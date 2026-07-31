@@ -7,7 +7,7 @@ on:
         default: "24"
       test-command:
         type: string
-        default: "npm test -- --coverage"
+        default: "npm test"
 permissions:
   contents: read
   id-token: write
