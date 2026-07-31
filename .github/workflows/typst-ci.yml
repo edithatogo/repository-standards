@@ -1,0 +1,69 @@
+name: Typst CI
+on:
+  workflow_call:
+    inputs:
+      root-file:
+        type: string
+        default: main.typ
+      output-file:
+        type: string
+        default: build/main.pdf
+      artifact-name:
+        type: string
+        default: typst-pdf
+      profile:
+        type: string
+        default: ""
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: typst-community/setup-typst@63ac138db421d586de61f7f5ac3bcef6a2e6c78c # v5.1.0
+        with:
+          typst-version: "0.15.1"
+      - name: Install and verify typstyle
+        env:
+          TYPSTYLE_SHA256: 4ee395be9c923eaffdfcc84d4cea7c54d8087ce8fc380ea82d775e0915698097
+        run: |
+          curl --fail --location --silent --show-error \
+            --output /tmp/typstyle \
+            https://github.com/typstyle-rs/typstyle/releases/download/v0.15.0/typstyle-x86_64-unknown-linux-musl
+          echo "$TYPSTYLE_SHA256  /tmp/typstyle" | sha256sum --check -
+          sudo install -m 0755 /tmp/typstyle /usr/local/bin/typstyle
+          typstyle --version
+      - name: Check formatting
+        run: typstyle --check .
+      - name: Compile
+        env:
+          ROOT_FILE: ${{ inputs.root-file }}
+          OUTPUT_FILE: ${{ inputs.output-file }}
+          PROFILE: ${{ inputs.profile }}
+        run: |
+          mkdir -p "$(dirname "$OUTPUT_FILE")"
+          if [ -n "$PROFILE" ]; then
+            typst compile --root . --input "profile=$PROFILE" "$ROOT_FILE" "$OUTPUT_FILE"
+          else
+            typst compile --root . "$ROOT_FILE" "$OUTPUT_FILE"
+          fi
+      - name: Validate PDF
+        env:
+          PDF_FILE: ${{ inputs.output-file }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes qpdf poppler-utils
+          test -s "$PDF_FILE"
+          qpdf --check "$PDF_FILE"
+          pdfinfo "$PDF_FILE"
+          pdftotext "$PDF_FILE" - | grep -q '[^[:space:]]'
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.output-file }}
+          if-no-files-found: error
+          retention-days: 14
