@@ -167,6 +167,12 @@ def exception_dates(entry: dict[str, Any]) -> tuple[list[str], list[str]]:
     return sorted(set(expired)), sorted(set(upcoming))
 
 
+def protection_state(rulesets: Any, branch_protection: Any) -> str:
+    if rulesets or branch_protection:
+        return "present"
+    return "unknown" if rulesets is None else "absent"
+
+
 def audit_one(
     client: GitHub,
     entry: dict[str, Any],
@@ -224,9 +230,11 @@ def audit_one(
         f"/repos/{repository}/rulesets?includes_parents=false",
         tolerated={403, 404},
     )
-    ruleset_state = (
-        "unknown" if rulesets is None else ("present" if rulesets else "absent")
+    branch_protection = client.get(
+        f"/repos/{repository}/branches/{urllib.parse.quote(branch, safe='')}/protection",
+        tolerated={403, 404},
     )
+    ruleset_state = protection_state(rulesets, branch_protection)
 
     profile_name = entry["profile"]
     profile = inherited_profile(profile_name, profiles_document["profiles"])
