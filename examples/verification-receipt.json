@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "repository": "edithatogo/example",
+  "revision": "0123456789abcdef",
+  "generated_at": "2026-07-31T00:00:00Z",
+  "seed": 20260731,
+  "result": "pass",
+  "checks": [
+    {
+      "name": "validate",
+      "result": "pass",
+      "duration_seconds": 1.2,
+      "evidence": "make validate"
+    }
+  ],
+  "artifacts": []
+}
