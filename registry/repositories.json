@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-31T08:02:39.0578256Z",
+  "generated_at": "2026-07-31T08:10:06.3504429Z",
   "scope": "Owner repositories excluding forks, archived, and disabled repositories",
   "policy": {
     "maintainers": 1,
@@ -164,7 +164,7 @@
       "sole_developer": true,
       "mandatory_human_approvals": 0,
       "renovate": {
-        "current": "activate_via_inherited_config",
+        "current": "repository_config_detected",
         "target": "hosted_app_plus_inherited_config",
         "canonical_preset": "github>edithatogo/renovate-config",
         "dependabot_detected": false,
@@ -180,7 +180,7 @@
     {
       "repository": "edithatogo/arxiv-paper-template",
       "visibility": "public",
-      "archetype": "software",
+      "archetype": "typesetting-template",
       "default_branch": "main",
       "sole_developer": true,
       "mandatory_human_approvals": 0,
@@ -192,11 +192,11 @@
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "listed_inactive",
-        "warranted": true,
-        "target": "active_oidc_upload_with_real_coverage"
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
       },
-      "quality_issue": "https://github.com/edithatogo/arxiv-paper-template/issues/14"
+      "quality_issue": "https://github.com/edithatogo/repository-standards/issues/5"
     },
     {
       "repository": "edithatogo/asreview",
