@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "delivery": "pull_request_or_issue",
+    "never_force_overwrite": true,
+    "automerge": "only low-risk managed-file updates after stable required checks",
+    "local_extension": "repository-local additions are preserved",
+    "credential_gate": "cross-repository writes require a separately approved fine-grained token"
+  },
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "source": "edithatogo/.github:AGENTS.md",
+      "strategy": "materialise_if_missing_then_detect_drift",
+      "profiles": ["*"]
+    },
+    {
+      "path": "SECURITY.md",
+      "source": "edithatogo/.github:SECURITY.md",
+      "strategy": "materialise_if_missing_then_detect_drift",
+      "profiles": ["*"]
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "source": "edithatogo/.github:CONTRIBUTING.md",
+      "strategy": "materialise_if_missing_then_detect_drift",
+      "profiles": ["*"]
+    },
+    {
+      "path": "renovate.json",
+      "source": "edithatogo/repository-standards:renovate/default.json",
+      "strategy": "preset_reference",
+      "profiles": ["*"]
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "source": "edithatogo/repository-standards:.github/workflows/{profile}.yml",
+      "strategy": "thin_immutable_reusable_workflow_call",
+      "profiles": [
+        "python",
+        "rust",
+        "node",
+        "data-pipeline",
+        "documentation",
+        "latex",
+        "typst"
+      ]
+    }
+  ]
+}
+
