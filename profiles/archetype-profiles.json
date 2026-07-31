@@ -8,7 +8,9 @@
       "explicit_permissions",
       "concurrency_cancellation",
       "job_timeouts",
-      "immutable_action_pins"
+      "immutable_action_pins",
+      "resolvable_action_pins",
+      "exceptions_current"
     ],
     "required_context": [
       "AGENTS.md",
@@ -24,6 +26,21 @@
       "deterministic_seed",
       "verification_receipt"
     ],
+    "quality_signals": {
+      "coverage": "patch_and_component_aware",
+      "mutation": "longitudinal",
+      "property_testing": "seed_and_example_count_recorded",
+      "flaky_tests": "quarantine_owner_and_expiry",
+      "performance": "versioned_regression_budget",
+      "contracts": "consumer_and_provider_compatibility_where_applicable"
+    },
+    "workflow_slos": {
+      "schedule_freshness_days": 8,
+      "queue_latency": "measured",
+      "dependency_update_latency": "measured",
+      "mean_repair_time": "measured",
+      "artifact_retention": "verified"
+    },
     "ruleset": {
       "require_stable_automated_checks": true,
       "required_human_approvals": 0,
@@ -187,4 +204,3 @@
     }
   }
 }
-
