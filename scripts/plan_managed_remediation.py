@@ -14,6 +14,7 @@ LOW_RISK = {
     "managed:CONTRIBUTING.md",
     "managed:SECURITY.md",
     "managed:renovate.json",
+    "managed:.github/workflows/scorecard.yml",
 }
 
 
