@@ -9,6 +9,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import audit_estate_conformance as audit
+import simulate_policy_impact as impact
 
 
 class PolicyTests(unittest.TestCase):
@@ -44,6 +45,14 @@ class PolicyTests(unittest.TestCase):
         text = audit.summary_markdown([row], "test")
         self.assertTrue(text.startswith(audit.START))
         self.assertTrue(text.endswith(audit.END))
+
+    def test_impact_profile_inheritance_terminates(self) -> None:
+        profiles = {"base": {"supply_chain": "baseline"}, "child": {"extends": "base"}}
+        profile = dict(profiles["child"])
+        while "extends" in profile:
+            parent = profile.pop("extends")
+            profile = {**profiles[parent], **profile}
+        self.assertEqual(profile["supply_chain"], "baseline")
 
 
 if __name__ == "__main__":
