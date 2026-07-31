@@ -1,5 +1,7 @@
 # Repository standards
 
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/edithatogo/repository-standards/badge)](https://securityscorecards.dev/viewer/?uri=github.com/edithatogo/repository-standards)
+
 Executable CI/CD, security, dependency-management, coverage, release, research-governance, and solo-maintainer standards for the `edithatogo` repository estate.
 
 ## Operating model
