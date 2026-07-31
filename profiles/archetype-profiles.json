@@ -34,6 +34,13 @@
       "performance": "versioned_regression_budget",
       "contracts": "consumer_and_provider_compatibility_where_applicable"
     },
+    "advanced_testing": {
+      "property_based": "required_where_input_space_or_invariants_are_material",
+      "mutation": "required_for_high_value_logic",
+      "deterministic_simulation": "required_for_concurrency_distributed_or_stateful_automation",
+      "metamorphic": "required_where_oracles_are_partial_or_expensive",
+      "contract": "required_at_external_or_intercomponent_boundaries"
+    },
     "workflow_slos": {
       "schedule_freshness_days": 8,
       "queue_latency": "measured",
