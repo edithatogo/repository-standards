@@ -36,6 +36,9 @@ jobs:
           python -m json.tool schemas/repository-entry.schema.json >/dev/null
           python -m json.tool schemas/verification-receipt.schema.json >/dev/null
           python -m py_compile scripts/audit_estate_conformance.py
+          python -m py_compile scripts/simulate_policy_impact.py
+          python -m py_compile scripts/plan_managed_remediation.py
+          PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_*.py' -v
 
   reconcile-estate:
     if: github.event_name != 'pull_request'
@@ -68,6 +71,18 @@ jobs:
             --output-dir conformance-output \
             --issue-repository "${{ github.repository }}" \
             --issue-number "${{ vars.CONFORMANCE_ISSUE_NUMBER || '16' }}"
+      - name: Simulate policy impact
+        run: |
+          python scripts/simulate_policy_impact.py \
+            --audit conformance-output/estate-conformance.json \
+            --profiles profiles/archetype-profiles.json \
+            --output conformance-output/policy-impact.json
+      - name: Plan bounded managed remediation
+        run: |
+          python scripts/plan_managed_remediation.py \
+            --audit conformance-output/estate-conformance.json \
+            --output conformance-output/managed-remediation-plan.json \
+            --limit 25
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
