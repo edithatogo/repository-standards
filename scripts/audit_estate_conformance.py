@@ -38,6 +38,8 @@ class GitHub:
         }
         self._action_resolution: dict[str, bool] = {}
         self._action_resolution_lock = Lock()
+        self._metrics_lock = Lock()
+        self.metrics = {"requests": 0, "retries": 0, "tolerated_errors": 0}
 
     def request(
         self,
@@ -56,18 +58,24 @@ class GitHub:
         )
         tolerated = tolerated or {404, 409, 422}
         for attempt in range(4):
+            with self._metrics_lock:
+                self.metrics["requests"] += 1
             try:
                 with urllib.request.urlopen(request, timeout=60) as response:
                     content = response.read()
                     return json.loads(content) if content else None
             except urllib.error.HTTPError as error:
                 if error.code in tolerated:
+                    with self._metrics_lock:
+                        self.metrics["tolerated_errors"] += 1
                     return None
                 if error.code not in {429, 500, 502, 503, 504} or attempt == 3:
                     raise
             except (TimeoutError, urllib.error.URLError):
                 if attempt == 3:
                     raise
+            with self._metrics_lock:
+                self.metrics["retries"] += 1
             time.sleep(2**attempt)
         raise RuntimeError("unreachable retry state")
 
@@ -491,6 +499,7 @@ def main() -> int:
         "scope": scope,
         "repository_count": len(rows),
         "repositories": rows,
+        "telemetry": client.metrics,
     }
     (args.output_dir / "estate-conformance.json").write_text(
         json.dumps(payload, indent=2) + "\n",
