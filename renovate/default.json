@@ -1,0 +1,4 @@
+{
+  "extends": ["github>edithatogo/renovate-config"],
+  "dependencyDashboard": true
+}

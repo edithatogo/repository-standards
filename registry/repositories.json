@@ -1,0 +1,1403 @@
+{
+  "generated_at": "2026-07-31T07:05:31.8041915Z",
+  "scope": "Non-fork, non-archived, non-disabled repositories owned by edithatogo",
+  "renovate_installation_gate": "Install https://github.com/apps/renovate for All repositories; inherited configuration is prepared.",
+  "codecov_policy": "Use OIDC uploads for executable repositories; do not fabricate coverage for docs, config-only, or empty repositories.",
+  "repositories": [
+    {
+      "repository": "edithatogo/.github",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/.github/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/accessandflow",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/accessandflow/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/ai-safety-rare-disease",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/ai-safety-rare-disease/issues/26",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/analyse_hype_celebrity",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/analyse_hype_celebrity/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/analysis_aihw_hospitals",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/analysis_aihw_hospitals/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/apfs-rs",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/apfs-rs/issues/45",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/archive-govt-nz",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/archive-govt-nz/issues/15",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/arxiv-latex-template",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/arxiv-latex-template/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/arxiv-paper-template",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/arxiv-paper-template/issues/15",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/asreview",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/asreview/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/astro-polyglot",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/astro-polyglot/issues/8",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/aus_mbs_pbs_graph",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/aus_mbs_pbs_graph/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/aus-health-data-scraper",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/aus-health-data-scraper/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/authentext",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/authentext/issues/65",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/Budget_2026_MMH",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/Budget_2026_MMH/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/careops",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/careops/issues/150",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/careops-approve",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/careops-approve/issues/50",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/careops-costing",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/careops-costing/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/careops-decisions",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/careops-decisions/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/careops-finance",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/careops-finance/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/careops-incidents",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/careops-incidents/issues/13",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/careops-process",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/careops-process/issues/60",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/CFTRDataTransfer",
+      "archetype": "data",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/CFTRDataTransfer/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/checklist_microcosting",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/checklist_microcosting/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/citeweft",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/citeweft/issues/10",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/claude-code",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/claude-code/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/closer-to-whom",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/closer-to-whom/issues/188",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/cobra-costing",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/cobra-costing/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/conductor-next",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/conductor-next/issues/16",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/corpus-cases-medilegal-nz",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/corpus-cases-medilegal-nz/issues/26",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/corpus-legislation-nz",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/corpus-legislation-nz/issues/160",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/corpus-nz-hansard",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/corpus-nz-hansard/issues/30",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/des_tutorial_py_response",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/des_tutorial_py_response/issues/19",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/dev-sync-automation",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/dev-sync-automation/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/dnz",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/dnz/issues/41",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/ecosystem-docs",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/ecosystem-docs/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/edithatogo.r-universe.dev",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/edithatogo.r-universe.dev/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/ee_trd",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/ee_trd/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/f7fztfn9vz",
+      "archetype": "empty",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": null,
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/fe-reader",
+      "archetype": "rust",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/fe-reader/issues/15",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/fhirstarter",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/fhirstarter/issues/13",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/foi-o",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/foi-o/issues/113",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/foi-process",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/foi-process/issues/95",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/fyi-archive",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/fyi-archive/issues/316",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/fyi-cli",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/fyi-cli/issues/282",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/gemini-cli_vs_itself",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/gemini-cli_vs_itself/issues/6",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/ginsim",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/ginsim/issues/25",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/global-family-justice-data",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/global-family-justice-data/issues/7",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/global-medicines-atlas",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/global-medicines-atlas/issues/82",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/gnrhi_oor",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/gnrhi_oor/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/gtpcnz",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/gtpcnz/issues/147",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/hathi-nz",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/hathi-nz/issues/42",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/healthagent",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/healthagent/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/healthpoint-rs",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/healthpoint-rs/issues/59",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/hermes-gemma-lab",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/hermes-gemma-lab/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/hermes-lfm2-lab",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/hermes-lfm2-lab/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/hermes-ollama-pack",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/hermes-ollama-pack/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/hermes-training",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/hermes-training/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/homebrew-mchs",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/homebrew-mchs/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/homebrew-osf",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/homebrew-osf/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/hwcc",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/hwcc/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/innovate",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/innovate/issues/415",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/kairos",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/kairos/issues/122",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/learningfromharm",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/learningfromharm/issues/6",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/legal-nz-workspace",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/legal-nz-workspace/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/legislation",
+      "archetype": "rust",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/legislation/issues/110",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/lifecourse",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/lifecourse/issues/49",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/linear-history",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/linear-history/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/m365_2_latex_4_py",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/m365_2_latex_4_py/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/mars",
+      "archetype": "rust",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/mars/issues/131",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/mchs",
+      "archetype": "rust",
+      "default_branch": "master",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/mchs/issues/368",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/mchs-swift",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/mchs-swift/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/metaclassify",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/metaclassify/issues/6",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/michelin-nz",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/michelin-nz/issues/33",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/microcosting_genomics",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/microcosting_genomics/issues/165",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/microcosting_healthworkforce",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/microcosting_healthworkforce/issues/32",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/models_lang",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/models_lang/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/my-personal-data",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/my-personal-data/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/NationalWeightedActivityUnitWrapper.jl",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/NationalWeightedActivityUnitWrapper.jl/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/new-drug-reimbursement-game",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/new-drug-reimbursement-game/issues/15",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/nhra_game",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/nhra_game/issues/26",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/nlp-policy-nz",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/nlp-policy-nz/issues/233",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/notion-skill",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/notion-skill/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/nsw-health-mscg-powerplatform",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/nsw-health-mscg-powerplatform/issues/6",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/NwauCore.jl",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/NwauCore.jl/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/nz_health_appropriations",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/nz_health_appropriations/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/nztaxmicrosim",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/nztaxmicrosim/issues/189",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/ollama-old",
+      "archetype": "docs",
+      "default_branch": "temp-old-main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/ollama-old/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/open_social_data",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/open_social_data/issues/30",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/openfisca-aotearoa-betterules",
+      "archetype": "empty",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": null,
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/osf-cli-go",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/osf-cli-go/issues/133",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/pae_ora_reform",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/pae_ora_reform/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/policy_-paramedics_mentalhealth_cxsyx",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/policy_-paramedics_mentalhealth_cxsyx/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/policy_paramedics_s41",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/policy_paramedics_s41/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/policy_societaldam_pharma",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/policy_societaldam_pharma/issues/18",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/populate",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/populate/issues/9",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/populationsim",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/populationsim/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/powerhealth",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/powerhealth/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/process-mappings",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/process-mappings/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/project-template",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/project-template/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/project-templates",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/project-templates/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/pubblocknz",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/pubblocknz/issues/41",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/pybliometrics",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/pybliometrics/issues/11",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/pyhero",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/pyhero/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/rac-conformance",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/rac-conformance/issues/180",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/rareburden-commons",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/rareburden-commons/issues/22",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/rarecpa",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/rarecpa/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/rcagent",
+      "archetype": "docs",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/rcagent/issues/18",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/real-estate-form-model",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/real-estate-form-model/issues/8",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/reimbursement-atlas",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/reimbursement-atlas/issues/645",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/renovate-config",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/renovate-config/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/research-skills",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/research-skills/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/revalue",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/revalue/issues/8",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/riopa-infrastructure",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/riopa-infrastructure/issues/147",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/scholarly-publishing-agents",
+      "archetype": "docs",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/scholarly-publishing-agents/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/SciencePlots",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/SciencePlots/issues/6",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/scimapping",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/scimapping/issues/11",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/scoop-osf",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/scoop-osf/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/sim_hospital_emergencydepartment",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/sim_hospital_emergencydepartment/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/sim_hospital_wholeofdistrict",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/sim_hospital_wholeofdistrict/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/sim_hospital_wholeofhospital",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/sim_hospital_wholeofhospital/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/simpletask-android",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/simpletask-android/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/simpy",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/simpy/issues/81",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/simsyphilis",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/simsyphilis/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/skillresearch",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/skillresearch/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/sm-govt-nz",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/sm-govt-nz/issues/325",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/sourceright",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/sourceright/issues/83",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/standardflow",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/standardflow/issues/14",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/standards_check",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/standards_check/issues/31",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/substack-cli-ts",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/substack-cli-ts/issues/163",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/Syspop",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/Syspop/issues/7",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/todo-sync",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/todo-sync/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/tutorial_des_health_services",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/tutorial_des_health_services/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/tutorial_ep_health",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/tutorial_ep_health/issues/5",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/tutorial_health_gt",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/tutorial_health_gt/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/tutorial_health_pm",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/tutorial_health_pm/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/tutorial_methods_equity",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/tutorial_methods_equity/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/tutorial_microcosting_genomics",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/tutorial_microcosting_genomics/issues/8",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/tutorial_rxnavinabox",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/tutorial_rxnavinabox/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/tutorials_heor",
+      "archetype": "data",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/tutorials_heor/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/two-phase-causal-ensemble-model",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/two-phase-causal-ensemble-model/issues/6",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/UniMelb-PhD-Thesis",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/UniMelb-PhD-Thesis/issues/4",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/unimelb-thesis-template-latex",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/unimelb-thesis-template-latex/issues/9",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/unimelb-thesis-template-quarto",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/unimelb-thesis-template-quarto/issues/10",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/unimelb-thesis-template-typst",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/unimelb-thesis-template-typst/issues/6",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/UniMelb-Thesis-v2",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/UniMelb-Thesis-v2/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/unisa-tbi",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/unisa-tbi/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/UOGTO",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/UOGTO/issues/108",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/voi_beast2",
+      "archetype": "docs",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/voi_beast2/issues/2",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/voi_genomicvariation",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/voi_genomicvariation/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/voi_humangenomeproject",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/voi_humangenomeproject/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/voi_sequencing_costs",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/voi_sequencing_costs/issues/35",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/voi-hallucinations",
+      "archetype": "python-or-other-software",
+      "default_branch": "master",
+      "renovate": "activate",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/voi-hallucinations/issues/3",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/voiage",
+      "archetype": "rust",
+      "default_branch": "main",
+      "renovate": "detected",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/voiage/issues/657",
+      "solo_maintainer": true
+    },
+    {
+      "repository": "edithatogo/vop_poc_nz",
+      "archetype": "python-or-other-software",
+      "default_branch": "main",
+      "renovate": "migrate_from_dependabot",
+      "codecov": "verify_or_activate",
+      "parent_issue": "https://github.com/edithatogo/vop_poc_nz/issues/55",
+      "solo_maintainer": true
+    }
+  ]
+}
