@@ -16,6 +16,7 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, date, datetime
 from pathlib import Path
+from threading import Lock
 from typing import Any
 
 
@@ -35,6 +36,8 @@ class GitHub:
             "User-Agent": "estate-conformance-audit",
             "X-GitHub-Api-Version": "2022-11-28",
         }
+        self._action_resolution: dict[str, bool] = {}
+        self._action_resolution_lock = Lock()
 
     def request(
         self,
@@ -87,6 +90,28 @@ class GitHub:
             return ""
         return base64.b64decode(result["content"]).decode("utf-8", errors="replace")
 
+    def action_ref_resolves(self, ref: str) -> bool:
+        """Verify an immutable marketplace action SHA exists in its source repo."""
+        if not FULL_SHA.search(ref):
+            return False
+        action, sha = ref.rsplit("@", 1)
+        parts = action.split("/")
+        if len(parts) < 2:
+            return False
+        key = f"{parts[0]}/{parts[1]}@{sha.lower()}"
+        with self._action_resolution_lock:
+            cached = self._action_resolution.get(key)
+        if cached is not None:
+            return cached
+        result = self.get(
+            f"/repos/{parts[0]}/{parts[1]}/git/commits/{sha}",
+            tolerated={404, 409, 422},
+        )
+        resolved = bool(result and result.get("sha", "").lower() == sha.lower())
+        with self._action_resolution_lock:
+            self._action_resolution[key] = resolved
+        return resolved
+
 
 def inherited_profile(name: str, profiles: dict[str, Any]) -> dict[str, Any]:
     current = dict(profiles[name])
@@ -115,6 +140,25 @@ def active_exception(entry: dict[str, Any], control: str) -> bool:
     return False
 
 
+def exception_dates(entry: dict[str, Any]) -> tuple[list[str], list[str]]:
+    """Return expired and soon-to-expire exception control names."""
+    today = date.today()
+    expired: list[str] = []
+    upcoming: list[str] = []
+    for exception in entry.get("exceptions", []):
+        control = exception.get("control", "unknown")
+        try:
+            review_after = date.fromisoformat(exception["review_after"])
+        except (KeyError, ValueError):
+            expired.append(control)
+            continue
+        if review_after < today:
+            expired.append(control)
+        elif (review_after - today).days <= 30:
+            upcoming.append(control)
+    return sorted(set(expired)), sorted(set(upcoming))
+
+
 def audit_one(
     client: GitHub,
     entry: dict[str, Any],
@@ -140,6 +184,11 @@ def audit_one(
         if not match.group(1).startswith(("./", "docker://"))
     ]
     unpinned = [ref for ref in action_refs if not FULL_SHA.search(ref)]
+    invalid_pins = [
+        ref
+        for ref in action_refs
+        if FULL_SHA.search(ref) and not client.action_ref_resolves(ref)
+    ]
     scheduled = bool(SCHEDULE.search(workflow))
     scheduled_run = None
     if scheduled:
@@ -151,6 +200,18 @@ def audit_one(
         if scheduled_run and scheduled_run.get("workflow_runs")
         else None
     )
+    schedule_fresh = bool(
+        not scheduled
+        or (
+            last_schedule
+            and last_schedule.get("created_at")
+            and (
+                datetime.now(UTC)
+                - datetime.fromisoformat(last_schedule["created_at"].replace("Z", "+00:00"))
+            ).days <= 8
+        )
+    )
+    expired_exceptions, upcoming_exceptions = exception_dates(entry)
     rulesets = client.get(
         f"/repos/{repository}/rulesets?includes_parents=false",
         tolerated={403, 404},
@@ -176,6 +237,7 @@ def audit_one(
         ),
         "job_timeouts": "timeout-minutes:" in workflow,
         "immutable_action_pins": bool(action_refs) and not unpinned,
+        "resolvable_action_pins": bool(action_refs) and not unpinned and not invalid_pins,
         "ruleset": ruleset_state == "present",
         "harness": present(
             paths,
@@ -227,6 +289,8 @@ def audit_one(
         "schedule_success": bool(
             not scheduled or (last_schedule and last_schedule.get("conclusion") == "success")
         ),
+        "schedule_freshness": schedule_fresh,
+        "exceptions_current": not expired_exceptions,
         "data_governance": all(
             [
                 present(paths, ("rights.md", "license", "licence")),
@@ -267,18 +331,20 @@ def audit_one(
         "concurrency_cancellation",
         "job_timeouts",
         "immutable_action_pins",
+        "resolvable_action_pins",
         "ruleset",
         "agents",
         "lifecycle_classified",
         "release_classified",
         "maintenance_classified",
+        "exceptions_current",
     ]
     if executable:
         required.extend(["harness", "verification_receipt", "deterministic_seed"])
     if profile.get("data_governance") == "required":
         required.append("data_governance")
     if profile.get("schedule_health") == "required" or scheduled:
-        required.append("schedule_success")
+        required.extend(["schedule_success", "schedule_freshness"])
     supply_chain = profiles_document["supply_chain_profiles"][
         entry.get("supply_chain_profile", profile.get("supply_chain", "baseline"))
     ]
@@ -298,6 +364,7 @@ def audit_one(
         "workflow_count": len(workflow_paths),
         "workflow_paths": workflow_paths,
         "unpinned_actions": unpinned,
+        "invalid_action_pins": invalid_pins,
         "ruleset": ruleset_state,
         "scheduled": scheduled,
         "last_scheduled_run": (
@@ -312,6 +379,8 @@ def audit_one(
         "controls": controls,
         "violations": violations,
         "exception_count": len(entry.get("exceptions", [])),
+        "expired_exceptions": expired_exceptions,
+        "upcoming_exceptions": upcoming_exceptions,
     }
 
 
@@ -321,6 +390,7 @@ def summary_markdown(rows: list[dict[str, Any]], scope: str) -> str:
 
     workflow_absent = sum(not row["controls"]["workflow_present"] for row in rows)
     unpinned = sum(bool(row["unpinned_actions"]) for row in rows)
+    invalid_pins = sum(bool(row["invalid_action_pins"]) for row in rows)
     lines = [
         START,
         "## Scheduled conformance status",
@@ -334,12 +404,15 @@ def summary_markdown(rows: list[dict[str, Any]], scope: str) -> str:
         f"| Concurrency/cancellation | {missing('concurrency_cancellation')} |",
         f"| Job timeouts | {missing('job_timeouts')} |",
         f"| Immutable action pins | {missing('immutable_action_pins')} ({unpinned} with detected floating refs) |",
+        f"| Resolvable immutable pins | {missing('resolvable_action_pins')} ({invalid_pins} with invalid pins) |",
         f"| Ruleset/protection profile | {missing('ruleset')} |",
         f"| One-command harness | {missing('harness')} |",
         f"| Machine-readable verification receipt | {missing('verification_receipt')} |",
         f"| Repository AGENTS.md | {missing('agents')} |",
         f"| Deterministic seed evidence | {missing('deterministic_seed')} |",
         f"| Scheduled-run success evidence | {missing('schedule_success')} |",
+        f"| Scheduled-run freshness | {missing('schedule_freshness')} |",
+        f"| Expired or invalid exceptions | {missing('exceptions_current')} |",
         f"| Lifecycle classification | {missing('lifecycle_classified')} |",
         f"| Release maturity classification | {missing('release_classified')} |",
         "",
