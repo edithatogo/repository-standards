@@ -1,6 +1,6 @@
 {
   "owner": "edithatogo",
-  "scope": "active non-fork non-archived owner repositories",
+  "scope": "authenticated owner repositories",
   "repositories": [
     {
       "repository": "edithatogo/.github",
@@ -9,7 +9,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -57,7 +60,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -69,7 +71,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -120,7 +125,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -132,7 +136,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "A simulation study to quantify the health economic consequences of specification gaming in AI-driven rare disease management.",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -182,7 +189,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -194,7 +200,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Don't Believe the Hype: Celebrity Effects on Health Interest",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -243,7 +252,6 @@
         "README security section missing",
         "README license section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -254,7 +262,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Analysis of AIHW Hospitals Data",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -304,7 +315,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -315,7 +325,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -364,7 +377,6 @@
         "README citation section missing",
         "CI badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -375,7 +387,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Auditable preservation of New Zealand government datasets, beginning with the Treasury",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -426,7 +441,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -438,7 +452,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "Reusable arXiv-ready LaTeX manuscript template and packaging workflow",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -485,7 +502,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -497,7 +513,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "Bleeding-edge, reproducible arXiv LaTeX manuscript template with SourceRight and Authentext",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -545,7 +564,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -557,7 +575,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Active learning for systematic reviews",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -607,8 +628,7 @@
         "README development section missing",
         "README security section missing",
         "CI badge missing",
-        "license badge missing",
-        "GitHub topics missing"
+        "license badge missing"
       ]
     },
     {
@@ -618,7 +638,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Starlight plugin generating native MDX API documentation from any programming language - Python, TypeScript, Rust, R, Julia, C#, Go, and more",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -663,7 +686,6 @@
       },
       "gaps": [
         "README citation section missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -675,7 +697,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -727,7 +752,6 @@
         "CI badge missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -739,7 +763,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -787,7 +814,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -803,7 +829,9 @@
         "agent",
         "ai",
         "ai-agents",
-        "epistemology"
+        "epistemology",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -865,7 +893,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Assessment of NZ Budget 2026",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -915,7 +946,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -926,7 +956,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Private continuity mirror for the CareOps portfolio",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -974,7 +1007,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -986,7 +1018,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "CareOps basic submit and named-approver workflow for Microsoft Teams and Power Automate",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1034,7 +1069,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -1046,7 +1080,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "CareOps costing Power Platform ALM repo",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1094,7 +1131,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -1106,7 +1142,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1157,7 +1196,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -1168,7 +1206,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1217,7 +1258,6 @@
         "README citation section missing",
         "CI badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -1229,7 +1269,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "CareOps incident analytics source for privacy-safe healthcare incident monitoring, governance review, and rare-event surveillance.",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1277,7 +1320,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -1289,7 +1331,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Privacy-preserving object-centric process intelligence for CareOps",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1337,7 +1382,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
@@ -1350,7 +1394,10 @@
       "archetype": "documentation",
       "default_branch": "master",
       "description": "Transfer of CFTR74 v3 on MassArray from Typer to Cerner Millennium Helix",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1397,7 +1444,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -1409,7 +1455,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Checklist for Microcosting",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1459,7 +1508,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -1470,7 +1518,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Neutral, auditable scholarly document extraction core for CiteWeft",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1520,7 +1571,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -1532,7 +1582,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1582,7 +1635,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -1602,6 +1654,8 @@
         "policy-simulation",
         "public-data",
         "research-software",
+        "software",
+        "solo-maintainer",
         "value-of-information"
       ],
       "readme": {
@@ -1663,7 +1717,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1714,7 +1771,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -1725,7 +1781,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1775,7 +1834,6 @@
         "CI badge missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -1786,7 +1844,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "New Zealand Medical-Legal Corpus - HDC, HPDT, ERA, and tribunal decisions",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1830,7 +1891,6 @@
       "gaps": [
         "README security section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -1842,7 +1902,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "API-first NZ legislation corpus pipeline: NZ API -> optimized Parquet -> Hugging Face/Xet -> annual Zenodo DOI snapshots.",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -1895,7 +1958,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "manifest and citation versions disagree"
       ]
     },
@@ -1915,7 +1977,9 @@
         "new-zealand",
         "open-data",
         "parliament",
-        "parquet"
+        "parquet",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -1978,7 +2042,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Discrete event simulation in Python using the 'SimPy' package for health economic modeling",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2025,7 +2092,6 @@
         "README security section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -2037,7 +2103,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2085,7 +2154,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -2097,7 +2165,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2148,7 +2219,6 @@
         "CI badge missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -2159,7 +2229,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2204,7 +2277,6 @@
         "README security section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -2216,7 +2288,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "R-universe registry for marsruntime",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -2259,7 +2334,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -2271,7 +2345,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Economic Evaluation of Novel Therapies for Treatment-Resistent Depression",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2323,7 +2400,6 @@
         "CI badge missing",
         "license badge missing",
         "citation badge missing",
-        "GitHub topics missing",
         "manifest and citation versions disagree",
         "structured logging decision/implementation missing"
       ]
@@ -2335,7 +2411,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Temporary Sonatype Central namespace verification repository for io.github.edithatogo",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -2378,7 +2457,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "license decision/file missing"
       ]
     },
@@ -2398,7 +2476,9 @@
         "pdf",
         "privacy",
         "provenance",
-        "rust"
+        "rust",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -2457,7 +2537,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "An ASGI FHIR API framework built on top of FastAPI and FHIR Resources",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2507,7 +2590,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -2519,7 +2601,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "Freedom of Information Ontology",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2568,8 +2653,7 @@
       "gaps": [
         "README development section missing",
         "README security section missing",
-        "README citation section missing",
-        "GitHub topics missing"
+        "README citation section missing"
       ]
     },
     {
@@ -2579,7 +2663,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Rust-first FOI process intelligence integration spine",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2631,7 +2718,6 @@
         "README citation section missing",
         "CI badge missing",
         "citation badge missing",
-        "GitHub topics missing",
         "structured logging decision/implementation missing"
       ]
     },
@@ -2642,7 +2728,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2694,7 +2783,6 @@
         "README security section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "manifest and citation versions disagree"
       ]
     },
@@ -2714,6 +2802,8 @@
         "oia",
         "privacy",
         "python",
+        "software",
+        "solo-maintainer",
         "transparency"
       ],
       "readme": {
@@ -2776,7 +2866,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -2827,7 +2920,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -2845,7 +2937,9 @@
         "jax",
         "open-science",
         "policy-analysis",
-        "reproducible-research"
+        "reproducible-research",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -2915,7 +3009,9 @@
         "data-engineering",
         "family-justice",
         "open-data",
-        "research-infrastructure"
+        "research-infrastructure",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -2985,7 +3081,9 @@
         "polars",
         "python",
         "regulatory",
-        "reimbursement"
+        "reimbursement",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -3046,7 +3144,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3097,7 +3198,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -3117,6 +3217,8 @@
         "policy-model",
         "primary-care",
         "quarto",
+        "software",
+        "solo-maintainer",
         "streamlit"
       ],
       "readme": {
@@ -3180,7 +3282,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3229,7 +3334,6 @@
         "README license section missing",
         "CI badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing"
       ]
     },
@@ -3240,7 +3344,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Library to model common health policy agents using reinforcement learning",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3287,7 +3394,6 @@
         "README security section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -3306,7 +3412,9 @@
         "healthcare",
         "healthpoint",
         "mcp",
-        "rust"
+        "rust",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -3366,7 +3474,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3414,7 +3525,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -3426,7 +3536,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3474,7 +3587,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -3486,7 +3598,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3534,7 +3649,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -3546,7 +3660,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3594,7 +3711,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
@@ -3607,7 +3723,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Homebrew tap for MCHS package distribution",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3654,7 +3773,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -3666,7 +3784,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Homebrew tap for OSF CLI Go",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3713,7 +3834,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -3725,7 +3845,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "NSW Health Workforce Cost Calculator - BBT Migration to Power Platform",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -3768,7 +3891,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -3780,7 +3902,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "A Python library for simplifying innovation/policy diffusion modelling.",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3834,7 +3959,6 @@
         "CI badge missing",
         "license badge missing",
         "citation badge missing",
-        "GitHub topics missing",
         "structured logging decision/implementation missing"
       ]
     },
@@ -3852,7 +3976,9 @@
         "des",
         "ecs",
         "rust",
-        "simulation"
+        "simulation",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -3921,7 +4047,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -3972,7 +4101,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -3984,7 +4112,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -4033,7 +4164,6 @@
         "README citation section missing",
         "CI badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -4054,6 +4184,8 @@
         "mcp",
         "nz",
         "policy",
+        "software",
+        "solo-maintainer",
         "typescript"
       ],
       "readme": {
@@ -4114,7 +4246,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Lifecourse Dynamic Population Microsimulation of Intellectual Disability",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -4163,7 +4298,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -4175,7 +4309,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "Mapping the history of a repo to a linear",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -4219,7 +4356,6 @@
       "gaps": [
         "README security section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
@@ -4232,7 +4368,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -4280,7 +4419,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -4296,7 +4434,9 @@
         "changepoint-detection",
         "machine-learning",
         "mars",
-        "multivariate-regression-splines"
+        "multivariate-regression-splines",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -4367,7 +4507,9 @@
         "microcosting",
         "nwau",
         "pypi",
-        "python"
+        "python",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -4432,8 +4574,10 @@
       "default_branch": "main",
       "description": "Swift package scaffold for MCHS contract interoperability",
       "topics": [
+        "documentation",
         "health-economics",
         "mchs",
+        "solo-maintainer",
         "swift",
         "swift-package"
       ],
@@ -4495,7 +4639,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -4546,7 +4693,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -4567,7 +4713,9 @@
         "observablehq",
         "open-source",
         "polars",
-        "python"
+        "python",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -4635,7 +4783,9 @@
         "genetics",
         "genomics",
         "microcosting",
-        "precision-medicine"
+        "precision-medicine",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -4696,7 +4846,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -4744,7 +4897,6 @@
         "README citation section missing",
         "CI badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
@@ -4757,7 +4909,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -4805,7 +4960,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -4817,7 +4971,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Private backup repo for personal files.",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -4860,7 +5017,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -4872,7 +5028,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Julia wrapper for the MCHS National Weighted Activity Unit command boundary",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -4923,7 +5082,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -4942,6 +5100,8 @@
         "python",
         "reimbursement",
         "rust",
+        "software",
+        "solo-maintainer",
         "uogto"
       ],
       "readme": {
@@ -5012,7 +5172,9 @@
         "healthcare",
         "healthpolicy",
         "nash-equilibrium",
-        "publicpolicy"
+        "publicpolicy",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -5076,7 +5238,10 @@
       "archetype": "typesetting",
       "default_branch": "master",
       "description": "",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5128,8 +5293,7 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub description missing",
-        "GitHub topics missing"
+        "GitHub description missing"
       ]
     },
     {
@@ -5139,7 +5303,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Notion Skill - Repository Reflection & Linear Integration with bidirectional sync, webhooks, conflict resolution, and MCP server support",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5187,7 +5354,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -5199,7 +5365,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "Medical Workforce & Clinical Governance Platform \u2014 Power Platform CI/CD",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5245,7 +5414,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
@@ -5258,7 +5426,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Julia package scaffold for MCHS/NWAU interoperability",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5309,7 +5480,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -5320,7 +5490,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5371,7 +5544,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -5389,6 +5561,8 @@
         "equity",
         "microsimulation",
         "python",
+        "software",
+        "solo-maintainer",
         "tax",
         "voi"
       ],
@@ -5448,7 +5622,10 @@
       "archetype": "documentation",
       "default_branch": "temp-old-main",
       "description": "test",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5495,7 +5672,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -5507,7 +5683,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5558,7 +5737,6 @@
         "CI badge missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -5570,7 +5748,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Fork of BetterRules/openfisca-aotearoa for PRs",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -5613,7 +5794,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "license decision/file missing"
       ]
     },
@@ -5629,7 +5809,9 @@
         "gemini-cli-extension",
         "go",
         "open-science-framework",
-        "osf"
+        "osf",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -5687,7 +5869,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5735,7 +5920,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -5747,7 +5931,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5794,7 +5981,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -5806,7 +5992,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5853,7 +6042,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -5865,7 +6053,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "Decision-Analysis Modelling for Pharmaceutical for Pharma From a Societal Perspective in New Zealand",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5918,8 +6109,7 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "citation badge missing",
-        "GitHub topics missing"
+        "citation badge missing"
       ]
     },
     {
@@ -5929,7 +6119,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -5978,7 +6171,6 @@
         "CI badge missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -5990,7 +6182,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "An Open Platform for Population Synthesis",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -6040,7 +6235,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -6051,7 +6245,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -6097,7 +6294,6 @@
       "gaps": [
         "README missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -6110,11 +6306,13 @@
       "description": "Source-backed, jurisdiction-aware process profiles and optional platform adapters. Normative contracts remain in rac-conformance.",
       "topics": [
         "camunda",
+        "documentation",
         "jurisdictional-profiles",
         "policy-as-process",
         "process-mapping",
         "process-mining",
-        "public-interest-technology"
+        "public-interest-technology",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -6176,7 +6374,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -6222,7 +6423,6 @@
       "gaps": [
         "README missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -6233,7 +6433,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -6284,7 +6487,6 @@
         "CI badge missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -6295,7 +6497,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Article on the Decision to Ban Puberty Blockers in NZ",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -6346,7 +6551,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -6357,7 +6561,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "Python-based API-Wrapper to access Scopus",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.rst",
         "sections": {
@@ -6410,7 +6617,6 @@
         "README citation section missing",
         "license badge missing",
         "citation badge missing",
-        "GitHub topics missing",
         "structured logging decision/implementation missing"
       ]
     },
@@ -6421,7 +6627,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -6466,7 +6675,6 @@
         "README security section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -6481,11 +6689,13 @@
       "topics": [
         "axiom",
         "conformance",
+        "documentation",
         "new-zealand",
         "openfisca",
         "policy-interchange",
         "policyengine",
-        "rules-as-code"
+        "rules-as-code",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -6549,7 +6759,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Open, provenance-first infrastructure for measuring the collective burden of rare diseases",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -6599,7 +6812,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -6611,7 +6823,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -6655,7 +6870,6 @@
       "gaps": [
         "README missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -6667,7 +6881,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "Healthcare RCA & SAE Investigation Skill Suite \u2014 AU/NZ clinical governance tools",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -6710,7 +6927,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
@@ -6723,7 +6939,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Interactive form for Real Estate Model Inputs",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -6766,7 +6985,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -6783,7 +7001,9 @@
         "conductor",
         "data-pipeline",
         "healthcare",
-        "reimbursement"
+        "reimbursement",
+        "software",
+        "solo-maintainer"
       ],
       "readme": {
         "path": "README.md",
@@ -6845,7 +7065,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Renovate configuration preset",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -6888,7 +7111,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -6903,6 +7125,7 @@
       "topics": [
         "cicd",
         "codecov",
+        "documentation",
         "renovate",
         "repository-template",
         "solo-maintainer"
@@ -6965,7 +7188,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7010,7 +7236,6 @@
         "README development section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -7022,7 +7247,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Value of Review",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7070,7 +7298,6 @@
         "README security section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -7082,7 +7309,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Open, modular, provenance-first infrastructure for reproducible public-data research and decision analytics.",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7134,7 +7364,6 @@
         "CI badge missing",
         "license badge missing",
         "citation badge missing",
-        "GitHub topics missing",
         "structured logging decision/implementation missing"
       ]
     },
@@ -7145,7 +7374,10 @@
       "archetype": "documentation",
       "default_branch": "master",
       "description": "End-to-end agentic workflows for academic and scholarly publishing \u2014 skills, rules, workflows, and agent definitions for authors, reviewers, editors, and publishers",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7191,7 +7423,6 @@
       "gaps": [
         "README security section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -7202,7 +7433,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "Matplotlib styles for scientific plotting",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7253,7 +7487,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -7264,7 +7497,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Science Mapping: Sourcing and Analysis Library",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7308,7 +7544,6 @@
       "gaps": [
         "README security section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -7320,7 +7555,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Scoop bucket for OSF CLI Go",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7367,7 +7605,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -7379,7 +7616,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Emergency Department Simulation",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7429,7 +7669,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -7440,7 +7679,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Simulation of Multi-Hospital Access and Flow",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7490,7 +7732,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -7501,7 +7742,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Whole of Hospital Simulation",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7551,7 +7795,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -7562,7 +7805,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7614,7 +7860,6 @@
         "CI badge missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -7626,7 +7871,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "fork from https://gitlab.com/team-simpy/simpy.git",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.rst",
         "sections": {
@@ -7677,7 +7925,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -7689,7 +7936,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Simulation of the Cost and Consequences of Syphyllis",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7739,7 +7989,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -7750,7 +7999,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Repo Engineering for Research Projects",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7802,7 +8054,6 @@
         "README citation section missing",
         "license badge missing",
         "citation badge missing",
-        "GitHub topics missing",
         "manifest and citation versions disagree"
       ]
     },
@@ -7813,7 +8064,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "Social media government NZ ingestion and syndication proof of concept",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -7856,7 +8110,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -7876,7 +8129,9 @@
         "legal-citations",
         "mcp",
         "reference-manager",
-        "rust"
+        "rust",
+        "solo-maintainer",
+        "typesetting"
       ],
       "readme": {
         "path": "README.md",
@@ -7937,7 +8192,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Standard Flow",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -7984,7 +8242,6 @@
         "README security section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
@@ -7996,7 +8253,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -8048,7 +8308,6 @@
         "license badge missing",
         "citation badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "manifest and citation versions disagree"
       ]
     },
@@ -8059,7 +8318,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "TypeScript CLI for publishing local Markdown to Substack via browser automation and internal API",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -8111,7 +8373,6 @@
         "README license section missing",
         "README citation section missing",
         "citation badge missing",
-        "GitHub topics missing",
         "manifest and citation versions disagree"
       ]
     },
@@ -8122,7 +8383,10 @@
       "archetype": "software",
       "default_branch": "main",
       "description": "Creating synthetic population",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -8170,7 +8434,6 @@
         "README license section missing",
         "README citation section missing",
         "CI badge missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -8187,6 +8450,7 @@
         "codecov",
         "renovate",
         "repository-template",
+        "software",
         "solo-maintainer"
       ],
       "readme": {
@@ -8194,51 +8458,47 @@
         "sections": {
           "installation": false,
           "usage": false,
-          "development": false,
-          "security": false,
-          "license": false,
-          "citation": false
+          "development": true,
+          "security": true,
+          "license": true,
+          "citation": true
         },
         "badges": {
-          "count": 0,
-          "ci": false,
+          "count": 3,
+          "ci": true,
           "coverage": false,
-          "license": false,
-          "citation": false,
+          "license": true,
+          "citation": true,
           "version": false
         }
       },
       "license": {
-        "api_spdx": null,
-        "files": [],
-        "present": false
+        "api_spdx": "MIT",
+        "files": [
+          "LICENSE"
+        ],
+        "present": true
       },
       "citation": {
         "warranted": true,
-        "files": [],
-        "present": false
+        "files": [
+          "CITATION.cff"
+        ],
+        "present": true
       },
       "versioning": {
-        "source": "pyproject_manifest",
-        "dynamic": false,
-        "manifest_version": "0.1.0",
+        "source": "git_tags_dynamic",
+        "dynamic": true,
+        "manifest_version": null,
         "citation_version": null,
         "drift": false
       },
       "logging": {
         "warranted": true,
-        "detected": false
+        "detected": true
       },
       "gaps": [
-        "README usage section missing",
-        "README development section missing",
-        "README security section missing",
-        "README license section missing",
-        "README citation section missing",
-        "CI badge missing",
-        "license decision/file missing",
-        "citation metadata missing",
-        "structured logging decision/implementation missing"
+        "README usage section missing"
       ]
     },
     {
@@ -8251,6 +8511,7 @@
       "topics": [
         "cicd",
         "codecov",
+        "documentation",
         "renovate",
         "repository-template",
         "solo-maintainer"
@@ -8260,29 +8521,33 @@
         "sections": {
           "installation": false,
           "usage": false,
-          "development": false,
-          "security": false,
-          "license": false,
-          "citation": false
+          "development": true,
+          "security": true,
+          "license": true,
+          "citation": true
         },
         "badges": {
-          "count": 0,
-          "ci": false,
+          "count": 3,
+          "ci": true,
           "coverage": false,
-          "license": false,
-          "citation": false,
+          "license": true,
+          "citation": true,
           "version": false
         }
       },
       "license": {
-        "api_spdx": null,
-        "files": [],
-        "present": false
+        "api_spdx": "MIT",
+        "files": [
+          "LICENSE"
+        ],
+        "present": true
       },
       "citation": {
         "warranted": true,
-        "files": [],
-        "present": false
+        "files": [
+          "CITATION.cff"
+        ],
+        "present": true
       },
       "versioning": {
         "source": "release_tags_or_doi",
@@ -8296,14 +8561,7 @@
         "detected": false
       },
       "gaps": [
-        "README usage section missing",
-        "README development section missing",
-        "README security section missing",
-        "README license section missing",
-        "README citation section missing",
-        "CI badge missing",
-        "license decision/file missing",
-        "citation metadata missing"
+        "README usage section missing"
       ]
     },
     {
@@ -8313,35 +8571,42 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "Bleeding-edge solo-maintainer LaTeX template with TeX Live 2026 CI",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
           "installation": false,
           "usage": false,
-          "development": false,
-          "security": false,
-          "license": false,
-          "citation": false
+          "development": true,
+          "security": true,
+          "license": true,
+          "citation": true
         },
         "badges": {
-          "count": 0,
-          "ci": false,
+          "count": 3,
+          "ci": true,
           "coverage": false,
-          "license": false,
-          "citation": false,
+          "license": true,
+          "citation": true,
           "version": false
         }
       },
       "license": {
-        "api_spdx": null,
-        "files": [],
-        "present": false
+        "api_spdx": "MIT",
+        "files": [
+          "LICENSE"
+        ],
+        "present": true
       },
       "citation": {
         "warranted": true,
-        "files": [],
-        "present": false
+        "files": [
+          "CITATION.cff"
+        ],
+        "present": true
       },
       "versioning": {
         "source": "release_tags_or_doi",
@@ -8355,15 +8620,7 @@
         "detected": false
       },
       "gaps": [
-        "README usage section missing",
-        "README development section missing",
-        "README security section missing",
-        "README license section missing",
-        "README citation section missing",
-        "CI badge missing",
-        "GitHub topics missing",
-        "license decision/file missing",
-        "citation metadata missing"
+        "README usage section missing"
       ]
     },
     {
@@ -8378,6 +8635,7 @@
         "codecov",
         "renovate",
         "repository-template",
+        "software",
         "solo-maintainer"
       ],
       "readme": {
@@ -8385,29 +8643,33 @@
         "sections": {
           "installation": false,
           "usage": false,
-          "development": false,
-          "security": false,
-          "license": false,
-          "citation": false
+          "development": true,
+          "security": true,
+          "license": true,
+          "citation": true
         },
         "badges": {
-          "count": 0,
-          "ci": false,
-          "coverage": false,
-          "license": false,
-          "citation": false,
+          "count": 3,
+          "ci": true,
+          "coverage": true,
+          "license": true,
+          "citation": true,
           "version": false
         }
       },
       "license": {
-        "api_spdx": null,
-        "files": [],
-        "present": false
+        "api_spdx": "MIT",
+        "files": [
+          "LICENSE"
+        ],
+        "present": true
       },
       "citation": {
         "warranted": true,
-        "files": [],
-        "present": false
+        "files": [
+          "CITATION.cff"
+        ],
+        "present": true
       },
       "versioning": {
         "source": "package_manifest",
@@ -8421,14 +8683,7 @@
         "detected": false
       },
       "gaps": [
-        "README usage section missing",
-        "README development section missing",
-        "README security section missing",
-        "README license section missing",
-        "README citation section missing",
-        "CI badge missing",
-        "license decision/file missing",
-        "citation metadata missing"
+        "README usage section missing"
       ]
     },
     {
@@ -8443,6 +8698,7 @@
         "codecov",
         "renovate",
         "repository-template",
+        "software",
         "solo-maintainer"
       ],
       "readme": {
@@ -8450,34 +8706,38 @@
         "sections": {
           "installation": false,
           "usage": false,
-          "development": false,
-          "security": false,
-          "license": false,
-          "citation": false
+          "development": true,
+          "security": true,
+          "license": true,
+          "citation": true
         },
         "badges": {
-          "count": 0,
-          "ci": false,
-          "coverage": false,
-          "license": false,
-          "citation": false,
+          "count": 3,
+          "ci": true,
+          "coverage": true,
+          "license": true,
+          "citation": true,
           "version": false
         }
       },
       "license": {
-        "api_spdx": null,
-        "files": [],
-        "present": false
+        "api_spdx": "MIT",
+        "files": [
+          "LICENSE"
+        ],
+        "present": true
       },
       "citation": {
         "warranted": true,
-        "files": [],
-        "present": false
+        "files": [
+          "CITATION.cff"
+        ],
+        "present": true
       },
       "versioning": {
-        "source": "pyproject_manifest",
-        "dynamic": false,
-        "manifest_version": "0.1.0",
+        "source": "git_tags_dynamic",
+        "dynamic": true,
+        "manifest_version": null,
         "citation_version": null,
         "drift": false
       },
@@ -8487,13 +8747,6 @@
       },
       "gaps": [
         "README usage section missing",
-        "README development section missing",
-        "README security section missing",
-        "README license section missing",
-        "README citation section missing",
-        "CI badge missing",
-        "license decision/file missing",
-        "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
     },
@@ -8509,6 +8762,7 @@
         "codecov",
         "renovate",
         "repository-template",
+        "software",
         "solo-maintainer"
       ],
       "readme": {
@@ -8516,29 +8770,33 @@
         "sections": {
           "installation": false,
           "usage": false,
-          "development": false,
-          "security": false,
-          "license": false,
-          "citation": false
+          "development": true,
+          "security": true,
+          "license": true,
+          "citation": true
         },
         "badges": {
-          "count": 0,
-          "ci": false,
-          "coverage": false,
-          "license": false,
-          "citation": false,
+          "count": 3,
+          "ci": true,
+          "coverage": true,
+          "license": true,
+          "citation": true,
           "version": false
         }
       },
       "license": {
-        "api_spdx": null,
-        "files": [],
-        "present": false
+        "api_spdx": "MIT",
+        "files": [
+          "LICENSE"
+        ],
+        "present": true
       },
       "citation": {
         "warranted": true,
-        "files": [],
-        "present": false
+        "files": [
+          "CITATION.cff"
+        ],
+        "present": true
       },
       "versioning": {
         "source": "cargo_manifest",
@@ -8553,13 +8811,6 @@
       },
       "gaps": [
         "README usage section missing",
-        "README development section missing",
-        "README security section missing",
-        "README license section missing",
-        "README citation section missing",
-        "CI badge missing",
-        "license decision/file missing",
-        "citation metadata missing",
         "structured logging decision/implementation missing"
       ]
     },
@@ -8570,35 +8821,42 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "Bleeding-edge solo-maintainer Typst 0.15 template with reproducible CI",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
           "installation": false,
           "usage": false,
-          "development": false,
-          "security": false,
-          "license": false,
-          "citation": false
+          "development": true,
+          "security": true,
+          "license": true,
+          "citation": true
         },
         "badges": {
-          "count": 0,
-          "ci": false,
+          "count": 3,
+          "ci": true,
           "coverage": false,
-          "license": false,
-          "citation": false,
+          "license": true,
+          "citation": true,
           "version": false
         }
       },
       "license": {
-        "api_spdx": null,
-        "files": [],
-        "present": false
+        "api_spdx": "MIT",
+        "files": [
+          "LICENSE"
+        ],
+        "present": true
       },
       "citation": {
         "warranted": true,
-        "files": [],
-        "present": false
+        "files": [
+          "CITATION.cff"
+        ],
+        "present": true
       },
       "versioning": {
         "source": "typst_manifest",
@@ -8612,15 +8870,7 @@
         "detected": false
       },
       "gaps": [
-        "README usage section missing",
-        "README development section missing",
-        "README security section missing",
-        "README license section missing",
-        "README citation section missing",
-        "CI badge missing",
-        "GitHub topics missing",
-        "license decision/file missing",
-        "citation metadata missing"
+        "README usage section missing"
       ]
     },
     {
@@ -8630,7 +8880,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -8678,7 +8931,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -8690,7 +8942,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Discrete event simulation in Python using the 'SimPy' package for health operations",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -8741,7 +8996,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -8752,7 +9006,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Tutorials on Elicited Preferences Research in Healthcare",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -8798,7 +9055,6 @@
       "gaps": [
         "README security section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -8809,7 +9065,10 @@
       "archetype": "documentation",
       "default_branch": "master",
       "description": "Tutorial on Game Theory Modelling for Healthcare",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -8856,7 +9115,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -8868,7 +9126,10 @@
       "archetype": "documentation",
       "default_branch": "master",
       "description": "Tutorial on Process Mining for Healthcare",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -8915,7 +9176,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -8927,7 +9187,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Tutorials on Equity Methods in Health Economics and Outcomes Research",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -8977,8 +9240,7 @@
         "README security section missing",
         "README citation section missing",
         "CI badge missing",
-        "license badge missing",
-        "GitHub topics missing"
+        "license badge missing"
       ]
     },
     {
@@ -8988,7 +9250,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Tutorial on Microcosting in Clinical Genomics",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9038,7 +9303,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9049,7 +9313,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Tutorials on Using RxNav in a Box in Health Economics and Outcomes Research",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9099,7 +9366,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9110,7 +9376,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Health Economics and Outcomes Research Tutorials for R, Julia, and Python",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": null,
         "sections": {
@@ -9155,7 +9424,6 @@
       },
       "gaps": [
         "README missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9166,7 +9434,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9214,7 +9485,6 @@
         "README security section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9225,7 +9495,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9274,7 +9547,6 @@
         "CI badge missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9285,7 +9557,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "University of Melbourne Thesis Template",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9333,7 +9608,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9344,7 +9618,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "University of Melbourne Thesis Template - Quarto",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9392,7 +9669,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9403,7 +9679,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "This repository contains a thesis template for University of Melbourne graduate researchers, using typst",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9453,7 +9732,6 @@
         "README citation section missing",
         "CI badge missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9464,7 +9742,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9512,7 +9793,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -9524,7 +9804,10 @@
       "archetype": "software",
       "default_branch": "master",
       "description": "Decision Support Tool for suspected Traumatic Brain Injuries",
-      "topics": [],
+      "topics": [
+        "software",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9570,7 +9853,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing",
         "structured logging decision/implementation missing"
@@ -9590,7 +9872,9 @@
         "owl",
         "semantic-web",
         "shacl",
-        "sparql"
+        "solo-maintainer",
+        "sparql",
+        "typesetting"
       ],
       "readme": {
         "path": "README.md",
@@ -9652,7 +9936,10 @@
       "archetype": "documentation",
       "default_branch": "master",
       "description": "Value of Information of AI Hallucinations",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9699,7 +9986,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -9711,7 +9997,10 @@
       "archetype": "documentation",
       "default_branch": "main",
       "description": "Value of Information - BEAST2",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9761,7 +10050,6 @@
         "README license section missing",
         "README citation section missing",
         "license badge missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9772,7 +10060,10 @@
       "archetype": "documentation",
       "default_branch": "master",
       "description": "Value of Information - Reducing Uncertainty in Genomic Information ",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9819,7 +10110,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -9831,7 +10121,10 @@
       "archetype": "documentation",
       "default_branch": "master",
       "description": "",
-      "topics": [],
+      "topics": [
+        "documentation",
+        "solo-maintainer"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9879,7 +10172,6 @@
         "README license section missing",
         "README citation section missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
@@ -9891,7 +10183,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -9941,7 +10236,6 @@
         "README citation section missing",
         "license badge missing",
         "GitHub description missing",
-        "GitHub topics missing",
         "citation metadata missing"
       ]
     },
@@ -9966,6 +10260,8 @@
         "r",
         "rust",
         "scientific-computing",
+        "solo-maintainer",
+        "typesetting",
         "uncertainty-quantification",
         "value-of-information"
       ],
@@ -10027,7 +10323,10 @@
       "archetype": "typesetting",
       "default_branch": "main",
       "description": "Value of Perspective Proof of Concept Aotearoa New Zealand",
-      "topics": [],
+      "topics": [
+        "solo-maintainer",
+        "typesetting"
+      ],
       "readme": {
         "path": "README.md",
         "sections": {
@@ -10073,8 +10372,7 @@
         "detected": false
       },
       "gaps": [
-        "README security section missing",
-        "GitHub topics missing"
+        "README security section missing"
       ]
     }
   ]
