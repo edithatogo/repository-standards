@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-31T07:44:52.1282095Z",
+  "generated_at": "2026-07-31T07:47:44.7350930Z",
   "scope": "Owner repositories excluding forks, archived, and disabled repositories",
   "policy": {
     "maintainers": 1,
@@ -2880,7 +2880,7 @@
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "listed_inactive",
+        "current": "active",
         "warranted": true,
         "target": "active_oidc_upload_with_real_coverage"
       },
