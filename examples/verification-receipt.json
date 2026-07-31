@@ -13,5 +13,16 @@
       "evidence": "make validate"
     }
   ],
-  "artifacts": []
+  "artifacts": [],
+  "quality_metrics": {
+    "line_coverage_percent": 95.0,
+    "patch_coverage_percent": 100.0,
+    "mutation_score_percent": 80.0,
+    "property_examples": 100,
+    "metamorphic_relations": 2,
+    "deterministic_simulation_scenarios": 8,
+    "contract_tests": 4,
+    "quarantined_tests": 0,
+    "benchmark_regressions": 0
+  }
 }
