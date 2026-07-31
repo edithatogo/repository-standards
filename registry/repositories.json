@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-31T07:21:13.0042451Z",
+  "generated_at": "2026-07-31T07:41:09.7251804Z",
   "scope": "Owner repositories excluding forks, archived, and disabled repositories",
   "policy": {
     "maintainers": 1,
@@ -2341,6 +2341,27 @@
       "quality_issue": "https://github.com/edithatogo/renovate-config/issues/2"
     },
     {
+      "repository": "edithatogo/repository-standards",
+      "visibility": "public",
+      "archetype": "docs-template",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
+    },
+    {
       "repository": "edithatogo/research-skills",
       "visibility": "public",
       "archetype": "docs-template",
@@ -2759,6 +2780,111 @@
         "target": "active_oidc_upload_with_real_coverage"
       },
       "quality_issue": "https://github.com/edithatogo/Syspop/issues/6"
+    },
+    {
+      "repository": "edithatogo/template-solo-data",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
+    },
+    {
+      "repository": "edithatogo/template-solo-docs",
+      "visibility": "public",
+      "archetype": "docs-template",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
+    },
+    {
+      "repository": "edithatogo/template-solo-node",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
+    },
+    {
+      "repository": "edithatogo/template-solo-python",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
+    },
+    {
+      "repository": "edithatogo/template-solo-rust",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
     },
     {
       "repository": "edithatogo/todo-sync",
