@@ -1,1403 +1,3268 @@
 {
-  "generated_at": "2026-07-31T07:05:31.8041915Z",
-  "scope": "Non-fork, non-archived, non-disabled repositories owned by edithatogo",
-  "renovate_installation_gate": "Install https://github.com/apps/renovate for All repositories; inherited configuration is prepared.",
-  "codecov_policy": "Use OIDC uploads for executable repositories; do not fabricate coverage for docs, config-only, or empty repositories.",
+  "generated_at": "2026-07-31T07:21:13.0042451Z",
+  "scope": "Owner repositories excluding forks, archived, and disabled repositories",
+  "policy": {
+    "maintainers": 1,
+    "mandatory_human_approvals": 0,
+    "dependency_updates": "Renovate",
+    "dependabot_transition": "Remove only after Renovate first successful run",
+    "coverage": "Codecov OIDC for executable repositories with real coverage; explicit N/A otherwise"
+  },
   "repositories": [
     {
       "repository": "edithatogo/.github",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/.github/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/.github/issues/4"
     },
     {
       "repository": "edithatogo/accessandflow",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/accessandflow/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/accessandflow/issues/4"
     },
     {
       "repository": "edithatogo/ai-safety-rare-disease",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/ai-safety-rare-disease/issues/26",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/ai-safety-rare-disease/issues/25"
     },
     {
       "repository": "edithatogo/analyse_hype_celebrity",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/analyse_hype_celebrity/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/analyse_hype_celebrity/issues/3"
     },
     {
       "repository": "edithatogo/analysis_aihw_hospitals",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/analysis_aihw_hospitals/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/analysis_aihw_hospitals/issues/1"
     },
     {
       "repository": "edithatogo/apfs-rs",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/apfs-rs/issues/45",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/apfs-rs/issues/44"
     },
     {
       "repository": "edithatogo/archive-govt-nz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/archive-govt-nz/issues/15",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/archive-govt-nz/issues/14"
     },
     {
       "repository": "edithatogo/arxiv-latex-template",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/arxiv-latex-template/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/arxiv-latex-template/issues/2"
     },
     {
       "repository": "edithatogo/arxiv-paper-template",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/arxiv-paper-template/issues/15",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/arxiv-paper-template/issues/14"
     },
     {
       "repository": "edithatogo/asreview",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/asreview/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/asreview/issues/4"
     },
     {
       "repository": "edithatogo/astro-polyglot",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/astro-polyglot/issues/8",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/astro-polyglot/issues/7"
     },
     {
       "repository": "edithatogo/aus_mbs_pbs_graph",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/aus_mbs_pbs_graph/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/aus_mbs_pbs_graph/issues/3"
     },
     {
       "repository": "edithatogo/aus-health-data-scraper",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/aus-health-data-scraper/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/aus-health-data-scraper/issues/2"
     },
     {
       "repository": "edithatogo/authentext",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/authentext/issues/65",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/authentext/issues/64"
     },
     {
       "repository": "edithatogo/Budget_2026_MMH",
-      "archetype": "data",
+      "visibility": "public",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/Budget_2026_MMH/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/Budget_2026_MMH/issues/1"
     },
     {
       "repository": "edithatogo/careops",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/careops/issues/150",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/careops/issues/149"
     },
     {
       "repository": "edithatogo/careops-approve",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/careops-approve/issues/50",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/careops-approve/issues/49"
     },
     {
       "repository": "edithatogo/careops-costing",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/careops-costing/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/careops-costing/issues/4"
     },
     {
       "repository": "edithatogo/careops-decisions",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/careops-decisions/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/careops-decisions/issues/2"
     },
     {
       "repository": "edithatogo/careops-finance",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/careops-finance/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/careops-finance/issues/2"
     },
     {
       "repository": "edithatogo/careops-incidents",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/careops-incidents/issues/13",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/careops-incidents/issues/12"
     },
     {
       "repository": "edithatogo/careops-process",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/careops-process/issues/60",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/careops-process/issues/59"
     },
     {
       "repository": "edithatogo/CFTRDataTransfer",
-      "archetype": "data",
+      "visibility": "public",
+      "archetype": "data-config",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/CFTRDataTransfer/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/CFTRDataTransfer/issues/1"
     },
     {
       "repository": "edithatogo/checklist_microcosting",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/checklist_microcosting/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/checklist_microcosting/issues/3"
     },
     {
       "repository": "edithatogo/citeweft",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/citeweft/issues/10",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/citeweft/issues/9"
     },
     {
       "repository": "edithatogo/claude-code",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/claude-code/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/claude-code/issues/2"
     },
     {
       "repository": "edithatogo/closer-to-whom",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/closer-to-whom/issues/188",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/closer-to-whom/issues/187"
     },
     {
       "repository": "edithatogo/cobra-costing",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/cobra-costing/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/cobra-costing/issues/1"
     },
     {
       "repository": "edithatogo/conductor-next",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/conductor-next/issues/16",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/conductor-next/issues/15"
     },
     {
       "repository": "edithatogo/corpus-cases-medilegal-nz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/corpus-cases-medilegal-nz/issues/26",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/corpus-cases-medilegal-nz/issues/25"
     },
     {
       "repository": "edithatogo/corpus-legislation-nz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/corpus-legislation-nz/issues/160",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/corpus-legislation-nz/issues/159"
     },
     {
       "repository": "edithatogo/corpus-nz-hansard",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/corpus-nz-hansard/issues/30",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/corpus-nz-hansard/issues/29"
     },
     {
       "repository": "edithatogo/des_tutorial_py_response",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/des_tutorial_py_response/issues/19",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/des_tutorial_py_response/issues/18"
     },
     {
       "repository": "edithatogo/dev-sync-automation",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/dev-sync-automation/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/dev-sync-automation/issues/2"
     },
     {
       "repository": "edithatogo/dnz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/dnz/issues/41",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/dnz/issues/40"
     },
     {
       "repository": "edithatogo/ecosystem-docs",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/ecosystem-docs/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/ecosystem-docs/issues/3"
     },
     {
       "repository": "edithatogo/edithatogo.r-universe.dev",
-      "archetype": "data",
+      "visibility": "public",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/edithatogo.r-universe.dev/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/edithatogo.r-universe.dev/issues/2"
     },
     {
       "repository": "edithatogo/ee_trd",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/ee_trd/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/ee_trd/issues/2"
     },
     {
       "repository": "edithatogo/f7fztfn9vz",
+      "visibility": "public",
       "archetype": "empty",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": null,
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": null
     },
     {
       "repository": "edithatogo/fe-reader",
-      "archetype": "rust",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/fe-reader/issues/15",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/fe-reader/issues/14"
     },
     {
       "repository": "edithatogo/fhirstarter",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/fhirstarter/issues/13",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/fhirstarter/issues/12"
     },
     {
       "repository": "edithatogo/foi-o",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/foi-o/issues/113",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/foi-o/issues/112"
     },
     {
       "repository": "edithatogo/foi-process",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/foi-process/issues/95",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/foi-process/issues/94"
     },
     {
       "repository": "edithatogo/fyi-archive",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/fyi-archive/issues/316",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/fyi-archive/issues/315"
     },
     {
       "repository": "edithatogo/fyi-cli",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/fyi-cli/issues/282",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/fyi-cli/issues/281"
     },
     {
       "repository": "edithatogo/gemini-cli_vs_itself",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/gemini-cli_vs_itself/issues/6",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/gemini-cli_vs_itself/issues/5"
     },
     {
       "repository": "edithatogo/ginsim",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/ginsim/issues/25",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/ginsim/issues/24"
     },
     {
       "repository": "edithatogo/global-family-justice-data",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/global-family-justice-data/issues/7",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/global-family-justice-data/issues/6"
     },
     {
       "repository": "edithatogo/global-medicines-atlas",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/global-medicines-atlas/issues/82",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/global-medicines-atlas/issues/81"
     },
     {
       "repository": "edithatogo/gnrhi_oor",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/gnrhi_oor/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/gnrhi_oor/issues/4"
     },
     {
       "repository": "edithatogo/gtpcnz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/gtpcnz/issues/147",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/gtpcnz/issues/146"
     },
     {
       "repository": "edithatogo/hathi-nz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/hathi-nz/issues/42",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/hathi-nz/issues/41"
     },
     {
       "repository": "edithatogo/healthagent",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/healthagent/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/healthagent/issues/4"
     },
     {
       "repository": "edithatogo/healthpoint-rs",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/healthpoint-rs/issues/59",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/healthpoint-rs/issues/58"
     },
     {
       "repository": "edithatogo/hermes-gemma-lab",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/hermes-gemma-lab/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/hermes-gemma-lab/issues/2"
     },
     {
       "repository": "edithatogo/hermes-lfm2-lab",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/hermes-lfm2-lab/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/hermes-lfm2-lab/issues/2"
     },
     {
       "repository": "edithatogo/hermes-ollama-pack",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/hermes-ollama-pack/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/hermes-ollama-pack/issues/2"
     },
     {
       "repository": "edithatogo/hermes-training",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/hermes-training/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/hermes-training/issues/3"
     },
     {
       "repository": "edithatogo/homebrew-mchs",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/homebrew-mchs/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/homebrew-mchs/issues/1"
     },
     {
       "repository": "edithatogo/homebrew-osf",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/homebrew-osf/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/homebrew-osf/issues/1"
     },
     {
       "repository": "edithatogo/hwcc",
-      "archetype": "data",
+      "visibility": "private",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/hwcc/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/hwcc/issues/1"
     },
     {
       "repository": "edithatogo/innovate",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/innovate/issues/415",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/innovate/issues/414"
     },
     {
       "repository": "edithatogo/kairos",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/kairos/issues/122",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/kairos/issues/121"
     },
     {
       "repository": "edithatogo/learningfromharm",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/learningfromharm/issues/6",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/learningfromharm/issues/5"
     },
     {
       "repository": "edithatogo/legal-nz-workspace",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/legal-nz-workspace/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/legal-nz-workspace/issues/2"
     },
     {
       "repository": "edithatogo/legislation",
-      "archetype": "rust",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/legislation/issues/110",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/legislation/issues/109"
     },
     {
       "repository": "edithatogo/lifecourse",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/lifecourse/issues/49",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/lifecourse/issues/48"
     },
     {
       "repository": "edithatogo/linear-history",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/linear-history/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/linear-history/issues/3"
     },
     {
       "repository": "edithatogo/m365_2_latex_4_py",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/m365_2_latex_4_py/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/m365_2_latex_4_py/issues/4"
     },
     {
       "repository": "edithatogo/mars",
-      "archetype": "rust",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/mars/issues/131",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/mars/issues/130"
     },
     {
       "repository": "edithatogo/mchs",
-      "archetype": "rust",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/mchs/issues/368",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/mchs/issues/367"
     },
     {
       "repository": "edithatogo/mchs-swift",
-      "archetype": "data",
+      "visibility": "public",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/mchs-swift/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/mchs-swift/issues/1"
     },
     {
       "repository": "edithatogo/metaclassify",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/metaclassify/issues/6",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/metaclassify/issues/5"
     },
     {
       "repository": "edithatogo/michelin-nz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/michelin-nz/issues/33",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/michelin-nz/issues/32"
     },
     {
       "repository": "edithatogo/microcosting_genomics",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/microcosting_genomics/issues/165",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/microcosting_genomics/issues/164"
     },
     {
       "repository": "edithatogo/microcosting_healthworkforce",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/microcosting_healthworkforce/issues/32",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/microcosting_healthworkforce/issues/31"
     },
     {
       "repository": "edithatogo/models_lang",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/models_lang/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/models_lang/issues/2"
     },
     {
       "repository": "edithatogo/my-personal-data",
-      "archetype": "data",
+      "visibility": "private",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/my-personal-data/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/my-personal-data/issues/1"
     },
     {
       "repository": "edithatogo/NationalWeightedActivityUnitWrapper.jl",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/NationalWeightedActivityUnitWrapper.jl/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/NationalWeightedActivityUnitWrapper.jl/issues/4"
     },
     {
       "repository": "edithatogo/new-drug-reimbursement-game",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/new-drug-reimbursement-game/issues/15",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/new-drug-reimbursement-game/issues/14"
     },
     {
       "repository": "edithatogo/nhra_game",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/nhra_game/issues/26",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/nhra_game/issues/25"
     },
     {
       "repository": "edithatogo/nlp-policy-nz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/nlp-policy-nz/issues/233",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/nlp-policy-nz/issues/232"
     },
     {
       "repository": "edithatogo/notion-skill",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/notion-skill/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/notion-skill/issues/2"
     },
     {
       "repository": "edithatogo/nsw-health-mscg-powerplatform",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/nsw-health-mscg-powerplatform/issues/6",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/nsw-health-mscg-powerplatform/issues/5"
     },
     {
       "repository": "edithatogo/NwauCore.jl",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/NwauCore.jl/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/NwauCore.jl/issues/3"
     },
     {
       "repository": "edithatogo/nz_health_appropriations",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/nz_health_appropriations/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/nz_health_appropriations/issues/3"
     },
     {
       "repository": "edithatogo/nztaxmicrosim",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/nztaxmicrosim/issues/189",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/nztaxmicrosim/issues/188"
     },
     {
       "repository": "edithatogo/ollama-old",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "temp-old-main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/ollama-old/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/ollama-old/issues/1"
     },
     {
       "repository": "edithatogo/open_social_data",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/open_social_data/issues/30",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/open_social_data/issues/29"
     },
     {
       "repository": "edithatogo/openfisca-aotearoa-betterules",
+      "visibility": "public",
       "archetype": "empty",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": null,
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": null
     },
     {
       "repository": "edithatogo/osf-cli-go",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/osf-cli-go/issues/133",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/osf-cli-go/issues/132"
     },
     {
       "repository": "edithatogo/pae_ora_reform",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/pae_ora_reform/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/pae_ora_reform/issues/4"
     },
     {
       "repository": "edithatogo/policy_-paramedics_mentalhealth_cxsyx",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/policy_-paramedics_mentalhealth_cxsyx/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/policy_-paramedics_mentalhealth_cxsyx/issues/1"
     },
     {
       "repository": "edithatogo/policy_paramedics_s41",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/policy_paramedics_s41/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/policy_paramedics_s41/issues/1"
     },
     {
       "repository": "edithatogo/policy_societaldam_pharma",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/policy_societaldam_pharma/issues/18",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/policy_societaldam_pharma/issues/17"
     },
     {
       "repository": "edithatogo/populate",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/populate/issues/9",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/populate/issues/8"
     },
     {
       "repository": "edithatogo/populationsim",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/populationsim/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/populationsim/issues/2"
     },
     {
       "repository": "edithatogo/powerhealth",
-      "archetype": "data",
+      "visibility": "private",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/powerhealth/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/powerhealth/issues/1"
     },
     {
       "repository": "edithatogo/process-mappings",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/process-mappings/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/process-mappings/issues/3"
     },
     {
       "repository": "edithatogo/project-template",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/project-template/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/project-template/issues/2"
     },
     {
       "repository": "edithatogo/project-templates",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/project-templates/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/project-templates/issues/2"
     },
     {
       "repository": "edithatogo/pubblocknz",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/pubblocknz/issues/41",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/pubblocknz/issues/40"
     },
     {
       "repository": "edithatogo/pybliometrics",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/pybliometrics/issues/11",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/pybliometrics/issues/10"
     },
     {
       "repository": "edithatogo/pyhero",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/pyhero/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/pyhero/issues/3"
     },
     {
       "repository": "edithatogo/rac-conformance",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/rac-conformance/issues/180",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/rac-conformance/issues/179"
     },
     {
       "repository": "edithatogo/rareburden-commons",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/rareburden-commons/issues/22",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/rareburden-commons/issues/21"
     },
     {
       "repository": "edithatogo/rarecpa",
-      "archetype": "data",
+      "visibility": "private",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/rarecpa/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/rarecpa/issues/1"
     },
     {
       "repository": "edithatogo/rcagent",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/rcagent/issues/18",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/rcagent/issues/17"
     },
     {
       "repository": "edithatogo/real-estate-form-model",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/real-estate-form-model/issues/8",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/real-estate-form-model/issues/7"
     },
     {
       "repository": "edithatogo/reimbursement-atlas",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/reimbursement-atlas/issues/645",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/reimbursement-atlas/issues/644"
     },
     {
       "repository": "edithatogo/renovate-config",
-      "archetype": "data",
+      "visibility": "public",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/renovate-config/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/renovate-config/issues/2"
     },
     {
       "repository": "edithatogo/research-skills",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/research-skills/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/research-skills/issues/1"
     },
     {
       "repository": "edithatogo/revalue",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/revalue/issues/8",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/revalue/issues/7"
     },
     {
       "repository": "edithatogo/riopa-infrastructure",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/riopa-infrastructure/issues/147",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/riopa-infrastructure/issues/146"
     },
     {
       "repository": "edithatogo/scholarly-publishing-agents",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/scholarly-publishing-agents/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/scholarly-publishing-agents/issues/1"
     },
     {
       "repository": "edithatogo/SciencePlots",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/SciencePlots/issues/6",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/SciencePlots/issues/5"
     },
     {
       "repository": "edithatogo/scimapping",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/scimapping/issues/11",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/scimapping/issues/10"
     },
     {
       "repository": "edithatogo/scoop-osf",
-      "archetype": "data",
+      "visibility": "public",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/scoop-osf/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/scoop-osf/issues/1"
     },
     {
       "repository": "edithatogo/sim_hospital_emergencydepartment",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/sim_hospital_emergencydepartment/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/sim_hospital_emergencydepartment/issues/1"
     },
     {
       "repository": "edithatogo/sim_hospital_wholeofdistrict",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/sim_hospital_wholeofdistrict/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/sim_hospital_wholeofdistrict/issues/1"
     },
     {
       "repository": "edithatogo/sim_hospital_wholeofhospital",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/sim_hospital_wholeofhospital/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/sim_hospital_wholeofhospital/issues/1"
     },
     {
       "repository": "edithatogo/simpletask-android",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/simpletask-android/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/simpletask-android/issues/2"
     },
     {
       "repository": "edithatogo/simpy",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/simpy/issues/81",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/simpy/issues/80"
     },
     {
       "repository": "edithatogo/simsyphilis",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/simsyphilis/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/simsyphilis/issues/1"
     },
     {
       "repository": "edithatogo/skillresearch",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/skillresearch/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/skillresearch/issues/2"
     },
     {
       "repository": "edithatogo/sm-govt-nz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/sm-govt-nz/issues/325",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/sm-govt-nz/issues/324"
     },
     {
       "repository": "edithatogo/sourceright",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/sourceright/issues/83",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/sourceright/issues/82"
     },
     {
       "repository": "edithatogo/standardflow",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/standardflow/issues/14",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/standardflow/issues/13"
     },
     {
       "repository": "edithatogo/standards_check",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/standards_check/issues/31",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/standards_check/issues/30"
     },
     {
       "repository": "edithatogo/substack-cli-ts",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/substack-cli-ts/issues/163",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/substack-cli-ts/issues/162"
     },
     {
       "repository": "edithatogo/Syspop",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/Syspop/issues/7",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/Syspop/issues/6"
     },
     {
       "repository": "edithatogo/todo-sync",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/todo-sync/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/todo-sync/issues/2"
     },
     {
       "repository": "edithatogo/tutorial_des_health_services",
-      "archetype": "data",
+      "visibility": "private",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/tutorial_des_health_services/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/tutorial_des_health_services/issues/3"
     },
     {
       "repository": "edithatogo/tutorial_ep_health",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/tutorial_ep_health/issues/5",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/tutorial_ep_health/issues/4"
     },
     {
       "repository": "edithatogo/tutorial_health_gt",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/tutorial_health_gt/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/tutorial_health_gt/issues/2"
     },
     {
       "repository": "edithatogo/tutorial_health_pm",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/tutorial_health_pm/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/tutorial_health_pm/issues/2"
     },
     {
       "repository": "edithatogo/tutorial_methods_equity",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/tutorial_methods_equity/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/tutorial_methods_equity/issues/3"
     },
     {
       "repository": "edithatogo/tutorial_microcosting_genomics",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/tutorial_microcosting_genomics/issues/8",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/tutorial_microcosting_genomics/issues/7"
     },
     {
       "repository": "edithatogo/tutorial_rxnavinabox",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/tutorial_rxnavinabox/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/tutorial_rxnavinabox/issues/1"
     },
     {
       "repository": "edithatogo/tutorials_heor",
-      "archetype": "data",
+      "visibility": "private",
+      "archetype": "data-config",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/tutorials_heor/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/tutorials_heor/issues/1"
     },
     {
       "repository": "edithatogo/two-phase-causal-ensemble-model",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/two-phase-causal-ensemble-model/issues/6",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/two-phase-causal-ensemble-model/issues/5"
     },
     {
       "repository": "edithatogo/UniMelb-PhD-Thesis",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/UniMelb-PhD-Thesis/issues/4",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/UniMelb-PhD-Thesis/issues/3"
     },
     {
       "repository": "edithatogo/unimelb-thesis-template-latex",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/unimelb-thesis-template-latex/issues/9",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-latex/issues/8"
     },
     {
       "repository": "edithatogo/unimelb-thesis-template-quarto",
-      "archetype": "docs",
+      "visibility": "public",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/unimelb-thesis-template-quarto/issues/10",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-quarto/issues/9"
     },
     {
       "repository": "edithatogo/unimelb-thesis-template-typst",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/unimelb-thesis-template-typst/issues/6",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-typst/issues/5"
     },
     {
       "repository": "edithatogo/UniMelb-Thesis-v2",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/UniMelb-Thesis-v2/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/UniMelb-Thesis-v2/issues/1"
     },
     {
       "repository": "edithatogo/unisa-tbi",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/unisa-tbi/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/unisa-tbi/issues/2"
     },
     {
       "repository": "edithatogo/UOGTO",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/UOGTO/issues/108",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/UOGTO/issues/107"
     },
     {
       "repository": "edithatogo/voi_beast2",
-      "archetype": "docs",
+      "visibility": "private",
+      "archetype": "docs-template",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/voi_beast2/issues/2",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/voi_beast2/issues/1"
     },
     {
       "repository": "edithatogo/voi_genomicvariation",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/voi_genomicvariation/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/voi_genomicvariation/issues/2"
     },
     {
       "repository": "edithatogo/voi_humangenomeproject",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/voi_humangenomeproject/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/voi_humangenomeproject/issues/2"
     },
     {
       "repository": "edithatogo/voi_sequencing_costs",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/voi_sequencing_costs/issues/35",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/voi_sequencing_costs/issues/34"
     },
     {
       "repository": "edithatogo/voi-hallucinations",
-      "archetype": "python-or-other-software",
+      "visibility": "private",
+      "archetype": "software",
       "default_branch": "master",
-      "renovate": "activate",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/voi-hallucinations/issues/3",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "activate_via_inherited_config",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "private_unverified_requires_codecov_authorization",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/voi-hallucinations/issues/2"
     },
     {
       "repository": "edithatogo/voiage",
-      "archetype": "rust",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "detected",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/voiage/issues/657",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/voiage/issues/656"
     },
     {
       "repository": "edithatogo/vop_poc_nz",
-      "archetype": "python-or-other-software",
+      "visibility": "public",
+      "archetype": "software",
       "default_branch": "main",
-      "renovate": "migrate_from_dependabot",
-      "codecov": "verify_or_activate",
-      "parent_issue": "https://github.com/edithatogo/vop_poc_nz/issues/55",
-      "solo_maintainer": true
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "migrate_from_dependabot_after_renovate_first_run",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": true,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "listed_inactive",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/vop_poc_nz/issues/54"
     }
   ]
 }
