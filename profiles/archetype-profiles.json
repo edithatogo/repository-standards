@@ -1,0 +1,190 @@
+{
+  "$schema": "./archetype-profiles.schema.json",
+  "schema_version": 1,
+  "defaults": {
+    "sole_developer": true,
+    "mandatory_human_approvals": 0,
+    "required_workflow_features": [
+      "explicit_permissions",
+      "concurrency_cancellation",
+      "job_timeouts",
+      "immutable_action_pins"
+    ],
+    "required_context": [
+      "AGENTS.md",
+      "SECURITY.md",
+      "CONTRIBUTING.md"
+    ],
+    "required_harness_capabilities": [
+      "format",
+      "lint",
+      "unit",
+      "generated_drift",
+      "security",
+      "deterministic_seed",
+      "verification_receipt"
+    ],
+    "ruleset": {
+      "require_stable_automated_checks": true,
+      "required_human_approvals": 0,
+      "block_force_push": true,
+      "block_branch_deletion": true,
+      "require_conversation_resolution": true,
+      "owner_recovery_path": true
+    }
+  },
+  "supply_chain_profiles": {
+    "none": [],
+    "baseline": [
+      "dependency_review",
+      "sbom"
+    ],
+    "published": [
+      "dependency_review",
+      "scorecard",
+      "sbom",
+      "provenance",
+      "checksums"
+    ],
+    "high_risk": [
+      "codeql",
+      "dependency_review",
+      "scorecard",
+      "sbom",
+      "provenance",
+      "checksums",
+      "signed_release"
+    ]
+  },
+  "profiles": {
+    "generic-software": {
+      "executable": true,
+      "workflow": "software-ci",
+      "supply_chain": "baseline",
+      "coverage": "warranted",
+      "logging": "classify",
+      "release": "build_publish_separated"
+    },
+    "python": {
+      "extends": "generic-software",
+      "workflow": "python-ci",
+      "version_authority": "pyproject_or_tag_derived",
+      "harness": "make_or_nox_or_tox_or_script"
+    },
+    "rust": {
+      "extends": "generic-software",
+      "workflow": "rust-ci",
+      "version_authority": "Cargo.toml",
+      "harness": "make_or_just_or_cargo_alias"
+    },
+    "node": {
+      "extends": "generic-software",
+      "workflow": "node-ci",
+      "version_authority": "package.json",
+      "harness": "npm_script"
+    },
+    "go": {
+      "extends": "generic-software",
+      "workflow": "go-ci",
+      "version_authority": "release_tag",
+      "harness": "make_or_task"
+    },
+    "julia": {
+      "extends": "generic-software",
+      "workflow": "julia-ci",
+      "version_authority": "Project.toml",
+      "harness": "make_or_julia_script"
+    },
+    "r": {
+      "extends": "generic-software",
+      "workflow": "r-ci",
+      "version_authority": "DESCRIPTION",
+      "harness": "make_or_r_script"
+    },
+    "powershell": {
+      "extends": "generic-software",
+      "workflow": "powershell-ci",
+      "version_authority": "module_manifest_or_release_tag",
+      "harness": "Invoke-Build_or_script"
+    },
+    "android": {
+      "extends": "generic-software",
+      "workflow": "android-ci",
+      "supply_chain": "high_risk",
+      "version_authority": "gradle",
+      "harness": "gradle_wrapper"
+    },
+    "polyglot-cli": {
+      "extends": "generic-software",
+      "workflow": "polyglot-cli-ci",
+      "supply_chain": "published",
+      "logging": "structured_required",
+      "harness": "make_or_just"
+    },
+    "data-pipeline": {
+      "extends": "generic-software",
+      "workflow": "data-ci",
+      "supply_chain": "published",
+      "logging": "structured_required",
+      "data_governance": "required",
+      "harness": "make_or_script"
+    },
+    "scheduled-data-collector": {
+      "extends": "data-pipeline",
+      "workflow": "scheduled-data-collector-ci",
+      "schedule_health": "required",
+      "retry_policy": "bounded_and_classified"
+    },
+    "documentation": {
+      "executable": false,
+      "workflow": "docs-ci",
+      "supply_chain": "none",
+      "coverage": "not_applicable",
+      "logging": "not_applicable",
+      "release": "build_publish_separated"
+    },
+    "latex": {
+      "extends": "documentation",
+      "workflow": "latex-ci",
+      "version_authority": "release_tag_or_doi",
+      "harness": "make"
+    },
+    "typst": {
+      "extends": "documentation",
+      "workflow": "typst-ci",
+      "version_authority": "typst.toml_or_release_tag",
+      "harness": "make"
+    },
+    "quarto": {
+      "extends": "documentation",
+      "workflow": "quarto-ci",
+      "version_authority": "release_tag_or_doi",
+      "harness": "make_or_script"
+    },
+    "research-paper": {
+      "extends": "documentation",
+      "workflow": "research-paper-ci",
+      "supply_chain": "baseline",
+      "citation": "required",
+      "rights": "required",
+      "reproducibility": "required"
+    },
+    "repository-infrastructure": {
+      "executable": false,
+      "workflow": "configuration-validation",
+      "supply_chain": "baseline",
+      "coverage": "not_applicable",
+      "logging": "not_applicable",
+      "release": "not_applicable"
+    },
+    "empty-or-unclassified": {
+      "executable": false,
+      "workflow": "classification_required",
+      "supply_chain": "none",
+      "coverage": "not_applicable",
+      "logging": "not_applicable",
+      "release": "classification_required"
+    }
+  }
+}
+
