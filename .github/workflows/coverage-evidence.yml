@@ -1,0 +1,35 @@
+name: Coverage evidence
+
+on:
+  workflow_call:
+    inputs:
+      files:
+        required: true
+        type: string
+      flags:
+        required: false
+        type: string
+        default: unit
+      fail-ci-if-error:
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          use_oidc: true
+          files: ${{ inputs.files }}
+          flags: ${{ inputs.flags }}
+          fail_ci_if_error: ${{ inputs.fail-ci-if-error }}
