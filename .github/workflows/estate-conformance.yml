@@ -35,9 +35,12 @@ jobs:
           python -m json.tool registry/repositories.json >/dev/null
           python -m json.tool schemas/repository-entry.schema.json >/dev/null
           python -m json.tool schemas/verification-receipt.schema.json >/dev/null
+          python -m json.tool registry/canaries.json >/dev/null
           python -m py_compile scripts/audit_estate_conformance.py
           python -m py_compile scripts/simulate_policy_impact.py
           python -m py_compile scripts/plan_managed_remediation.py
+          python -m py_compile scripts/export_policy_bundle.py
+          python -m py_compile scripts/build_blast_radius.py
           PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_*.py' -v
 
   reconcile-estate:
@@ -48,6 +51,8 @@ jobs:
     permissions:
       contents: read
       issues: write
+      id-token: write
+      attestations: write
     env:
       ESTATE_AUDIT_TOKEN: ${{ secrets.ESTATE_AUDIT_TOKEN }}
       ISSUE_TOKEN: ${{ github.token }}
@@ -83,6 +88,19 @@ jobs:
             --audit conformance-output/estate-conformance.json \
             --output conformance-output/managed-remediation-plan.json \
             --limit 25
+      - name: Export policy bundle and blast-radius graph
+        run: |
+          python scripts/export_policy_bundle.py \
+            --profiles profiles/archetype-profiles.json \
+            --registry registry/repositories.json \
+            --output-dir conformance-output/opa-bundle
+          python scripts/build_blast_radius.py \
+            --registry registry/repositories.json \
+            --canaries registry/canaries.json \
+            --output conformance-output/blast-radius.json
+      - uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
+        with:
+          subject-path: conformance-output/estate-conformance.json
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
