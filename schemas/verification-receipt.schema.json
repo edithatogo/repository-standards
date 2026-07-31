@@ -38,6 +38,23 @@
           "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}
         }
       }
+    },
+    "quality_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "line_coverage_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "branch_coverage_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "patch_coverage_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "mutation_score_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "property_examples": {"type": "integer", "minimum": 0},
+        "metamorphic_relations": {"type": "integer", "minimum": 0},
+        "deterministic_simulation_scenarios": {"type": "integer", "minimum": 0},
+        "contract_tests": {"type": "integer", "minimum": 0},
+        "quarantined_tests": {"type": "integer", "minimum": 0},
+        "oldest_quarantine_days": {"type": "integer", "minimum": 0},
+        "benchmark_regressions": {"type": "integer", "minimum": 0}
+      }
     }
   }
 }
