@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/edithatogo/repository-standards/schemas/repository-entry.schema.json",
+  "title": "Repository conformance registry entry",
+  "type": "object",
+  "required": [
+    "repository",
+    "visibility",
+    "archetype",
+    "profile",
+    "default_branch",
+    "sole_developer",
+    "mandatory_human_approvals",
+    "support_status",
+    "maintenance_tier",
+    "release_maturity",
+    "canonical_status",
+    "exceptions"
+  ],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "pattern": "^[^/]+/[^/]+$"
+    },
+    "visibility": {
+      "enum": ["public", "private", "internal"]
+    },
+    "archetype": {
+      "type": "string"
+    },
+    "profile": {
+      "type": "string"
+    },
+    "default_branch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sole_developer": {
+      "const": true
+    },
+    "mandatory_human_approvals": {
+      "const": 0
+    },
+    "support_status": {
+      "enum": ["active", "limited", "experimental", "unsupported", "review_required"]
+    },
+    "maintenance_tier": {
+      "enum": ["critical", "maintained", "best_effort", "historical", "review_required"]
+    },
+    "release_maturity": {
+      "enum": ["not_released", "experimental", "pre_release", "stable", "mature", "not_applicable", "review_required"]
+    },
+    "canonical_status": {
+      "enum": ["canonical", "historical_line", "superseded", "duplicate_candidate", "empty", "review_required"]
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["control", "reason", "owner", "review_after"],
+        "properties": {
+          "control": {"type": "string"},
+          "reason": {"type": "string", "minLength": 1},
+          "owner": {"type": "string", "minLength": 1},
+          "review_after": {"type": "string", "format": "date"},
+          "evidence": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}
+
