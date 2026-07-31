@@ -60,6 +60,7 @@ APP_TERMS = re.compile(
 
 class GitHub:
     def __init__(self, token: str) -> None:
+        self.scope = "authenticated owner repositories"
         self.headers = {
             "Accept": "application/vnd.github+json",
             "Authorization": f"Bearer {token}",
@@ -87,16 +88,30 @@ class GitHub:
     def active_repositories(self, owner: str) -> list[dict[str, Any]]:
         repositories: list[dict[str, Any]] = []
         page = 1
+        use_public_endpoint = False
         while True:
-            query = urllib.parse.urlencode(
-                {
-                    "affiliation": "owner",
-                    "per_page": 100,
-                    "page": page,
-                    "sort": "full_name",
-                }
-            )
-            batch = self.get(f"/user/repos?{query}") or []
+            parameters: dict[str, Any] = {
+                "per_page": 100,
+                "page": page,
+                "sort": "full_name",
+            }
+            if use_public_endpoint:
+                parameters["type"] = "owner"
+                endpoint = f"/users/{urllib.parse.quote(owner, safe='')}/repos"
+            else:
+                parameters["affiliation"] = "owner"
+                endpoint = "/user/repos"
+            query = urllib.parse.urlencode(parameters)
+            try:
+                batch = self.get(f"{endpoint}?{query}") or []
+            except urllib.error.HTTPError as error:
+                if error.code != 403 or use_public_endpoint:
+                    raise
+                repositories.clear()
+                page = 1
+                use_public_endpoint = True
+                self.scope = "public-only owner repositories"
+                continue
             repositories.extend(
                 repository
                 for repository in batch
@@ -330,12 +345,14 @@ def audit_repository(client: GitHub, repository: dict[str, Any]) -> dict[str, An
     }
 
 
-def markdown(rows: list[dict[str, Any]]) -> str:
+def markdown(rows: list[dict[str, Any]], scope: str) -> str:
     def count(predicate: Any) -> int:
         return sum(1 for row in rows if predicate(row))
 
     lines = [
         "# Repository product-metadata audit",
+        "",
+        f"Scope: **{scope}**.",
         "",
         f"Active, non-fork, non-archived repositories: **{len(rows)}**.",
         "",
@@ -393,7 +410,7 @@ def main() -> int:
         json.dumps(
             {
                 "owner": args.owner,
-                "scope": "active non-fork non-archived owner repositories",
+                "scope": client.scope,
                 "repositories": rows,
             },
             indent=2,
@@ -402,7 +419,7 @@ def main() -> int:
         encoding="utf-8",
     )
     (args.output_dir / "repository-product-metadata-audit.md").write_text(
-        markdown(rows),
+        markdown(rows, client.scope),
         encoding="utf-8",
     )
     print(json.dumps({"repositories": len(rows)}, indent=2))
