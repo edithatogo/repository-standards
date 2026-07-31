@@ -25,8 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5445ce83e3 # v7
-      - uses: actions/setup-python@a3eaf2bcd76e5fd05e4ebd3e3960002094e02ac8 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
       - name: Validate policy files
@@ -49,8 +49,8 @@ jobs:
       ESTATE_AUDIT_TOKEN: ${{ secrets.ESTATE_AUDIT_TOKEN }}
       ISSUE_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5445ce83e3 # v7
-      - uses: actions/setup-python@a3eaf2bcd76e5fd05e4ebd3e3960002094e02ac8 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
       - name: Require an estate-readable token
@@ -68,7 +68,7 @@ jobs:
             --output-dir conformance-output \
             --issue-repository "${{ github.repository }}" \
             --issue-number "${{ vars.CONFORMANCE_ISSUE_NUMBER || '16' }}"
-      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v7
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: estate-conformance-${{ github.run_id }}
