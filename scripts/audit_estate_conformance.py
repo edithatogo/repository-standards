@@ -231,10 +231,18 @@ def audit_one(
     profile_name = entry["profile"]
     profile = inherited_profile(profile_name, profiles_document["profiles"])
     executable = bool(profile.get("executable"))
+    supply_chain_profile = entry.get(
+        "supply_chain_profile", profile.get("supply_chain", "baseline")
+    )
+    scorecard_applicable = (
+        entry.get("visibility", "").casefold() == "public"
+        and supply_chain_profile in {"published", "high_risk"}
+    )
     managed = {
         item["path"]: item["path"] in paths
         for item in managed_document["files"]
         if "*" in item["profiles"] or profile_name in item["profiles"]
+        if item["path"] != ".github/workflows/scorecard.yml" or scorecard_applicable
     }
     controls = {
         "workflow_present": bool(workflow_paths),
@@ -353,9 +361,11 @@ def audit_one(
         required.append("data_governance")
     if profile.get("schedule_health") == "required" or scheduled:
         required.extend(["schedule_success", "schedule_freshness"])
-    supply_chain = profiles_document["supply_chain_profiles"][
-        entry.get("supply_chain_profile", profile.get("supply_chain", "baseline"))
-    ]
+    supply_chain = list(profiles_document["supply_chain_profiles"][
+        supply_chain_profile
+    ])
+    if entry.get("visibility", "").casefold() != "public":
+        supply_chain = [control for control in supply_chain if control != "scorecard"]
     required.extend(supply_chain)
     required.extend(f"managed:{path}" for path in managed)
     violations = sorted(
