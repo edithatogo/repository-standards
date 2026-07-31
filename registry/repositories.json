@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-31T07:47:44.7350930Z",
+  "generated_at": "2026-07-31T08:02:39.0578256Z",
   "scope": "Owner repositories excluding forks, archived, and disabled repositories",
   "policy": {
     "maintainers": 1,
@@ -2824,6 +2824,27 @@
       "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
     },
     {
+      "repository": "edithatogo/template-solo-latex",
+      "visibility": "public",
+      "archetype": "typesetting-template",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
+      },
+      "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
+    },
+    {
       "repository": "edithatogo/template-solo-node",
       "visibility": "public",
       "archetype": "software",
@@ -2883,6 +2904,27 @@
         "current": "active",
         "warranted": true,
         "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
+    },
+    {
+      "repository": "edithatogo/template-solo-typst",
+      "visibility": "public",
+      "archetype": "typesetting-template",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
       },
       "quality_issue": "https://github.com/edithatogo/repository-standards/issues/1"
     },
@@ -3120,12 +3162,12 @@
     {
       "repository": "edithatogo/unimelb-thesis-template-latex",
       "visibility": "public",
-      "archetype": "docs-template",
+      "archetype": "typesetting-template",
       "default_branch": "main",
       "sole_developer": true,
       "mandatory_human_approvals": 0,
       "renovate": {
-        "current": "activate_via_inherited_config",
+        "current": "repository_config_detected",
         "target": "hosted_app_plus_inherited_config",
         "canonical_preset": "github>edithatogo/renovate-config",
         "dependabot_detected": false,
@@ -3162,21 +3204,21 @@
     {
       "repository": "edithatogo/unimelb-thesis-template-typst",
       "visibility": "public",
-      "archetype": "software",
+      "archetype": "typesetting-template",
       "default_branch": "main",
       "sole_developer": true,
       "mandatory_human_approvals": 0,
       "renovate": {
-        "current": "activate_via_inherited_config",
+        "current": "repository_config_detected",
         "target": "hosted_app_plus_inherited_config",
         "canonical_preset": "github>edithatogo/renovate-config",
         "dependabot_detected": false,
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "listed_inactive",
-        "warranted": true,
-        "target": "active_oidc_upload_with_real_coverage"
+        "current": "not_applicable_no_executable_coverage",
+        "warranted": false,
+        "target": "not_applicable_until_executable_tests_exist"
       },
       "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-typst/issues/5"
     },
