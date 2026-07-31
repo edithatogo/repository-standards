@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "policy": "Each managed archetype is exercised on a canary before estate propagation.",
+  "canaries": [
+    {"profile": "python", "repository": "edithatogo/template-solo-python"},
+    {"profile": "rust", "repository": "edithatogo/template-solo-rust"},
+    {"profile": "node", "repository": "edithatogo/template-solo-node"},
+    {"profile": "data-pipeline", "repository": "edithatogo/template-solo-data"},
+    {"profile": "documentation", "repository": "edithatogo/template-solo-docs"},
+    {"profile": "latex", "repository": "edithatogo/template-solo-latex"},
+    {"profile": "typst", "repository": "edithatogo/template-solo-typst"}
+  ]
+}
