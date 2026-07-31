@@ -41,6 +41,13 @@
       "metamorphic": "required_where_oracles_are_partial_or_expensive",
       "contract": "required_at_external_or_intercomponent_boundaries"
     },
+    "scorecard": {
+      "required": "public_published_or_high_risk",
+      "private": "optional_evidence_only",
+      "publish_private_results": false,
+      "score_is_not_a_release_gate": true,
+      "sole_developer_approvals_remain_zero": true
+    },
     "workflow_slos": {
       "schedule_freshness_days": 8,
       "queue_latency": "measured",
