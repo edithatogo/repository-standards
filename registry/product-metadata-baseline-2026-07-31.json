@@ -8,9 +8,11 @@
       "visibility": "public",
       "archetype": "documentation",
       "default_branch": "main",
-      "description": "",
+      "description": "Shared community health files and sole-maintainer defaults for edithatogo repositories.",
       "topics": [
+        "community-health",
         "documentation",
+        "github-configuration",
         "solo-maintainer"
       ],
       "readme": {
@@ -59,7 +61,6 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "GitHub description missing",
         "license decision/file missing",
         "citation metadata missing"
       ]
