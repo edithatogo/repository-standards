@@ -19,9 +19,10 @@ def main() -> int:
     supply = profiles["supply_chain_profiles"]
     impacts = []
     for row in audit["repositories"]:
-        profile = profiles["profiles"][row["profile"]]
+        profile = dict(profiles["profiles"][row["profile"]])
         while "extends" in profile:
-            profile = {**profiles["profiles"][profile["extends"]], **profile}
+            parent_name = profile.pop("extends")
+            profile = {**profiles["profiles"][parent_name], **profile}
         required = set(supply[profile.get("supply_chain", "baseline")])
         missing = sorted(control for control in required if not row["controls"].get(control))
         if missing:
