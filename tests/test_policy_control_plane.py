@@ -54,6 +54,11 @@ class PolicyTests(unittest.TestCase):
             profile = {**profiles[parent], **profile}
         self.assertEqual(profile["supply_chain"], "baseline")
 
+    def test_branch_protection_counts_as_protection_profile(self) -> None:
+        protection = {"required_status_checks": {"strict": True}}
+        self.assertEqual(audit.protection_state([], protection), "present")
+        self.assertEqual(audit.protection_state([], None), "absent")
+
 
 if __name__ == "__main__":
     unittest.main()
