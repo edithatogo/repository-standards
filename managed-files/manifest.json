@@ -35,6 +35,27 @@
       "profiles": ["*"]
     },
     {
+      "path": ".github/workflows/scorecard.yml",
+      "source": "edithatogo/repository-standards:managed-files/templates/scorecard.yml",
+      "strategy": "materialise_public_published_or_high_risk_if_missing",
+      "profiles": [
+        "generic-software",
+        "python",
+        "rust",
+        "node",
+        "go",
+        "julia",
+        "r",
+        "powershell",
+        "android",
+        "polyglot-cli",
+        "data-pipeline",
+        "scheduled-data-collector",
+        "research-paper",
+        "repository-infrastructure"
+      ]
+    },
+    {
       "path": ".github/workflows/ci.yml",
       "source": "edithatogo/repository-standards:.github/workflows/{workflow}.yml",
       "strategy": "thin_immutable_reusable_workflow_call",
