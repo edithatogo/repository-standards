@@ -138,3 +138,6 @@ Repository-specific issues remain the authority for legal choices, publication
 claims, package-release semantics, and logging fields. The audit is a triage
 surface, not permission to guess them.
 
+The scheduled workflow uses `ESTATE_AUDIT_TOKEN` when configured. Without that
+read-only credential, its cross-repository result is public-only and must not be
+represented as a whole-estate audit.

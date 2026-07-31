@@ -9,6 +9,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -68,13 +69,20 @@ class GitHub:
 
     def get(self, path: str) -> Any:
         request = urllib.request.Request(f"{API}{path}", headers=self.headers)
-        try:
-            with urllib.request.urlopen(request, timeout=60) as response:
-                return json.load(response)
-        except urllib.error.HTTPError as error:
-            if error.code in {404, 409, 422}:
-                return None
-            raise
+        for attempt in range(4):
+            try:
+                with urllib.request.urlopen(request, timeout=60) as response:
+                    return json.load(response)
+            except urllib.error.HTTPError as error:
+                if error.code in {404, 409, 422}:
+                    return None
+                if error.code not in {429, 500, 502, 503, 504} or attempt == 3:
+                    raise
+            except (TimeoutError, urllib.error.URLError):
+                if attempt == 3:
+                    raise
+            time.sleep(2**attempt)
+        raise RuntimeError("unreachable retry state")
 
     def active_repositories(self, owner: str) -> list[dict[str, Any]]:
         repositories: list[dict[str, Any]] = []

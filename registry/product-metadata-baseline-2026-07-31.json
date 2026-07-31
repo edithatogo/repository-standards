@@ -476,7 +476,7 @@
         "drift": false
       },
       "logging": {
-        "warranted": true,
+        "warranted": false,
         "detected": false
       },
       "gaps": [
@@ -487,8 +487,7 @@
         "CI badge missing",
         "GitHub topics missing",
         "license decision/file missing",
-        "citation metadata missing",
-        "structured logging decision/implementation missing"
+        "citation metadata missing"
       ]
     },
     {
@@ -2563,7 +2562,7 @@
         "drift": false
       },
       "logging": {
-        "warranted": true,
+        "warranted": false,
         "detected": true
       },
       "gaps": [
@@ -5120,7 +5119,7 @@
         "drift": false
       },
       "logging": {
-        "warranted": true,
+        "warranted": false,
         "detected": true
       },
       "gaps": [
@@ -7920,7 +7919,7 @@
         "drift": false
       },
       "logging": {
-        "warranted": true,
+        "warranted": false,
         "detected": false
       },
       "gaps": [
@@ -7928,8 +7927,7 @@
         "README security section missing",
         "README citation section missing",
         "license badge missing",
-        "citation badge missing",
-        "structured logging decision/implementation missing"
+        "citation badge missing"
       ]
     },
     {
@@ -8040,7 +8038,7 @@
         "drift": true
       },
       "logging": {
-        "warranted": true,
+        "warranted": false,
         "detected": false
       },
       "gaps": [
@@ -8051,8 +8049,7 @@
         "citation badge missing",
         "GitHub description missing",
         "GitHub topics missing",
-        "manifest and citation versions disagree",
-        "structured logging decision/implementation missing"
+        "manifest and citation versions disagree"
       ]
     },
     {
@@ -9268,7 +9265,7 @@
         "drift": false
       },
       "logging": {
-        "warranted": true,
+        "warranted": false,
         "detected": false
       },
       "gaps": [
@@ -9278,8 +9275,7 @@
         "license badge missing",
         "GitHub description missing",
         "GitHub topics missing",
-        "citation metadata missing",
-        "structured logging decision/implementation missing"
+        "citation metadata missing"
       ]
     },
     {
@@ -9638,7 +9634,7 @@
         "drift": false
       },
       "logging": {
-        "warranted": true,
+        "warranted": false,
         "detected": false
       },
       "gaps": [
@@ -9646,8 +9642,7 @@
         "README security section missing",
         "README license section missing",
         "README citation section missing",
-        "CI badge missing",
-        "structured logging decision/implementation missing"
+        "CI badge missing"
       ]
     },
     {
@@ -10017,7 +10012,7 @@
         "drift": false
       },
       "logging": {
-        "warranted": true,
+        "warranted": false,
         "detected": true
       },
       "gaps": [
@@ -10074,13 +10069,12 @@
         "drift": false
       },
       "logging": {
-        "warranted": true,
+        "warranted": false,
         "detected": false
       },
       "gaps": [
         "README security section missing",
-        "GitHub topics missing",
-        "structured logging decision/implementation missing"
+        "GitHub topics missing"
       ]
     }
   ]

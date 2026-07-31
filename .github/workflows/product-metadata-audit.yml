@@ -30,7 +30,7 @@ jobs:
           python-version: "3.14"
       - name: Audit active repositories
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.ESTATE_AUDIT_TOKEN || github.token }}
         run: |
           python scripts/audit_repository_product_metadata.py \
             --owner "${{ github.repository_owner }}" \
@@ -41,4 +41,3 @@ jobs:
           path: build/product-metadata
           if-no-files-found: error
           retention-days: 30
-
