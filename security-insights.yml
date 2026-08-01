@@ -1,0 +1,34 @@
+header:
+  schema-version: 2.2.0
+  last-updated: '2026-08-01'
+  last-reviewed: '2026-08-01'
+  url: https://github.com/edithatogo/repository-standards/blob/main/security-insights.yml
+  comment: |
+    This file describes the security posture of the repository standards
+    control plane. It is maintained as a versioned, machine-readable snapshot.
+
+project:
+  name: edithatogo repository standards
+  administrators:
+    - name: Dylan Mordaunt
+      primary: true
+  repositories:
+    - name: repository-standards
+      url: https://github.com/edithatogo/repository-standards
+      comment: Executable estate registry, policy profiles and conformance tooling.
+  vulnerability-reporting:
+    reports-accepted: true
+    bug-bounty-available: false
+
+repository:
+  url: https://github.com/edithatogo/repository-standards
+  status: active
+  accepts-change-request: true
+  accepts-automated-change-request: true
+  security:
+    assessments:
+      self:
+        comment: |
+          Automated evidence is published through CodeQL, Scorecard,
+          conformance receipts, SBOM/provenance workflows and the central
+          registry. Human/legal claims remain explicitly evidence-gated.
