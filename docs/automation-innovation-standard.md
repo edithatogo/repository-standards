@@ -60,6 +60,7 @@ availability. Alerts link to the exact run and owning nested issue.
 - differential policy evaluation reports newly introduced failures before merge;
 - OPA/Rego export permits independent policy evaluation;
 - OpenTelemetry spans correlate scanner API calls, retries and issue updates;
+- GitHub 403/429 secondary throttling is retried with bounded backoff and telemetry;
 - a dependency graph limits propagation blast radius and orders reusable-workflow upgrades;
 - canary repositories exercise each archetype before estate rollout;
 - automatically generated scorecards show evidence freshness, not only presence;
