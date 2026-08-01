@@ -68,6 +68,12 @@
       "profiles": ["*"]
     },
     {
+      "path": ".github/workflows/zizmor.yml",
+      "source": "edithatogo/repository-standards:managed-files/templates/zizmor.yml",
+      "strategy": "materialise_repository_infrastructure_only",
+      "profiles": ["repository-infrastructure"]
+    },
+    {
       "path": ".github/workflows/ci.yml",
       "source": "edithatogo/repository-standards:.github/workflows/{workflow}.yml",
       "strategy": "thin_immutable_reusable_workflow_call",
