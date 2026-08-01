@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "edithatogo",
+  "solo_maintainer": true,
+  "controls": {
+    "security_insights": {
+      "status": "implemented",
+      "scope": "public_published_or_high_risk",
+      "evidence": "security-insights.yml"
+    },
+    "slsa_verification": {
+      "status": "implemented_as_reusable_workflow",
+      "scope": "repositories_with_published_artifacts",
+      "evidence": ".github/workflows/slsa-verification.yml"
+    },
+    "best_practices_badge": {
+      "status": "pilot_gated",
+      "scope": "mature_public_canonical_repositories",
+      "gate": "external_self_attestation_and_project_enrollment"
+    },
+    "criticality_score": {
+      "status": "prioritisation_only",
+      "scope": "internal_triage",
+      "gate": "github_token_and_optional_bigquery_credentials"
+    }
+  },
+  "deferred_competing_policy_writers": ["allstar", "minder", "clomonitor"],
+  "human_approval_required": 0
+}
