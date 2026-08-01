@@ -1,0 +1,41 @@
+name: SLSA provenance verification
+
+on:
+  workflow_call:
+    inputs:
+      artifact:
+        description: Path to the downloaded artifact to verify
+        required: true
+        type: string
+      provenance:
+        description: Path to the matching SLSA provenance statement
+        required: true
+        type: string
+      source-uri:
+        description: Expected source repository URI
+        required: true
+        type: string
+      builder-id:
+        description: Expected trusted builder identity
+        required: false
+        type: string
+        default: https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: slsa-framework/slsa-verifier/actions/installer@ea584f4502babc6f60d9bc799dbbb13c1caa9ee6 # v2.7.1
+      - name: Verify provenance
+        run: >-
+          slsa-verifier verify-artifact "${{ inputs.artifact }}"
+          --provenance-path "${{ inputs.provenance }}"
+          --source-uri "${{ inputs.source-uri }}"
+          --builder-id "${{ inputs.builder-id }}"
