@@ -59,6 +59,18 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(audit.protection_state([], protection), "present")
         self.assertEqual(audit.protection_state([], None), "absent")
 
+    def test_scan_failure_is_preserved_without_fabricated_controls(self) -> None:
+        client = Mock()
+        client.tree.side_effect = PermissionError("throttled")
+        row = audit.audit_safely(
+            client,
+            {"repository": "owner/repo", "profile": "python", "default_branch": "main"},
+            {"profiles": {}},
+            {"files": []},
+        )
+        self.assertEqual(row["violations"], ["scan_unavailable"])
+        self.assertEqual(row["controls"], {})
+
 
 if __name__ == "__main__":
     unittest.main()
