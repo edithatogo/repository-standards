@@ -48,6 +48,12 @@
       "score_is_not_a_release_gate": true,
       "sole_developer_approvals_remain_zero": true
     },
+    "assurance": {
+      "security_insights": "required_public_published_or_high_risk",
+      "slsa_verification": "required_for_published_artifacts",
+      "best_practices_badge": "pilot_mature_public_canonical_only",
+      "criticality_score": "prioritisation_only"
+    },
     "workflow_slos": {
       "schedule_freshness_days": 8,
       "queue_latency": "measured",

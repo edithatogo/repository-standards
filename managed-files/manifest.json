@@ -56,6 +56,18 @@
       ]
     },
     {
+      "path": "security-insights.yml",
+      "source": "edithatogo/repository-standards:security-insights.yml",
+      "strategy": "materialise_public_published_or_high_risk_if_missing_then_review",
+      "profiles": ["*"]
+    },
+    {
+      "path": ".github/workflows/slsa-verification.yml",
+      "source": "edithatogo/repository-standards:managed-files/templates/slsa-verification.yml",
+      "strategy": "materialise_when_published_artifacts_exist",
+      "profiles": ["*"]
+    },
+    {
       "path": ".github/workflows/ci.yml",
       "source": "edithatogo/repository-standards:.github/workflows/{workflow}.yml",
       "strategy": "thin_immutable_reusable_workflow_call",

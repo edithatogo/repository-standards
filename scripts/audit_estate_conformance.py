@@ -69,8 +69,12 @@ class GitHub:
                     with self._metrics_lock:
                         self.metrics["tolerated_errors"] += 1
                     return None
-                if error.code not in {429, 500, 502, 503, 504} or attempt == 3:
+                if error.code not in {403, 429, 500, 502, 503, 504} or attempt == 3:
                     raise
+                retry_after = error.headers.get("Retry-After")
+                if retry_after and retry_after.isdigit():
+                    time.sleep(min(int(retry_after), 60))
+                    continue
             except (TimeoutError, urllib.error.URLError):
                 if attempt == 3:
                     raise
@@ -250,6 +254,11 @@ def audit_one(
         item["path"]: item["path"] in paths
         for item in managed_document["files"]
         if "*" in item["profiles"] or profile_name in item["profiles"]
+        if not (item["path"] == "security-insights.yml" and not scorecard_applicable)
+        if not (
+            item["path"] == ".github/workflows/slsa-verification.yml"
+            and "provenance" not in profiles_document["supply_chain_profiles"].get(supply_chain_profile, [])
+        )
         if item["path"] != ".github/workflows/scorecard.yml" or scorecard_applicable
     }
     controls = {
@@ -288,6 +297,8 @@ def audit_one(
         or "github/codeql-action" in workflow,
         "dependency_review": "actions/dependency-review-action" in workflow,
         "scorecard": "ossf/scorecard-action" in workflow,
+        "security_insights": any(path.casefold().endswith("security-insights.yml") for path in paths),
+        "slsa_verification": "slsa-verifier" in workflow or "slsa-framework/slsa-verifier" in workflow,
         "sbom": bool(re.search(r"\b(sbom|syft|cyclonedx|spdx)\b", workflow, re.I))
         or present(paths, ("sbom.json", "sbom.spdx.json", "bom.json")),
         "provenance": "attest-build-provenance" in workflow
@@ -374,6 +385,8 @@ def audit_one(
     ])
     if entry.get("visibility", "").casefold() != "public":
         supply_chain = [control for control in supply_chain if control != "scorecard"]
+    if scorecard_applicable:
+        required.extend(["security_insights", "slsa_verification"])
     required.extend(supply_chain)
     required.extend(f"managed:{path}" for path in managed)
     violations = sorted(
@@ -410,11 +423,48 @@ def audit_one(
     }
 
 
+def audit_safely(
+    client: GitHub,
+    entry: dict[str, Any],
+    profiles_document: dict[str, Any],
+    managed_document: dict[str, Any],
+) -> dict[str, Any]:
+    try:
+        return audit_one(client, entry, profiles_document, managed_document)
+    except Exception as error:  # Preserve estate progress while failing the run.
+        status = getattr(error, "code", None)
+        return {
+            "repository": entry["repository"],
+            "profile": entry["profile"],
+            "scan_error": {
+                "type": type(error).__name__,
+                "status": status,
+            },
+            "workflow_count": None,
+            "workflow_paths": [],
+            "unpinned_actions": [],
+            "invalid_action_pins": [],
+            "ruleset": "unknown",
+            "scheduled": None,
+            "last_scheduled_run": None,
+            "controls": {},
+            "violations": ["scan_unavailable"],
+            "exception_count": len(entry.get("exceptions", [])),
+            "expired_exceptions": [],
+            "upcoming_exceptions": [],
+        }
+
+
 def summary_markdown(rows: list[dict[str, Any]], scope: str) -> str:
     def missing(control: str) -> int:
         return sum(control in row["violations"] for row in rows)
 
-    workflow_absent = sum(not row["controls"]["workflow_present"] for row in rows)
+    failures = sum(bool(row.get("scan_error")) for row in rows)
+    workflow_absent = sum(
+        not row["controls"].get("workflow_present", False)
+        for row in rows
+        if not row.get("scan_error")
+    )
     unpinned = sum(bool(row["unpinned_actions"]) for row in rows)
     invalid_pins = sum(bool(row["invalid_action_pins"]) for row in rows)
     lines = [
@@ -422,6 +472,7 @@ def summary_markdown(rows: list[dict[str, Any]], scope: str) -> str:
         "## Scheduled conformance status",
         "",
         f"Scope: **{scope}**. Repositories measured: **{len(rows)}**.",
+        f"Scan failures: **{failures}**. Partial scans never replace authoritative issue state.",
         "",
         "| Control | Repositories requiring work |",
         "|---|---:|",
@@ -493,6 +544,7 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--issue-repository")
     parser.add_argument("--issue-number", type=int)
+    parser.add_argument("--workers", type=int, default=4)
     args = parser.parse_args()
     audit_token = os.environ.get("ESTATE_AUDIT_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if not audit_token:
@@ -502,10 +554,12 @@ def main() -> int:
     profiles = json.loads(args.profiles.read_text(encoding="utf-8-sig"))
     managed = json.loads(args.managed_files.read_text(encoding="utf-8-sig"))
     client = GitHub(audit_token)
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    if not 1 <= args.workers <= 10:
+        parser.error("--workers must be between 1 and 10")
+    with ThreadPoolExecutor(max_workers=args.workers) as executor:
         rows = list(
             executor.map(
-                lambda entry: audit_one(client, entry, profiles, managed),
+                lambda entry: audit_safely(client, entry, profiles, managed),
                 registry["repositories"],
             )
         )
@@ -528,8 +582,9 @@ def main() -> int:
         encoding="utf-8",
     )
     issue_url = None
+    scan_failures = sum(bool(row.get("scan_error")) for row in rows)
     issue_token = os.environ.get("ISSUE_TOKEN")
-    if args.issue_repository and args.issue_number and issue_token:
+    if not scan_failures and args.issue_repository and args.issue_number and issue_token:
         issue_url = reconcile_issue(
             GitHub(issue_token),
             args.issue_repository,
@@ -540,12 +595,13 @@ def main() -> int:
         json.dumps(
             {
                 "repositories": len(rows),
+                "scan_failures": scan_failures,
                 "issue": issue_url,
             },
             indent=2,
         )
     )
-    return 0
+    return 3 if scan_failures else 0
 
 
 if __name__ == "__main__":
