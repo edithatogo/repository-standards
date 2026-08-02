@@ -1,4 +1,4 @@
-name: Advisory Criticality Score`n# Hosted validation retry: 2026-08-01T12:13:47Z
+name: Advisory Criticality Score
 
 on:
   workflow_dispatch:
