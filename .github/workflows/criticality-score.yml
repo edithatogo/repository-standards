@@ -1,0 +1,36 @@
+name: Advisory Criticality Score`n# Hosted validation retry: 2026-08-01T12:13:47Z
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: Repository URL to score
+        required: true
+        default: https://github.com/edithatogo/repository-standards
+
+permissions:
+  contents: read
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/setup-go@5064d95ba18d4a9dda7c4cc67adeb03aea1a2a14 # main (2026-08-01)
+        with:
+          go-version: '1.26.x'
+      - name: Install pinned Criticality Score CLI
+        run: GOTOOLCHAIN=local go install github.com/ossf/criticality_score/v2/cmd/criticality_score@v2.0.0
+      - name: Calculate advisory score
+        env:
+          GITHUB_AUTH_TOKEN: ${{ github.token }}
+          TARGET_REPOSITORY: ${{ inputs.repository }}
+        run: |
+          mkdir -p reports
+          criticality_score -format=json "$TARGET_REPOSITORY" | tee reports/criticality-score.json
+      - name: Upload advisory evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: criticality-score-${{ github.run_id }}
+          path: reports/criticality-score.json
+          retention-days: 14
