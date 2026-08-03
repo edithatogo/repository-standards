@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use the repository standards control plane, please cite it as follows."
+title: "Repository standards"
+abstract: "Executable CI/CD, security, dependency-management, coverage, release, research-governance, and solo-maintainer standards for the edithatogo repository estate."
+type: software
+authors:
+  - family-names: Mordaunt
+    given-names: Dylan
+    affiliation: Independent
+repository-code: "https://github.com/edithatogo/repository-standards"
+url: "https://github.com/edithatogo/repository-standards"
+license: Apache-2.0
+date-released: 2026-08-03
+version: "2026.08.03"
