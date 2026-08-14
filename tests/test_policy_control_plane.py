@@ -27,6 +27,13 @@ class PolicyTests(unittest.TestCase):
         entry = {"exceptions": [{"control": "x", "review_after": review}]}
         self.assertEqual(audit.exception_dates(entry)[1], ["x"])
 
+    def test_missing_or_invalid_review_after_date_is_expired(self) -> None:
+        entry_missing = {"exceptions": [{"control": "x"}]}
+        entry_invalid = {"exceptions": [{"control": "y", "review_after": "invalid-date"}]}
+
+        self.assertEqual(audit.exception_dates(entry_missing)[0], ["x"])
+        self.assertEqual(audit.exception_dates(entry_invalid)[0], ["y"])
+
     def test_resolvable_pin_is_checked_not_inferred_from_shape(self) -> None:
         client = audit.GitHub("not-used")
         client.get = Mock(return_value=None)
