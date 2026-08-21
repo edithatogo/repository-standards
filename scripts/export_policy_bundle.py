@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Export an independently evaluable OPA/Rego policy data bundle."""
 
-from __future__ import annotations
 
 import argparse
 import json
