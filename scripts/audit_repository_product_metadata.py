@@ -12,7 +12,7 @@ import sys
 import time
 import urllib.error
 import urllib.parse
-import urllib.request
+from urllib.request import Request, urlopen
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
@@ -69,10 +69,10 @@ class GitHub:
         }
 
     def get(self, path: str) -> Any:
-        request = urllib.request.Request(f"{API}{path}", headers=self.headers)
+        request = Request(f"{API}{path}", headers=self.headers)
         for attempt in range(4):
             try:
-                with urllib.request.urlopen(request, timeout=60) as response:
+                with urlopen(request, timeout=60) as response:
                     return json.load(response)
             except urllib.error.HTTPError as error:
                 if error.code in {404, 409, 422}:
