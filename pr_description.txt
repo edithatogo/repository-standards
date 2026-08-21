@@ -1,0 +1,4 @@
+🎯 **What:** The `request` method in `GitHub` class was refactored to reduce deep nesting by extracting inner logic into helper methods.
+💡 **Why:** This improves maintainability and readability by separating the actual request execution and HTTP error handling (retry/backoff logic) from the looping construct, making the main `request` method shorter and flatter.
+✅ **Verification:** I ran the unit test suite (`PYTHONPATH=scripts python3 -m unittest discover -s tests/`) and they passed successfully, verifying that no existing functionality is broken. I also ensured that the formatting is consistent by using `black`.
+✨ **Result:** The code health issue is resolved, with `request` looping logic cleanly separated from action and backoff execution logic.
