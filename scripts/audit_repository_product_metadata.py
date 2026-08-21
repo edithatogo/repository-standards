@@ -392,7 +392,9 @@ def main() -> int:
     parser.add_argument("--owner", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
-    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    github_token = os.environ.pop("GITHUB_TOKEN", None)
+    gh_token = os.environ.pop("GH_TOKEN", None)
+    token = github_token or gh_token
     if not token:
         print("GITHUB_TOKEN or GH_TOKEN is required", file=sys.stderr)
         return 2
