@@ -202,11 +202,16 @@ def audit_one(
         if not match.group(1).startswith(("./", "docker://"))
     ]
     unpinned = [ref for ref in action_refs if not FULL_SHA.search(ref)]
-    invalid_pins = [
-        ref
-        for ref in action_refs
-        if FULL_SHA.search(ref) and not client.action_ref_resolves(ref)
-    ]
+
+    pinned_refs = [ref for ref in action_refs if FULL_SHA.search(ref)]
+    if pinned_refs:
+        with ThreadPoolExecutor(max_workers=min(10, len(pinned_refs))) as executor:
+            resolutions = list(executor.map(client.action_ref_resolves, pinned_refs))
+        invalid_pins = [
+            ref for ref, resolves in zip(pinned_refs, resolutions) if not resolves
+        ]
+    else:
+        invalid_pins = []
     scheduled = bool(SCHEDULE.search(workflow))
     scheduled_run = None
     if scheduled:
