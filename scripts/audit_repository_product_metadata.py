@@ -51,6 +51,10 @@ LOGGING_TERMS = re.compile(
     r"bunyan|serilog|nlog|slf4j|log4j|zap|zerolog)\b",
     re.I,
 )
+LOGGING_PATHS = re.compile(
+    r"(^|/)(logging|logger|telemetry|observability)(\.|/)",
+    re.I,
+)
 APP_TERMS = re.compile(
     r"\b(api|service|server|cli|command.line|pipeline|etl|daemon|worker|bot|"
     r"application|app|scraper|crawler|ingest)\b",
@@ -268,7 +272,7 @@ def audit_repository(client: GitHub, repository: dict[str, Any]) -> dict[str, An
     logging_detected = bool(
         LOGGING_TERMS.search(manifest_text)
         or any(
-            re.search(r"(^|/)(logging|logger|telemetry|observability)(\.|/)", path, re.I)
+            LOGGING_PATHS.search(path)
             for path in paths
         )
     )
