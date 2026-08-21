@@ -253,7 +253,7 @@ def audit_repository(client: GitHub, repository: dict[str, Any]) -> dict[str, An
         path for path in paths if path.casefold().rsplit("/", 1)[-1] in CITATION_NAMES
     )
     license_files = sorted(path for path in paths if LICENSE_NAMES.search(path))
-    executable = bool({path.casefold() for path in paths}.intersection(EXECUTABLE_MARKERS))
+    executable = bool(lowered_paths.keys() & EXECUTABLE_MARKERS)
     logging_warranted = kind in {"software", "data"} and executable and bool(
         APP_TERMS.search(f"{repository['name']} {description}")
         or any(
