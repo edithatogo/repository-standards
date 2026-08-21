@@ -12,7 +12,7 @@ import sys
 import time
 import urllib.error
 import urllib.parse
-import urllib.request
+from urllib.request import Request, urlopen
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, date, datetime
 from pathlib import Path
@@ -50,7 +50,7 @@ class GitHub:
         tolerated: set[int] | None = None,
     ) -> Any:
         data = None if payload is None else json.dumps(payload).encode()
-        request = urllib.request.Request(
+        request = Request(
             f"{API}{path}",
             data=data,
             method=method,
@@ -61,7 +61,7 @@ class GitHub:
             with self._metrics_lock:
                 self.metrics["requests"] += 1
             try:
-                with urllib.request.urlopen(request, timeout=60) as response:
+                with urlopen(request, timeout=60) as response:
                     content = response.read()
                     return json.loads(content) if content else None
             except urllib.error.HTTPError as error:
