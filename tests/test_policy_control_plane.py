@@ -27,6 +27,14 @@ class PolicyTests(unittest.TestCase):
         entry = {"exceptions": [{"control": "x", "review_after": review}]}
         self.assertEqual(audit.exception_dates(entry)[1], ["x"])
 
+    def test_exception_missing_review_after_is_not_active(self) -> None:
+        entry = {"exceptions": [{"control": "x"}]}
+        self.assertFalse(audit.active_exception(entry, "x"))
+
+    def test_exception_malformed_review_after_is_not_active(self) -> None:
+        entry = {"exceptions": [{"control": "x", "review_after": "not-a-date"}]}
+        self.assertFalse(audit.active_exception(entry, "x"))
+
     def test_resolvable_pin_is_checked_not_inferred_from_shape(self) -> None:
         client = audit.GitHub("not-used")
         client.get = Mock(return_value=None)
