@@ -132,12 +132,14 @@ def inherited_profile(name: str, profiles: dict[str, Any]) -> dict[str, Any]:
 
 
 def present(paths: set[str], patterns: tuple[str, ...]) -> bool:
-    lowered = {path.casefold() for path in paths}
-    return any(
-        candidate in lowered
-        or any(path.endswith(candidate) for path in lowered)
-        for candidate in patterns
-    )
+    for pattern in patterns:
+        if pattern.endswith("/*"):
+            prefix = pattern[:-1]
+            if any(path.startswith(prefix) for path in paths):
+                return True
+        elif pattern in paths:
+            return True
+    return False
 
 
 def active_exception(entry: dict[str, Any], control: str) -> bool:

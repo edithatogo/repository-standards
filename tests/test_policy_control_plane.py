@@ -72,5 +72,23 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(row["controls"], {})
 
 
+    def test_present_exact_match(self) -> None:
+        self.assertTrue(audit.present({"makefile"}, ("makefile",)))
+        self.assertFalse(audit.present({"makefile"}, ("justfile",)))
+
+    def test_present_prefix_wildcard_match(self) -> None:
+        self.assertTrue(audit.present({"docs/license"}, ("docs/*",)))
+        self.assertTrue(audit.present({"a/b.txt"}, ("a/*",)))
+        self.assertTrue(audit.present({"dir/a/b.txt"}, ("dir/*",)))
+        self.assertFalse(audit.present({"dir/a/b.txt"}, ("a/*",)))
+
+    def test_present_empty_inputs(self) -> None:
+        self.assertFalse(audit.present(set(), ("makefile",)))
+        self.assertFalse(audit.present({"makefile"}, ()))
+
+    def test_present_no_match_returns_false(self) -> None:
+        self.assertFalse(audit.present({"a/b.txt"}, ("b.txt",)))
+        self.assertFalse(audit.present({"A/B.TXT"}, ("a/b.txt",)))
+
 if __name__ == "__main__":
     unittest.main()
