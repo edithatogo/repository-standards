@@ -11,7 +11,7 @@ import re
 import sys
 import time
 import urllib.error
-import urllib.parse
+from urllib.parse import quote
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, date, datetime
@@ -89,14 +89,14 @@ class GitHub:
     def tree(self, repository: str, branch: str) -> list[dict[str, Any]]:
         result = self.get(
             f"/repos/{repository}/git/trees/"
-            f"{urllib.parse.quote(branch, safe='')}?recursive=1"
+            f"{quote(branch, safe='')}?recursive=1"
         )
         return [] if not result else result.get("tree", [])
 
     def text(self, repository: str, path: str, branch: str) -> str:
         result = self.get(
-            f"/repos/{repository}/contents/{urllib.parse.quote(path, safe='/')}"
-            f"?ref={urllib.parse.quote(branch, safe='')}"
+            f"/repos/{repository}/contents/{quote(path, safe='/')}"
+            f"?ref={quote(branch, safe='')}"
         )
         if not result or result.get("encoding") != "base64":
             return ""
@@ -235,7 +235,7 @@ def audit_one(
         tolerated={403, 404},
     )
     branch_protection = client.get(
-        f"/repos/{repository}/branches/{urllib.parse.quote(branch, safe='')}/protection",
+        f"/repos/{repository}/branches/{quote(branch, safe='')}/protection",
         tolerated={403, 404},
     )
     ruleset_state = protection_state(rulesets, branch_protection)
