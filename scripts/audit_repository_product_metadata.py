@@ -11,7 +11,7 @@ import re
 import sys
 import time
 import urllib.error
-import urllib.parse
+from urllib.parse import quote, urlencode
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -97,11 +97,11 @@ class GitHub:
             }
             if use_public_endpoint:
                 parameters["type"] = "owner"
-                endpoint = f"/users/{urllib.parse.quote(owner, safe='')}/repos"
+                endpoint = f"/users/{quote(owner, safe='')}/repos"
             else:
                 parameters["affiliation"] = "owner"
                 endpoint = "/user/repos"
-            query = urllib.parse.urlencode(parameters)
+            query = urlencode(parameters)
             try:
                 batch = self.get(f"{endpoint}?{query}") or []
             except urllib.error.HTTPError as error:
@@ -125,17 +125,17 @@ class GitHub:
         return sorted(repositories, key=lambda item: item["full_name"].casefold())
 
     def tree(self, repository: str, branch: str) -> list[dict[str, Any]]:
-        encoded_branch = urllib.parse.quote(branch, safe="")
+        encoded_branch = quote(branch, safe="")
         result = self.get(
             f"/repos/{repository}/git/trees/{encoded_branch}?recursive=1"
         )
         return [] if not result else result.get("tree", [])
 
     def text(self, repository: str, path: str, branch: str) -> str:
-        encoded = urllib.parse.quote(path, safe="/")
+        encoded = quote(path, safe="/")
         result = self.get(
             f"/repos/{repository}/contents/{encoded}?ref="
-            f"{urllib.parse.quote(branch, safe='')}"
+            f"{quote(branch, safe='')}"
         )
         if not result or result.get("encoding") != "base64":
             return ""
