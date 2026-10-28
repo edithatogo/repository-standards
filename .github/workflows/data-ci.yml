@@ -4,7 +4,7 @@ on:
     inputs:
       python-version:
         type: string
-        default: "3.14"
+        default: "3.15.1"
       install-command:
         type: string
         default: 'python -m pip install -e ".[test]"'

@@ -221,6 +221,17 @@
       "coverage": "not_applicable",
       "logging": "not_applicable",
       "release": "classification_required"
+    },
+    "scientific-native": {
+      "extends": "generic-software",
+      "workflow": "scientific-native-ci",
+      "harness": "repository_owned_native_and_installed_consumer",
+      "scientific_policy": "profiles/scientific-native.json",
+      "adoption": "explicit-per-repository",
+      "numerical_contracts": "required",
+      "minimal_native_core": "required",
+      "frontier_qualification": "required",
+      "resource_receipts": "required"
     }
   }
 }

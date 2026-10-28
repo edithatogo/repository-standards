@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "status": "approved-policy-not-runtime-acceptance",
+  "python": "3.15.1",
+  "frontier_policy": "newest candidates first; exact pins after qualification",
+  "capabilities": {
+    "kairos": {
+      "repository": "edithatogo/kairos",
+      "kind": "library",
+      "owns": "simulation time/events/state, DES/ABM, simulation RNG and replay",
+      "providers": []
+    },
+    "innovate": {
+      "repository": "edithatogo/innovate",
+      "kind": "library",
+      "owns": "diffusion/adoption models and fitting",
+      "providers": [
+        "kairos"
+      ]
+    },
+    "voiage": {
+      "repository": "edithatogo/voiage",
+      "kind": "library",
+      "owns": "VOI estimators and decision uncertainty",
+      "providers": []
+    },
+    "mars": {
+      "repository": "edithatogo/mars",
+      "kind": "library",
+      "owns": "spline fitting and portable model replay",
+      "providers": []
+    },
+    "careops-sim": {
+      "repository": "edithatogo/careops-sim",
+      "kind": "application",
+      "owns": "healthcare pathways, policies and profiles",
+      "providers": [
+        "kairos"
+      ]
+    },
+    "tobac": {
+      "repository": "edithatogo/tobac",
+      "kind": "application",
+      "owns": "tobacco research models and evidence",
+      "providers": [
+        "voiage"
+      ]
+    },
+    "vop_poc_nz": {
+      "repository": "edithatogo/vop_poc_nz",
+      "kind": "application",
+      "owns": "economic models and decision context",
+      "providers": [
+        "voiage"
+      ]
+    },
+    "repository-standards": {
+      "repository": "edithatogo/repository-standards",
+      "kind": "policy",
+      "owns": "engineering policy and qualification receipts",
+      "providers": []
+    }
+  },
+  "planned_adapters": [
+    {
+      "consumer": "voiage",
+      "provider": "innovate",
+      "status": "qualification-required"
+    },
+    {
+      "consumer": "voiage",
+      "provider": "mars",
+      "status": "qualification-required"
+    }
+  ],
+  "deferred_migrations": [
+    "lifecourse",
+    "revalue",
+    "new-drug-reimbursement-game"
+  ],
+  "candidate_checks": [
+    "security",
+    "build",
+    "numerical",
+    "consumer",
+    "resource"
+  ],
+  "build_stages": [
+    "runtime-build",
+    "compiler-bootstrap",
+    "hpc-install",
+    "scheduler-run"
+  ]
+}
