@@ -7,9 +7,9 @@
 - [ ] Phase verification and agent review.
 
 ## B — Shared qualification controls
-- [~] Add scientific/native profile and capability graph with negative tests.
-- [ ] Add candidate and resource receipt validation; qualify Python 3.15.1 CI.
-- [ ] Run full policy gate, agent review, fixes and integrate.
+- [x] Add scientific/native profile and capability graph with negative tests (PR116).
+- [x] Add candidate and resource receipt validation; qualify Python 3.15.1 CI (PR116).
+- [x] Run full policy gate, agent review, fixes and integrate (PR116, 1bc9f5e).
 
 ## C — Library modernisation
 - [ ] Kairos: reconcile upstream accepted line and minimal native data features.
