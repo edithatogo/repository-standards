@@ -112,7 +112,7 @@ def validate_receipt(record: dict) -> list[str]:
     if isinstance(hashes, dict) and any(not re.fullmatch(r'[0-9a-f]{64}', str(v)) for v in hashes.values()):
         errors.append('source hashes must be SHA256')
     command = record.get('command')
-    if not isinstance(command, list) or not command or any(not isinstance(x, str) or not x.strip() for x in command):
+    if not isinstance(command, list) or not command or any(not isinstance(x, str) for x in command) or not command[0].strip():
         errors.append('command argv required')
     if type(record.get('concurrency')) is not int or record['concurrency'] < 1:
         errors.append('positive integer concurrency required')

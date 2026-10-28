@@ -115,3 +115,10 @@ class ScientificPolicyTests(unittest.TestCase):
     def test_missing_kind_is_structured_failure(self):
         del self.policy['capabilities']['innovate']['kind']
         self.assertIn('unknown kind', ' '.join(science.validate_policy(self.policy)))
+
+    def test_preserves_empty_command_arguments(self):
+        record = self.receipt()
+        record['command'] = ['python', '-c', '']
+        self.assertEqual(science.validate_receipt(record), [])
+        record['command'] = ['python', '-c', '   ']
+        self.assertEqual(science.validate_receipt(record), [])
