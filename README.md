@@ -17,3 +17,9 @@ The posture is deliberately compatible with one maintainer: zero mandatory human
 ## Safe rollout
 
 The scanner reports drift before managed-file synchronisation or ruleset activation. Lifecycle, licence, publication and canonicalisation decisions stay `review_required` until evidence supports them. See [`docs/continuous-conformance-standard.md`](docs/continuous-conformance-standard.md).
+
+## Scientific/native ecosystem
+
+The [scientific/native profile](docs/scientific-native.md) coordinates ownership,
+frontier dependency qualification and resource evidence without replacing local
+numerical gates. Delivery is tracked in [Conductor](conductor/index.md).

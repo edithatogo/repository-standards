@@ -1,0 +1,3390 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-28T16:39:21.771950+00:00",
+  "claim": "declaration inventory, not resolved-feature or installed acceptance",
+  "repositories": [
+    {
+      "repository": "edithatogo/kairos",
+      "revision": "56ac7691946d8cfc08f4d601e91ba4ea5547e886",
+      "capture": "committed git blobs; working changes excluded",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "fd81c059718aeb990462ccbf0282b57d9488a7213420e8cc637d3182b6fa7697",
+          "bytes": 7
+        },
+        {
+          "path": "Cargo.lock",
+          "sha256": "db047fde8908ffd2995e66db50aec2d4c5f58f07704b1cb29cb94ea69d5c1ca5",
+          "bytes": 109059
+        },
+        {
+          "path": "Cargo.toml",
+          "sha256": "de78b28e83f1af8181811fd3480ddad1fce7d35a19b1d1baa6d2b7926ad6b197",
+          "bytes": 1028,
+          "features": {},
+          "package": {},
+          "declared_dependencies": {}
+        },
+        {
+          "path": "bindings/python/pyproject.toml",
+          "sha256": "80b90c41b9f7d04b359f3d88c3609894c3f86411f8e4bea5ceaf1f434662f844",
+          "bytes": 525,
+          "requires_python": ">=3.15.1,<3.16",
+          "declared_dependencies": {
+            "runtime": [],
+            "optional": {
+              "arrow": [
+                "pyarrow>=25.0.1"
+              ],
+              "test": [
+                "pytest",
+                "ruff==0.17.2"
+              ]
+            },
+            "development": {},
+            "build": {
+              "requires": [
+                "setuptools>=69",
+                "wheel"
+              ],
+              "build-backend": "setuptools.build_meta"
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-abm/Cargo.toml",
+          "sha256": "06dc98dc56a30b5fcc5ac6faa26dec49a83d2a7fb9170914566916870d22a842",
+          "bytes": 754,
+          "features": {},
+          "package": {
+            "rust-version": {
+              "workspace": true
+            },
+            "name": "kairo-ecs-abm",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "description": "Agent-Based Modeling behavior API for KairoECS"
+          },
+          "declared_dependencies": {
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-core",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-state": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-state",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-rng": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-rng",
+                "version": "0.0.0"
+              }
+            },
+            "petgraph": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.7.1",
+                "default-features": false,
+                "features": [
+                  "graphmap",
+                  "stable_graph"
+                ]
+              }
+            },
+            "thiserror": {
+              "role": "runtime",
+              "declaration": "2.0"
+            },
+            "geo": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.33.1",
+                "default-features": false
+              }
+            },
+            "rstar": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.12.2",
+                "default-features": false
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-arrow/Cargo.toml",
+          "sha256": "ad59d818f9d69f981b162ee999e46b31d032971b503d38665ae9fa47a81084bf",
+          "bytes": 2954,
+          "features": {
+            "default": [],
+            "arrow-native": [
+              "dep:arrow-schema"
+            ],
+            "serde-runtime": [
+              "dep:serde",
+              "dep:serde_json"
+            ],
+            "polars-native": [
+              "dep:polars",
+              "dep:polars-arrow",
+              "serde-runtime"
+            ],
+            "parquet-native": [],
+            "parallel-io": [],
+            "hdf5": [
+              "parallel-io"
+            ],
+            "adios2": [
+              "parallel-io"
+            ]
+          },
+          "package": {
+            "rust-version": {
+              "workspace": true
+            },
+            "name": "kairo-ecs-arrow",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "description": "Arrow telemetry and event log serialization for KairoECS"
+          },
+          "declared_dependencies": {
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "sha2": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.10.8",
+                "default-features": false
+              }
+            },
+            "tempfile": {
+              "role": "runtime",
+              "declaration": "3.17.1"
+            },
+            "arrow-schema": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "60.0.0",
+                "optional": true
+              }
+            },
+            "polars": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "0.45",
+                "default-features": false,
+                "features": [
+                  "lazy",
+                  "parquet",
+                  "ipc",
+                  "fmt",
+                  "dtype-u16"
+                ],
+                "optional": true
+              }
+            },
+            "polars-arrow": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "0.45.1",
+                "default-features": false,
+                "optional": true
+              }
+            },
+            "serde": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ],
+                "optional": true
+              }
+            },
+            "serde_json": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "1",
+                "optional": true
+              }
+            },
+            "criterion": {
+              "role": "test",
+              "declaration": "0.5"
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-bench/Cargo.toml",
+          "sha256": "df17ebf5393a97141f46ebfc387d754b86d94d3802d3617164d2c3f51a71d91a",
+          "bytes": 750,
+          "features": {},
+          "package": {
+            "name": "kairo-ecs-bench",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "publish": false
+          },
+          "declared_dependencies": {
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-core",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-rng": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-rng",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-state": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-state",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "criterion": {
+              "role": "test",
+              "declaration": "0.5"
+            },
+            "serde": {
+              "role": "test",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "test",
+              "declaration": "1"
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-cli/Cargo.toml",
+          "sha256": "3f65f37eae8a2f8c650a199696df7c688233c52256d820cce38469c6808703e7",
+          "bytes": 650,
+          "features": {},
+          "package": {
+            "name": "kairo-ecs-cli",
+            "version": "0.1.0",
+            "description": "KairoECS CLI for experiment execution and scenario management",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "clap": {
+              "role": "runtime",
+              "declaration": {
+                "version": "4",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-core",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "rayon": {
+              "role": "runtime",
+              "declaration": "1.12"
+            },
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": "1"
+            },
+            "thiserror": {
+              "role": "runtime",
+              "declaration": "2"
+            },
+            "toml": {
+              "role": "runtime",
+              "declaration": "0.8"
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-core/Cargo.toml",
+          "sha256": "ba89ab5f0cfed3c9ef4f1c8eca29b457aed21f1855bb567e45b57e48ef646789",
+          "bytes": 604,
+          "features": {
+            "default": [],
+            "numa": []
+          },
+          "package": {
+            "name": "kairo-ecs-core",
+            "version": "0.0.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-types": {
+              "role": "test",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-rng": {
+              "role": "test",
+              "declaration": {
+                "path": "../kairo-ecs-rng",
+                "version": "0.0.0"
+              }
+            },
+            "serde": {
+              "role": "test",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "test",
+              "declaration": "1"
+            },
+            "proptest": {
+              "role": "test",
+              "declaration": {
+                "version": "1.6",
+                "default-features": false,
+                "features": [
+                  "std"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-cs-bridge/Cargo.toml",
+          "sha256": "6de61e67fa6b14ba4cc4e8f068a81a2cf8880ff30cb6e711d0fb931bf8972cac",
+          "bytes": 258,
+          "features": {},
+          "package": {
+            "rust-version": {
+              "workspace": true
+            },
+            "name": "kairo-ecs-cs-bridge",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "description": "C# P/Invoke bridge for KairoECS"
+          },
+          "declared_dependencies": {
+            "kairo-ecs-ffi": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-ffi",
+                "version": "0.1.0"
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-cuda/Cargo.toml",
+          "sha256": "99cd28e45f235d5ca44887bcf42760aa092aff2148d94088ea6f26a5c2bf6ae9",
+          "bytes": 486,
+          "features": {
+            "default": [],
+            "cuda": [
+              "dep:cudarc"
+            ],
+            "cuda-12000": [
+              "cuda",
+              "cudarc/cuda-12000"
+            ]
+          },
+          "package": {
+            "name": "kairo-ecs-cuda",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "bytemuck": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1.25.2",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "cudarc": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "0.19.10",
+                "default-features": false,
+                "features": [
+                  "driver",
+                  "nvrtc",
+                  "dynamic-loading"
+                ],
+                "optional": true
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-debug/Cargo.toml",
+          "sha256": "e8cfe1c68a72f4f2ffc97d55545fc250e1c5914419a2aae029477c099c995d59",
+          "bytes": 640,
+          "features": {},
+          "package": {
+            "name": "kairo-ecs-debug",
+            "version": "0.0.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-core",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "clap": {
+              "role": "runtime",
+              "declaration": {
+                "version": ">=4.5.0, <4.6.0",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": "1"
+            },
+            "thiserror": {
+              "role": "runtime",
+              "declaration": "2"
+            },
+            "criterion": {
+              "role": "test",
+              "declaration": "0.5"
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-des/Cargo.toml",
+          "sha256": "4c715dbb7c4f0d9b714a9cbcca8aafee7dc99f4dc351b4e91bd003fabbc43690",
+          "bytes": 531,
+          "features": {},
+          "package": {
+            "rust-version": {
+              "workspace": true
+            },
+            "name": "kairo-ecs-des",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "description": "Discrete Event Simulation trajectory API for KairoECS"
+          },
+          "declared_dependencies": {
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-core",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-state": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-state",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-rng": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-rng",
+                "version": "0.0.0"
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-diplomat/Cargo.toml",
+          "sha256": "d0d41bb0f58ae49e6aa613a15a9e97195609d94dd41061c325c2105205948beb",
+          "bytes": 300,
+          "features": {},
+          "package": {
+            "name": "kairo-ecs-diplomat",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-ffi": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-ffi",
+                "version": "0.1.0"
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-ffi/Cargo.toml",
+          "sha256": "f35e7c1c4ecf741c0ae8a84ec18e504223026912a873f80ac07356ca460ac4af",
+          "bytes": 1275,
+          "features": {
+            "default": [],
+            "arrow-c-data": [],
+            "numa": [
+              "kairo-ecs-core/numa",
+              "kairo-ecs-state/numa"
+            ],
+            "native-data": [
+              "dep:kairo-ecs-arrow",
+              "kairo-ecs-arrow/polars-native"
+            ]
+          },
+          "package": {
+            "name": "kairo-ecs-ffi",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-core",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-state": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-state",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-rng": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-rng",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-arrow": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "path": "../kairo-ecs-arrow",
+                "version": "0.1.0",
+                "default-features": false,
+                "optional": true
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-fmi/Cargo.toml",
+          "sha256": "5ba60fc281259072b39c05ec0db7790a9def9587c1160e0bb8dea88817f391e6",
+          "bytes": 809,
+          "features": {
+            "default": [],
+            "fmi-runtime": [
+              "dep:libloading"
+            ],
+            "fmi2": [
+              "fmi-runtime"
+            ],
+            "fmi3": [
+              "fmi-runtime"
+            ],
+            "aas": [],
+            "digital-twin": [
+              "fmi2"
+            ]
+          },
+          "package": {
+            "name": "kairo-ecs-fmi",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "flate2": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1.1.10",
+                "default-features": false,
+                "features": [
+                  "rust_backend"
+                ]
+              }
+            },
+            "libloading": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "0.9.0",
+                "optional": true
+              }
+            },
+            "quick-xml": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.42.0",
+                "default-features": false
+              }
+            },
+            "zip": {
+              "role": "runtime",
+              "declaration": {
+                "version": "9.1.0",
+                "default-features": false,
+                "features": [
+                  "deflate-flate2"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "test",
+              "declaration": "1"
+            },
+            "criterion": {
+              "role": "test",
+              "declaration": "0.5"
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-game-ontology/Cargo.toml",
+          "sha256": "106aaaee9bc5970405244c9c71add5737b55793650a7d0a39e7996e351ea6162",
+          "bytes": 242,
+          "features": {
+            "default": [],
+            "codegen": []
+          },
+          "package": {
+            "name": "kairo-ecs-game-ontology",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {}
+        },
+        {
+          "path": "crates/kairo-ecs-game-theory/Cargo.toml",
+          "sha256": "6ca298736dffdba399655b9b986565d52d88a157b79ff6a8cb1f6a46b71a2941",
+          "bytes": 601,
+          "features": {
+            "default": [],
+            "generated-components": [],
+            "graph-relations": [
+              "dep:kairo-ecs-state",
+              "dep:kairo-ecs-types"
+            ]
+          },
+          "package": {
+            "name": "kairo-ecs-game-theory",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "clarabel": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.11.1",
+                "features": [
+                  "serde"
+                ]
+              }
+            },
+            "kairo-ecs-state": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "path": "../kairo-ecs-state",
+                "version": "0.0.0",
+                "optional": true
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0",
+                "optional": true
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-gpu/Cargo.toml",
+          "sha256": "91530a0f276b0ac7115d57f9d37f663020369378344f3a9e733fb65bb1121f70",
+          "bytes": 663,
+          "features": {
+            "default": [],
+            "gpu": [],
+            "wgpu-backend": [
+              "gpu",
+              "dep:wgpu",
+              "dep:pollster"
+            ],
+            "cuda-backend": [
+              "gpu",
+              "dep:kairo-ecs-cuda",
+              "kairo-ecs-cuda/cuda-12000"
+            ],
+            "metal-backend": [
+              "gpu",
+              "wgpu-backend"
+            ]
+          },
+          "package": {
+            "name": "kairo-ecs-gpu",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "bytemuck": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1.25.2",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "kairo-ecs-cuda": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "path": "../kairo-ecs-cuda",
+                "version": "0.1.0",
+                "optional": true
+              }
+            },
+            "pollster": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "1.0.1",
+                "optional": true
+              }
+            },
+            "wgpu": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "30.0.1",
+                "optional": true
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-grpc/Cargo.toml",
+          "sha256": "b41e3972e6a0f29d0583aeadb88e6cfea5c3d42f32d1348a7f258d4ab72d96a1",
+          "bytes": 950,
+          "features": {
+            "default": [],
+            "grpc": []
+          },
+          "package": {
+            "name": "kairo-ecs-grpc",
+            "version": "0.0.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-pdes": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-pdes",
+                "version": "0.0.0",
+                "features": [
+                  "time-warp",
+                  "pdes"
+                ]
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "prost": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.13.5",
+                "default-features": false,
+                "features": [
+                  "std",
+                  "prost-derive"
+                ]
+              }
+            },
+            "tokio": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1.54.1",
+                "default-features": false,
+                "features": [
+                  "rt",
+                  "rt-multi-thread",
+                  "net",
+                  "io-util",
+                  "sync",
+                  "macros",
+                  "time"
+                ]
+              }
+            },
+            "tokio-stream": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.1.19",
+                "default-features": false,
+                "features": [
+                  "net"
+                ]
+              }
+            },
+            "tonic": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.14.6",
+                "default-features": false,
+                "features": [
+                  "channel",
+                  "server",
+                  "router",
+                  "transport",
+                  "codegen"
+                ]
+              }
+            },
+            "serde": {
+              "role": "test",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "test",
+              "declaration": "1"
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-ml/Cargo.toml",
+          "sha256": "c7068bb2f6d3e0ad61a110e182bad3087a77f5eba4d3c894279bd408012367c4",
+          "bytes": 263,
+          "features": {
+            "default": [],
+            "onnx": [],
+            "tensorrt": [],
+            "burn": [],
+            "gymnasium": []
+          },
+          "package": {
+            "name": "kairo-ecs-ml",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {}
+        },
+        {
+          "path": "crates/kairo-ecs-mpi/Cargo.toml",
+          "sha256": "571a6ecc41172cd655007f5805bdc3cb307269a1fb9d59488297da069c338227",
+          "bytes": 421,
+          "features": {
+            "default": [],
+            "mpi": []
+          },
+          "package": {
+            "name": "kairo-ecs-mpi",
+            "version": "0.0.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-pdes": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-pdes",
+                "version": "0.0.0",
+                "features": [
+                  "time-warp",
+                  "pdes"
+                ]
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-pdes/Cargo.toml",
+          "sha256": "c1e5a100da17c3699087cb8a50daa0683125ea5332647fa45839cbc9bed80276",
+          "bytes": 605,
+          "features": {
+            "default": [],
+            "pdes": [],
+            "time-warp": []
+          },
+          "package": {
+            "name": "kairo-ecs-pdes",
+            "version": "0.0.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "serde_json": {
+              "role": "test",
+              "declaration": "1"
+            },
+            "kairo-ecs-core": {
+              "role": "test",
+              "declaration": {
+                "path": "../kairo-ecs-core",
+                "version": "0.0.0"
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-rng/Cargo.toml",
+          "sha256": "241ac6a8c9440536c9e020aba40a0afe37dcbf4c7821c39a4f0613d9a2d0e5a4",
+          "bytes": 570,
+          "features": {},
+          "package": {
+            "name": "kairo-ecs-rng",
+            "version": "0.0.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "rand": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.10",
+                "default-features": false
+              }
+            },
+            "rand_chacha": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.10",
+                "default-features": false
+              }
+            },
+            "rand_distr": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.6",
+                "default-features": false,
+                "features": [
+                  "alloc"
+                ]
+              }
+            },
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "thiserror": {
+              "role": "runtime",
+              "declaration": "2"
+            },
+            "serde_json": {
+              "role": "test",
+              "declaration": "1"
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-state/Cargo.toml",
+          "sha256": "64afc505aff63198b76894cb0c3f8e79c91130bf9d86816473bb491f2e61699e",
+          "bytes": 375,
+          "features": {
+            "default": [],
+            "numa": []
+          },
+          "package": {
+            "name": "kairo-ecs-state",
+            "version": "0.0.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-core",
+                "version": "0.0.0"
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-streaming/Cargo.toml",
+          "sha256": "1bdf4011bdc06c9506c4b415a0dfbfe87b439a6f4e927f4a269b5bfa00f2cdc1",
+          "bytes": 275,
+          "features": {
+            "default": [],
+            "kafka": [],
+            "nats": [],
+            "websocket": [],
+            "arrow-flight": []
+          },
+          "package": {
+            "name": "kairo-ecs-streaming",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {}
+        },
+        {
+          "path": "crates/kairo-ecs-types/Cargo.toml",
+          "sha256": "772abd5b321f6c5806a8dfcb6c53c6d633ed6fc4201070f5f8149a72315e0288",
+          "bytes": 189,
+          "features": {},
+          "package": {
+            "name": "kairo-ecs-types",
+            "version": "0.0.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {}
+        },
+        {
+          "path": "crates/kairo-ecs-uniffi/Cargo.toml",
+          "sha256": "276470efab56533e797b02a2d8404cbbaa812b25a4565da339a1233d6d558e36",
+          "bytes": 296,
+          "features": {},
+          "package": {
+            "name": "kairo-ecs-uniffi",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-ffi": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-ffi",
+                "version": "0.1.0"
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-viz/Cargo.toml",
+          "sha256": "760ac4fd9d8911f55df40acd77f8242bc8815e51e069c91aff2dc94b436f233c",
+          "bytes": 413,
+          "features": {
+            "default": [],
+            "wgpu-renderer": [],
+            "bevy-renderer": []
+          },
+          "package": {
+            "name": "kairo-ecs-viz",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-state": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-state",
+                "version": "0.0.0"
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-types",
+                "version": "0.0.0"
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-wasm/Cargo.toml",
+          "sha256": "2717ec77fbaf341ab071d9c5088e1f1bb00f83fa5a202b2dc416b61634aa579a",
+          "bytes": 471,
+          "features": {
+            "default": [],
+            "wasm-export": [
+              "dep:wasm-bindgen"
+            ]
+          },
+          "package": {
+            "name": "kairo-ecs-wasm",
+            "version": "0.1.0",
+            "edition": "2021",
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "description": "WASM bindings for KairoECS"
+          },
+          "declared_dependencies": {
+            "kairo-ecs-ffi": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../kairo-ecs-ffi",
+                "version": "0.1.0"
+              }
+            },
+            "wasm-bindgen": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "0.2",
+                "optional": true
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/kairo-ecs-webgpu/Cargo.toml",
+          "sha256": "24aa90ff8b4dfc21eea2c0530ef94f8c0d18805e16208a623b12a92d8aa4134c",
+          "bytes": 251,
+          "features": {
+            "default": [],
+            "webgpu": []
+          },
+          "package": {
+            "name": "kairo-ecs-webgpu",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": {
+              "workspace": true
+            },
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {}
+        },
+        {
+          "path": "examples/fmi-co-simulation/basic-import/Cargo.toml",
+          "sha256": "fea76c0adc3b78c77c57ebbd1b671062ecf2476c097b78ff29b021b0df75a12d",
+          "bytes": 231,
+          "features": {},
+          "package": {
+            "rust-version": "1.99",
+            "name": "kairo-fmi-basic-import",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": "Apache-2.0"
+          },
+          "declared_dependencies": {
+            "kairo-ecs-fmi": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../../../crates/kairo-ecs-fmi",
+                "features": [
+                  "fmi2"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "path": "examples/ml-surrogate/de-surrogate/Cargo.toml",
+          "sha256": "43666be5d29794535c4ffa1fdbf6c203f8e12400547dd71d152965ee6e8ef626",
+          "bytes": 381,
+          "features": {
+            "default": [],
+            "onnx": [
+              "kairo-ecs-ml/onnx"
+            ]
+          },
+          "package": {
+            "name": "de-surrogate",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": "Apache-2.0",
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": "1.99"
+          },
+          "declared_dependencies": {
+            "kairo-ecs-ml": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../../../crates/kairo-ecs-ml",
+                "default-features": false
+              }
+            }
+          }
+        },
+        {
+          "path": "examples/viz/headless-snapshot/Cargo.lock",
+          "sha256": "8f70815d11d453a2aafbcabfe2ca490f7cd460089c05c438898a237673b0ad6d",
+          "bytes": 512
+        },
+        {
+          "path": "examples/viz/headless-snapshot/Cargo.toml",
+          "sha256": "adee63d0925088a473ece9df62bc548193c32082a8969f4e64c8d9b494975e62",
+          "bytes": 485,
+          "features": {},
+          "package": {
+            "name": "kairo-viz-headless-snapshot",
+            "version": "0.1.0",
+            "edition": "2021",
+            "license": "Apache-2.0",
+            "repository": "https://github.com/edithatogo/kairos",
+            "rust-version": "1.99"
+          },
+          "declared_dependencies": {
+            "kairo-ecs-state": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../../../crates/kairo-ecs-state"
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../../../crates/kairo-ecs-types"
+              }
+            },
+            "kairo-ecs-viz": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../../../crates/kairo-ecs-viz",
+                "default-features": false
+              }
+            }
+          }
+        },
+        {
+          "path": "fuzz/Cargo.lock",
+          "sha256": "eb78c30f6de24d81b9f28648b5d98c710d3bcde07c4154917fd8a785725bfafc",
+          "bytes": 2509
+        },
+        {
+          "path": "fuzz/Cargo.toml",
+          "sha256": "a6b9846d4a51a6d15c53032e6c09a5633a91cc345b26fefe2451dd10b6609e39",
+          "bytes": 422,
+          "features": {},
+          "package": {
+            "name": "kairo-ecs-fuzz",
+            "version": "0.0.0",
+            "publish": false,
+            "edition": "2021",
+            "metadata": {
+              "cargo-fuzz": true
+            }
+          },
+          "declared_dependencies": {
+            "libfuzzer-sys": {
+              "role": "runtime",
+              "declaration": "0.4"
+            },
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../crates/kairo-ecs-core"
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../crates/kairo-ecs-types"
+              }
+            }
+          }
+        },
+        {
+          "path": "python/kairo_gym/pyproject.toml",
+          "sha256": "1b9ef565b7c078691600ac13d011f665cc27396a35c07485627ffdbe04f97494",
+          "bytes": 334,
+          "requires_python": ">=3.15.1,<3.16",
+          "declared_dependencies": {
+            "runtime": [],
+            "optional": {
+              "gymnasium": [
+                "gymnasium>=0.29.1"
+              ]
+            },
+            "development": {},
+            "build": {
+              "requires": [
+                "setuptools>=68"
+              ],
+              "build-backend": "setuptools.build_meta"
+            }
+          }
+        },
+        {
+          "path": "rust-toolchain.toml",
+          "sha256": "a7b2c61d6d08a76412b085d8425685eadaeed2427259d0a584c3dad954f0988b",
+          "bytes": 135
+        },
+        {
+          "path": "templates/Cargo.toml",
+          "sha256": "12ade025561492d23e057a3c2904048eda7a7a29191fc81e597a6600270a4a51",
+          "bytes": 951,
+          "features": {},
+          "package": {},
+          "declared_dependencies": {}
+        },
+        {
+          "path": "templates/bindings/python/pyproject.toml",
+          "sha256": "622c1dacb4b9d86c313d8d12fe21a7f4e7bfb36bebaa8b839925156a8f554604",
+          "bytes": 318,
+          "requires_python": ">=3.15.1,<3.16",
+          "declared_dependencies": {
+            "runtime": [
+              "pyarrow"
+            ],
+            "optional": {},
+            "development": {},
+            "build": {
+              "requires": [
+                "maturin>=1.0,<2.0"
+              ],
+              "build-backend": "maturin"
+            }
+          }
+        },
+        {
+          "path": "templates/rust-toolchain.toml",
+          "sha256": "687d4b68d2977a3df55dbad29e1f39dfeaf08007c0e360deb0026fa568816536",
+          "bytes": 86
+        }
+      ]
+    },
+    {
+      "repository": "edithatogo/innovate",
+      "revision": "83d556ba4995fd5f5238f4953e9a8af34976f464",
+      "capture": "committed git blobs; working changes excluded",
+      "files": [
+        {
+          "path": "bindings/rust/Cargo.toml",
+          "sha256": "08f12631b9a87dd0feb9a09d60d1824e239f1d22688b1a87fcab97927558ab40",
+          "bytes": 1863,
+          "features": {},
+          "package": {
+            "name": "innovate-rs",
+            "version": "0.5.0",
+            "edition": "2021",
+            "rust-version": "1.85",
+            "license": "Apache-2.0",
+            "description": "Rust bindings over the Innovate functional kernel",
+            "documentation": "https://docs.rs/innovate-rs",
+            "homepage": "https://github.com/edithatogo/innovate",
+            "repository": "https://github.com/edithatogo/innovate",
+            "readme": "README.md",
+            "keywords": [
+              "innovation",
+              "diffusion",
+              "kernel",
+              "bindings"
+            ],
+            "categories": [
+              "api-bindings",
+              "science"
+            ],
+            "include": [
+              "Cargo.toml",
+              "README.md",
+              "benches/**",
+              "examples/**",
+              "inst/**",
+              "scripts/**",
+              "src/**"
+            ]
+          },
+          "declared_dependencies": {
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "git": "https://github.com/edithatogo/kairos.git",
+                "rev": "fae901558f07b7b717a676adbafbe2cdc78dea1c"
+              }
+            },
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "git": "https://github.com/edithatogo/kairos.git",
+                "rev": "fae901558f07b7b717a676adbafbe2cdc78dea1c"
+              }
+            },
+            "kairo-ecs-state": {
+              "role": "runtime",
+              "declaration": {
+                "git": "https://github.com/edithatogo/kairos.git",
+                "rev": "fae901558f07b7b717a676adbafbe2cdc78dea1c"
+              }
+            },
+            "kairo-ecs-rng": {
+              "role": "runtime",
+              "declaration": {
+                "git": "https://github.com/edithatogo/kairos.git",
+                "rev": "fae901558f07b7b717a676adbafbe2cdc78dea1c"
+              }
+            },
+            "kairo-ecs-des": {
+              "role": "runtime",
+              "declaration": {
+                "git": "https://github.com/edithatogo/kairos.git",
+                "rev": "fae901558f07b7b717a676adbafbe2cdc78dea1c"
+              }
+            },
+            "kairo-ecs-abm": {
+              "role": "runtime",
+              "declaration": {
+                "git": "https://github.com/edithatogo/kairos.git",
+                "rev": "fae901558f07b7b717a676adbafbe2cdc78dea1c"
+              }
+            },
+            "kairo-ecs-arrow": {
+              "role": "runtime",
+              "declaration": {
+                "git": "https://github.com/edithatogo/kairos.git",
+                "rev": "fae901558f07b7b717a676adbafbe2cdc78dea1c"
+              }
+            },
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": "1"
+            },
+            "tracing": {
+              "role": "runtime",
+              "declaration": "0.1"
+            },
+            "criterion": {
+              "role": "test",
+              "declaration": "=0.5.1"
+            },
+            "dhat": {
+              "role": "test",
+              "declaration": "0.3"
+            },
+            "tracing-subscriber": {
+              "role": "test",
+              "declaration": {
+                "version": "0.3",
+                "features": [
+                  "fmt"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "b931d9b710e60e759d50139abba46554bcb00027b9ac08562436c20be700a86d",
+          "bytes": 11601,
+          "requires_python": ">=3.14",
+          "declared_dependencies": {
+            "runtime": [
+              "numpy>=2.4.4,<3",
+              "scipy>=1.17.1,<2",
+              "pandas>=3.0.2,<4",
+              "pyarrow>=23.0.1,<26",
+              "statsmodels>=0.14.6,<0.15",
+              "networkx>=3.6.1,<4",
+              "jitcdde>=1.8.3,<2",
+              "sympy>=1.14,<2",
+              "ruptures>=1.1.9,<1.1.10",
+              "pymannkendall>=1.4.3,<2",
+              "pytensor>=2.38.2,<4",
+              "pandasdmx>=1.9.0",
+              "pydantic>=2.13.4"
+            ],
+            "optional": {
+              "jax": [
+                "jax>=0.4.20",
+                "jaxlib>=0.4.20",
+                "numpyro>=0.20.1,<0.22",
+                "diffrax>=0.5",
+                "blackjax>=1.0",
+                "arviz>=0.17,<2.0",
+                "jaxopt>=0.8"
+              ],
+              "bayesian": [
+                "jax>=0.4.20",
+                "jaxlib>=0.4.20",
+                "numpyro>=0.20.1,<0.22",
+                "diffrax>=0.5",
+                "blackjax>=1.0",
+                "arviz>=0.17,<2.0",
+                "jaxopt>=0.8"
+              ],
+              "dataframe": [
+                "polars>=1.0"
+              ],
+              "legacy-abm": [
+                "mesa>=3.5.1,<4",
+                "ndlib>=5.1.1,<6"
+              ]
+            },
+            "development": {
+              "dev": [
+                "pytest>=7.4",
+                "pytest-xdist>=3.5",
+                "pytest-benchmark>=4.0",
+                "pytest-cov>=4.1",
+                "syrupy>=4.6",
+                "hypothesis>=6.96",
+                "nox>=2025.5.1",
+                "matplotlib>=3.7",
+                "mutmut>=3.6,<4.0",
+                "scalene>=1.5",
+                "ruff>=0.4.0",
+                "basedpyright>=1.39.8",
+                "bandit>=1.7",
+                "pip-audit>=2.9",
+                "pre-commit>=3.6",
+                "griffe>=1.15",
+                "nbqa>=1.7",
+                "nbstripout>=0.7",
+                "pandera>=0.30.1,<0.33",
+                "pydantic>=2.13.4,<3",
+                "lizard>=1.17",
+                "commitizen>=3.13",
+                "pyproject-fmt>=1.7",
+                "check-wheel-contents>=0.6",
+                "twine>=5.1"
+              ]
+            },
+            "build": {
+              "requires": [
+                "setuptools>=61.0"
+              ],
+              "build-backend": "setuptools.build_meta"
+            }
+          }
+        },
+        {
+          "path": "uv.lock",
+          "sha256": "d7af62bfa2f4d3f1ecd5e8d9ca011b1fdcfc916e79fb37267c35107620551356",
+          "bytes": 385426
+        }
+      ]
+    },
+    {
+      "repository": "edithatogo/mars",
+      "revision": "d68b54a1c9a5eee40e1b7a724e002d5083ff6d8f",
+      "capture": "committed git blobs; working changes excluded",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "cb503884a501cb85b4d51f924ad35c26b6d57d50b01e710435b496db81f83451",
+          "bytes": 10403,
+          "requires_python": ">=3.10",
+          "declared_dependencies": {
+            "runtime": [
+              "numpy>=1.20.0",
+              "scikit-learn>=1.0.0",
+              "matplotlib>=3.4.0"
+            ],
+            "optional": {
+              "pandas": [
+                "pandas>=1.3.0"
+              ],
+              "cli": [
+                "pandas>=1.3.0",
+                "click>=8.0.0",
+                "rich>=12.0.0"
+              ],
+              "profiling": [
+                "scalene>=1.5.0",
+                "py-spy>=0.3.0"
+              ],
+              "dev": [
+                "uv>=0.11.15",
+                "pytest>=7.0.0",
+                "pytest-cov>=4.0.0",
+                "pytest-xdist>=3.0.0",
+                "pytest-benchmark>=4.0.0",
+                "pytest-sugar>=0.9.0",
+                "hypothesis>=6.90.0",
+                "mutmut>=2.4.0",
+                "nbmake>=1.4.0",
+                "diff-cover>=8.0.0",
+                "ruff>=0.4.0",
+                "ty>=0.0.30",
+                "pre-commit>=3.6.0",
+                "bandit>=1.7.10",
+                "pip-audit>=2.9.0",
+                "msgpack>=1.2.0",
+                "click>=8.3.3",
+                "gitpython>=3.1.58",
+                "idna>=3.15",
+                "pillow>=12.3.0",
+                "pymdown-extensions>=10.21.3",
+                "tornado>=6.5.7",
+                "urllib3>=2.7.0",
+                "mkdocs>=1.5.0",
+                "mkdocs-material>=9.5.0",
+                "mkdocstrings[python]>=0.24.0",
+                "mike>=2.0.0",
+                "python-semantic-release>=9.0.0",
+                "pandas>=1.3.0",
+                "tox>=4.11.0"
+              ]
+            },
+            "development": {
+              "dev": [
+                "ty>=0.0.30"
+              ]
+            },
+            "build": {
+              "requires": [
+                "maturin>=1.8.0"
+              ],
+              "build-backend": "maturin"
+            }
+          }
+        },
+        {
+          "path": "rust-runtime/Cargo.lock",
+          "sha256": "a14898ebb88c593fe518cc451ec3e9c42c29471cfe24bdc7da73b545d65c72d1",
+          "bytes": 17694
+        },
+        {
+          "path": "rust-runtime/Cargo.toml",
+          "sha256": "8089739a4514c3cf066d3ba350ec7f50ded363130881a8d34bf90e9dfcec4084",
+          "bytes": 617,
+          "features": {},
+          "package": {
+            "name": "mars-earth",
+            "version": "0.1.0",
+            "edition": "2021",
+            "description": "Portable runtime replay for mars ModelSpec artifacts",
+            "license": "Apache-2.0",
+            "repository": "https://github.com/edithatogo/mars",
+            "readme": "README.md"
+          },
+          "declared_dependencies": {
+            "anyhow": {
+              "role": "runtime",
+              "declaration": "1"
+            },
+            "rayon": {
+              "role": "runtime",
+              "declaration": "1.10"
+            },
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": "1"
+            },
+            "pyo3": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.29.0",
+                "features": [
+                  "abi3-py39"
+                ]
+              }
+            },
+            "criterion": {
+              "role": "test",
+              "declaration": "0.5"
+            }
+          }
+        },
+        {
+          "path": "uv.lock",
+          "sha256": "ff3fe7b10d71a04ae07716f423f488dec3d3a5a0a3e7675eec00587eb9793fca",
+          "bytes": 789909
+        }
+      ]
+    },
+    {
+      "repository": "edithatogo/voiage",
+      "revision": "f78ccd3339e17e929d6efe3a8a8c96e9202e2040",
+      "capture": "committed git blobs; working changes excluded",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "fd81c059718aeb990462ccbf0282b57d9488a7213420e8cc637d3182b6fa7697",
+          "bytes": 7
+        },
+        {
+          "path": "paper/reproduction-environment/pyproject.toml",
+          "sha256": "2ae0033c68442724d0f116590896853811693d09742b56b5e614db81a316972a",
+          "bytes": 10015,
+          "requires_python": ">=3.12",
+          "declared_dependencies": {
+            "runtime": [
+              "click>=8.3.3,<9",
+              "numpy>=2.2.6,<3.0",
+              "scipy>=1.16.3,<1.17",
+              "pandas>=1.3,<3.0",
+              "xarray>=0.19,<2025.0",
+              "scikit-learn>=1.7.2,<2.0",
+              "pyarrow>=25.0.0,<26",
+              "polars>=1.42.1,<2",
+              "pydantic>=2.13.4,<3",
+              "jsonschema>=4.26.0,<5.0",
+              "typing_extensions>=4.16.0",
+              "typer>=0.9,<1.0"
+            ],
+            "optional": {
+              "croissant": [],
+              "frictionless": [],
+              "ingestion": [],
+              "ecosystem": [
+                "defusedxml>=0.7.1,<1.0"
+              ],
+              "excel": [
+                "openpyxl>=3.1.5,<4.0"
+              ],
+              "docs": [
+                "griffe>=1.14.0,<2.0"
+              ],
+              "jax": [
+                "jax>=0.7.1,<0.8"
+              ],
+              "ci": [
+                "defusedxml>=0.7.1,<1.0",
+                "docutils>=0.23,<1",
+                "fastapi>=0.139.2,<1.0",
+                "httpx>=0.28.1,<1.0",
+                "hypothesis>=6.157.0,<7.0",
+                "jax>=0.7.1,<0.8",
+                "matplotlib>=3.4,<4.0",
+                "maturin>=1.9,<2.0",
+                "psutil>=5.9,<8.0",
+                "pytest>=9.1.1,<10.0",
+                "pytest-benchmark>=5.2.3,<6.0",
+                "pytest-cov>=7.1.0,<8.0",
+                "pytest-integration>=0.2.3,<0.3",
+                "pytest-xdist>=3.8.0,<4.0",
+                "PyYAML>=6.0.3,<7.0",
+                "rfc8785>=0.1,<0.2",
+                "tomli>=2.4.1,<3.0"
+              ],
+              "dev": [
+                "maturin>=1.9,<2.0",
+                "mutmut==3.6.0",
+                "scalene>=2.3.0,<3.0",
+                "ruff>=0.15.22,<0.16.0",
+                "bandit>=1.9.4,<2.0",
+                "nox>=2026.7.11,<2027",
+                "ty>=0.0.61,<1.0",
+                "basedpyright>=1.39.9,<2.0",
+                "types-setuptools>=83.0.0.20260716",
+                "types-requests>=2.33.0.20260712",
+                "jupyterlab>=4.6.2,<5.0",
+                "ipykernel>=7.3.0,<8",
+                "pre-commit>=4.6.0,<5.0",
+                "vulture>=2.16,<3.0",
+                "tox>=4.57.0,<5.0",
+                "tomli>=2.4.1,<3.0"
+              ],
+              "experimental": [
+                "duckdb>=1.5.4,<2",
+                "orjson>=3.11.9,<4",
+                "msgspec>=0.21.1,<1"
+              ],
+              "plotting": [
+                "matplotlib>=3.11.1,<4",
+                "seaborn>=0.13.2,<1"
+              ],
+              "performance": [
+                "psutil>=5.9,<8.0"
+              ],
+              "deep_learning": [
+                "torch>=2.13.0,<3.0"
+              ],
+              "web": [
+                "fastapi>=0.139.2,<1.0",
+                "httpx>=0.28.1,<1.0",
+                "uvicorn>=0.51.0,<1.0"
+              ]
+            },
+            "development": {},
+            "build": {
+              "requires": [
+                "maturin>=1.9,<2.0"
+              ],
+              "build-backend": "build_backend",
+              "backend-path": [
+                "."
+              ]
+            }
+          }
+        },
+        {
+          "path": "paper/reproduction-environment/python315/pyproject.toml",
+          "sha256": "6e93de735bb35cea2a89f9134a00e6c8685c3221621fe1e6d029b63570faa0ed",
+          "bytes": 10567,
+          "requires_python": ">=3.15.1,<3.16",
+          "declared_dependencies": {
+            "runtime": [
+              "click>=8.3.3,<9",
+              "numpy>=2.5.4,<3",
+              "scipy>=1.18.1,<1.19",
+              "pandas>=3.1.0,<4",
+              "xarray>=2026.9.0,<2027",
+              "scikit-learn>=1.9.1,<2",
+              "pyarrow>=26.0.0,<27",
+              "polars>=2.1.0,<3",
+              "pydantic>=2.13.4,<3",
+              "jsonschema>=4.26.0,<5.0",
+              "typing_extensions>=4.16.0",
+              "typer>=0.9,<1.0"
+            ],
+            "optional": {
+              "test-acceleration": [
+                "pytest-testmon>=2.2.0,<3",
+                "pytest-gremlins>=1.9.0,<2",
+                "coverage>=7.16.0,<8",
+                "vcrpy>=8.3.0,<9"
+              ],
+              "croissant": [],
+              "frictionless": [],
+              "ingestion": [],
+              "ecosystem": [
+                "defusedxml>=0.7.1,<1.0"
+              ],
+              "excel": [
+                "openpyxl>=3.1.5,<4.0"
+              ],
+              "docs": [
+                "griffe>=1.14.0,<2.0"
+              ],
+              "jax": [
+                "jax>=0.12.0.1,<0.13"
+              ],
+              "ci": [
+                "defusedxml>=0.7.1,<1.0",
+                "docutils>=0.23,<1",
+                "fastapi>=0.139.2,<1.0",
+                "httpx>=0.28.1,<1.0",
+                "hypothesis>=6.157.0,<7.0",
+                "jax>=0.12.0.1,<0.13",
+                "matplotlib>=3.4,<4.0",
+                "maturin>=1.9,<2.0",
+                "psutil>=5.9,<8.0",
+                "pytest>=9.1.1,<10.0",
+                "pytest-benchmark>=5.2.3,<6.0",
+                "pytest-cov>=7.1.0,<8.0",
+                "pytest-integration>=0.2.3,<0.3",
+                "pytest-xdist>=3.8.0,<4.0",
+                "PyYAML>=6.0.3,<7.0",
+                "rfc8785>=0.1,<0.2",
+                "tomli>=2.4.1,<3.0"
+              ],
+              "dev": [
+                "maturin>=1.9,<2.0",
+                "mutmut==3.6.0",
+                "scalene>=2.3.0,<3.0",
+                "ruff>=0.17.2,<0.18",
+                "bandit>=1.9.4,<2.0",
+                "nox>=2026.7.11,<2027",
+                "ty>=0.0.61,<1.0",
+                "basedpyright>=1.39.9,<2.0",
+                "types-setuptools>=83.0.0.20260716",
+                "types-requests>=2.33.0.20260712",
+                "jupyterlab>=4.6.2,<5.0",
+                "ipykernel>=7.3.0,<8",
+                "pre-commit>=4.6.0,<5.0",
+                "vulture>=2.16,<3.0",
+                "tox>=4.67,<5",
+                "tox-uv>=1.37,<2",
+                "tomli>=2.4.1,<3.0"
+              ],
+              "experimental": [
+                "duckdb>=1.5.4,<2",
+                "orjson>=3.11.9,<4",
+                "msgspec>=0.21.1,<1"
+              ],
+              "plotting": [
+                "matplotlib>=3.11.1,<4",
+                "seaborn>=0.13.2,<1"
+              ],
+              "performance": [
+                "psutil>=5.9,<8.0"
+              ],
+              "deep_learning": [],
+              "web": [
+                "fastapi>=0.139.2,<1.0",
+                "httpx>=0.28.1,<1.0",
+                "uvicorn>=0.51.0,<1.0"
+              ]
+            },
+            "development": {},
+            "build": {
+              "requires": [
+                "maturin>=1.9,<2.0"
+              ],
+              "build-backend": "build_backend",
+              "backend-path": [
+                "."
+              ]
+            }
+          }
+        },
+        {
+          "path": "paper/reproduction-environment/python315/uv.lock",
+          "sha256": "ee0d8fbaab209be5f858e32e8d2e8d3c43b710cf10b696dc6b24ecc77baa2d57",
+          "bytes": 383220
+        },
+        {
+          "path": "paper/reproduction-environment/uv.lock",
+          "sha256": "e5bfefe59aa2920d5b28e9beaa5a6e05cc8b08e4a91e74ed8589d7fc3354f7c5",
+          "bytes": 676711
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "285123be46b49099e778ae659619386a262d8bf798b3713eed2f4f72027dddc4",
+          "bytes": 10794,
+          "requires_python": ">=3.15.1,<3.16",
+          "declared_dependencies": {
+            "runtime": [
+              "click>=8.3.3,<9",
+              "numpy>=2.5.4,<3",
+              "scipy>=1.18.1,<1.19",
+              "scikit-learn>=1.9.1,<2",
+              "pyarrow>=26.0.0,<27",
+              "polars>=2.1.0,<3",
+              "pydantic>=2.13.4,<3",
+              "jsonschema>=4.26.0,<5.0",
+              "typing_extensions>=4.16.0",
+              "typer>=0.9,<1.0"
+            ],
+            "optional": {
+              "test-acceleration": [
+                "pytest-testmon>=2.2.0,<3",
+                "pytest-gremlins>=1.9.0,<2",
+                "coverage>=7.16.0,<8",
+                "vcrpy>=8.3.0,<9"
+              ],
+              "croissant": [],
+              "frictionless": [],
+              "ingestion": [],
+              "ecosystem": [
+                "defusedxml>=0.7.1,<1.0"
+              ],
+              "excel": [
+                "python-calamine>=0.9.0,<0.10",
+                "xlsxwriter>=3.3.0,<4",
+                "defusedxml>=0.7.1,<1.0"
+              ],
+              "docs": [
+                "griffe>=1.14.0,<2.0"
+              ],
+              "jax": [
+                "jax>=0.12.0.1,<0.13"
+              ],
+              "ci": [
+                "python-calamine>=0.9.0,<0.10",
+                "xlsxwriter>=3.3.0,<4",
+                "openpyxl>=3.1.5,<4.0",
+                "defusedxml>=0.7.1,<1.0",
+                "docutils>=0.23,<1",
+                "fastapi>=0.139.2,<1.0",
+                "httpx>=0.28.1,<1.0",
+                "hypothesis>=6.157.0,<7.0",
+                "jax>=0.12.0.1,<0.13",
+                "matplotlib>=3.4,<4.0",
+                "maturin>=1.9,<2.0",
+                "psutil>=5.9,<8.0",
+                "pytest>=9.1.1,<9.2",
+                "pytest-benchmark>=5.2.3,<6.0",
+                "pytest-cov>=7.1.0,<8.0",
+                "pytest-integration>=0.2.3,<0.3",
+                "pytest-xdist>=3.8.0,<4.0",
+                "PyYAML>=6.0.3,<7.0",
+                "rfc8785>=0.1,<0.2",
+                "tomli>=2.4.1,<3.0"
+              ],
+              "dev": [
+                "maturin>=1.9,<2.0",
+                "mutmut==3.6.0",
+                "scalene>=2.3.0,<3.0",
+                "ruff>=0.17.2,<0.18",
+                "bandit>=1.9.4,<2.0",
+                "nox>=2026.7.11,<2027",
+                "ty>=0.0.61,<1.0",
+                "basedpyright>=1.39.9,<2.0",
+                "types-setuptools>=83.0.0.20260716",
+                "types-requests>=2.33.0.20260712",
+                "jupyterlab>=4.6.2,<5.0",
+                "ipykernel>=7.3.0,<8",
+                "pre-commit>=4.6.0,<5.0",
+                "vulture>=2.16,<3.0",
+                "tox>=4.67,<5",
+                "tox-uv>=1.37,<2",
+                "tomli>=2.4.1,<3.0"
+              ],
+              "experimental": [
+                "duckdb>=1.5.4,<2",
+                "orjson>=3.11.9,<4",
+                "msgspec>=0.21.1,<1"
+              ],
+              "plotting": [
+                "matplotlib>=3.11.1,<4",
+                "seaborn>=0.13.2,<1"
+              ],
+              "performance": [
+                "psutil>=5.9,<8.0"
+              ],
+              "deep_learning": [],
+              "web": [
+                "fastapi>=0.139.2,<1.0",
+                "httpx>=0.28.1,<1.0",
+                "uvicorn>=0.51.0,<1.0"
+              ]
+            },
+            "development": {
+              "verification": [
+                "tox>=4.67,<5",
+                "tox-uv>=1.37,<2"
+              ],
+              "producer-tests": [
+                "pandas>=3.1.0,<4"
+              ]
+            },
+            "build": {
+              "requires": [
+                "maturin>=1.9,<2.0"
+              ],
+              "build-backend": "build_backend",
+              "backend-path": [
+                "."
+              ]
+            }
+          }
+        },
+        {
+          "path": "r-package/voiageR/src/rust/Cargo.lock",
+          "sha256": "7f1711bff5c2fbe111247e85e80588e05a3c94d335d61dc09acd6822a64c1453",
+          "bytes": 159
+        },
+        {
+          "path": "r-package/voiageR/src/rust/Cargo.toml",
+          "sha256": "101568787019d8b596f7d337cf3460990e8b9d042be93f0140e169873e7473b5",
+          "bytes": 251,
+          "features": {},
+          "package": {
+            "name": "voiage-r-native",
+            "version": "2.2.0",
+            "edition": "2021",
+            "rust-version": "1.85",
+            "license": "Apache-2.0",
+            "publish": false
+          },
+          "declared_dependencies": {}
+        },
+        {
+          "path": "rust/Cargo.lock",
+          "sha256": "2d2f3a566a8647c19e1b0d63c393dd4897931f312cacf2e8ff473c1addf8d40e",
+          "bytes": 21873
+        },
+        {
+          "path": "rust/Cargo.toml",
+          "sha256": "91c0037f1361b837afc5c45c1e1d6edec1f51b094ee2739cc963895e930c7c36",
+          "bytes": 867,
+          "features": {},
+          "package": {},
+          "declared_dependencies": {}
+        },
+        {
+          "path": "rust/crates/voiage-diagnostics/Cargo.toml",
+          "sha256": "9234a8feff5362262664a7c92b37323829cc4f0da502ba068de057b1dc68ba85",
+          "bytes": 881,
+          "features": {
+            "default": [],
+            "otel": [
+              "dep:opentelemetry",
+              "dep:opentelemetry_sdk"
+            ]
+          },
+          "package": {
+            "name": "voiage-diagnostics",
+            "description": "Structured diagnostics and error contracts for voiage.",
+            "version": {
+              "workspace": true
+            },
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "readme": "README.md",
+            "keywords": [
+              "value-of-information",
+              "diagnostics",
+              "decision-analysis"
+            ],
+            "categories": [
+              "science"
+            ]
+          },
+          "declared_dependencies": {
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1.0",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": "1.0"
+            },
+            "tracing": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.1",
+                "default-features": false,
+                "features": [
+                  "std"
+                ]
+              }
+            },
+            "opentelemetry": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "0.32.0",
+                "default-features": false,
+                "features": [
+                  "trace"
+                ],
+                "optional": true
+              }
+            },
+            "opentelemetry_sdk": {
+              "role": "optional-backend-or-binding",
+              "declaration": {
+                "version": "0.32.1",
+                "default-features": false,
+                "features": [
+                  "trace",
+                  "testing"
+                ],
+                "optional": true
+              }
+            },
+            "voiage-domain": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            }
+          }
+        },
+        {
+          "path": "rust/crates/voiage-domain/Cargo.toml",
+          "sha256": "bb56ce118f1d3062d42c71c5442df95b95b3e481aa3440bf6d6ddcbb70628826",
+          "bytes": 508,
+          "features": {},
+          "package": {
+            "name": "voiage-domain",
+            "description": "Validated, binding-independent domain contracts for voiage.",
+            "version": {
+              "workspace": true
+            },
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "readme": "README.md",
+            "keywords": [
+              "value-of-information",
+              "decision-analysis",
+              "statistics"
+            ],
+            "categories": [
+              "science"
+            ]
+          },
+          "declared_dependencies": {
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1.0",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "proptest": {
+              "role": "test",
+              "declaration": "1.7"
+            },
+            "serde_json": {
+              "role": "test",
+              "declaration": "1.0"
+            }
+          }
+        },
+        {
+          "path": "rust/crates/voiage-ffi/Cargo.toml",
+          "sha256": "1475a4987560ce20bc0208c4b7c898377612d8d92cd1282de4c212276db1e6cf",
+          "bytes": 582,
+          "features": {},
+          "package": {
+            "name": "voiage-ffi",
+            "description": "Leaf C ABI adapter for the voiage Rust core.",
+            "version": {
+              "workspace": true
+            },
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "publish": false
+          },
+          "declared_dependencies": {
+            "voiage-diagnostics": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-domain": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-numerics": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-serialization": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            }
+          }
+        },
+        {
+          "path": "rust/crates/voiage-numerics/Cargo.toml",
+          "sha256": "6ec85d095bf2d4d740dfdc59392b70b0eef32326f0aab895d0f2b8efe463aafb",
+          "bytes": 577,
+          "features": {},
+          "package": {
+            "name": "voiage-numerics",
+            "description": "Binding-independent numerical kernels for voiage.",
+            "version": {
+              "workspace": true
+            },
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "readme": "README.md",
+            "keywords": [
+              "value-of-information",
+              "decision-analysis",
+              "statistics",
+              "numerics"
+            ],
+            "categories": [
+              "science"
+            ]
+          },
+          "declared_dependencies": {
+            "voiage-diagnostics": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-domain": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "proptest": {
+              "role": "test",
+              "declaration": "1.7"
+            },
+            "serde_json": {
+              "role": "test",
+              "declaration": "1.0"
+            }
+          }
+        },
+        {
+          "path": "rust/crates/voiage-python/Cargo.toml",
+          "sha256": "f5ae455c110cfa063bc44d40912a6aa28154a268580a7b87ced0f10b0ada69da",
+          "bytes": 648,
+          "features": {},
+          "package": {
+            "name": "voiage-python",
+            "description": "Private PyO3 adapter for the voiage Rust core.",
+            "version": {
+              "workspace": true
+            },
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "publish": false
+          },
+          "declared_dependencies": {
+            "pyo3": {
+              "role": "runtime",
+              "declaration": {
+                "version": "0.29",
+                "features": [
+                  "abi3-py315"
+                ]
+              }
+            },
+            "serde": {
+              "role": "runtime",
+              "declaration": "1"
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": "1"
+            },
+            "serde_json_canonicalizer": {
+              "role": "runtime",
+              "declaration": "0.3.2"
+            },
+            "sha2": {
+              "role": "build",
+              "declaration": "0.11"
+            },
+            "voiage-diagnostics": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-domain": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-numerics": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-serialization": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            }
+          }
+        },
+        {
+          "path": "rust/crates/voiage-serialization/Cargo.toml",
+          "sha256": "f122725eee61823d1beaf5239861dfdbf5e8d1d32bab839391462ef59a8c1261",
+          "bytes": 586,
+          "features": {},
+          "package": {
+            "name": "voiage-serialization",
+            "description": "Canonical serialization adapters for validated voiage contracts.",
+            "version": {
+              "workspace": true
+            },
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "readme": "README.md",
+            "keywords": [
+              "value-of-information",
+              "serialization",
+              "decision-analysis"
+            ],
+            "categories": [
+              "science"
+            ]
+          },
+          "declared_dependencies": {
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "test",
+              "declaration": "1"
+            },
+            "voiage-diagnostics": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-domain": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            }
+          }
+        },
+        {
+          "path": "rust/crates/voiage-test-support/Cargo.toml",
+          "sha256": "061c72f4b6e7a5684dc2f23451caaa47a7171056a94d8fd77907f290d5ec0bc3",
+          "bytes": 517,
+          "features": {},
+          "package": {
+            "name": "voiage-test-support",
+            "description": "Shared fixture and test support for the voiage Rust workspace.",
+            "version": {
+              "workspace": true
+            },
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "repository": {
+              "workspace": true
+            },
+            "publish": false
+          },
+          "declared_dependencies": {
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "version": "1.0",
+                "features": [
+                  "derive"
+                ]
+              }
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": "1.0"
+            },
+            "voiage-diagnostics": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-domain": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-numerics": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "voiage-serialization": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            }
+          }
+        },
+        {
+          "path": "rust/fuzz/Cargo.lock",
+          "sha256": "20a49c4744d9f9f8f653ffd491e3aa0a21362cabfde1bca142af61cbd5b89fa1",
+          "bytes": 6105
+        },
+        {
+          "path": "rust/fuzz/Cargo.toml",
+          "sha256": "0ba6bcb4e94e86a31427a36f473048d70d6b54095e3c1c8a6a3c63d5c4c1aef7",
+          "bytes": 670,
+          "features": {},
+          "package": {
+            "name": "voiage-fuzz",
+            "version": "0.0.0",
+            "publish": false,
+            "edition": "2021",
+            "metadata": {
+              "cargo-fuzz": true
+            }
+          },
+          "declared_dependencies": {
+            "libfuzzer-sys": {
+              "role": "runtime",
+              "declaration": "=0.4.13"
+            },
+            "voiage-domain": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../crates/voiage-domain"
+              }
+            },
+            "voiage-numerics": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../crates/voiage-numerics"
+              }
+            },
+            "voiage-ffi": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../crates/voiage-ffi"
+              }
+            }
+          }
+        },
+        {
+          "path": "specs/submission-readiness/dependency-frontier-environment-20260829/pyproject.toml",
+          "sha256": "2ae0033c68442724d0f116590896853811693d09742b56b5e614db81a316972a",
+          "bytes": 10015,
+          "requires_python": ">=3.12",
+          "declared_dependencies": {
+            "runtime": [
+              "click>=8.3.3,<9",
+              "numpy>=2.2.6,<3.0",
+              "scipy>=1.16.3,<1.17",
+              "pandas>=1.3,<3.0",
+              "xarray>=0.19,<2025.0",
+              "scikit-learn>=1.7.2,<2.0",
+              "pyarrow>=25.0.0,<26",
+              "polars>=1.42.1,<2",
+              "pydantic>=2.13.4,<3",
+              "jsonschema>=4.26.0,<5.0",
+              "typing_extensions>=4.16.0",
+              "typer>=0.9,<1.0"
+            ],
+            "optional": {
+              "croissant": [],
+              "frictionless": [],
+              "ingestion": [],
+              "ecosystem": [
+                "defusedxml>=0.7.1,<1.0"
+              ],
+              "excel": [
+                "openpyxl>=3.1.5,<4.0"
+              ],
+              "docs": [
+                "griffe>=1.14.0,<2.0"
+              ],
+              "jax": [
+                "jax>=0.7.1,<0.8"
+              ],
+              "ci": [
+                "defusedxml>=0.7.1,<1.0",
+                "docutils>=0.23,<1",
+                "fastapi>=0.139.2,<1.0",
+                "httpx>=0.28.1,<1.0",
+                "hypothesis>=6.157.0,<7.0",
+                "jax>=0.7.1,<0.8",
+                "matplotlib>=3.4,<4.0",
+                "maturin>=1.9,<2.0",
+                "psutil>=5.9,<8.0",
+                "pytest>=9.1.1,<10.0",
+                "pytest-benchmark>=5.2.3,<6.0",
+                "pytest-cov>=7.1.0,<8.0",
+                "pytest-integration>=0.2.3,<0.3",
+                "pytest-xdist>=3.8.0,<4.0",
+                "PyYAML>=6.0.3,<7.0",
+                "rfc8785>=0.1,<0.2",
+                "tomli>=2.4.1,<3.0"
+              ],
+              "dev": [
+                "maturin>=1.9,<2.0",
+                "mutmut==3.6.0",
+                "scalene>=2.3.0,<3.0",
+                "ruff>=0.15.22,<0.16.0",
+                "bandit>=1.9.4,<2.0",
+                "nox>=2026.7.11,<2027",
+                "ty>=0.0.61,<1.0",
+                "basedpyright>=1.39.9,<2.0",
+                "types-setuptools>=83.0.0.20260716",
+                "types-requests>=2.33.0.20260712",
+                "jupyterlab>=4.6.2,<5.0",
+                "ipykernel>=7.3.0,<8",
+                "pre-commit>=4.6.0,<5.0",
+                "vulture>=2.16,<3.0",
+                "tox>=4.57.0,<5.0",
+                "tomli>=2.4.1,<3.0"
+              ],
+              "experimental": [
+                "duckdb>=1.5.4,<2",
+                "orjson>=3.11.9,<4",
+                "msgspec>=0.21.1,<1"
+              ],
+              "plotting": [
+                "matplotlib>=3.11.1,<4",
+                "seaborn>=0.13.2,<1"
+              ],
+              "performance": [
+                "psutil>=5.9,<8.0"
+              ],
+              "deep_learning": [
+                "torch>=2.13.0,<3.0"
+              ],
+              "web": [
+                "fastapi>=0.139.2,<1.0",
+                "httpx>=0.28.1,<1.0",
+                "uvicorn>=0.51.0,<1.0"
+              ]
+            },
+            "development": {},
+            "build": {
+              "requires": [
+                "maturin>=1.9,<2.0"
+              ],
+              "build-backend": "build_backend",
+              "backend-path": [
+                "."
+              ]
+            }
+          }
+        },
+        {
+          "path": "tests/fixtures/provider_sdk_wheel_consumer/pyproject.toml",
+          "sha256": "fa4519c0332fe3819782ad5c8b1aa317a245b0b06692f459d5ec3c5e075d5d21",
+          "bytes": 440,
+          "requires_python": ">=3.12",
+          "declared_dependencies": {
+            "runtime": [
+              "voiage"
+            ],
+            "optional": {},
+            "development": {},
+            "build": {
+              "requires": [
+                "setuptools>=68"
+              ],
+              "build-backend": "setuptools.build_meta"
+            }
+          }
+        },
+        {
+          "path": "uv.lock",
+          "sha256": "3416ffe175d6171959ea26064f368e48d7129eb9014386c1410f6b05d7ef463c",
+          "bytes": 393554
+        }
+      ]
+    },
+    {
+      "repository": "edithatogo/careops-sim",
+      "revision": "2ec0d03fcdcbe4b88acbf227a2912e4a7ca54a76",
+      "capture": "committed git blobs; working changes excluded",
+      "files": [
+        {
+          "path": "Cargo.lock",
+          "sha256": "f0900a0b1b9704c1c2d971947442e7fe68d0f22e15625f5c106e99e18f1cc882",
+          "bytes": 9866
+        },
+        {
+          "path": "Cargo.toml",
+          "sha256": "b73ac7aec1498db4603a25cf9fc04fcd666779b3f8e7879a71e800ee65922e4d",
+          "bytes": 754,
+          "features": {},
+          "package": {
+            "name": "careops-sim",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            },
+            "publish": false
+          },
+          "declared_dependencies": {}
+        },
+        {
+          "path": "crates/careops-core/Cargo.toml",
+          "sha256": "7af84bea12b1624a4fba9883d0901dea83d03d8df2c0fea8145e1695283629d0",
+          "bytes": 293,
+          "features": {},
+          "package": {
+            "name": "careops-core",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "kairo-ecs-rng": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/careops-ed-cli/Cargo.toml",
+          "sha256": "8ace75e911bf30f695f40e403f0296aa2d3ae6e6e2aca7e862bb1938c17c33e0",
+          "bytes": 311,
+          "features": {},
+          "package": {
+            "name": "careops-ed-cli",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "careops-ed": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../careops-ed"
+              }
+            },
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "sha2": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            }
+          }
+        },
+        {
+          "path": "crates/careops-ed/Cargo.toml",
+          "sha256": "aeca63ade72d5cf2cf3013aaaef80ed055e1866f125f9a363627980a045a403c",
+          "bytes": 321,
+          "features": {},
+          "package": {
+            "name": "careops-ed",
+            "version": "0.1.0",
+            "edition": {
+              "workspace": true
+            },
+            "rust-version": {
+              "workspace": true
+            },
+            "license": {
+              "workspace": true
+            }
+          },
+          "declared_dependencies": {
+            "careops-core": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "kairo-ecs-rng": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "kairo-ecs-types": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "serde": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": {
+                "workspace": true
+              }
+            }
+          }
+        },
+        {
+          "path": "fuzz/Cargo.lock",
+          "sha256": "db6bb0790c51cf6bfaf07759e4299459d00e7c3392888a09559558d768d9f3b3",
+          "bytes": 5215
+        },
+        {
+          "path": "fuzz/Cargo.toml",
+          "sha256": "c1c0a382b30497c5a86ba204bea6e1068bf2418355b8a72dc7f28c227b048c7a",
+          "bytes": 446,
+          "features": {},
+          "package": {
+            "name": "careops-ed-fuzz",
+            "version": "0.0.0",
+            "publish": false,
+            "edition": "2024",
+            "license": "Apache-2.0",
+            "metadata": {
+              "cargo-fuzz": true
+            }
+          },
+          "declared_dependencies": {
+            "careops-ed": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../crates/careops-ed",
+                "version": "=0.1.0"
+              }
+            },
+            "libfuzzer-sys": {
+              "role": "runtime",
+              "declaration": "=0.4.13"
+            },
+            "serde_json": {
+              "role": "runtime",
+              "declaration": "=1.0.151"
+            }
+          }
+        },
+        {
+          "path": "rust-toolchain.toml",
+          "sha256": "eeb69f696d42b47412b674d0ab121c4d9b3c49ba67e181b348202ef7f4909507",
+          "bytes": 161
+        },
+        {
+          "path": "tests/fixtures/kairos-consumer-smoke/Cargo.lock",
+          "sha256": "f0f7ca9598e55065312eb3f2fa26eff9d9430677390ad630597f434b40e51249",
+          "bytes": 885
+        },
+        {
+          "path": "tests/fixtures/kairos-consumer-smoke/Cargo.toml",
+          "sha256": "06699dcd0395624b263c37e2368ea6333afa76cbdf1ea14701a4d0fa133c3ca1",
+          "bytes": 353,
+          "features": {},
+          "package": {
+            "name": "careops-kairos-consumer-smoke",
+            "version": "0.1.0",
+            "edition": "2021",
+            "rust-version": "1.76",
+            "publish": false
+          },
+          "declared_dependencies": {
+            "kairo-ecs-core": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../../../libs/kairos/crates/kairo-ecs-core"
+              }
+            },
+            "kairo-ecs-des": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../../../libs/kairos/crates/kairo-ecs-des"
+              }
+            },
+            "kairo-ecs-abm": {
+              "role": "runtime",
+              "declaration": {
+                "path": "../../../libs/kairos/crates/kairo-ecs-abm"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repository": "edithatogo/tobac",
+      "revision": "62056c566d1d7f9280d63df6c26b7673de8be98a",
+      "capture": "committed git blobs; working changes excluded",
+      "files": [
+        {
+          "path": ".python-version",
+          "sha256": "fd81c059718aeb990462ccbf0282b57d9488a7213420e8cc637d3182b6fa7697",
+          "bytes": 7
+        },
+        {
+          "path": "engineering/requirements.lock",
+          "sha256": "290067c0eb932ad150b1b0e1317ce0b5975780b44c629686390a59c5ba709fb2",
+          "bytes": 114982
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "2b34aae27610adbfcba3b0a9cdea35447adbd06876c748d3c781a32302ba3f20",
+          "bytes": 819,
+          "requires_python": ">=3.15.1,<3.16",
+          "declared_dependencies": {
+            "runtime": [
+              "numpy==2.5.4",
+              "scipy==1.18.1"
+            ],
+            "optional": {
+              "interchange": [
+                "pyarrow==26.0.0",
+                "polars==2.1.0",
+                "patito==0.8.6",
+                "msgspec==0.22.0"
+              ],
+              "longitudinal": [
+                "pandas==3.1.0",
+                "matplotlib==3.11.2"
+              ],
+              "engineering": [
+                "jsonschema==4.26.0"
+              ]
+            },
+            "development": {},
+            "build": {
+              "requires": [
+                "setuptools>=77"
+              ],
+              "build-backend": "setuptools.build_meta"
+            }
+          }
+        },
+        {
+          "path": "requirements.lock",
+          "sha256": "69f6661b3361fbfb5da70922bb771d6b32ac95f62a6682e4e35cfda4ad954b24",
+          "bytes": 120
+        }
+      ]
+    }
+  ],
+  "remaining": [
+    "VOP clone/readback",
+    "resolved target-specific features",
+    "source usage classification of optional backends and bindings",
+    "installed consumer qualification"
+  ]
+}
