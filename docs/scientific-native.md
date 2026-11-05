@@ -44,3 +44,12 @@ Use compiler timing and resource observations to identify costly stages before
 CPU flamegraph/perf or DHAT/heap allocation investigations. SDK-based runtime
 builds never prove a compiler-from-source or full HPC matrix gate. The Voiage HPC
 track remains a delivery dependency; requirements may be revised only explicitly.
+
+
+## Focused testing and native dataframe boundaries
+
+Repository owners must declare affected test selectors and preserve full milestone gates for dependency, packaging, shared-fixture and integration changes. Reverse-import selection is an optimization, not proof of dynamic plugin coverage. Unknown impact requires explicit integration selectors or a complete milestone. Keep pytest cacheprovider enabled; an empty failure cache does not verify tests. Zero retries is the default.
+
+For repositories declaring a native Polars boundary, distinguish production source, test oracles and legacy scripts. Enforce imports and conversion boundaries with regression checks and a pandas-absent installed-package replay. Do not claim the whole repository is pandas-free while development or script consumers remain. Preserve numerical predicates, error/presence semantics and immutable oracles during migration.
+
+Qualify optional test tools on the actual repo-local Python 3.15.1 interpreter. Hypothesis requires meaningful invariants; mutation reports require exact targets and surviving/killed/error dispositions. Dead-code findings require review of public keyword and dynamic entry-point compatibility. Network denial and bounded timeouts belong to qualified local unit workloads; they must not silently interrupt native mutations. Parallelism and randomized order require fixture isolation and reproducible RNG contracts before adoption. Prefer one authoritative development dependency group, with separate optional consumer roles, rather than overlapping tool lists.

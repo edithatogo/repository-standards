@@ -2305,7 +2305,7 @@
     },
     {
       "repository": "edithatogo/microcosting_genomics",
-      "visibility": "private",
+      "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
       "sole_developer": true,
