@@ -59,6 +59,52 @@ class InnovationScopePolicyTests(unittest.TestCase):
         self.assertEqual(self.policy.get('candidate_checks'), ['security', 'build', 'numerical', 'consumer', 'resource'])
         self.assertFalse(self.policy.get('automatic_consumer_migration', True))
 
+    def test_minimal_cores_do_not_require_optional_providers(self):
+        for key in ('kairos', 'innovate', 'voiage', 'game-runtime'):
+            self.assertEqual(self.policy['capabilities'][key]['providers'], [])
+        pairs = {(x['consumer'], x['provider']): x for x in self.policy['planned_adapters']}
+        for pair in (('innovate', 'kairos'), ('innovate', 'game-runtime'),
+                     ('game-runtime', 'kairos'), ('game-runtime', 'uogto-semantics')):
+            self.assertTrue(pairs.get(pair, {}).get('optional', False))
+
+    def test_scoped_release_units_do_not_waive_claimed_gates(self):
+        rules = self.policy.get('scientific_refinements', {}).get('release', {})
+        self.assertEqual(rules.get('units'), ['native-core', 'data-bindings', 'optional-integrations'])
+        self.assertFalse(rules.get('optional_integration_blocks_core', True))
+        self.assertTrue(rules.get('all_claimed_capabilities_require_evidence', False))
+        self.assertTrue(rules.get('unresolved_obligations_retained', False))
+
+    def test_game_results_and_information_isolation_are_required(self):
+        rules = self.policy.get('scientific_refinements', {}).get('games', {})
+        self.assertTrue(rules.get('player_observation_isolation', False))
+        self.assertTrue(rules.get('offline_game_access_is_not_live_policy_access', False))
+        fields = set(rules.get('required_result_fields', []))
+        self.assertTrue({'game_class', 'information_structure', 'solution_concept',
+                         'algorithm_version', 'status', 'tolerance', 'residuals',
+                         'selection_rule', 'completeness_claim'} <= fields)
+        self.assertTrue(rules.get('equilibrium_and_behavioural_predictions_distinct', False))
+
+    def test_information_estimands_and_randomness_are_not_conflated(self):
+        rules = self.policy.get('scientific_refinements', {}).get('decision', {})
+        self.assertEqual(set(rules.get('estimands', [])),
+                         {'conventional-evpi-evsi', 'net-benefit-of-research',
+                          'strategic-information-value', 'social-information-value'})
+        self.assertFalse(rules.get('clip_strategic_values_to_zero', True))
+        self.assertTrue(rules.get('conditional_expectation_before_decision_maximisation', False))
+        self.assertTrue(rules.get('monte_carlo_error_reported', False))
+        axes = set(self.policy.get('scientific_refinements', {}).get('uncertainty_axes', []))
+        self.assertEqual(axes, {'parameter', 'structural', 'simulation', 'measurement', 'strategic', 'numerical'})
+
+    def test_adversarial_scientific_and_feature_validation(self):
+        rules = self.policy.get('scientific_refinements', {}).get('validation', {})
+        for field in ('prior_only_inference_negative_control', 'data_dependent_sbc',
+                      'metamorphic_invariants', 'hype_scale_identification',
+                      'medicines_observation_shocks', 'effective_and_known_dates',
+                      'resolved_cargo_feature_closures', 'lazy_polars_equivalence'):
+            self.assertTrue(rules.get(field, False), field)
+        self.assertEqual(rules.get('fit_assessment_dimensions'),
+                         ['execution', 'convergence', 'identification', 'prediction', 'causal'])
+
 
 if __name__ == '__main__':
     unittest.main()

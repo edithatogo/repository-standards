@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "approved-policy-not-runtime-acceptance",
-  "policy_revision": "2026-11-08-paignia-scope-reconciliation",
+  "policy_revision": "2026-11-08-scientific-contract-refinements",
   "python": "3.15.2",
   "python_role": "binding-and-tooling-candidate; per-consumer qualification required",
   "frontier_policy": "newest candidates first; exact pins after security/build/numerical/consumer/resource qualification",
@@ -18,7 +18,7 @@
       "repository": "edithatogo/innovate",
       "kind": "library",
       "owns": "innovation modelling/prediction: policy diffusion, adoption, competition, substitution, complements, hype effects, repeat use and innovation-specific game construction",
-      "providers": ["kairos"]
+      "providers": []
     },
     "voiage": {
       "repository": "edithatogo/voiage",
@@ -45,30 +45,47 @@
       "identity_document": "docs/paignia-library-boundary.md",
       "repository": "edithatogo/paignia",
       "incubator_repository": "edithatogo/new-drug-reimbursement-game",
-      "proposed_packages": ["paignia-core", "paignia-solve", "paignia-kairos", "paignia-uogto", "paignia-arrow"],
+      "proposed_packages": [
+        "paignia-core",
+        "paignia-solve",
+        "paignia-kairos",
+        "paignia-uogto",
+        "paignia-arrow"
+      ],
       "package_names_reserved": false,
       "standalone_repository_created": true,
       "packages_published": false,
       "kind": "library",
-      "source_paths": ["crates/paignia-core", "crates/paignia-solve"],
+      "source_paths": [
+        "crates/paignia-core",
+        "crates/paignia-solve"
+      ],
       "source_status": "seed-transfer-in-progress-unqualified",
-      "legacy_source_paths": ["crates/uogto-game-core", "crates/uogto-game-solve"],
+      "legacy_source_paths": [
+        "crates/uogto-game-core",
+        "crates/uogto-game-solve"
+      ],
       "status": "extraction-and-qualification-required",
       "owns": "one domain-neutral Rust game representation/solution capability; reconcile Kairos game solver overlap before promotion",
-      "providers": ["uogto-semantics"],
-      "static_solver_requires_simulator": false
+      "providers": [],
+      "static_solver_requires_simulator": false,
+      "semantic_contract": "uogto-semantics; optional adapter, not mandatory core runtime"
     },
     "careops-sim": {
       "repository": "edithatogo/careops-sim",
       "kind": "application",
       "owns": "healthcare pathways, operational policies, local profiles and application validation",
-      "providers": ["kairos"]
+      "providers": [
+        "kairos"
+      ]
     },
     "tobac": {
       "repository": "edithatogo/tobac",
       "kind": "application",
       "owns": "tobacco-specific models, evidence and policy scenarios; generic methods promoted upstream",
-      "providers": ["voiage"]
+      "providers": [
+        "voiage"
+      ]
     },
     "vop_poc_nz": {
       "repository": "edithatogo/vop_poc_nz",
@@ -76,13 +93,18 @@
       "lifecycle_role": "proof-of-concept",
       "generic_decision_capability_owner": "voiage",
       "owns": "NZ empirical proof-of-concept scenarios, assumptions and demonstrations; not a competing general economic framework",
-      "providers": ["voiage"]
+      "providers": [
+        "voiage"
+      ]
     },
     "new-drug-reimbursement-game": {
       "repository": "edithatogo/new-drug-reimbursement-game",
       "kind": "application",
       "owns": "reimbursement-specific institutions, payoff assumptions, calibration and research scenarios",
-      "providers": ["game-runtime", "voiage"]
+      "providers": [
+        "game-runtime",
+        "voiage"
+      ]
     },
     "repository-standards": {
       "repository": "edithatogo/repository-standards",
@@ -95,8 +117,15 @@
     "innovate": {
       "scientific_engine": "rust-only",
       "tabular_engine": "polars",
-      "interchange": ["arrow", "parquet", "versioned-metadata"],
-      "unsupported_runtime_packages": ["pandas", "xarray"],
+      "interchange": [
+        "arrow",
+        "parquet",
+        "versioned-metadata"
+      ],
+      "unsupported_runtime_packages": [
+        "pandas",
+        "xarray"
+      ],
       "host_fallback": false,
       "runtime_accepted": false,
       "application": "mandatory for new scientific work and next breaking supported release; current hybrid source requires migration",
@@ -122,10 +151,42 @@
     }
   },
   "planned_adapters": [
-    {"consumer": "voiage", "provider": "innovate", "optional": true, "status": "qualification-required"},
-    {"consumer": "voiage", "provider": "mars", "optional": true, "status": "qualification-required"},
-    {"consumer": "innovate", "provider": "game-runtime", "optional": true, "status": "extraction-and-qualification-required"},
-    {"consumer": "game-runtime", "provider": "kairos", "optional": true, "status": "dynamic-adapter-only-qualification-required"}
+    {
+      "consumer": "voiage",
+      "provider": "innovate",
+      "optional": true,
+      "status": "qualification-required"
+    },
+    {
+      "consumer": "voiage",
+      "provider": "mars",
+      "optional": true,
+      "status": "qualification-required"
+    },
+    {
+      "consumer": "innovate",
+      "provider": "game-runtime",
+      "optional": true,
+      "status": "extraction-and-qualification-required"
+    },
+    {
+      "consumer": "game-runtime",
+      "provider": "kairos",
+      "optional": true,
+      "status": "dynamic-adapter-only-qualification-required"
+    },
+    {
+      "consumer": "innovate",
+      "provider": "kairos",
+      "optional": true,
+      "status": "native-adapter-qualification-required"
+    },
+    {
+      "consumer": "game-runtime",
+      "provider": "uogto-semantics",
+      "optional": true,
+      "status": "semantic-adapter-qualification-required"
+    }
   ],
   "promotion_rule": "applications retain domain assumptions/evidence; reusable methods move to their authoritative library with independent oracle, public contract and installed-consumer receipts",
   "data_boundaries": {
@@ -133,7 +194,88 @@
     "raw_bytes_are_not_semantic_acceptance": true,
     "joint_draw_dependence_must_be_preserved": true
   },
-  "deferred_migrations": ["lifecourse", "revalue"],
-  "candidate_checks": ["security", "build", "numerical", "consumer", "resource"],
-  "build_stages": ["runtime-build", "compiler-bootstrap", "hpc-install", "scheduler-run"]
+  "deferred_migrations": [
+    "lifecourse",
+    "revalue"
+  ],
+  "candidate_checks": [
+    "security",
+    "build",
+    "numerical",
+    "consumer",
+    "resource"
+  ],
+  "build_stages": [
+    "runtime-build",
+    "compiler-bootstrap",
+    "hpc-install",
+    "scheduler-run"
+  ],
+  "scientific_refinements": {
+    "document": "docs/scientific-result-contracts.md",
+    "release": {
+      "units": [
+        "native-core",
+        "data-bindings",
+        "optional-integrations"
+      ],
+      "optional_integration_blocks_core": false,
+      "all_claimed_capabilities_require_evidence": true,
+      "unresolved_obligations_retained": true
+    },
+    "games": {
+      "player_observation_isolation": true,
+      "offline_game_access_is_not_live_policy_access": true,
+      "required_result_fields": [
+        "game_class",
+        "information_structure",
+        "solution_concept",
+        "algorithm_version",
+        "status",
+        "tolerance",
+        "residuals",
+        "selection_rule",
+        "completeness_claim"
+      ],
+      "equilibrium_and_behavioural_predictions_distinct": true
+    },
+    "decision": {
+      "estimands": [
+        "conventional-evpi-evsi",
+        "net-benefit-of-research",
+        "strategic-information-value",
+        "social-information-value"
+      ],
+      "clip_strategic_values_to_zero": false,
+      "conditional_expectation_before_decision_maximisation": true,
+      "monte_carlo_error_reported": true,
+      "requires_information_structure_and_selection_rule": true
+    },
+    "uncertainty_axes": [
+      "parameter",
+      "structural",
+      "simulation",
+      "measurement",
+      "strategic",
+      "numerical"
+    ],
+    "validation": {
+      "prior_only_inference_negative_control": true,
+      "data_dependent_sbc": true,
+      "metamorphic_invariants": true,
+      "hype_scale_identification": true,
+      "medicines_observation_shocks": true,
+      "effective_and_known_dates": true,
+      "resolved_cargo_feature_closures": true,
+      "lazy_polars_equivalence": true,
+      "fit_assessment_dimensions": [
+        "execution",
+        "convergence",
+        "identification",
+        "prediction",
+        "causal"
+      ]
+    },
+    "implementation_acceptance": false
+  }
 }
