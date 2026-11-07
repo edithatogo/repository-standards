@@ -1,10 +1,10 @@
 # Paignia: reusable strategic-interaction library
 
-Decision date: 2026-11-08. Status: chosen project identity, standalone repository created and seed transfer underway; package publication and runtime acceptance remain pending. This document supplements the innovation-native policy and does not close any provider or consumer gate.
+Decision date: 2026-11-08. Status: chosen project identity, standalone repository created and seed transferred but unqualified; package publication and runtime acceptance remain pending. This document supplements the innovation-native policy and does not close any provider or consumer gate.
 
 ## Identity
 
-**Paignia** is the chosen public name for the domain-neutral Rust game-theory library at [edithatogo/paignia](https://github.com/edithatogo/paignia). Its repository has been created and is being populated from `edithatogo/new-drug-reimbursement-game`. Keep the policy capability ID `game-runtime` stable as a compatibility alias. No registry package publication or provider qualification is claimed. Check package namespace availability and any relevant naming/rights requirements before registry publication; creating the GitHub repository does not reserve package names.
+**Paignia** is the chosen public name for the domain-neutral Rust game-theory library at [edithatogo/paignia](https://github.com/edithatogo/paignia). Its initial source transfer from `edithatogo/new-drug-reimbursement-game` is merged at [12b22ce](https://github.com/edithatogo/paignia/commit/12b22ce7571b9c590405bf53c2c1c5862b49cd64). Keep the policy capability ID `game-runtime` stable as a compatibility alias. No registry package publication or provider qualification is claimed. Check package namespace availability and any relevant naming/rights requirements before registry publication; creating the GitHub repository does not reserve package names.
 
 | Seed or planned source | Package | Rule |
 |---|---|---|
@@ -14,7 +14,7 @@ Decision date: 2026-11-08. Status: chosen project identity, standalone repositor
 | Semantic adapter | `paignia-uogto` | Versioned UOGTO mappings and conformance; preserve experimental semantic-profile boundaries. |
 | Interchange adapter | `paignia-arrow` | Optional Arrow/Polars interchange; do not force dataframe dependencies into minimal solvers. |
 
-The renamed core/solver seed is being transferred from the reimbursement incubator to Paignia. Its historical source paths were `crates/uogto-game-core` and `crates/uogto-game-solve`. Paignia's `extraction-manifest.json` records package/source provenance and `docs/architecture/paignia-transfer-map.md` records source dispositions. Resolve the resulting immutable provider revision before acceptance; the reimbursement application consumes that revision rather than retaining a second authoritative implementation. The adapter packages remain planned. Historical commands, versions and receipts retain their tested names; source transfer does not establish publication, general solver support or numerical validity.
+The renamed core/solver seed has transferred from the reimbursement incubator to Paignia. Its historical source paths were `crates/uogto-game-core` and `crates/uogto-game-solve`. The [provider manifest at the merged revision](https://github.com/edithatogo/paignia/blob/12b22ce7571b9c590405bf53c2c1c5862b49cd64/extraction-manifest.json) records package/source provenance and `docs/architecture/paignia-transfer-map.md` records source dispositions. Qualify the selected immutable provider revision before acceptance; the reimbursement application consumes that revision rather than retaining a second authoritative implementation. The adapter packages remain planned. Historical commands, versions and receipts retain their tested names; source transfer does not establish publication, general solver support or numerical validity.
 
 ## Responsibility and dependency direction
 

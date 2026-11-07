@@ -60,7 +60,9 @@
         "crates/paignia-core",
         "crates/paignia-solve"
       ],
-      "source_status": "seed-transfer-in-progress-unqualified",
+      "source_status": "transferred-unqualified",
+      "source_revision": "12b22ce7571b9c590405bf53c2c1c5862b49cd64",
+      "source_provenance_manifest": "https://github.com/edithatogo/paignia/blob/12b22ce7571b9c590405bf53c2c1c5862b49cd64/extraction-manifest.json",
       "legacy_source_paths": [
         "crates/uogto-game-core",
         "crates/uogto-game-solve"

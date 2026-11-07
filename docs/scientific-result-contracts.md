@@ -4,7 +4,7 @@ Policy date: 2026-11-08. These requirements amend existing work, not runtime acc
 
 ## Ownership and release
 
-Paignia's actual home is https://github.com/edithatogo/paignia. Preserve the `game-runtime` capability ID and T17 leaf IDs. Incubator provenance remains `new-drug-reimbursement-game`; source transfer and installed consumers still need evidence. Static Paignia does not require Kairos or UOGTO tooling. Innovate's deterministic core does not require Kairos, Paignia or Voiage. Optional adapters own those relationships; no reverse core imports.
+Paignia's actual home is https://github.com/edithatogo/paignia. Preserve the `game-runtime` capability ID and T17 leaf IDs. Incubator provenance remains `new-drug-reimbursement-game`; the [merged source transfer](paignia-library-boundary.md) does not qualify packages, methods or installed consumers. Static Paignia does not require Kairos or UOGTO tooling. Innovate's deterministic core does not require Kairos, Paignia or Voiage. Optional adapters own those relationships; no reverse core imports.
 
 Qualify native-core, data-bindings and optional-integrations separately. Every advertised capability keeps all applicable scientific, native, security and consumer requirements. An unfinished optional feature remains unavailable or experimental and its obligation stays open; it does not block an unrelated core release. Static strategic examples do not require dynamic replay. General hype evaluation does not require a medicines cohort. A core Innovate release does not require Voiage integration. Native performance tests and dynamic-integration performance tests have separate prerequisites and receipts.
 
