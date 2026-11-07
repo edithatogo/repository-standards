@@ -1,94 +1,129 @@
 {
   "schema_version": 1,
   "status": "approved-policy-not-runtime-acceptance",
-  "python": "3.15.1",
-  "frontier_policy": "newest candidates first; exact pins after qualification",
+  "policy_revision": "2026-11-07-innovation-native",
+  "python": "3.15.2",
+  "python_role": "binding-and-tooling-candidate; per-consumer qualification required",
+  "frontier_policy": "newest candidates first; exact pins after security/build/numerical/consumer/resource qualification",
+  "automatic_consumer_migration": false,
+  "decision_feedback": "versioned-artifacts-through-application-orchestration",
   "capabilities": {
     "kairos": {
       "repository": "edithatogo/kairos",
       "kind": "library",
-      "owns": "simulation time/events/state, DES/ABM, simulation RNG and replay",
+      "owns": "Rust simulation time/events/state/resources, DES/ABM, simulation RNG and replay",
       "providers": []
     },
     "innovate": {
       "repository": "edithatogo/innovate",
       "kind": "library",
-      "owns": "diffusion/adoption models and fitting",
-      "providers": [
-        "kairos"
-      ]
+      "owns": "innovation modelling/prediction: policy diffusion, adoption, competition, substitution, complements, hype effects, repeat use and innovation-specific game construction",
+      "providers": ["kairos"]
     },
     "voiage": {
       "repository": "edithatogo/voiage",
       "kind": "library",
-      "owns": "VOI estimators and decision uncertainty",
+      "owns": "VOI and generic decision uncertainty, perspective/equity and reusable VOP decision capability",
       "providers": []
     },
     "mars": {
       "repository": "edithatogo/mars",
       "kind": "library",
-      "owns": "spline fitting and portable model replay",
+      "owns": "spline fitting and portable surrogate/model replay",
       "providers": []
+    },
+    "uogto-semantics": {
+      "repository": "edithatogo/UOGTO",
+      "kind": "library",
+      "role": "semantic-contract-not-execution-engine",
+      "owns": "game-theory vocabulary, identifiers and semantic conformance",
+      "providers": []
+    },
+    "game-runtime": {
+      "repository": "edithatogo/new-drug-reimbursement-game",
+      "kind": "library",
+      "source_paths": ["crates/uogto-game-core", "crates/uogto-game-solve"],
+      "status": "extraction-and-qualification-required",
+      "owns": "one domain-neutral Rust game representation/solution capability; reconcile Kairos game solver overlap before promotion",
+      "providers": ["uogto-semantics"],
+      "static_solver_requires_simulator": false
     },
     "careops-sim": {
       "repository": "edithatogo/careops-sim",
       "kind": "application",
-      "owns": "healthcare pathways, policies and profiles",
-      "providers": [
-        "kairos"
-      ]
+      "owns": "healthcare pathways, operational policies, local profiles and application validation",
+      "providers": ["kairos"]
     },
     "tobac": {
       "repository": "edithatogo/tobac",
       "kind": "application",
-      "owns": "tobacco research models and evidence",
-      "providers": [
-        "voiage"
-      ]
+      "owns": "tobacco-specific models, evidence and policy scenarios; generic methods promoted upstream",
+      "providers": ["voiage"]
     },
     "vop_poc_nz": {
       "repository": "edithatogo/vop_poc_nz",
       "kind": "application",
-      "owns": "economic models and decision context",
-      "providers": [
-        "voiage"
-      ]
+      "lifecycle_role": "proof-of-concept",
+      "generic_decision_capability_owner": "voiage",
+      "owns": "NZ empirical proof-of-concept scenarios, assumptions and demonstrations; not a competing general economic framework",
+      "providers": ["voiage"]
+    },
+    "new-drug-reimbursement-game": {
+      "repository": "edithatogo/new-drug-reimbursement-game",
+      "kind": "application",
+      "owns": "reimbursement-specific institutions, payoff assumptions, calibration and research scenarios",
+      "providers": ["game-runtime", "voiage"]
     },
     "repository-standards": {
       "repository": "edithatogo/repository-standards",
       "kind": "policy",
-      "owns": "engineering policy and qualification receipts",
+      "owns": "engineering policy, ownership contracts and qualification receipts; not consumer runtime certification",
       "providers": []
     }
   },
-  "planned_adapters": [
-    {
-      "consumer": "voiage",
-      "provider": "innovate",
-      "status": "qualification-required"
+  "runtime_contracts": {
+    "innovate": {
+      "scientific_engine": "rust-only",
+      "tabular_engine": "polars",
+      "interchange": ["arrow", "parquet", "versioned-metadata"],
+      "unsupported_runtime_packages": ["pandas", "xarray"],
+      "host_fallback": false,
+      "runtime_accepted": false,
+      "application": "mandatory for new scientific work and next breaking supported release; current hybrid source requires migration",
+      "oracles": "isolated external-reference environments only; unreachable by production dispatch"
     },
-    {
-      "consumer": "voiage",
-      "provider": "mars",
-      "status": "qualification-required"
+    "kairos": {
+      "scientific_engine": "rust-only",
+      "host_fallback": false,
+      "data_layer": "optional Polars/Arrow; do not force tabular dependencies into the minimal engine",
+      "runtime_accepted": false,
+      "acceptance_note": "each capability and consumer retains its own native/scientific receipt"
+    },
+    "voiage": {
+      "direction": "binding-independent Rust numerical/domain policy with Polars/Arrow consumers",
+      "runtime_accepted": false,
+      "acceptance_note": "current hybrid and per-method scope must remain explicit; this policy does not migrate all interfaces"
+    },
+    "game-runtime": {
+      "scientific_engine": "rust-only",
+      "host_fallback": false,
+      "runtime_accepted": false,
+      "acceptance_note": "incubator extraction plus Kairos S01-S04 reconciliation and installed consumers required"
     }
+  },
+  "planned_adapters": [
+    {"consumer": "voiage", "provider": "innovate", "optional": true, "status": "qualification-required"},
+    {"consumer": "voiage", "provider": "mars", "optional": true, "status": "qualification-required"},
+    {"consumer": "innovate", "provider": "game-runtime", "optional": true, "status": "extraction-and-qualification-required"},
+    {"consumer": "game-runtime", "provider": "kairos", "optional": true, "status": "dynamic-adapter-only-qualification-required"}
   ],
-  "deferred_migrations": [
-    "lifecourse",
-    "revalue",
-    "new-drug-reimbursement-game"
-  ],
-  "candidate_checks": [
-    "security",
-    "build",
-    "numerical",
-    "consumer",
-    "resource"
-  ],
-  "build_stages": [
-    "runtime-build",
-    "compiler-bootstrap",
-    "hpc-install",
-    "scheduler-run"
-  ]
+  "promotion_rule": "applications retain domain assumptions/evidence; reusable methods move to their authoritative library with independent oracle, public contract and installed-consumer receipts",
+  "data_boundaries": {
+    "medicines_sources": "Global Medicines Atlas/Reimbursement Atlas own acquisition, terminology and reviewed evidence; Innovate consumes pinned qualified projections",
+    "raw_bytes_are_not_semantic_acceptance": true,
+    "joint_draw_dependence_must_be_preserved": true
+  },
+  "deferred_migrations": ["lifecourse", "revalue"],
+  "candidate_checks": ["security", "build", "numerical", "consumer", "resource"],
+  "build_stages": ["runtime-build", "compiler-bootstrap", "hpc-install", "scheduler-run"]
 }

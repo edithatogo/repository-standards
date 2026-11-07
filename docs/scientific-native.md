@@ -1,46 +1,24 @@
 # Scientific/native qualification
 
-The approved cohort and directed ownership graph live in
-[the scientific profile](../profiles/scientific-native.json). This profile is
-additive: it does not silently reassign existing repository archetypes, replace
-local tests, activate rulesets or certify scientific runtime behavior.
+The approved cohort and directed ownership graph live in [the scientific profile](../profiles/scientific-native.json). This profile is additive: it does not silently change repository archetypes, activate rulesets, replace numerical tests or certify runtime behaviour.
 
-Use the repo-local Python 3.15.1 interpreter:
+The 7 November 2026 [innovation ecosystem update](innovation-ecosystem-boundaries.md) makes Innovate's Rust-core/Polars direction mandatory, retires pandas/xarray support in the new release, records VOP as a proof of concept with Voiage-owned generic methods, and consolidates game-runtime ownership. Existing exact-source evidence remains historical evidence; consumer migrations require their own acceptance.
+
+Use the repo-local qualified interpreter. Python 3.15.2 is the new interface/tooling candidate; source execution and installed consumers must be requalified rather than relabelling older receipts:
 
 ```sh
-.venv/bin/python scripts/scientific_ecosystem.py policy profiles/scientific-native.json
-.venv/bin/python scripts/scientific_ecosystem.py candidate candidate.json
-.venv/bin/python scripts/scientific_ecosystem.py receipt resource-receipt.json
-PYTHONPATH=scripts .venv/bin/python -m unittest discover -s tests -v
+python scripts/scientific_ecosystem.py policy profiles/scientific-native.json
+python scripts/scientific_ecosystem.py candidate candidate.json
+python scripts/scientific_ecosystem.py receipt resource-receipt.json
+PYTHONPATH=scripts python -m unittest discover -s tests -v
 ```
 
-Candidate records bind candidate identity, exact source revision, status and
-security/build/numerical/consumer/resource checks. A qualified candidate requires
-all five passes. A blocked candidate records blocker, affected capability, owner
-and revisit condition. Candidates include releases, prereleases and pinned
-nightlies; no automatic preference for obsolete support floors is implied.
+Candidate records bind identity, exact revision and security/build/numerical/consumer/resource checks. A qualified candidate requires all five passes. A blocked candidate records blocker, affected capability, owner and revisit condition. Releases, prereleases and pinned nightlies may be candidates; no preference for obsolete floors or unqualified upgrades is implied.
 
-Resource receipts distinguish runtime-build, compiler-bootstrap, hpc-install and
-scheduler-run. Record exact source hashes, toolchain identities, argv, runner,
-cache state, concurrency, times, terminal exit/stop state, descendant RSS or
-cgroup peak, disk growth, intervals and measurement limitations. Missing counters
-are not zero. Failed or partial jobs remain retained, never promoted to passes.
-Historical process-group samples remain historical evidence and must not be
-relabelled descendant measurements. Compiler bootstrap receipts additionally
-identify the packaging requirement, binary bootstrap and source-built components.
+Resource receipts distinguish runtime-build, compiler-bootstrap, hpc-install and scheduler-run. Record exact source hashes, toolchain, argv, runner/cache state, concurrency, timestamps, terminal exit/stop state, descendant RSS or cgroup peak, disk growth, measurement interval and limitations. Missing counters are not zero; failed/partial jobs do not pass. Historical process-group samples are not relabelled descendant measurements. Compiler bootstrap records identify the packaging requirement, binary bootstrap and source-built components.
 
-Validation checks completeness and internal consistency; it cannot authenticate
-producer claims. Consumers must independently verify artifacts, source hashes,
-actual output, installed identities and relevant numerical/ABI contracts before
-acceptance. The existing verification receipt remains the overall gate summary;
-resource receipts are separate evidence artifacts referenced by its SHA256.
+Structural validation cannot authenticate producer claims. Consumers independently verify artefacts, hashes, actual outputs and relevant numerical/ABI contracts. The existing verification receipt remains the overall summary; resource evidence is referenced by SHA-256.
 
-Keep core, bindings, backend, build-only, test-oracle and development dependencies
-separate. Arrow Rust, PyArrow and Polars versions are independent release lines;
-qualify interchange and buffer ownership rather than matching version strings.
-Do not add Python/GPU/plotting to a native core to share a policy file.
+Separate core, binding, backend, build-only, isolated test-oracle and development dependencies. Arrow Rust, PyArrow and Polars versions are independent release lines: qualify schema/buffer/lifetime interchange. No Python/GPU/plotting dependency belongs in a minimal native core solely to share a policy file. The current Kairos Git-Polars/root-patch and packaging constraints are documented in the linked boundary update.
 
-Use compiler timing and resource observations to identify costly stages before
-CPU flamegraph/perf or DHAT/heap allocation investigations. SDK-based runtime
-builds never prove a compiler-from-source or full HPC matrix gate. The Voiage HPC
-track remains a delivery dependency; requirements may be revised only explicitly.
+Profile compiler timings/resources before optimisation. An SDK runtime build never proves compiler-from-source or full HPC acceptance. Existing Voiage HPC requirements remain open until explicitly changed and qualified; this policy does not waive them.
