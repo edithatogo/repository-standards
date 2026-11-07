@@ -31,11 +31,17 @@ class InnovationScopePolicyTests(unittest.TestCase):
         self.assertEqual(item.get('generic_decision_capability_owner'), 'voiage')
         self.assertIn('voiage', item['providers'])
 
-    def test_game_runtime_is_one_incubated_library_not_an_application_dependency(self):
+    def test_game_runtime_has_one_library_owner_and_keeps_application_separate(self):
         item = self.policy['capabilities'].get('game-runtime', {})
         self.assertEqual(item.get('kind'), 'library')
-        self.assertEqual(item.get('repository'), 'edithatogo/new-drug-reimbursement-game')
-        self.assertEqual(item.get('source_paths'), ['crates/uogto-game-core', 'crates/uogto-game-solve'])
+        self.assertEqual(item.get('repository'), 'edithatogo/paignia')
+        self.assertEqual(item.get('incubator_repository'), 'edithatogo/new-drug-reimbursement-game')
+        self.assertEqual(item.get('source_paths'), ['crates/paignia-core', 'crates/paignia-solve'])
+        self.assertEqual(item.get('display_name'), 'Paignia')
+        self.assertEqual(item.get('identity_status'), 'chosen-name-publication-checks-pending')
+        self.assertTrue(item.get('standalone_repository_created', False))
+        self.assertFalse(item.get('packages_published', True))
+        self.assertFalse(item.get('static_solver_requires_simulator', True))
         self.assertEqual(item.get('status'), 'extraction-and-qualification-required')
         self.assertNotIn('new-drug-reimbursement-game', item.get('providers', []))
 

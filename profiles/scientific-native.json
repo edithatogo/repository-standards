@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "approved-policy-not-runtime-acceptance",
-  "policy_revision": "2026-11-08-paignia-identity",
+  "policy_revision": "2026-11-08-paignia-scope-reconciliation",
   "python": "3.15.2",
   "python_role": "binding-and-tooling-candidate; per-consumer qualification required",
   "frontier_policy": "newest candidates first; exact pins after security/build/numerical/consumer/resource qualification",
@@ -41,14 +41,18 @@
     },
     "game-runtime": {
       "display_name": "Paignia",
-      "identity_status": "working-name-publication-checks-pending",
+      "identity_status": "chosen-name-publication-checks-pending",
       "identity_document": "docs/paignia-library-boundary.md",
-      "repository": "edithatogo/new-drug-reimbursement-game",
-      "proposed_repository": "edithatogo/paignia",
+      "repository": "edithatogo/paignia",
+      "incubator_repository": "edithatogo/new-drug-reimbursement-game",
       "proposed_packages": ["paignia-core", "paignia-solve", "paignia-kairos", "paignia-uogto", "paignia-arrow"],
       "package_names_reserved": false,
+      "standalone_repository_created": true,
+      "packages_published": false,
       "kind": "library",
-      "source_paths": ["crates/uogto-game-core", "crates/uogto-game-solve"],
+      "source_paths": ["crates/paignia-core", "crates/paignia-solve"],
+      "source_status": "seed-transfer-in-progress-unqualified",
+      "legacy_source_paths": ["crates/uogto-game-core", "crates/uogto-game-solve"],
       "status": "extraction-and-qualification-required",
       "owns": "one domain-neutral Rust game representation/solution capability; reconcile Kairos game solver overlap before promotion",
       "providers": ["uogto-semantics"],
@@ -114,7 +118,7 @@
       "scientific_engine": "rust-only",
       "host_fallback": false,
       "runtime_accepted": false,
-      "acceptance_note": "Paignia naming does not qualify the incubator; extraction plus Kairos S01-S04 reconciliation and installed consumers remain required"
+      "acceptance_note": "Core, supported static algorithms and optional dynamic adapter qualify independently; naming/seed rename is not acceptance. Preserve Kairos S01-S04 dispositions without requiring every unfinished method or the dynamic adapter for static qualification."
     }
   },
   "planned_adapters": [

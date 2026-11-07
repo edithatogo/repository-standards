@@ -8,14 +8,14 @@ The maintainer requires Innovate to remain a general library for modelling/predi
 |---|---|---|
 | Innovation dynamics, observation models, fit/predict and innovation-specific games | Innovate | No second simulator, general game solver, VOI library or medicines data lake. |
 | Native simulation clock/state/events/resources/RNG/replay | Kairos | No host-language preview engine or per-application scheduler. |
-| Generic game representation and algorithms | Extracted game-runtime capability | Consolidate the reimbursement game's `uogto-game-core`/`uogto-game-solve` with Kairos solver overlap; static solving does not require a simulator. |
+| Generic game representation and algorithms | Paignia (`game-runtime` policy key) | Transfer the renamed `paignia-core`/`paignia-solve` seed to its created repository; reconcile Kairos solver overlap while preserving per-method qualification. Static solving does not require a simulator. |
 | Game semantics/conformance | UOGTO | Ontology is not an algorithm implementation. |
 | VOI, generic decision/perspective/equity and reusable VOP capability | Voiage | `vop_poc_nz` is a proof of concept, not a competing framework. |
 | Generic spline surrogate | MARS | Promote only with measured accuracy/cost and decision-preservation evidence. |
 | Source acquisition, medicine identity/funding/regulatory evidence | Global Medicines Atlas and Reimbursement Atlas | Consumers use qualified, revision-pinned projections and retain source meanings. |
 | Clinical, tobacco, NZ and reimbursement scenarios | Domain applications | Keep institutional assumptions, empirical parameters and application validation here. |
 
-The game-runtime profile points to existing incubator crate paths, not to a fabricated new repository. The application and the reusable component may temporarily share a repository while remaining different dependency nodes. Extraction requires two real consumers, independent algorithm tests, immutable delivery and reconciliation of Kairos's S01–S04 completion obligations. Keeping old API adapters is allowed; keeping two authoritative implementations is not the target.
+The stable `game-runtime` profile records [Paignia's chosen identity and created repository](paignia-library-boundary.md), with the former reimbursement incubator retained as provenance. Seed transfer is underway; packages remain unpublished and unqualified. T17.01–T17.17 retains its IDs: provider implementation moves to Paignia while application-consumer and valuation handoffs stay with their respective owners. Static qualification requires two real consumers, independent tests for the claimed algorithms, immutable delivery and dispositions for Kairos's S01–S04 obligations. Core, supported static solvers and the optional dynamic adapter qualify independently; unfinished methods and dynamic execution do not block a smaller supported scope. Keeping old API adapters is allowed; keeping two authoritative implementations is not the target.
 
 ## Directed integration
 

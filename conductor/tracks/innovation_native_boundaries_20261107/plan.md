@@ -27,6 +27,14 @@ Files: `profiles/scientific-native.json`, `docs/scientific-native.md`, `docs/inn
 - [x] Update policy/docs and rerun: six tests pass; independent graph check finds no cycle or library-to-application edge.
 - [ ] Run the complete repository policy/test harness on the exact PR head and retain hosted results before merging. Local focused checks are not a full-suite claim.
 
+Paignia reconciliation check, 8 November 2026: the updated source-path and then
+created-repository assertions failed against their old policy values; all 30 repository unit tests
+passed with `PYTHONPATH=scripts python -m unittest discover -s tests -v`; the
+`scientific_ecosystem.py policy profiles/scientific-native.json` graph check and
+`git diff --check` also passed. Local interpreter: Python 3.12.14. The configured
+Python 3.15.1 hosted harness remains required; these policy checks do not qualify
+the seed, any consumer or a release.
+
 ## S02 — Extend actual consumer conformance auditing
 
 Files: `scripts/audit_estate_conformance.py`; create `tests/test_native_consumer_controls.py` and scope-specific fixtures.
@@ -38,7 +46,14 @@ Interface: per-repository audit emits separate declared-policy, source-scan, res
 
 ## S03 — Provider ownership/extraction handoffs
 
-Targets: Innovate PR570 taskbook E01–E05/G01–G04; Kairos track110 S01–S04; Voiage `rust/crates/voiage-domain` and `voiage-numerics`; reimbursement `crates/uogto-game-core`/`uogto-game-solve`.
+Targets: Innovate PR570 taskbook E01–E05/G01–G04; Kairos track110 S01–S04; Voiage `rust/crates/voiage-domain` and `voiage-numerics`; `edithatogo/paignia` seed `crates/paignia-core`/`paignia-solve` (transferred from the reimbursement incubator's `uogto-game-*`; not published or qualified).
+
+Keep `game-runtime` as the stable policy key. T17.01–T17.17 keeps its IDs through
+provider transfer to Paignia, with application .09/.10/.11 handoffs retaining
+their external owners. T17.01–T17.03 plus actual T17.09/T17.10 consumers feed static
+T17.12 eligibility; dynamic-adapter and per-algorithm receipts remain separate.
+Reimbursement plus Innovate can be the first consumer pair. Reuse those receipts
+and UOGTO SGC.01–SGC.08; do not add another naming/completion ledger.
 
 - [ ] Record existing callers, mathematical contracts, provider PRs, exact accepted pins and independently computed references.
 - [ ] Verify library/provider graph and actual installed consumers, including VOP migration and two game-runtime consumers; an issue is not acceptance.

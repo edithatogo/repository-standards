@@ -1,20 +1,20 @@
 # Paignia: reusable strategic-interaction library
 
-Decision date: 2026-11-08. Status: working project identity and implementation direction; extraction, package publication and runtime acceptance remain pending. This document supplements the innovation-native policy and does not close any provider or consumer gate.
+Decision date: 2026-11-08. Status: chosen project identity, standalone repository created and seed transfer underway; package publication and runtime acceptance remain pending. This document supplements the innovation-native policy and does not close any provider or consumer gate.
 
 ## Identity
 
-Use **Paignia** as the working public name for the domain-neutral Rust game-theory capability currently incubated in `edithatogo/new-drug-reimbursement-game`. Keep the policy capability ID `game-runtime` as a compatibility alias. The intended repository slug is `paignia`; it is a target, not a repository claimed to exist. Package namespaces and any relevant naming/rights checks must be completed before publication; no namespace is reserved by this decision.
+**Paignia** is the chosen public name for the domain-neutral Rust game-theory library at [edithatogo/paignia](https://github.com/edithatogo/paignia). Its repository has been created and is being populated from `edithatogo/new-drug-reimbursement-game`. Keep the policy capability ID `game-runtime` stable as a compatibility alias. No registry package publication or provider qualification is claimed. Check package namespace availability and any relevant naming/rights requirements before registry publication; creating the GitHub repository does not reserve package names.
 
-| Current implementation | Intended extracted package | Rule |
+| Seed or planned source | Package | Rule |
 |---|---|---|
-| `crates/uogto-game-core` | `paignia-core` | Typed game/strategy/information/payoff/result contracts; no scheduler. |
-| `crates/uogto-game-solve` | `paignia-solve` | Qualified equilibrium, learning and strategic algorithms with explicit supported scope. |
+| `crates/paignia-core` (Paignia seed) | `paignia-core` | Typed game/player/action/payoff contracts; general information sets remain pending in T17.17; no scheduler. |
+| `crates/paignia-solve` (Paignia seed) | `paignia-solve` | Qualify each supported algorithm independently; the existing seed is not a general equilibrium solver. |
 | Planned execution adapter | `paignia-kairos` | Optional dependency on Kairos and Paignia; never required for static solving. |
 | Semantic adapter | `paignia-uogto` | Versioned UOGTO mappings and conformance; preserve experimental semantic-profile boundaries. |
 | Interchange adapter | `paignia-arrow` | Optional Arrow/Polars interchange; do not force dataframe dependencies into minimal solvers. |
 
-These are planned names. Existing Cargo package IDs, commands, locks, published versions and historical receipts retain their names until a separately tested migration. Do not replace strings globally or claim a rename is extraction.
+The renamed core/solver seed is being transferred from the reimbursement incubator to Paignia. Its historical source paths were `crates/uogto-game-core` and `crates/uogto-game-solve`. Paignia's `extraction-manifest.json` records package/source provenance and `docs/architecture/paignia-transfer-map.md` records source dispositions. Resolve the resulting immutable provider revision before acceptance; the reimbursement application consumes that revision rather than retaining a second authoritative implementation. The adapter packages remain planned. Historical commands, versions and receipts retain their tested names; source transfer does not establish publication, general solver support or numerical validity.
 
 ## Responsibility and dependency direction
 
@@ -29,7 +29,9 @@ Runtime arrows are consumer -> provider. Paignia static core -> no simulator; `p
 
 ## Existing work to reconcile, not duplicate
 
-The extraction owner is reimbursement-game Track T17, with existing issue #100. Preserve its T17.01-T17.12 leaves, the two-real-consumer requirement and inherited Kairos S01-S04 obligations. The four inherited obligations include declared RK4 replicator dynamics, actual mixed-Nash methods, correlated-equilibrium incentive constraints/objective and general supported information-set CFR/CFR+. Unsupported or unverified methods remain explicitly unsupported.
+The provider authority is Paignia's `conductor/tracks/t17_game_runtime_ecosystem_20261107`, transferred with its existing T17.01-T17.17 IDs and reimbursement-game issue #100 history. Paignia owns T17.01-T17.08/T17.12-T17.17. T17.09 is the first actual application-consumer handoff, T17.10 the second distinct application/Innovate handoff, and T17.11 reimbursement-specific valuation; those implementations and completion receipts remain with their application owners. Preserve the two-real-consumer qualification and inherited Kairos S01-S04 obligations. The four inherited obligations include declared RK4 replicator dynamics, actual mixed-Nash methods, correlated-equilibrium incentive constraints/objective and general supported information-set CFR/CFR+. Unsupported or unverified methods remain explicitly unsupported and individually pending; they do not all gate a smaller supported core/static release.
+
+Static package qualification follows T17.01-T17.03, two actual consumer receipts T17.09/T17.10, and T17.12. Reimbursement and Innovate can be the first pair; CareOps is another candidate, not a mandatory first consumer. Optional dynamic execution uses T17.08 and T17.14-T17.16 for lawful observations, RNG isolation and checkpoints. T17.13 qualifies semantic/identifier conversion where needed, including static UOGTO mappings. T17.17 supplies runtime-independent information sets for general imperfect-information methods such as CFR; it is a prerequisite for those claims, not for the minimal perfect-information static slice. Neither the reimbursement-specific valuation task nor all unimplemented algorithms are prerequisites for a scoped static claim.
 
 Innovate PR #570 retains its 52 implementation packets. Kairos Tracks 108 and 109-115 retain provider/native/scientific responsibilities. Voiage's `simulation_outcome_boundary_20261107` and issue #1286 own decision-input integration and VOP promotion. New supplements must map to those owners rather than manufacture duplicate completion tracks.
 
@@ -45,6 +47,12 @@ Paignia's scientific execution is Rust-only with no Python subprocess fallback. 
 
 New dependency candidates follow the shared newest-candidate-first policy, but exact versions require security, build, numerical, installed-consumer and resource evidence. This decision changes no pin and invents no universal version baseline. Check direct and transitive resolved graphs, required root patches, licences and packaging. Actual native results and failures take precedence over manifest declarations.
 
-First acceptance: static core/solver runs with Python and Kairos absent; invalid inputs/unsupported games fail; independent analytic and reference-game tests pass with declared residual tolerances; two distinct real applications consume the same package artefacts; optional Kairos integration proves a single clock/state/RNG and native replay. Record exact source, dependency closure, seeds, commands, nonzero test counts, package hashes, algorithm identity and equilibrium-selection assumptions.
+Acceptance is scoped independently:
 
-Repository extraction eligibility does not itself publish packages. Preserve provenance/licences, compatibility, rollbacks, ABI/schema versions and scientific limitations through beta, release candidate and hardened release. No new repository, model implementation, automatic consumer migration, external submission or public release is claimed here.
+- **Core:** typed representation, identifiers, validation, packaging and compatibility are qualified without a solver or simulator prerequisite.
+- **Static solver:** only named supported algorithms are qualified using invalid/unsupported inputs, independent analytic/reference games and applicable residual tolerances. Python and Kairos are absent from production dispatch. Two distinct real applications consume the same qualified artifacts for T17.12 acceptance; unfinished algorithms remain explicitly unsupported.
+- **Dynamic adapter:** the optional Kairos adapter additionally proves one clock/state/RNG, lawful observations and native replay/checkpoint behavior. Its pending state does not block core/static acceptance or another application's native-runtime-only receipt.
+
+Record exact source, dependency closure, commands, nonzero test counts and package hashes once for the applicable scope; add seeds, algorithm identity, residuals and equilibrium-selection assumptions where relevant. Reuse that evidence across the owning tracks rather than creating repeated approval or documentation gates.
+
+Repository creation and seed transfer do not themselves publish or qualify packages. Preserve provenance/licences, compatibility, rollbacks, ABI/schema versions and scientific limitations through beta, release candidate and hardened release. This policy records the created repository; it claims no completed model, automatic consumer migration, external submission or public release.
