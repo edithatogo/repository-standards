@@ -1,0 +1,22 @@
+{
+  "track_id": "privacy_secrets_rollout_20261110",
+  "type": "security",
+  "status": "in_progress",
+  "created_at": "2026-11-10",
+  "updated_at": "2026-11-10",
+  "inventory_complete": true,
+  "inventory_counts": {
+    "total": 303,
+    "active": 277,
+    "archived": 26,
+    "private": 101
+  },
+  "central_policy_implemented": false,
+  "shared_hosted_verification": "pending",
+  "consumer_rollout": "pending",
+  "consumer_execution_verified": false,
+  "archived_repositories": "pending_separate_handling",
+  "tooling_python": "3.12",
+  "runtime_exception": "Isolated scanner tooling only; Presidio 2.2.366 requires Python >=3.11,<3.15. Consumer product interpreters and locks are unchanged.",
+  "public_evidence_policy": "Aggregate counts only. Keep private repository identities, paths, PR URLs and source content in private evidence."
+}

@@ -23,3 +23,17 @@ The scanner reports drift before managed-file synchronisation or ruleset activat
 The [scientific/native profile](docs/scientific-native.md) coordinates ownership,
 frontier dependency qualification and resource evidence without replacing local
 numerical gates. Delivery is tracked in [Conductor](conductor/index.md).
+
+## Privacy and secret scanning
+
+The [privacy and secrets standard](docs/privacy-secrets-standard.md) defines a
+shared pinned Gitleaks/Presidio action, isolated scanner dependencies and
+value-free findings. It supplements existing repository controls and distinguishes
+configured workflows, executed scans and unsupported content. The
+[local commands](privacy/local-hooks.md) support checks before commit or push;
+hooks require installation in each working clone.
+
+The [rollout track](conductor/tracks/privacy_secrets_rollout_20261110/index.md)
+records implementation and aggregate deployment evidence. Its inventory includes
+active forks as well as owned projects; archived repositories remain separately
+accounted for. Private repository details are not published here.
