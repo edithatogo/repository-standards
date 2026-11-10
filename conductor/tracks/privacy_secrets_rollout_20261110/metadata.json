@@ -44,5 +44,6 @@
       "cancelled": 1
     },
     "shared_pin": "985503bc8eae58e7d6ef36a6e5427d0077e0193c"
-  }
+  },
+  "installation_qualification": "Verified shared source and hosted canaries plus exact consumer workflow review; queued or pre-runner-refused execution remains unverified; native and instruction gates remain binding."
 }

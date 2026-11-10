@@ -120,9 +120,20 @@ public repository.
 
 Record each repository as discovered, prepared, PR opened, configured on its
 default branch, executed, or blocked. A branch/PR alone is not a deployed control.
-Merge only after the new check passes and existing required checks permit it;
-never weaken required checks to finish the rollout. Empty repositories need an
-initial commit. Archived repositories remain read-only pending separate handling.
+Require existing native and instruction-defined gates before merging; never
+weaken them to finish the rollout. A successful receiving check qualifies
+execution in that repository. For the qualified 2026-11-10 implementation pinned
+to `985503bc8eae58e7d6ef36a6e5427d0077e0193c`, the 84 source tests, hosted source
+canary and successful receiving canaries also support installation of an exact
+baseline-only addition while its receiving job is queued or refused before runner
+startup. Verify the exact workflow, expected PR head and default-branch pin,
+and label execution unverified. This does not waive a required check, a local
+validation or review requirement, an existing security gate, or a privacy failure
+after scanner execution. The distinction installs reviewed configuration without
+claiming that an unavailable runner scanned the repository.
+
+Empty repositories need an initial commit. Archived repositories remain read-only
+pending separate handling.
 Disabled Actions, fork restrictions, quota refusal and suspended schedules are
 execution blockers and must be reported separately from installed workflow files.
 

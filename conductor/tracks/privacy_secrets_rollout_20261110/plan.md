@@ -34,8 +34,12 @@
 - [x] Prepare additive consumer changes against fresh branch heads.
   Evidence: all 277 active repositories have an initial workflow commit, PR,
   or prepared branch with an explicit PR-permission refusal.
-- [ ] Open scoped PRs and merge only after the new check succeeds and existing
-  required checks allow it. Resolve genuine rollout faults without weakening gates.
+- [~] Open scoped PRs and install the qualified baseline where existing required
+  checks and repository instructions permit it. Source tests, hosted canaries and
+  exact workflow review qualify installation when a receiving job is queued or
+  refused before runner startup; record that execution as unverified. Executed
+  privacy failures and binding CI/security/review/local-validation gates remain
+  holds. Resolve genuine rollout faults without weakening those gates.
 - [ ] Verify each receiving default-branch file and its shared-action pin.
 - [ ] Record execution results separately from configured workflows, including
   disabled Actions, fork restrictions, quota refusal and schedule suspension.

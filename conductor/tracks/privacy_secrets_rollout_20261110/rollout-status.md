@@ -41,6 +41,13 @@ cause; no billing, quota or policy cause is asserted. Existing required CI and
 security failures remain binding. No branch protection or approval requirement
 was weakened.
 
+After the source tests and dozens of successful receiving canaries, exact
+baseline-only additions may be installed while a receiving job is queued or
+refused before runner startup, provided no native or instruction-defined gate
+blocks the merge. This qualifies the configuration, not its execution. The
+actual job status is retained; no unexecuted scan is recorded as passed. A
+privacy failure after scanner execution remains a hold pending diagnosis.
+
 Repository-specific formatting, runtime-contract and logging incompatibilities
 are repaired on their existing PRs. The supported scanner runtime exception is
 limited to isolated tooling and preserves product interpreter requirements.

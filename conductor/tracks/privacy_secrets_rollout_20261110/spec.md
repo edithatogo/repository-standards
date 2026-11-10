@@ -41,8 +41,12 @@ an immutable shared-action commit and minimal read-only permissions.
    dependencies are hash-verified. Untrusted repository paths do not execute
    application code, import shadow modules or follow symlinks outside the target.
 7. The shared implementation passes behavioral tests and hosted canary execution
-   before broad deployment. Merge consumer PRs only when the new scanner check
-   passes and existing required checks allow it; preserve all existing gates.
+   before broad deployment. A receiving success qualifies its execution. After
+   source and receiving canary qualification, an exact baseline-only PR may be
+   installed while its job is queued or refused before runner startup, provided
+   existing native and instruction-defined checks/reviews permit it. Retain the
+   actual unverified execution state. Executed privacy failures remain holds.
+   Preserve existing required/security/local-validation/review gates.
 8. Every eligible repository has a verified default-branch workflow or a precise
    unresolved blocker. Prepared branches, configured workflows and actual
    successful executions are counted separately. Archived projects are pending
