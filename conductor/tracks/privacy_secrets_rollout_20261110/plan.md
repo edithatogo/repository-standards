@@ -14,7 +14,7 @@
 
 - [x] Implement the trusted scanner wrappers, isolated environment, hashed lock,
   verified binary installer and safe reporting.
-- [ ] Pin the managed consumer workflow to the published, tested shared action.
+- [x] Pin the managed consumer workflow to shared action `985503bc8eae58e7d6ef36a6e5427d0077e0193c`.
 - [x] Prove actual detection and failure behavior: staged/index content,
   introduced/deleted secrets, identifiers, malformed Git ranges, import/path
   isolation, invalid checksums, unavailable tools and safe output.
@@ -23,12 +23,15 @@
   Evidence: 84 unittest tests passed on Python 3.12.14 with real Presidio 2.2.366
   and Gitleaks 8.30.1; Ruff and targeted Zizmor passed. Staged guard results
   are recorded in verification.md.
-- [~] Publish the shared implementation and verify its hosted test result.
+- [x] Publish the shared implementation and verify its hosted test result.
+  PR #122 merged after hosted canary, behavioral tests, policy-gate, CodeQL,
+  Analyze (Python/actions) and Zizmor all passed on commit `992a80791c7debab851a684ba314734a843052e7`.
 
 ## 3. Canary and rollout
 
-- [ ] Verify a representative canary using the exact shared-action commit.
-- [ ] Prepare additive consumer changes against fresh branch heads.
+- [x] Verify the full shared composite action in the hosted source canary.
+- [~] Verify receiving repositories using the immutable published action pin.
+- [~] Prepare additive consumer changes against fresh branch heads.
 - [ ] Open scoped PRs and merge only after the new check succeeds and existing
   required checks allow it. Resolve genuine rollout faults without weakening gates.
 - [ ] Verify each receiving default-branch file and its shared-action pin.
@@ -48,8 +51,11 @@
 
 ## Current evidence limits
 
-The inventory, shared implementation and local verification are complete. Hosted verification and rollout are in progress. This plan
-does not yet assert a published shared action, merged consumer rollout, green
-hosted canary or successful estate-wide scan. A configured check and a qualified
-execution are different states. The authoritative per-repository audit remains
-private; this public record contains aggregate evidence only.
+The inventory and shared implementation are complete, and the published source
+passed the hosted canary and all required checks. Receiving repository rollout
+is in progress. Six receiving default branches have been merged and their files
+read back with the expected pin at this checkpoint. Other PRs are pending checks,
+repository permissions or rules. Some private-repository jobs fail before a runner
+starts; this does not establish a scanner result or its cause. A configured check
+and a qualified execution are different states. The authoritative per-repository
+audit remains private; this public record contains aggregate evidence only.
