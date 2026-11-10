@@ -8,9 +8,11 @@ Reports exist only inside a private temporary directory and are removed on exit.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
+import stat
 import subprocess
 import sys
 import tempfile
@@ -25,6 +27,12 @@ MAX_SUMMARY_FINDINGS = 100
 REVISION = re.compile(r"(?:[0-9a-fA-F]{40}|[0-9a-fA-F]{64})\Z")
 RULE_ID = re.compile(r"[a-zA-Z0-9_-]{1,120}\Z")
 TRUSTED_CONFIG = Path(__file__).resolve().parents[1] / "privacy" / "gitleaks.toml"
+TRUSTED_REVIEWED_FINDINGS = (
+    Path(__file__).resolve().parents[1] / "privacy" / "reviewed-findings.json"
+)
+MAX_REVIEW_REGISTRY_BYTES = 64 * 1024
+PRIVATE_MATCH_PROCESSING = os.name == "posix"
+FindingIdentity = tuple[str, str, str, int]
 
 
 class ScanError(Exception):
@@ -34,6 +42,125 @@ class ScanError(Exception):
 class SafeParser(argparse.ArgumentParser):
     def error(self, message: str) -> None:
         raise ScanError("invalid_arguments")
+
+
+def unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ScanError("invalid_reviewed_findings")
+        result[key] = value
+    return result
+
+
+def load_reviewed_findings() -> dict[FindingIdentity, str]:
+    """Read only the pinned tooling registry, afresh for every scan."""
+    try:
+        if TRUSTED_REVIEWED_FINDINGS.is_symlink():
+            raise ScanError("invalid_reviewed_findings")
+        with TRUSTED_REVIEWED_FINDINGS.open("rb") as source:
+            raw = source.read(MAX_REVIEW_REGISTRY_BYTES + 1)
+        if len(raw) > MAX_REVIEW_REGISTRY_BYTES:
+            raise ScanError("invalid_reviewed_findings")
+        registry = json.loads(raw, object_pairs_hook=unique_object)
+    except OSError as error:
+        raise ScanError("reviewed_findings_unavailable") from error
+    except (ValueError, UnicodeError) as error:
+        raise ScanError("invalid_reviewed_findings") from error
+    if (
+        not isinstance(registry, dict)
+        or set(registry) != {"schema_version", "findings"}
+        or type(registry["schema_version"]) is not int
+        or registry["schema_version"] != 1
+        or not isinstance(registry["findings"], list)
+    ):
+        raise ScanError("invalid_reviewed_findings")
+    reviewed: dict[FindingIdentity, str] = {}
+    for entry in registry["findings"]:
+        if not isinstance(entry, dict) or set(entry) != {
+            "commit",
+            "path",
+            "rule_id",
+            "line",
+            "value_sha256",
+            "reason",
+            "evidence_urls",
+        }:
+            raise ScanError("invalid_reviewed_findings")
+        commit, path, rule, line, digest = (
+            entry["commit"],
+            entry["path"],
+            entry["rule_id"],
+            entry["line"],
+            entry["value_sha256"],
+        )
+        reason, urls = entry["reason"], entry["evidence_urls"]
+        if (
+            not isinstance(commit, str)
+            or not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", commit)
+            or set(commit) == {"0"}
+            or not isinstance(path, str)
+            or not path
+            or len(path) > 1024
+            or str(PurePosixPath(path)) != path
+            or PurePosixPath(path).is_absolute()
+            or ".." in PurePosixPath(path).parts
+            or any(ord(character) < 32 or character in "\\*?[]" for character in path)
+            or re.match(r"^[a-zA-Z]:", path)
+            or not isinstance(rule, str)
+            or not RULE_ID.fullmatch(rule)
+            or type(line) is not int
+            or line < 1
+            or not isinstance(digest, str)
+            or not re.fullmatch(r"[0-9a-f]{64}", digest)
+            or not isinstance(reason, str)
+            or not 20 <= len(reason.strip()) <= 2048
+            or not isinstance(urls, list)
+            or not 1 <= len(urls) <= 8
+            or any(
+                not isinstance(url, str)
+                or len(url) > 1024
+                or not url.startswith(
+                    ("https://github.com/", "https://api.github.com/")
+                )
+                or any(ord(character) < 32 for character in url)
+                for url in urls
+            )
+        ):
+            raise ScanError("invalid_reviewed_findings")
+        identity = (commit, path, rule, line)
+        if identity in reviewed:
+            raise ScanError("invalid_reviewed_findings")
+        reviewed[identity] = digest
+    return reviewed
+
+
+def is_reviewed_nonsecret(
+    finding: Any, reviewed: dict[FindingIdentity, str], *, enabled: bool
+) -> bool:
+    """Match raw scanner fields exactly; never normalize a finding into admission."""
+    if not enabled or not isinstance(finding, dict):
+        return False
+    commit, path, rule, line, value = (
+        finding.get("Commit"),
+        finding.get("File"),
+        finding.get("RuleID"),
+        finding.get("StartLine"),
+        finding.get("Secret"),
+    )
+    if (
+        not all(isinstance(item, str) and item for item in (commit, path, rule, value))
+        or type(line) is not int
+        or line < 1
+    ):
+        return False
+    expected = reviewed.get((commit, path, rule, line))
+    if expected is None:
+        return False
+    try:
+        return hashlib.sha256(value.encode("utf-8")).hexdigest() == expected
+    except UnicodeError:
+        return False
 
 
 def clean_environment() -> dict[str, str]:
@@ -174,6 +301,7 @@ def scan(
         raise ScanError("default_rules_required")
     if extension.get("disabledRules") or extension.get("path"):
         raise ScanError("default_rules_required")
+    reviewed = load_reviewed_findings()
     if git_output(root, "rev-parse", "--is-inside-work-tree") != "true":
         raise ScanError("invalid_repository")
 
@@ -231,7 +359,9 @@ def scan(
             "--gitleaks-ignore-path",
             str(ignore),
             "--ignore-gitleaks-allow",
-            "--redact=100",
+            # Exact reviewed fingerprints need the actual matched value internally.
+            # Scanner streams never leave this process; the report is private and temporary.
+            "--redact=0" if PRIVATE_MATCH_PROCESSING else "--redact=100",
             "--no-banner",
             "--no-color",
             "--log-level",
@@ -253,13 +383,24 @@ def scan(
                 stderr=subprocess.DEVNULL,
                 check=False,
                 timeout=TIMEOUT_SECONDS + 30,
+                **({"umask": 0o077} if PRIVATE_MATCH_PROCESSING else {}),
             )
         except (OSError, subprocess.SubprocessError) as error:
             raise ScanError("scanner_unavailable_or_timed_out") from error
         if result.returncode not in (0, 1):
             raise ScanError("scanner_failed")
         try:
-            if report.stat().st_size > MAX_REPORT_BYTES:
+            attributes = report.lstat()
+            if (
+                not stat.S_ISREG(attributes.st_mode)
+                or attributes.st_nlink != 1
+                or (
+                    PRIVATE_MATCH_PROCESSING
+                    and stat.S_IMODE(attributes.st_mode) != 0o600
+                )
+            ):
+                raise ScanError("unsafe_private_report")
+            if attributes.st_size > MAX_REPORT_BYTES:
                 raise ScanError("scanner_report_too_large")
             findings = json.loads(report.read_text(encoding="utf-8"))
         except (OSError, ValueError) as error:
@@ -268,9 +409,20 @@ def scan(
             raise ScanError("invalid_scanner_report")
         if result.returncode == 1 and not findings:
             raise ScanError("scanner_failed_without_findings")
-        summary = summarise(findings, root)
+        blocking = [
+            finding
+            for finding in findings
+            if not is_reviewed_nonsecret(
+                finding, reviewed, enabled=PRIVATE_MATCH_PROCESSING and not staged
+            )
+        ]
+        summary = summarise(blocking, root)
+        summary["detected_finding_count"] = len(findings)
+        summary["reviewed_nonsecret_count"] = len(findings) - len(blocking)
+        if findings and not blocking:
+            summary["status"] = "reviewed_nonsecret"
         summary["mode"] = mode
-        return (1 if findings else 0), summary
+        return (1 if blocking else 0), summary
 
 
 def main(argv: list[str] | None = None) -> int:

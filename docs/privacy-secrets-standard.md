@@ -50,6 +50,11 @@ Gitleaks always extends its upstream default rules. Consumer `.gitleaks.toml`,
 not weaken this independent baseline. It does not automatically baseline existing
 secrets or introduce blanket exclusions for tests, documentation or generated text.
 
+Individually verified false positives may use the pinned tooling's
+[exact reviewed-finding registry](../privacy/reviewed-findings.md). Each entry
+binds commit, path, rule, line and matched-value digest; other findings still block.
+The safe summary separately counts reviewed nonsecrets and remaining findings.
+
 ## Scan scope
 
 | Invocation | Secret scan | Personal-identifier scan |
