@@ -31,9 +31,15 @@
 
 - [x] Verify the full shared composite action in the hosted source canary.
 - [~] Verify receiving repositories using the immutable published action pin.
-- [~] Prepare additive consumer changes against fresh branch heads.
-- [ ] Open scoped PRs and merge only after the new check succeeds and existing
-  required checks allow it. Resolve genuine rollout faults without weakening gates.
+- [x] Prepare additive consumer changes against fresh branch heads.
+  Evidence: all 277 active repositories have an initial workflow commit, PR,
+  or prepared branch with an explicit PR-permission refusal.
+- [~] Open scoped PRs and install the qualified baseline where existing required
+  checks and repository instructions permit it. Source tests, hosted canaries and
+  exact workflow review qualify installation when a receiving job is queued or
+  refused before runner startup; record that execution as unverified. Executed
+  privacy failures and binding CI/security/review/local-validation gates remain
+  holds. Resolve genuine rollout faults without weakening those gates.
 - [ ] Verify each receiving default-branch file and its shared-action pin.
 - [ ] Record execution results separately from configured workflows, including
   disabled Actions, fork restrictions, quota refusal and schedule suspension.
@@ -51,11 +57,9 @@
 
 ## Current evidence limits
 
-The inventory and shared implementation are complete, and the published source
-passed the hosted canary and all required checks. Receiving repository rollout
-is in progress. Six receiving default branches have been merged and their files
-read back with the expected pin at this checkpoint. Other PRs are pending checks,
-repository permissions or rules. Some private-repository jobs fail before a runner
-starts; this does not establish a scanner result or its cause. A configured check
-and a qualified execution are different states. The authoritative per-repository
-audit remains private; this public record contains aggregate evidence only.
+The published shared implementation and its managed consumer both passed their
+hosted checks and are merged. All active repositories have a prepared change;
+receiving repository installation and execution remain in progress. See
+[the dated rollout checkpoint](rollout-status.md) for aggregate evidence.
+Prepared changes, successful scans and installed default-branch workflows are
+separate states. The full repository audit remains private.

@@ -1,10 +1,11 @@
 # Privacy and secret-scanning rollout
 
-Status: implementation in progress; consumer deployment and execution pending.
+Status: shared implementation and managed consumer verified; estate rollout in progress.
 
 - [Specification](spec.md)
 - [Plan and evidence](plan.md)
 - [Metadata](metadata.json)
+- [Rollout checkpoint](rollout-status.md)
 - [Shared standard](../../../docs/privacy-secrets-standard.md)
 - [Local checks](../../../privacy/local-hooks.md)
 
