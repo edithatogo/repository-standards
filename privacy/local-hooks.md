@@ -44,8 +44,8 @@ replace an existing hook or `core.hooksPath` without inspecting it.
 Use `--profile sensitive` to block the supported contact and identifier matches
 throughout selected text. Staged mode reads the index rather than unstaged edits;
 this catches content removed from the working copy but still staged for commit.
-The personal-identifier scan covers the whole index snapshot, so existing indexed
-findings can still fail it.
+The personal-identifier scan covers complete blobs of changed staged/index files,
+so unchanged files do not enter that incremental check.
 
 ## Before a push or release
 

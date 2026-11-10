@@ -22,6 +22,38 @@ def _synthetic(parts: tuple[str, ...]) -> str:
     return "".join(parts)
 
 
+def _generated_recognizer_vectors() -> tuple[tuple[str, str, str], ...]:
+    """Return entity, context and value for deterministic detector test inputs.
+
+    This zero-input factory cannot ingest patient, customer or environment data.
+    These values must be written in clear text in disposable Git repositories to
+    exercise the real scanner. The bank-format vector uses a fictional TEST bank
+    code and an all-zero account; its check digits are generated here. Keeping
+    the provenance in this table also avoids representing a synthetic value as
+    an application variable that retrieves a real identifier.
+    """
+    digits = [2, 1, 1, 1, 1, 1, 1, 1]
+    checksum = sum(a * b for a, b in zip(digits, [1, 3, 7, 9, 1, 3, 7, 9])) % 10
+    bank_format = "TEST" + "0" * 14
+    rearranged = bank_format + "GB00"
+    expanded = "".join(
+        str(ord(char) - 55) if char.isalpha() else char for char in rearranged
+    )
+    check_digits = 98 - int(expanded) % 97
+    return (
+        (
+            "AU_MEDICARE",
+            "Medicare",
+            "".join(str(x) for x in digits) + str(checksum) + "1",
+        ),
+        ("CREDIT_CARD", "Credit card number", "4" + "1" * 15),
+        ("IBAN_CODE", "IBAN", f"GB{check_digits:02d}" + bank_format),
+        # ACMA's reserved fictional mobile number, in international format.
+        # https://www.acma.gov.au/phone-numbers-use-tv-shows-films-and-creative-works
+        ("PHONE_NUMBER", "Phone", "+61 " + "491 " + "570 " + "006"),
+    )
+
+
 HAS_PRESIDIO = importlib.util.find_spec("presidio_analyzer") is not None
 
 
@@ -86,34 +118,16 @@ class PresidioIntegrationTests(GitFixture):
         self.assertNotIn("tax file number:", output)
 
     def test_remaining_supported_entities_use_real_recognizers(self) -> None:
-        digits = [2, 1, 1, 1, 1, 1, 1, 1]
-        checksum = sum(a * b for a, b in zip(digits, [1, 3, 7, 9, 1, 3, 7, 9])) % 10
-        medicare = "".join(str(x) for x in digits) + str(checksum) + "1"
-        card = "4" + "1" * 15
-        iban = _synthetic(("GB82", "WEST", "1234", "5698", "7654", "32"))
-        phone = "+61 " + "412 " + "345 " + "678"
-        text = (
-            "Medicare: "
-            + medicare
-            + "\nCredit card number: "
-            + card
-            + "\nIBAN: "
-            + iban
-            + "\nPhone: "
-            + phone
-        )
+        vectors = _generated_recognizer_vectors()
+        text = "\n".join(context + ": " + sample for _, context, sample in vectors)
         self.put("records/synthetic.txt", text)
         self.commit()
         code, report, output = self.run_cli()
         self.assertEqual(code, 1)
         entities = {f["entity"] for f in report["findings"]}
-        self.assertTrue(
-            {"AU_MEDICARE", "CREDIT_CARD", "IBAN_CODE", "PHONE_NUMBER"}.issubset(
-                entities
-            )
-        )
-        for value in (medicare, card, iban, phone):
-            self.assertNotIn(value, output)
+        self.assertTrue({entity for entity, _, _ in vectors}.issubset(entities))
+        for _, _, sample in vectors:
+            self.assertNotIn(sample, output)
 
     def test_invalid_australian_checksum_is_not_accepted(self) -> None:
         value = _synthetic(("123", "456", "781"))
