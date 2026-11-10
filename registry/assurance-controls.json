@@ -31,7 +31,9 @@
       "source_pull_request": 122,
       "coverage": "Gitleaks submitted/all-reachable secret history; Presidio selected committed text and six identifier types",
       "exclusions": "archived or inaccessible repositories remain explicit; unsupported file formats are reported",
-      "acceptance": "workflow deployment, required-branch gating and scan execution are distinct"
+      "acceptance": "workflow deployment, required-branch gating and scan execution are distinct",
+      "managed_consumer_commit": "5fd6efc1953ad18ff01a29e3da7597387253f114",
+      "rollout_evidence": "conductor/tracks/privacy_secrets_rollout_20261110/rollout-status.md"
     }
   },
   "deferred_competing_policy_writers": [
