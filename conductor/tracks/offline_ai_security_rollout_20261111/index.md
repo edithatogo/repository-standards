@@ -113,3 +113,24 @@ A negative TDD run caught two cases in `guarded_invoke`: returning raw tool outp
 - Real-model GLiNER, Opengrep and Gitleaks fixture checks are **not verified** until the pinned scanner image and pre-provisioned model assets are made available to the self-hosted runner.
 
 **Risk register:** CI logs must never contain raw findings, snippets, model responses, prompts, PII, PHI or plaintext secrets. The runtime intentionally returns only coarse control-failure labels. A privacy-safe count/receipt format can be added after integration, without exposing matched values.
+
+## Cross-language DLP and regression evidence
+
+Completed in this tranche:
+
+- Added a local, private Unix socket `security/dlp_socket.py` broker, wrapping the Python sanitizer for other native runtimes, with 1 MiB payload limits, 0700 parent directory, 0600 socket, duplicate JSON-key rejection and fixed value-free error responses. Seven broker tests passed.
+- Added Node.js + TypeScript-compatible, dependency-free `clients/node/dlp-client.mjs` / `.d.mts` with strict socket path, timeout, payload/response caps, transport failure and no HTTP. Five Node tests passed.
+- Added Rust `clients/rust/` typed `serde_json` Unix client and tests, **not compiled in this environment**; exact dependency and Cargo.lock qualification remain open.
+- Added an actual Python broker↔Node client process interoperability fixture, with two passing synthetic tests, including a value-free rejection response.
+- Added deterministic seeded checksum metamorphic tests for AU Medicare and both NZ NHI formats (2,400 generated input cases plus mutations), all three pytest tests passed.
+- The central scanner's `run.sh` includes Python broker tests, Python↔Node interop, standalone Node tests and identifier property tests as required controls.
+- The isolated privacy wrapper `security.quiet_exec` removes raw findings, tool outputs and stack traces from GitHub CI logs; its four regression tests passed.
+- The local focused regression run passed **48 Python tests and 5 Node tests**. It used a test-only DLP stub for socket/boundary checks. It does not establish real GLiNER/Presidio integration recall or prove Rust correctness.
+
+Outstanding mandatory qualification:
+
+1. Fully validated image, actual Gitleaks/Opengrep/Promptfoo CLI and Presidio/GLiNER model tests.
+2. Real agent, retrieval and MCP adapters in each application; no automatic instrumentation is claimed.
+3. Rust `cargo test --offline --locked` and TypeScript consumer integration with a live model-backed socket server.
+4. Deployment on a hardened ephemeral, private, self-hosted runner with measured network isolation and log review.
+5. Two GitHub repository policy exceptions, repinning 175 consumer callers to the final qualified central commit, and merging only after checks pass.
