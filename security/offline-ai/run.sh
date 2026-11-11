@@ -16,7 +16,7 @@ if [[ "${EVENT_NAME:-}" == push || "${EVENT_NAME:-}" == pull_request ]]; then
   fi
 fi
 PYTHONPATH=/policy/security/offline-ai python /policy/security/offline-ai/scripts/verify_sast_fixtures.py
-opengrep scan --config /policy/security/offline-ai/.opengrep/rules.yaml --error --exclude .git .
+opengrep scan --taint-intrafile --config /policy/security/offline-ai/.opengrep/rules.yaml --error --exclude .git .
 PYTHONPATH=/policy/security/offline-ai python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_detect_ai.py \
   /policy/security/offline-ai/tests/test_agent_boundary.py \
