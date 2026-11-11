@@ -53,3 +53,13 @@ No existing workflows were removed or replaced. Several existing repositories al
 ## Known limitations
 
 A GitHub-managed controller/checkout requires GitHub connectivity even when the scanner container cannot reach the network. Configuration labels such as `SECURITY_NO_EGRESS` are not sufficient proof; namespace/container/network tests must demonstrate denied egress. Regex/SAST/NER detectors are bounded, and 100% detection across arbitrary PII and unknown code is not establishable.
+
+## Continuation evidence — 2026-11-11
+
+- Added a tracked-content AI detector (`security/offline-ai/scripts/detect_ai.sh`), including generic filename imports. Its five local synthetic fixture tests passed using Python pytest; this is not proof of whole-estate classifier recall.
+- Added dedicated regression fixtures for the AI detector, enabled on the offline runner for all repositories.
+- Hardened container options with `--pull=never`, a non-root UID, a readonly workspace, a dedicated writable tmpfs and tool-specific offline cache environment variables. Scanner execution stays `--network none`.
+- Added a **non-mocked Presidio/GLiNER integration smoke suite**, required when AI code is detected. No successful full-model run has yet been observed. This remains a blocking qualification gate.
+- Scanner runtime policy checkout now points at the updated immutable commit `dc52f7b5364253d7ff94684a8c8a62d97e349d88`. Consumer reusable workflow calls are still pinned to `36362fa872e4ce747266a6e795fcefa3dd343f67`; these call the changing central draft only after their PRs are updated to the qualified final SHA.
+- The two identified exceptions remain unresolved: `Budget_2026_MMH` (403 creating PR) and `nztaxmicrosim` (409 protected-branch write).
+- GitHub Actions security lint, policy and existing privacy workflows were observed queued/pending during these commits, not passing. Do not merge based on these observations.
