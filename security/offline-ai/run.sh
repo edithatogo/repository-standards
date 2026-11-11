@@ -26,6 +26,7 @@ quiet pytest python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_verify_assets.py \
   /policy/security/offline-ai/tests/test_target_provider.py \
   /policy/security/offline-ai/tests/test_identifiers.py \
+  /policy/security/offline-ai/tests/test_identifier_properties.py \
   /policy/security/offline-ai/tests/test_verify_network.py \
   /policy/security/offline-ai/tests/test_quiet_exec.py \
   /policy/security/offline-ai/tests/test_dlp_socket.py
