@@ -63,3 +63,20 @@ A GitHub-managed controller/checkout requires GitHub connectivity even when the 
 - Scanner runtime policy checkout now points at the updated immutable commit `dc52f7b5364253d7ff94684a8c8a62d97e349d88`. Consumer reusable workflow calls are still pinned to `36362fa872e4ce747266a6e795fcefa3dd343f67`; these call the changing central draft only after their PRs are updated to the qualified final SHA.
 - The two identified exceptions remain unresolved: `Budget_2026_MMH` (403 creating PR) and `nztaxmicrosim` (409 protected-branch write).
 - GitHub Actions security lint, policy and existing privacy workflows were observed queued/pending during these commits, not passing. Do not merge based on these observations.
+
+## Implementation tranche — offline contracts and source-to-sink assurance
+
+Implemented in the central draft PR:
+
+- `security/offline-ai/security/agent_boundary.py`: explicit DLP ingress and egress contracts, preventing tool invocation when sanitization fails and normalizing potentially sensitive exception text from transformations.
+- `security/offline-ai/tests/test_agent_boundary.py`: five offline boundary regression tests, passed in a local isolated test environment using a minimal test-only DLP stub; production detector behavior was not tested by these five cases.
+- `security/offline-ai/security/verify_assets.py`: SHA-256 verifier for a reviewed local asset manifest, trusted-root enforcement, duplicate and symlink rejection, required GLiNER config/weight verification.
+- `security/offline-ai/tests/test_verify_assets.py`: seven positive/negative synthetic manifest cases passed locally (tampered weights, missing weights, duplicates, symlink, untrusted root, malformed manifest).
+- `security/offline-ai/docker/Dockerfile`, `docker/build_offline.sh`, `docker/README.md`: offline build recipe requiring a preloaded digest-pinned base, local wheels, package hashes, binaries, Promptfoo and GLiNER files. Not built, qualified or deployed; provisioning assets are not present.
+- `security/offline-ai/fixtures/taint/`: Python, TypeScript and Rust positive/negative fixtures; `scripts/verify_sast_fixtures.py` requires the real Opengrep executable to detect all three positive examples without flagging benign controls. Not yet executed against the binary.
+- `security/offline-ai/run.sh`: asset verification and SAST rule qualification now execute before repository scan; locally runnable unit tests are invoked in scanner before conditional model tests.
+- Central reusable workflow references scanner policy commit `06def09d9595bce33fc43fa390940a3c61fce125`. Consumer caller references are unchanged pending central qualification and merge.
+
+The 12 locally executed unit cases are **not** a complete validation of the scanner stack. Requirements 01–09 remain open until independent asset/model verification, full real-tool tests, network-denial tests, cross-language runtime integrations and estate-wide reconciliation succeed.
+
+**Design limitation:** explicit `guarded_invoke` and `guarded_transform` calls do not automatically interpose on unmodified application code. Product-level interception and Rust/TypeScript compatibility remain open, and Python `sanitize_context` must not be treated as proof of anonymization.
