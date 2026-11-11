@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/repository-standards
-          ref: feat/offline-ai-security-estate-20261111
+          ref: f332dbd32c0e404a3d402346b6139ab8aca47213
           persist-credentials: false
           submodules: false
           path: policy
