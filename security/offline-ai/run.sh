@@ -8,6 +8,8 @@ test "${HF_HUB_OFFLINE:-}" = 1 && test "${npm_config_offline:-}" = true || exit 
 # A checked-out repository must never supply or override the scanner's trusted asset manifest.
 PYTHONPATH=/policy/security/offline-ai python -m security.verify_network
 PYTHONPATH=/policy/security/offline-ai python -m security.verify_assets
+# Verify the installed binary and trusted rules against ephemeral positive/negative controls.
+PYTHONPATH=/policy/security/offline-ai python /policy/security/offline-ai/scripts/verify_gitleaks.py
 # History scan is independent from untrusted repository configuration.
 gitleaks git /work --config /policy/security/offline-ai/.gitleaks.toml --redact --exit-code 1
 if [[ "${EVENT_NAME:-}" == push || "${EVENT_NAME:-}" == pull_request ]]; then
