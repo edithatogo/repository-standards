@@ -6,6 +6,7 @@ git config --global --add safe.directory /work
 for executable in gitleaks opengrep python promptfoo git; do command -v "$executable" >/dev/null || exit 2; done
 test "${HF_HUB_OFFLINE:-}" = 1 && test "${npm_config_offline:-}" = true || exit 2
 # A checked-out repository must never supply or override the scanner's trusted asset manifest.
+PYTHONPATH=/policy/security/offline-ai python -m security.verify_network
 PYTHONPATH=/policy/security/offline-ai python -m security.verify_assets
 # History scan is independent from untrusted repository configuration.
 gitleaks git /work --config /policy/security/offline-ai/.gitleaks.toml --redact --exit-code 1
@@ -21,7 +22,8 @@ PYTHONPATH=/policy/security/offline-ai python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_agent_boundary.py \
   /policy/security/offline-ai/tests/test_verify_assets.py \
   /policy/security/offline-ai/tests/test_target_provider.py \
-  /policy/security/offline-ai/tests/test_identifiers.py
+  /policy/security/offline-ai/tests/test_identifiers.py \
+  /policy/security/offline-ai/tests/test_verify_network.py
 ai=false
 if [[ "${ENFORCE_AI:-false}" == true ]] || bash /policy/security/offline-ai/scripts/detect_ai.sh; then
   ai=true
