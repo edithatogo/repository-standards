@@ -28,9 +28,9 @@ def test_double_boundary_redacts_transform_output(monkeypatch):
     assert value == "[REDACTED] [REDACTED]"
     assert calls == ["SECRET", "[REDACTED] SECRET"]
 
-def test_sink_errors_do_not_get_rewritten(monkeypatch):
+def test_sink_errors_are_normalized(monkeypatch):
     monkeypatch.setattr(boundary, "sanitize_context", lambda x: x)
-    with pytest.raises(ValueError, match="unavailable"):
+    with pytest.raises(DLPUnavailable, match="Guarded sink failed"):
         boundary.guarded_invoke(lambda x: (_ for _ in ()).throw(ValueError("unavailable")), "safe")
 
 def test_transform_error_text_not_exposed(monkeypatch):
@@ -39,4 +39,17 @@ def test_transform_error_text_not_exposed(monkeypatch):
         raise RuntimeError("CANARY-SECRET123")
     with pytest.raises(DLPUnavailable, match="Guarded transform failed") as exc:
         boundary.guarded_transform(fail, "safe")
+    assert "CANARY-" not in str(exc.value)
+
+def test_sink_result_is_sanitized(monkeypatch):
+    monkeypatch.setattr(boundary, "sanitize_context", lambda x: x.replace("SECRET", "[REDACTED]"))
+    result = boundary.guarded_invoke(lambda _: "SECRET", "safe")
+    assert result == "[REDACTED]"
+
+def test_sink_exception_is_normalized(monkeypatch):
+    monkeypatch.setattr(boundary, "sanitize_context", lambda x: x)
+    def fail(_):
+        raise RuntimeError("CANARY-SECRET123")
+    with pytest.raises(DLPUnavailable) as exc:
+        boundary.guarded_invoke(fail, "safe")
     assert "CANARY-" not in str(exc.value)
