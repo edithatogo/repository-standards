@@ -80,3 +80,25 @@ Implemented in the central draft PR:
 The 12 locally executed unit cases are **not** a complete validation of the scanner stack. Requirements 01–09 remain open until independent asset/model verification, full real-tool tests, network-denial tests, cross-language runtime integrations and estate-wide reconciliation succeed.
 
 **Design limitation:** explicit `guarded_invoke` and `guarded_transform` calls do not automatically interpose on unmodified application code. Product-level interception and Rust/TypeScript compatibility remain open, and Python `sanitize_context` must not be treated as proof of anonymization.
+
+## Security engineering tranche — continuation
+
+Additional centrally committed assets and status:
+
+| Track | Implemented locally | Qualification remaining |
+| --- | --- | --- |
+| 01 Offline supply chain | Offline-only Dockerfile, vetted wheelhouse and binary contract, digest-locked base-image requirement, local manifest checksum verifier with 7 synthetic tests | Actual image build, complete dependency lock and signed release/SBOM |
+| 02 Offline isolation | Loopback-only network namespace preflight with 5 synthetic tests | Real Docker network and ephemeral runner verification, host firewall policy |
+| 03 Gitleaks | Ephemeral clean/secret synthetic Git-history qualification script; no test secrets committed | Execute against pinned Gitleaks binary and verify correct CLI flags |
+| 04 Opengrep | 8 positive/negative language fixtures, including spoofed sanitizer tests; intrafile taint flag; no generic TypeScript sanitizer exemption | Execute against real Opengrep, qualify Rust coverage and all rule syntax |
+| 05 DLP | Validated NHI and Medicare recognizers with 5 synthetic tests; model and checksum gates | Production Presidio/GLiNER integration, PHI recall and false-positive evidence |
+| 06 Agent boundaries | Explicit input/result sanitization, normalized tool exceptions; regression first exposed an unsanitized tool response and exception and both were fixed | Integrate into actual agent ingress, retrieval, MCP, logs and egress |
+| 07 Local red-team | Repo-scoped real-agent Python Promptfoo provider and integration configuration; 5 provider tests | Actual local agent adapters, adversarial corpus quality, pinned CLI |
+| 08 Estate rollout | Retained 175 draft consumer PRs; central PR #126 updated, no merges | Two protected repository exceptions, repin after central qualification |
+| 09 Evidence | Updated README and granular Conductor receipts | Publish value-free SARIF and audited aggregate receipt |
+
+Local unit-testing evidence: 29 checks passed across asset integrity, network namespace, synthetic identifiers, agent-boundary behavior and constrained provider loading; three additional focused shell AI-detector tests passed locally. These tests use synthetic fixtures; they do **not** prove model PII recall, production agent boundary coverage or real scanner binary execution.
+
+A negative TDD run caught two cases in `guarded_invoke`: returning raw tool output and propagating a tool exception with unmasked contents. The implementation now sanitizes the sink result and suppresses unsafe exception text. A separate AI-detector correction distinguishes an inspection error (exit 2) from a genuine absence of AI code (exit 1), preventing accidental skipping of conditional security checks.
+
+**Remaining hard blockers:** preprovisioned vetted image/weights, real Opengrep/Gitleaks/Promptfoo and GLiNER qualification, end-to-end application interception, vulnerability review and branch-policy exceptions. The local image build recipe is not itself a built image or verified SBOM.
