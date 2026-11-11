@@ -3,7 +3,7 @@ set -euo pipefail
 cd /work
 # The readonly workspace is owned by the checkout runner, not by the sandbox UID.
 git config --global --add safe.directory /work
-for executable in gitleaks opengrep python promptfoo git; do command -v "$executable" >/dev/null || exit 2; done
+for executable in gitleaks opengrep python promptfoo git node; do command -v "$executable" >/dev/null || exit 2; done
 quiet() { PYTHONPATH=/policy/security/offline-ai python -m security.quiet_exec "$@"; }
 test "${HF_HUB_OFFLINE:-}" = 1 && test "${npm_config_offline:-}" = true || exit 2
 # A checked-out repository must never supply or override the scanner's trusted asset manifest.
@@ -27,7 +27,9 @@ quiet pytest python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_target_provider.py \
   /policy/security/offline-ai/tests/test_identifiers.py \
   /policy/security/offline-ai/tests/test_verify_network.py \
-  /policy/security/offline-ai/tests/test_quiet_exec.py
+  /policy/security/offline-ai/tests/test_quiet_exec.py \
+  /policy/security/offline-ai/tests/test_dlp_socket.py
+quiet node-tests node --test /policy/security/offline-ai/clients/node/dlp-client.test.mjs
 ai=false
 if [[ "${ENFORCE_AI:-false}" == true ]]; then
   ai=true
