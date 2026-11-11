@@ -39,3 +39,7 @@ def test_no_sensitive_content_in_output(repository):
     code, out, err = detect(repository)
     assert code == 0
     assert "CANARY-" not in (out + err)
+
+def test_invalid_repository_is_inspection_failure(tmp_path):
+    result = subprocess.run(["bash", str(SCRIPT)], cwd=tmp_path, capture_output=True, text=True)
+    assert result.returncode == 2
