@@ -27,8 +27,16 @@ PYTHONPATH=/policy/security/offline-ai python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_identifiers.py \
   /policy/security/offline-ai/tests/test_verify_network.py
 ai=false
-if [[ "${ENFORCE_AI:-false}" == true ]] || bash /policy/security/offline-ai/scripts/detect_ai.sh; then
+if [[ "${ENFORCE_AI:-false}" == true ]]; then
   ai=true
+elif bash /policy/security/offline-ai/scripts/detect_ai.sh; then
+  ai=true
+else
+  status=$?
+  if [[ "$status" -ne 1 ]]; then
+    echo "AI inspection failed closed" >&2
+    exit 2
+  fi
 fi
 if [[ "$ai" == true ]]; then
   test -f /opt/models/gliner-pii/config.json || { echo "Offline GLiNER model missing"; exit 2; }
