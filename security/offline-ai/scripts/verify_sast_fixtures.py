@@ -14,7 +14,7 @@ RULES = ROOT / ".opengrep" / "rules.yaml"
 
 def verify() -> None:
     result = subprocess.run(
-        ["opengrep", "scan", "--json", "--config", str(RULES), str(FIXTURES)],
+        ["opengrep", "scan", "--taint-intrafile", "--json", "--config", str(RULES), str(FIXTURES)],
         capture_output=True, text=True, timeout=120, check=False,
     )
     if result.returncode != 0:
@@ -27,7 +27,7 @@ def verify() -> None:
         observed = {Path(item["path"]).name for item in hits}
     except (ValueError, TypeError, KeyError) as exc:
         raise RuntimeError("Opengrep fixture report invalid") from None
-    required = {"python_bad.py", "typescript_bad.ts", "rust_bad.rs"}
+    required = {"python_bad.py", "typescript_bad.ts", "rust_bad.rs", "python_spoofed_sanitizer_bad.py", "typescript_spoofed_sanitizer_bad.ts"}
     clean = {"python_good.py", "typescript_good.ts", "rust_good.rs"}
     if not required.issubset(observed) or (observed & clean):
         raise RuntimeError("Opengrep rule regression: unexpected coverage on synthetic fixtures")
