@@ -5,6 +5,7 @@ import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
+from .identifiers import identifier_spans
 
 class DLPUnavailable(RuntimeError):
     pass
@@ -53,6 +54,7 @@ def redact_sensitive_data(value: str) -> str:
     if not isinstance(value, str):
         raise TypeError("Expected string")
     spans = [(m.start(), m.end()) for rule in (CANARY, EMAIL, PHONE) for m in rule.finditer(value)]
+    spans.extend(identifier_spans(value))
     try:
         for result in _engine().analyze(text=value, language="en", score_threshold=0.25):
             spans.append((result.start, result.end))
