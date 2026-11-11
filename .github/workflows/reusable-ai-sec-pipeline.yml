@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/repository-standards
-          ref: b06b7dee27be211b5c897e237e28946f5ef7499c
+          ref: c50e5ebe8639d25214689a3a044edf259138b511
           persist-credentials: false
           submodules: false
           path: policy
