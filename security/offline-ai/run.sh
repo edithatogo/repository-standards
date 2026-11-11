@@ -20,7 +20,7 @@ if [[ "${ENFORCE_AI:-false}" == true ]] || bash /policy/security/offline-ai/scri
 fi
 if [[ "$ai" == true ]]; then
   test -f /opt/models/gliner-pii/config.json || { echo "Offline GLiNER model missing"; exit 2; }
-  PYTHONPATH=/policy/security/offline-ai python -m pytest -q -p no:cacheprovider /policy/security/offline-ai/tests/test_local_dlp.py
+  PYTHONPATH=/policy/security/offline-ai python -m pytest -q -p no:cacheprovider /policy/security/offline-ai/tests/test_local_dlp.py /policy/security/offline-ai/tests/test_local_dlp_integration.py
   cd /policy/security/offline-ai
   # Mock corpus verifies runner wiring, not application prompt safety.
   PYTHONPATH=. promptfoo eval -c promptfooconfig.yaml --no-cache --no-progress
