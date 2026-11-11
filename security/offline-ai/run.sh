@@ -14,6 +14,7 @@ if [[ "${EVENT_NAME:-}" == push || "${EVENT_NAME:-}" == pull_request ]]; then
     git diff "${BASE_SHA}" HEAD --binary --no-ext-diff | gitleaks stdin --config /policy/security/offline-ai/.gitleaks.toml --redact --exit-code 1
   fi
 fi
+PYTHONPATH=/policy/security/offline-ai python /policy/security/offline-ai/scripts/verify_sast_fixtures.py
 opengrep scan --config /policy/security/offline-ai/.opengrep/rules.yaml --error --exclude .git .
 PYTHONPATH=/policy/security/offline-ai python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_detect_ai.py \
