@@ -18,12 +18,12 @@ rules:
           - pattern: $REQ.body
           - pattern: $REQ.POST
           - pattern: $REQ.GET
+    # Only fully qualified, reviewed sanitizer interfaces are trusted.
+    # Imported aliases and repository-defined lookalikes are NOT trusted.
     pattern-sanitizers:
       - pattern-either:
-          - pattern: redact_sensitive_data(...)
-          - pattern: sanitize_context(...)
-          - pattern: local_dlp.redact_sensitive_data(...)
-          - pattern: local_dlp.sanitize_context(...)
+          - pattern: security.local_dlp.redact_sensitive_data(...)
+          - pattern: security.local_dlp.sanitize_context(...)
     pattern-sinks:
       - pattern-either:
           - pattern: requests.post(...)
@@ -48,12 +48,7 @@ rules:
           - pattern: $FS.readFileSync(...)
           - pattern: $DB.query(...)
           - pattern: $R.json()
-    pattern-sanitizers:
-      - pattern-either:
-          - pattern: sanitizeContext(...)
-          - pattern: redactSensitiveData(...)
-          - pattern: sanitize_context(...)
-          - pattern: redact_sensitive_data(...)
+    # No TypeScript sanitizer is whitelisted until its implementation is qualified.
     pattern-sinks:
       - pattern-either:
           - pattern: fetch(...)
