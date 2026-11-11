@@ -29,7 +29,8 @@ quiet pytest python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_identifier_properties.py \
   /policy/security/offline-ai/tests/test_verify_network.py \
   /policy/security/offline-ai/tests/test_quiet_exec.py \
-  /policy/security/offline-ai/tests/test_dlp_socket.py
+  /policy/security/offline-ai/tests/test_dlp_socket.py \
+  /policy/security/offline-ai/tests/test_node_python_bridge.py
 quiet node-tests node --test /policy/security/offline-ai/clients/node/dlp-client.test.mjs
 ai=false
 if [[ "${ENFORCE_AI:-false}" == true ]]; then
