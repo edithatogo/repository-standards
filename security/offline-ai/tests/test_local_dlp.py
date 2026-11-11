@@ -29,5 +29,5 @@ def test_deterministic_redaction_with_mock_engine(monkeypatch):
     monkeypatch.setitem(sys.modules,"presidio_analyzer",analyzer)
     monkeypatch.setitem(sys.modules,"presidio_anonymizer",anonymizer)
     monkeypatch.setitem(sys.modules,"presidio_anonymizer.entities",entities)
-    out = dlp.sanitize_context({"input": "jane@example.test CANARY-ABCDEFGH"})
-    assert "jane@example.test" not in out["input"] and "CANARY-" not in out["input"]
+    out = dlp.sanitize_context({"input": "jane@example.test CANARY-ABCDEFGH ABC1235 ZBN77VL 2123 4567 01"})
+    assert all(secret not in out["input"] for secret in ("jane@example.test", "CANARY-", "ABC1235", "ZBN77VL", "2123 4567 01"))
