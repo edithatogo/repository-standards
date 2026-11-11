@@ -19,7 +19,8 @@ opengrep scan --config /policy/security/offline-ai/.opengrep/rules.yaml --error 
 PYTHONPATH=/policy/security/offline-ai python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_detect_ai.py \
   /policy/security/offline-ai/tests/test_agent_boundary.py \
-  /policy/security/offline-ai/tests/test_verify_assets.py
+  /policy/security/offline-ai/tests/test_verify_assets.py \
+  /policy/security/offline-ai/tests/test_target_provider.py
 ai=false
 if [[ "${ENFORCE_AI:-false}" == true ]] || bash /policy/security/offline-ai/scripts/detect_ai.sh; then
   ai=true
@@ -30,4 +31,12 @@ if [[ "$ai" == true ]]; then
   cd /policy/security/offline-ai
   # Mock corpus verifies runner wiring, not application prompt safety.
   PYTHONPATH=. promptfoo eval -c promptfooconfig.yaml --no-cache --no-progress
+  if [[ -f /work/security/agent_security_adapter.py ]]; then
+    export SECURITY_AGENT_WORKSPACE=/work
+    export SECURITY_AGENT_ADAPTER=/work/security/agent_security_adapter.py
+    PYTHONPATH=. promptfoo eval -c promptfooconfig.integration.yaml --no-cache --no-progress
+  elif [[ "${ENFORCE_AI:-false}" == true ]]; then
+    echo 'Real local agent adapter required for enforced AI security profile' >&2
+    exit 2
+  fi
 fi
