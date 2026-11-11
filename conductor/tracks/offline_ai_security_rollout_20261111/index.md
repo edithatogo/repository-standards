@@ -102,3 +102,14 @@ Local unit-testing evidence: 29 checks passed across asset integrity, network na
 A negative TDD run caught two cases in `guarded_invoke`: returning raw tool output and propagating a tool exception with unmasked contents. The implementation now sanitizes the sink result and suppresses unsafe exception text. A separate AI-detector correction distinguishes an inspection error (exit 2) from a genuine absence of AI code (exit 1), preventing accidental skipping of conditional security checks.
 
 **Remaining hard blockers:** preprovisioned vetted image/weights, real Opengrep/Gitleaks/Promptfoo and GLiNER qualification, end-to-end application interception, vulnerability review and branch-policy exceptions. The local image build recipe is not itself a built image or verified SBOM.
+
+## Final local security hardening in this tranche
+
+- Discovered and repaired an offline **data-leak channel via GitHub Actions logs**: Opengrep findings and Promptfoo outputs were previously emitted to standard output. The new `security/quiet_exec.py` executes scanner controls with stdout/stderr redirected to `DEVNULL`, emits fixed labels only on failure, and suppresses potentially sensitive exception/response text. Four synthetic local tests passed, including a failing child process that prints a synthetic canary.
+- Required loopback-only namespace check, model asset hash verification and real Gitleaks positive/negative temporary Git-history qualification before repo scanning. No secret fixtures are committed for Gitleaks history testing.
+- Strengthened Opengrep policy against **no-op sanitizer-name spoofing**. Only explicitly qualified Python sanitizer paths are accepted; TypeScript currently has **no approved sanitizer** pending a real implementation. Added two spoof fixtures and selected Opengrep `--taint-intrafile`.
+- Fixed the fail-open AI-code classification path: detector now returns 2 on Git inspection error, and the orchestration aborts rather than silently skipping AI stages. Three additional local shell regression tests passed.
+- Added tests and wiring for all new modules. In total **36 distinct local focused tests passed** in the development sandbox across the Python boundary, asset verifier, local agent provider, clinical identifiers, network isolation, quiet executor and shell AI detector. This excludes unverified real Opengrep/Gitleaks/GLiNER/Promptfoo integration and no whole-repository test-suite pass is claimed.
+- Real-model GLiNER, Opengrep and Gitleaks fixture checks are **not verified** until the pinned scanner image and pre-provisioned model assets are made available to the self-hosted runner.
+
+**Risk register:** CI logs must never contain raw findings, snippets, model responses, prompts, PII, PHI or plaintext secrets. The runtime intentionally returns only coarse control-failure labels. A privacy-safe count/receipt format can be added after integration, without exposing matched values.
