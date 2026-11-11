@@ -17,7 +17,14 @@ def guarded_invoke(sink: Callable[[Any], T], payload: Any) -> T:
         clean = sanitize_context(payload)
     except Exception:
         raise DLPUnavailable("DLP boundary failed closed") from None
-    return sink(clean)
+    try:
+        result = sink(clean)
+    except Exception:
+        raise DLPUnavailable("Guarded sink failed") from None
+    try:
+        return sanitize_context(result)
+    except Exception:
+        raise DLPUnavailable("DLP tool output failed closed") from None
 
 def guarded_transform(transform: Callable[[Any], Any], payload: Any) -> Any:
     """Sanitize input and output; suppress exception messages from unsafe transforms."""
