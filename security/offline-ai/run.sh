@@ -20,7 +20,8 @@ PYTHONPATH=/policy/security/offline-ai python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_detect_ai.py \
   /policy/security/offline-ai/tests/test_agent_boundary.py \
   /policy/security/offline-ai/tests/test_verify_assets.py \
-  /policy/security/offline-ai/tests/test_target_provider.py
+  /policy/security/offline-ai/tests/test_target_provider.py \
+  /policy/security/offline-ai/tests/test_identifiers.py
 ai=false
 if [[ "${ENFORCE_AI:-false}" == true ]] || bash /policy/security/offline-ai/scripts/detect_ai.sh; then
   ai=true
