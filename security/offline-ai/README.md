@@ -24,3 +24,16 @@ The runtime does not automatically protect a consumer application merely because
 ### Qualification evidence still missing
 
 The locally run Python unit tests do not prove actual Opengrep finding coverage, Gitleaks CLI compatibility, Promptfoo CLI/provider compatibility, actual Presidio/GLiNER model behavior, a complete pinned container image, or runner network isolation. Every corresponding gate is expected to fail closed until its prerequisites are met. Do not merge 175 draft consumer callers in advance of a qualified central release.
+
+## Cross-language local DLP broker
+
+The optional broker `security/dlp_socket.py` is a **Unix-domain socket**, not HTTP, and does not bind any network address. Start it only in a pre-created, user-owned private directory (0700); it creates a 0600 socket. The default path is `/run/offline-dlp/dlp.sock`, configurable with `DLP_SOCKET_PATH`. The broker rejects duplicate JSON keys, invalid constants, oversized messages and unsupported payloads with the fixed response `DLP_REJECTED`; it never logs payload values.
+
+Clients:
+- Node/TypeScript: `clients/node/dlp-client.mjs` with `dlp-client.d.mts`; use `sanitizeViaSocket(value, {socketPath})` before any agent input, tool output, logging or egress boundary. Tested using Node's built-in test runner.
+- Python: `security.agent_boundary` for in-process callers. The socket broker is an alternative for cross-language processes.
+- Rust: `clients/rust/` contains a draft `serde_json`-based Unix socket client. **Not compiled or qualified** in this environment. The crate requires approved vendor dependencies, Cargo.lock and `cargo test --offline --locked`.
+
+A synthetic, real-process Python-broker/Node-client integration test is in `tests/test_node_python_bridge.py`. The broker is not automatically installed into consumer applications; each runtime must instantiate it securely, bind its own source/sink call sites, and prove correct error handling. It is not a substitute for risk-based clinical de-identification.
+
+**Privacy assurance:** all scanner, CLI test and Promptfoo output is suppressed by `security.quiet_exec` before reaching GitHub logs. It emits only predefined pass/fail labels. A security finding remains actionable via offline local inspection; raw logs and tool responses must not be uploaded to GitHub.
