@@ -4,7 +4,7 @@ import subprocess
 import sys
 
 _ALLOWED = frozenset({
-    "gitleaks-history", "gitleaks-diff", "opengrep", "pytest",
+    "gitleaks-history", "gitleaks-diff", "opengrep", "pytest", "node-tests",
     "promptfoo-mock", "promptfoo-agent", "asset-preflight",
     "network-preflight", "sast-fixtures", "gitleaks-fixtures",
 })
