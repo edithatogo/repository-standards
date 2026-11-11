@@ -1,0 +1,78 @@
+rules:
+  - id: offline-python-raw-to-egress
+    languages: [python]
+    severity: ERROR
+    message: "Untrusted data may reach network, agent, tool output or logging without sanitization"
+    mode: taint
+    pattern-sources:
+      - pattern-either:
+          - pattern: os.getenv(...)
+          - pattern: os.environ[$K]
+          - pattern: input(...)
+          - pattern: open(...).read(...)
+          - pattern: $F.read(...)
+          - pattern: $C.fetchall(...)
+          - pattern: $C.fetchone(...)
+          - pattern: $R.json(...)
+          - pattern: $R.text
+          - pattern: $REQ.body
+          - pattern: $REQ.POST
+          - pattern: $REQ.GET
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: redact_sensitive_data(...)
+          - pattern: sanitize_context(...)
+          - pattern: local_dlp.redact_sensitive_data(...)
+          - pattern: local_dlp.sanitize_context(...)
+    pattern-sinks:
+      - pattern-either:
+          - pattern: requests.post(...)
+          - pattern: httpx.post(...)
+          - pattern: $CLIENT.post(...)
+          - pattern: $AGENT.invoke(...)
+          - pattern: $LLM.invoke(...)
+          - pattern: $LLM.generate(...)
+          - pattern: print(...)
+          - pattern: $LOGGER.info(...)
+          - pattern: $LOGGER.error(...)
+  - id: offline-ts-raw-to-egress
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: "Untrusted data may reach network, agents or logging"
+    mode: taint
+    pattern-sources:
+      - pattern-either:
+          - pattern: process.env.$K
+          - pattern: req.body
+          - pattern: $REQ.query
+          - pattern: $FS.readFileSync(...)
+          - pattern: $DB.query(...)
+          - pattern: $R.json()
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: sanitizeContext(...)
+          - pattern: redactSensitiveData(...)
+          - pattern: sanitize_context(...)
+          - pattern: redact_sensitive_data(...)
+    pattern-sinks:
+      - pattern-either:
+          - pattern: fetch(...)
+          - pattern: axios.post(...)
+          - pattern: $CLIENT.post(...)
+          - pattern: $AGENT.invoke(...)
+          - pattern: console.log(...)
+          - pattern: $LOGGER.error(...)
+  - id: offline-rust-direct-env-log
+    languages: [rust]
+    severity: ERROR
+    message: "Do not log raw environment secrets"
+    pattern-either:
+      - pattern: println!(..., std::env::var($KEY), ...)
+      - pattern: eprintln!(..., std::env::var($KEY), ...)
+  - id: offline-rust-env-http
+    languages: [rust]
+    severity: ERROR
+    message: "Do not send raw environment secrets to a network client"
+    pattern-either:
+      - pattern: $CLIENT.body(std::env::var($KEY))
+      - pattern: $CLIENT.post(std::env::var($KEY))
