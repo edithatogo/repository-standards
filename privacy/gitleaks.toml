@@ -1,0 +1,4 @@
+title = "Shared upstream Gitleaks baseline"
+
+[extend]
+useDefault = true

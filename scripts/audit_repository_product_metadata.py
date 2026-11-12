@@ -142,11 +142,16 @@ class GitHub:
             return ""
         return base64.b64decode(result["content"]).decode("utf-8", errors="replace")
 
-    def graphql(self, query: str) -> dict[str, Any] | None:
+    def graphql(
+        self, query: str, variables: dict[str, str] | None = None
+    ) -> dict[str, Any] | None:
+        payload: dict[str, Any] = {"query": query}
+        if variables is not None:
+            payload["variables"] = variables
         request = urllib.request.Request(
             f"{API}/graphql",
-            data=json.dumps({"query": query}).encode("utf-8"),
-            headers=self.headers,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={**self.headers, "Content-Type": "application/json"},
             method="POST",
         )
         for attempt in range(4):
@@ -173,23 +178,27 @@ class GitHub:
 
         query_parts = []
         aliases = []
+        variable_definitions = ["$owner: String!", "$name: String!"]
+        variables = {"owner": owner, "name": name}
         for i, path in enumerate(valid_paths):
             alias = f"f{i}"
             aliases.append((alias, path))
-            expression = f"{branch}:{path}"
+            variable = f"expression{i}"
+            variable_definitions.append(f"${variable}: String!")
+            variables[variable] = f"{branch}:{path}"
             query_parts.append(
-                f'{alias}: object(expression: "{expression}") {{ ... on Blob {{ text }} }}'
+                f"{alias}: object(expression: ${variable}) {{ ... on Blob {{ text }} }}"
             )
 
         query = f"""
-        query {{
-          repository(owner: "{owner}", name: "{name}") {{
+        query ({', '.join(variable_definitions)}) {{
+          repository(owner: $owner, name: $name) {{
             {' '.join(query_parts)}
           }}
         }}
         """
 
-        result = self.graphql(query)
+        result = self.graphql(query, variables)
         if not result:
             return {}
 
@@ -226,12 +235,38 @@ def archetype(paths: set[str], description: str) -> str:
 
 def badge_state(readme: str) -> dict[str, bool | int]:
     lowered = readme.casefold()
+    badge_count = 0
+    position = 0
+    alt_end = url_end = marker_position = -1
+    badge_marker = re.compile(r"badge|shields|actions", re.I)
+    # Cache the next delimiter and marker while moving forward. This preserves
+    # nested candidates without rescanning malformed remote Markdown.
+    while True:
+        start = readme.find("![", position)
+        if start < 0:
+            break
+        position = start + 2
+        if alt_end < position:
+            alt_end = readme.find("]", position)
+        if alt_end < 0:
+            break
+        if not readme.startswith("(", alt_end + 1):
+            continue
+        url_start = alt_end + 2
+        if url_end < url_start:
+            url_end = readme.find(")", url_start)
+        if url_end < 0:
+            break
+        if marker_position < url_start:
+            marker = badge_marker.search(readme, url_start)
+            if marker is None:
+                break
+            marker_position = marker.start()
+        if marker_position < url_end:
+            badge_count += 1
+            position = url_end + 1
     return {
-        "count": len(
-            re.findall(
-                r"!\[[^\]]*]\([^)]*(?:badge|shields|actions)[^)]*\)", readme, re.I
-            )
-        ),
+        "count": badge_count,
         "ci": "actions/workflows" in lowered or "github/workflow/status" in lowered,
         "coverage": "codecov" in lowered or "coveralls" in lowered,
         "license": "license-" in lowered or "/license" in lowered,
