@@ -14,25 +14,33 @@
       "path": "AGENTS.md",
       "source": "edithatogo/.github:AGENTS.md",
       "strategy": "materialise_if_missing_then_detect_drift",
-      "profiles": ["*"]
+      "profiles": [
+        "*"
+      ]
     },
     {
       "path": "SECURITY.md",
       "source": "edithatogo/.github:SECURITY.md",
       "strategy": "materialise_if_missing_then_detect_drift",
-      "profiles": ["*"]
+      "profiles": [
+        "*"
+      ]
     },
     {
       "path": "CONTRIBUTING.md",
       "source": "edithatogo/.github:CONTRIBUTING.md",
       "strategy": "materialise_if_missing_then_detect_drift",
-      "profiles": ["*"]
+      "profiles": [
+        "*"
+      ]
     },
     {
       "path": "renovate.json",
       "source": "edithatogo/repository-standards:renovate/default.json",
       "strategy": "preset_reference",
-      "profiles": ["*"]
+      "profiles": [
+        "*"
+      ]
     },
     {
       "path": ".github/workflows/scorecard.yml",
@@ -59,19 +67,25 @@
       "path": "security-insights.yml",
       "source": "edithatogo/repository-standards:security-insights.yml",
       "strategy": "materialise_public_published_or_high_risk_if_missing_then_review",
-      "profiles": ["*"]
+      "profiles": [
+        "*"
+      ]
     },
     {
       "path": ".github/workflows/slsa-verification.yml",
       "source": "edithatogo/repository-standards:managed-files/templates/slsa-verification.yml",
       "strategy": "materialise_when_published_artifacts_exist",
-      "profiles": ["*"]
+      "profiles": [
+        "*"
+      ]
     },
     {
       "path": ".github/workflows/zizmor.yml",
       "source": "edithatogo/repository-standards:managed-files/templates/zizmor.yml",
       "strategy": "materialise_repository_infrastructure_only",
-      "profiles": ["repository-infrastructure"]
+      "profiles": [
+        "repository-infrastructure"
+      ]
     },
     {
       "path": ".github/workflows/ci.yml",
@@ -86,6 +100,16 @@
         "latex",
         "typst"
       ]
+    },
+    {
+      "path": ".github/workflows/privacy-secrets.yml",
+      "source": "edithatogo/repository-standards:managed-files/templates/privacy-secrets.yml",
+      "strategy": "thin_immutable_composite_action_call_preserve_local_controls",
+      "profiles": [
+        "*"
+      ],
+      "upstream_commit": "985503bc8eae58e7d6ef36a6e5427d0077e0193c",
+      "runtime": "isolated scanner tooling; no product dependency change"
     }
   ]
 }
