@@ -48,6 +48,7 @@ class GitHub:
         payload: dict[str, Any] | None = None,
         *,
         tolerated: set[int] | None = None,
+        fail_fast: set[int] | None = None,
     ) -> Any:
         data = None if payload is None else json.dumps(payload).encode()
         request = urllib.request.Request(
@@ -69,6 +70,8 @@ class GitHub:
                     with self._metrics_lock:
                         self.metrics["tolerated_errors"] += 1
                     return None
+                if error.code in (fail_fast or set()):
+                    raise
                 if error.code not in {403, 429, 500, 502, 503, 504} or attempt == 3:
                     raise
                 retry_after = error.headers.get("Retry-After")
@@ -83,8 +86,11 @@ class GitHub:
             time.sleep(2**attempt)
         raise RuntimeError("unreachable retry state")
 
-    def get(self, path: str, *, tolerated: set[int] | None = None) -> Any:
-        return self.request("GET", path, tolerated=tolerated)
+    def get(
+        self, path: str, *, tolerated: set[int] | None = None,
+        fail_fast: set[int] | None = None,
+    ) -> Any:
+        return self.request("GET", path, tolerated=tolerated, fail_fast=fail_fast)
 
     def tree(self, repository: str, branch: str) -> list[dict[str, Any]]:
         result = self.get(
@@ -245,6 +251,7 @@ def audit_one(
         rulesets = client.get(
             f"/repos/{repository}/rulesets?includes_parents=false",
             tolerated={404},
+            fail_fast={403},
         )
     except urllib.error.HTTPError as error:
         if error.code != 403:
@@ -256,6 +263,7 @@ def audit_one(
         branch_protection = client.get(
             f"/repos/{repository}/branches/{urllib.parse.quote(branch, safe='')}/protection",
             tolerated={404},
+            fail_fast={403},
         )
     except urllib.error.HTTPError as error:
         if error.code != 403:

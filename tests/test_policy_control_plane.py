@@ -3,10 +3,11 @@ from __future__ import annotations
 
 import json
 import tempfile
+import urllib.error
 import unittest
 from datetime import date, timedelta
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import audit_estate_conformance as audit
 import simulate_policy_impact as impact
@@ -58,6 +59,18 @@ class PolicyTests(unittest.TestCase):
         protection = {"required_status_checks": {"strict": True}}
         self.assertEqual(audit.protection_state([], protection), "present")
         self.assertEqual(audit.protection_state([], None), "absent")
+
+    def test_protection_permission_denial_does_not_retry_or_sleep(self) -> None:
+        error = urllib.error.HTTPError(
+            "https://api.github.com/example", 403, "Forbidden", {}, None
+        )
+        client = audit.GitHub("not-used")
+        with patch.object(audit.urllib.request, "urlopen", side_effect=error) as urlopen:
+            with patch.object(audit.time, "sleep") as sleep:
+                with self.assertRaises(urllib.error.HTTPError):
+                    client.get("/example", tolerated={404}, fail_fast={403})
+        self.assertEqual(urlopen.call_count, 1)
+        sleep.assert_not_called()
 
     def test_protection_denied_cannot_be_called_absent(self) -> None:
         self.assertEqual(
