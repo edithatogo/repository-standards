@@ -1,0 +1,36 @@
+name: Presidio and Gitleaks
+description: Run pinned local privacy and secret scanners without uploading findings.
+inputs:
+  mode:
+    description: auto scans introduced commits; full audits reachable history and tracked text.
+    default: auto
+  profile:
+    description: repository or sensitive; sensitive also blocks contact identifiers outside data paths.
+    default: repository
+runs:
+  using: composite
+  steps:
+    - name: Set up isolated scanner Python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: '3.12'
+    - name: Install checksum-locked privacy tooling
+      shell: bash
+      env:
+        GUARD_ROOT: ${{ github.action_path }}/../../..
+      run: |
+        python -I -m venv "$RUNNER_TEMP/privacy-guard-venv"
+        "$RUNNER_TEMP/privacy-guard-venv/bin/python" -I -m pip install \
+          --disable-pip-version-check --only-binary=:all: --require-hashes \
+          -r "$GUARD_ROOT/privacy/requirements.lock"
+        python -I "$GUARD_ROOT/scripts/install_gitleaks.py" --destination "$RUNNER_TEMP/privacy-guard-bin"
+    - name: Check privacy and secrets
+      shell: bash
+      env:
+        GUARD_ROOT: ${{ github.action_path }}/../../..
+        GUARD_MODE: ${{ inputs.mode }}
+        GUARD_PROFILE: ${{ inputs.profile }}
+      run: |
+        "$RUNNER_TEMP/privacy-guard-venv/bin/python" -I "$GUARD_ROOT/scripts/privacy_guard.py" \
+          --root "$GITHUB_WORKSPACE" --binary "$RUNNER_TEMP/privacy-guard-bin/gitleaks" \
+          --mode "$GUARD_MODE" --profile "$GUARD_PROFILE"

@@ -1,0 +1,63 @@
+name: Privacy guard tests
+on:
+  pull_request:
+    paths:
+      - .github/actions/privacy-secrets/**
+      - .github/workflows/privacy-guard-tests.yml
+      - privacy/**
+      - scripts/privacy_guard.py
+      - scripts/privacy_scan.py
+      - scripts/secrets_scan.py
+      - scripts/install_gitleaks.py
+      - tests/test_privacy*.py
+      - tests/test_secrets_scan.py
+  push:
+    branches: [main]
+    paths:
+      - .github/actions/privacy-secrets/**
+      - .github/workflows/privacy-guard-tests.yml
+      - privacy/**
+      - scripts/privacy_guard.py
+      - scripts/privacy_scan.py
+      - scripts/secrets_scan.py
+      - scripts/install_gitleaks.py
+      - tests/test_privacy*.py
+      - tests/test_secrets_scan.py
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: privacy-guard-tests-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  behavioral-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install locked scanners
+        run: |
+          python -m pip install --disable-pip-version-check --only-binary=:all: --require-hashes -r privacy/requirements.lock
+          python scripts/install_gitleaks.py --destination "$RUNNER_TEMP/privacy-guard-bin"
+      - name: Verify detection, reporting and failure behavior
+        env:
+          PYTHONPATH: scripts
+          GITLEAKS_BINARY: ${{ runner.temp }}/privacy-guard-bin/gitleaks
+        run: |
+          python -m unittest discover -s tests -p 'test_privacy*.py' -v
+          python -m unittest discover -s tests -p 'test_secrets_scan.py' -v
+  canary-scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Exercise the complete composite action
+        uses: ./.github/actions/privacy-secrets
