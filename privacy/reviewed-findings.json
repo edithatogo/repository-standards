@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "findings": [
+    {
+      "commit": "068283c039369bfd293d04c8afb811220ff4ffe3",
+      "path": "engineering/publication-policy.json",
+      "rule_id": "generic-api-key",
+      "line": 453,
+      "value_sha256": "c1271cbe3675dc62b290857d26cc68bb418117077fe1284fe92cfe18b6a52fd9",
+      "reason": "Independently reviewed public Git blob identifier binding the pinned privacy workflow. Object bytes reproduce the identifier; this exact finding contains no credential.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/068283c039369bfd293d04c8afb811220ff4ffe3",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/43610e2ff130b26bc50f1e3fc9423ce2f86fb510"
+      ]
+    },
+    {
+      "commit": "068283c039369bfd293d04c8afb811220ff4ffe3",
+      "path": "engineering/publication-policy.json",
+      "rule_id": "generic-api-key",
+      "line": 456,
+      "value_sha256": "ed4069335525f692ec25ed1e5a6f21823ec2eb3fdf9937cdb6088353d3c5fc5a",
+      "reason": "Independently reviewed public Git blob identifier binding the pinned privacy workflow. Object bytes reproduce the identifier; this exact finding contains no credential.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/068283c039369bfd293d04c8afb811220ff4ffe3",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/2be6113547ec4dfc22a07db1e827b07f8955e965"
+      ]
+    }
+  ]
+}
