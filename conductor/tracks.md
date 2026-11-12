@@ -1,5 +1,18 @@
 # Tracks
 
+## Frontier control-plane programme (13 November 2026)
+[Programme roadmap](frontier-roadmap-20261113.md). These are **planned tracks**, not completed deployments.
+
+- [ ] **P0 Fresh inventory and evidence-grade conformance** — [Track](tracks/frontier_01_evidence_inventory_20261113/index.md).
+- [ ] **P0 Risk-tiered enforcement and privacy rollout** — [Track](tracks/frontier_02_enforcement_20261113/index.md); depends on `frontier_01_evidence_inventory_20261113`, `privacy_secrets_rollout_20261110`.
+- [ ] **P0 Bounded GitHub App remediation control plane** — [Track](tracks/frontier_03_managed_remediation_20261113/index.md); depends on `frontier_01_evidence_inventory_20261113`, `frontier_02_enforcement_20261113`.
+- [ ] **P1 Archetype-based verification and scientific reproducibility** — [Track](tracks/frontier_04_verification_harness_20261113/index.md); depends on `frontier_01_evidence_inventory_20261113`, `bounded_execution_merkle_lineage_20261110`.
+- [ ] **P1 Reproducible release and supply-chain evidence** — [Track](tracks/frontier_05_release_supplychain_20261113/index.md); depends on `frontier_03_managed_remediation_20261113`, `frontier_04_verification_harness_20261113`.
+- [ ] **P1 Agent harness, context and change safety** — [Track](tracks/frontier_06_agent_assurance_20261113/index.md); depends on `frontier_03_managed_remediation_20261113`, `frontier_04_verification_harness_20261113`.
+- [ ] **P1 Continuous assurance scorecard and frontier certification** — [Track](tracks/frontier_07_observability_certification_20261113/index.md); depends on `frontier_01_evidence_inventory_20261113`, `frontier_02_enforcement_20261113`, `frontier_03_managed_remediation_20261113`, `frontier_04_verification_harness_20261113`, `frontier_05_release_supplychain_20261113`, `frontier_06_agent_assurance_20261113`.
+
+## Existing tracks (retained)
+
 - [~] **Scientific ecosystem alignment: ownership, dependencies and build qualification**
   [Track](tracks/scientific_ecosystem_alignment_20261029/index.md)
 
