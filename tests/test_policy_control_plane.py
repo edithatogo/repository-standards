@@ -59,6 +59,34 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(audit.protection_state([], protection), "present")
         self.assertEqual(audit.protection_state([], None), "absent")
 
+    def test_protection_denied_cannot_be_called_absent(self) -> None:
+        self.assertEqual(
+            audit.protection_state(
+                [], None, branch_protection_accessible=False
+            ),
+            "unknown",
+        )
+        self.assertEqual(
+            audit.protection_state(
+                None, None, rulesets_accessible=False
+            ),
+            "unknown",
+        )
+
+    def test_protection_observed_trumps_other_denied_api(self) -> None:
+        self.assertEqual(
+            audit.protection_state(
+                [{"id": 1}], None, branch_protection_accessible=False
+            ),
+            "present",
+        )
+
+    def test_no_protection_requires_two_conclusive_reads(self) -> None:
+        self.assertEqual(
+            audit.protection_state([], None),
+            "absent",
+        )
+
     def test_scan_failure_is_preserved_without_fabricated_controls(self) -> None:
         client = Mock()
         client.tree.side_effect = PermissionError("throttled")
