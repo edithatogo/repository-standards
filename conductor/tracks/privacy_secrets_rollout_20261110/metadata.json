@@ -1,0 +1,49 @@
+{
+  "track_id": "privacy_secrets_rollout_20261110",
+  "type": "security",
+  "status": "in_progress",
+  "created_at": "2026-11-10",
+  "updated_at": "2026-11-10",
+  "inventory_complete": true,
+  "inventory_counts": {
+    "total": 303,
+    "active": 277,
+    "archived": 26,
+    "private": 101
+  },
+  "central_policy_implemented": true,
+  "shared_hosted_verification": "passed",
+  "consumer_rollout": "all_active_changes_prepared_deployment_in_progress",
+  "consumer_execution_verified": false,
+  "archived_repositories": "preserved_unchanged",
+  "tooling_python": "3.12",
+  "runtime_exception": "Isolated scanner tooling only; Presidio 2.2.366 requires Python >=3.11,<3.15. Consumer product interpreters and locks are unchanged.",
+  "public_evidence_policy": "Aggregate counts only. Keep private repository identities, paths, PR URLs and source content in private evidence.",
+  "source_implementation_commit": "985503bc8eae58e7d6ef36a6e5427d0077e0193c",
+  "source_consumer_commit": "5fd6efc1953ad18ff01a29e3da7597387253f114",
+  "consumer_execution_status": "mixed_passed_pending_and_not_started",
+  "rollout_checkpoint": {
+    "as_of": "2026-11-10T08:09:07+00:00",
+    "total": 303,
+    "active": 277,
+    "deployments": {
+      "PR open": 234,
+      "Archived; unchanged": 26,
+      "Installed": 41,
+      "PR creation blocked": 2
+    },
+    "scans": {
+      "queued": 132,
+      "failed before runner startup": 63,
+      "success": 68,
+      "in_progress": 5,
+      "pr_creation_blocked": 2,
+      "not_observed": 1,
+      "pending after workflow repair": 3,
+      "failed; cause needs review": 2,
+      "cancelled": 1
+    },
+    "shared_pin": "985503bc8eae58e7d6ef36a6e5427d0077e0193c"
+  },
+  "installation_qualification": "Verified shared source and hosted canaries plus exact consumer workflow review; queued or pre-runner-refused execution remains unverified; native and instruction gates remain binding."
+}
