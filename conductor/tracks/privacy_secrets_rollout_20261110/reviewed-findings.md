@@ -46,3 +46,33 @@ and an explicit consuming pin change remain necessary before adoption.
 
 These results qualify the local change only. Publication, new-head hosted checks,
 consumer pin adoption and resolution of unrelated findings remain unclaimed.
+
+## Native capsule follow-through — 14 November 2026
+
+Chat `01a1d426-0c2d-7ed2-b91a-fa5f2e2c5372` owns the bounded public `tobac`
+capsule finding repair in the isolated Git clone
+`/Users/doughnut/Documents/repository-standards-privacy-20261114`, branch
+`codex/tobac-privacy-fingerprint-20261114`, based on `592903c`.
+The managed-worktree request stalled and Git readback showed this clean clone.
+Owned paths are the reviewed-finding registry, its review note, the focused real
+Gitleaks regression and this handoff. Next, reproduce the historical fingerprint,
+verify its public source bytes, exercise a nearby credential control and publish
+through the existing hosted gates. The consuming pin and signed receipt update
+belong to this chat's separate `tobac` checkout.
+
+The full-history secret scan reproduced six unmatched coordinates. Source review
+verified the capsule workflow SHA-256, four `data-sitekey` occurrences in one
+immutable HTML blob across two commits, and the release-scanner log digest.
+Both retained original logs reproduce that digest. The trusted registry now
+contains those six exact identities alongside its two previous entries. The
+real full-history scanner reports six detected, six reviewed and zero blocking
+findings. The qualified-hash regression still blocks a nearby hexadecimal API
+credential, and both SHA-1 and SHA-256 admission controls pass.
+
+Repo-local Python 3.15.2 passed the documented complete policy command, 109 tests
+with 24 Presidio capability skips. The real Gitleaks cases executed. The shared
+hosted scanner suite supplies supported Presidio execution. Active policy-tool
+workflow defaults and current runtime guidance now select the qualified 3.15.2
+patch. Those workflow declarations, `conductor/workflow.md` and
+`conductor/tech-stack.md` are also owned by this slice. Hosted publication and
+the consuming immutable pin are pending.
