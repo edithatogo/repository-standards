@@ -1,0 +1,12 @@
+[package]
+name = "offline-dlp-client"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Local Unix socket client for fail-closed offline DLP"
+
+[dependencies]
+serde_json = "=1.0.145"
+
+# A reviewed Cargo.lock and vendored crates must be generated in the
+# qualified offline Rust environment before this is release-ready.

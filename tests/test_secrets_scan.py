@@ -496,6 +496,23 @@ class GitleaksIntegrationTests(RepositoryCase):
         # Construct a synthetic pattern only in temporary fixtures, never a credential.
         return "ghp_" + hashlib.sha256(b"synthetic-regression-canary").hexdigest()[:36]
 
+    def test_offline_mount_scans_history_across_owner_boundary(self) -> None:
+        root = self.root.resolve()
+        with (
+            patch.object(scanner, "OFFLINE_CONSUMER_MOUNT", root),
+            patch.dict(os.environ, {"GIT_TEST_ASSUME_DIFFERENT_OWNER": "true"}),
+        ):
+            with self.assertRaisesRegex(scanner.ScanError, "git_validation_failed"):
+                scanner.scan(root, full_history=True, binary=GITLEAKS_BINARY)
+            code, summary = scanner.scan(
+                root,
+                full_history=True,
+                binary=GITLEAKS_BINARY,
+                offline_container=True,
+            )
+        self.assertEqual(code, 0)
+        self.assertEqual(summary["status"], "clean")
+
     def test_real_cli_exact_admission_and_extra_secret_resistance(self) -> None:
         self.verify_exact_admission(
             hashlib.sha1(b"public-object-regression-fixture").hexdigest()

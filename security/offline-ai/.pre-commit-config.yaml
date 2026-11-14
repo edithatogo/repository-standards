@@ -1,0 +1,10 @@
+# Opt in by copying/merging into each repo's existing hooks. Requires preinstalled local gitleaks.
+repos:
+  - repo: local
+    hooks:
+      - id: offline-gitleaks-staged
+        name: Offline Gitleaks staged diff
+        entry: bash scripts/gitleaks_staged.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]

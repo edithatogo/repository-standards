@@ -1,0 +1,63 @@
+name: Offline AI security (four layers)
+on:
+  workflow_call:
+    inputs:
+      enforce_ai:
+        type: boolean
+        required: false
+        default: false
+permissions:
+  contents: read
+jobs:
+  offline-security:
+    runs-on: [self-hosted, linux, x64, ai-security-offline]
+    timeout-minutes: 45
+    steps:
+      - name: Checkout consumer without credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+          path: consumer
+      - name: Checkout central security policy without credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: edithatogo/repository-standards
+          # Immutable snapshot containing the offline scanner rules and replay controls.
+          ref: 78db7cefae15c818a1d6cc152e68b259a5591945
+          persist-credentials: false
+          submodules: false
+          path: policy
+      - name: Verify isolated execution preconditions
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v docker
+          test -n "${SECURITY_IMAGE_DIGEST:-}" || { echo 'Runner must preconfigure SECURITY_IMAGE_DIGEST (sha256:...)'; exit 2; }
+          [[ "$SECURITY_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]] || exit 2
+          docker image inspect "localhost/offline-ai-security@${SECURITY_IMAGE_DIGEST}" >/dev/null
+      - name: Run 4 layers in a network-disabled container
+        shell: bash
+        env:
+          ENFORCE_AI: ${{ inputs.enforce_ai }}
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
+        run: |
+          set -euo pipefail
+          docker run --rm --pull=never --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --pids-limit 256 --memory 8g --cpus 4 --user 65534:65534 \
+            --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 \
+            --mount type=bind,src="$GITHUB_WORKSPACE/consumer",dst=/work,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/policy",dst=/policy,readonly \
+            -e ENFORCE_AI -e EVENT_NAME -e BASE_SHA -e HOME=/tmp \
+            -e HF_HUB_OFFLINE=1 -e TRANSFORMERS_OFFLINE=1 -e HF_DATASETS_OFFLINE=1 \
+            -e HF_HOME=/opt/models -e XDG_CACHE_HOME=/tmp/cache -e TMPDIR=/tmp \
+            -e HF_HUB_DISABLE_TELEMETRY=1 -e PIP_NO_INDEX=1 -e npm_config_offline=true \
+            -e PROMPTFOO_CONFIG_DIR=/tmp/promptfoo -e PROMPTFOO_DISABLE_TELEMETRY=1 -e PROMPTFOO_DISABLE_UPDATE=1 \
+            -e PROMPTFOO_DISABLE_REMOTE_GENERATION=true \
+            -e PROMPTFOO_DISABLE_REDTEAM_REMOTE_GENERATION=true \
+            -e PROMPTFOO_DISABLE_SHARING=1 -e PROMPTFOO_SELF_HOSTED=1 \
+            -e PYTHONDONTWRITEBYTECODE=1 -e PYTEST_ADDOPTS=-p\ no:cacheprovider \
+            "localhost/offline-ai-security@${SECURITY_IMAGE_DIGEST}" \
+            bash /policy/security/offline-ai/run.sh
