@@ -32,7 +32,7 @@ finish() {
     fi
   fi
   python -I - "$evidence/hosted-execution.json" "$stage" "$status" "$policy_sha" <<'PY'
-import json, pathlib, sys
+import json, os, pathlib, sys
 path, stage, status, policy = sys.argv[1:]
 record = {
     "schema_version": 1,
@@ -47,6 +47,7 @@ record = {
     "release_qualified": False,
 }
 with pathlib.Path(path).open("x", encoding="utf-8") as stream:
+    os.fchmod(stream.fileno(), 0o600)
     json.dump(record, stream, indent=2, sort_keys=True)
     stream.write("\n")
 PY

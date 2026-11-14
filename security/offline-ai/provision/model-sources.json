@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "model": {
     "repo": "urchade/gliner_multi_pii-v1",
     "revision": "1fcf13e85f4eef5394e1fcd406cf2ca9ea82351d",
@@ -40,6 +40,36 @@
       "path": "spm.model",
       "size": 4305025,
       "sha256": "13c8d666d62a7bc4ac8f040aab68e942c861f93303156cc28f5c7e885d86d6e3"
+    }
+  },
+  "attribution": {
+    "model_card": {
+      "url": "https://huggingface.co/urchade/gliner_multi_pii-v1/resolve/1fcf13e85f4eef5394e1fcd406cf2ca9ea82351d/README.md",
+      "path": "attribution/gliner-model-card.md",
+      "scope": "model-license-declaration",
+      "sha256": "5922e242558f1608f734dd23bb4a26fd2986254202131aa1d86153692181953e",
+      "size": 3040
+    },
+    "encoder_card": {
+      "url": "https://huggingface.co/microsoft/mdeberta-v3-base/resolve/a0484667b22365f84929a935b5e50a51f71f159d/README.md",
+      "path": "attribution/mdeberta-model-card.md",
+      "scope": "model-license-declaration",
+      "sha256": "90d5e535e04fc9ac4f39336ed33c1adc7d0136b8ce3bbe211c18a0d47b72342f",
+      "size": 3667
+    },
+    "model_source_license": {
+      "url": "https://raw.githubusercontent.com/urchade/GLiNER/520e5debcf428e7c499868f0840e916a81f449f2/LICENSE",
+      "path": "attribution/gliner-source-LICENSE.txt",
+      "scope": "associated-source-code-license",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "size": 11357
+    },
+    "encoder_source_license": {
+      "url": "https://raw.githubusercontent.com/microsoft/DeBERTa/4d7fe0bd4fb3c7d4f4005a7cafabde9800372098/LICENSE",
+      "path": "attribution/deberta-source-LICENSE.txt",
+      "scope": "associated-source-code-license",
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "size": 1141
     }
   }
 }

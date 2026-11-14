@@ -134,7 +134,7 @@ else:
         self.assertTrue(any("qualify_model.py" in " ".join(call) for call in runs))
 
     def test_each_real_stage_failure_records_unexecuted_controls_without_raw_output(self):
-        for match in ("import sys", "security.verify_network", "hashlib", "security.verify_assets",
+        for match in ("security.verify_container", "security.verify_network", "hashlib", "security.verify_assets",
                       "verify_gitleaks.py", "verify_sast_fixtures.py", "qualify_model.py",
                       "promptfooconfig.yaml"):
             with self.subTest(stage=match):

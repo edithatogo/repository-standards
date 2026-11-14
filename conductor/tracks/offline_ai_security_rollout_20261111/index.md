@@ -208,3 +208,47 @@ regressions require hosted verification; no image/model execution result is
 claimed by this source checkpoint. Requirements 01–09 remain open, including
 real self-hosted runner eligibility, host isolation, vulnerability review and
 applicable application/language qualification. Consumer PR #9 remains draft.
+
+## Reviewed preparation follow-up — 2026-11-15
+
+The workspace recovered and Python 3.15.2 was restored. The combined policy
+suite initially reproduced a stale image-test failure marker left after the
+runtime check became `security.verify_container`; correcting the marker restored
+the required failure-path coverage. The first hosted policy run reproduced that
+same defect. Its privacy and Actions-security checks passed, and
+[candidate run 43651617676](https://github.com/edithatogo/repository-standards/actions/runs/43651617676)
+completed using Python 3.15.1. Its three public candidate files were reconstructed
+from retained chunks and verified against their exact byte lengths, SHA256 and
+Git blob identifiers.
+
+The first image run reached the Docker host and failed at upstream preparation
+with the expected unreviewed-lock catalog. Its retained execution receipt keeps
+release, runner and application qualification false. No scanner execution is
+inferred from that attempt.
+
+The follow-up also requires byte equality between the selected policy workflow
+and the calling commit after normalizing only the single immutable policy SHA.
+Regression cases reproduced the old acceptance of changed container entrypoints
+and network flags, then verified rejection. Model preparation now preserves
+private fixed-stage failure receipts, pinned model cards and associated
+source-code license texts, with exact attribution hashes and explicit scopes.
+
+The reviewed dependency commit retains all 21 shared privacy pins/hash sets and
+verifies all 18 additional Python releases and 603 unique npm releases against
+upstream metadata. Four exact transitive npm overrides resolve the reported
+advisories; the final npm audit reports zero known advisories. The committed
+`security/offline-ai/provision/dependency-review.json` binds the reviewed lock
+bytes and records the source checks, advisory dispositions and remaining real
+execution gates. Native optional packages remain included without lifecycle
+scripts, with a silent libsql/esbuild execution check during preparation.
+
+The integrated Python 3.15.2 policy suite completed with **250 tests: 215 passed
+and 35 existing capability-dependent skips**. It includes 19 container-control,
+12 immutable-source, 13 vendor-preparation and 9 model-preparation cases. Shell
+syntax and diff whitespace checks passed. These source tests do not substitute
+for the required Python 3.15.1 model and image execution.
+
+Central PR #145 contains this preparation work. Central PR #126 and consumer
+PR #9 remain draft while real image execution, image vulnerability review,
+isolated self-hosted runner eligibility and applicable integration gates remain
+open. No runner has been registered and no consumer pin has been changed.

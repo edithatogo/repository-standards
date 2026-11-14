@@ -3,5 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "engines": { "node": ">=22.22.0" },
-  "dependencies": { "promptfoo": "0.125.1" }
+  "dependencies": { "promptfoo": "0.125.1" },
+  "overrides": {
+    "@hono/node-server": "2.1.6",
+    "basic-ftp": "6.2.4",
+    "glob": "14.0.2",
+    "minimatch": "11.0.1"
+  }
 }

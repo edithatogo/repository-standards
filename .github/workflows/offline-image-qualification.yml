@@ -45,24 +45,8 @@ jobs:
       - name: Select the immutable runtime policy
         id: policy
         run: |
-          python -I - "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$GITHUB_OUTPUT" <<'PY'
-          import pathlib, re, subprocess, sys
-          root, temporary, output = map(pathlib.Path, sys.argv[1:])
-          workflow = (root / ".github/workflows/reusable-ai-sec-pipeline.yml").read_text()
-          pins = re.findall(r"^          ref: ([0-9a-f]{40})$", workflow, re.MULTILINE)
-          if len(pins) != 1:
-              raise SystemExit("Immutable policy pin is missing or ambiguous")
-          pin = pins[0]
-          git = ["git", "--no-replace-objects", "-C", str(root)]
-          subprocess.run(git + ["merge-base", "--is-ancestor", pin, "HEAD"], check=True)
-          changed = subprocess.check_output(git + ["diff", "--name-only", pin, "HEAD"], text=True).splitlines()
-          if set(changed) - {".github/workflows/reusable-ai-sec-pipeline.yml"}:
-              raise SystemExit("The runtime policy pin does not contain the current qualification source")
-          policy = temporary / "offline-qualified-policy"
-          subprocess.run(git + ["worktree", "add", "--detach", str(policy), pin], check=True)
-          with output.open("a", encoding="utf-8") as stream:
-              stream.write(f"path={policy}\nsha={pin}\n")
-          PY
+          python -I "$GITHUB_WORKSPACE/security/offline-ai/provision/select_policy.py" \
+            "$GITHUB_WORKSPACE" "$RUNNER_TEMP" "$GITHUB_OUTPUT"
       - name: Prepare verified assets and execute offline controls
         id: qualify
         env:
