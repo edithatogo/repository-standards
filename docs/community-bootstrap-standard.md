@@ -129,6 +129,12 @@ YAML constructions and refuses symlink traversal and non-regular files. Treat
 reports from private repositories as private; this tool is not the F01 public
 aggregate publisher.
 
+Snapshot file access currently requires descriptor-relative, no-follow filesystem
+support (`O_NOFOLLOW` and `O_DIRECTORY`), as available on the qualified Linux
+runner. On Windows, use a suitable Linux/WSL environment for this auditor;
+unavailable safe-read capabilities remain unknown rather than weakening the
+filesystem boundary.
+
 The checks deliberately establish bounded structural properties. They do not
 certify every upstream schema feature, prose accuracy, valid external links,
 valid action revisions, container builds, successful tests, active providers,

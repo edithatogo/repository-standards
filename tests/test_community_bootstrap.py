@@ -393,5 +393,116 @@ class CommunityBootstrapTests(unittest.TestCase):
         self.assertEqual(original, (self.root / "README.md").read_bytes())
 
 
+    def test_local_copilot_guidance_covers_missing_root_agents(self):
+        (self.root / "AGENTS.md").unlink()
+        self.write(self.root, ".github/copilot-instructions.md", GUIDES["AGENTS.md"])
+        self.write(self.defaults, "AGENTS.md", "Incomplete default instructions.")
+        result = self.check("agents")
+        self.assertEqual("pass", result["status"])
+        self.assertEqual("local", result["source"])
+        self.assertEqual([".github/copilot-instructions.md"], result["paths"])
+
+    def test_root_agents_precedes_copilot_and_neither_inherits(self):
+        self.write(self.root, ".github/copilot-instructions.md", GUIDES["AGENTS.md"])
+        self.assertEqual(["AGENTS.md"], self.check("agents")["paths"])
+        self.write(self.root, "AGENTS.md", "# Agent instructions\nIncomplete local guidance.\n")
+        result = self.check("agents")
+        self.assertEqual("fail", result["status"])
+        self.assertEqual(["AGENTS.md"], result["paths"])
+        for path in ("AGENTS.md", ".github/copilot-instructions.md"):
+            (self.root / path).unlink()
+            self.write(self.defaults, path, GUIDES["AGENTS.md"])
+        result = self.check("agents")
+        self.assertEqual("fail", result["status"])
+        self.assertEqual("missing", result["source"])
+
+    def test_invalid_nested_workflow_runner_and_step_shapes_fail(self):
+        jobs = [
+            {"runs-on": {"labels": None}, "steps": [{"run": "echo checked"}]},
+            {"runs-on": {"group": None, "labels": "ubuntu-latest"}, "steps": [{"run": "echo checked"}]},
+            {"runs-on": {"labels": []}, "steps": [{"run": "echo checked"}]},
+            {"runs-on": {"labels": ["ubuntu-latest", None]}, "steps": [{"run": "echo checked"}]},
+            {"uses": "./.github/workflows/reusable.yml", "runs-on": "ubuntu-latest"},
+            {"uses": "./.github/workflows/reusable.yml", "runs-on": None},
+            {"runs-on": "ubuntu-latest", "steps": [{"run": "echo checked", "uses": None}]},
+            {"runs-on": "ubuntu-latest", "steps": [{"run": None, "uses": "actions/checkout@v4"}]},
+            {"runs-on": "ubuntu-latest", "steps": [{"run": None}]},
+        ]
+        for job in jobs:
+            with self.subTest(job=job):
+                self.write(self.root, ".github/workflows/ci.yml", json.dumps({"on": "push", "jobs": {"test": job}}))
+                self.assertEqual("fail", self.check("workflows")["status"])
+
+    def test_supported_mapping_runner_and_reusable_job_shapes_pass(self):
+        jobs = [
+            {"runs-on": {"group": "standard-runners"}, "steps": [{"run": "echo checked"}]},
+            {"runs-on": {"labels": "ubuntu-latest"}, "steps": [{"uses": "actions/checkout@v4"}]},
+            {"runs-on": {"group": "standard-runners", "labels": ["linux", "x64"]}, "steps": [{"run": "echo checked"}]},
+            {"uses": "./.github/workflows/reusable.yml"},
+        ]
+        for job in jobs:
+            with self.subTest(job=job):
+                self.write(self.root, ".github/workflows/ci.yml", json.dumps({"on": "push", "jobs": {"test": job}}))
+                self.assertEqual("pass", self.check("workflows")["status"])
+
+    def test_supplied_devcontainer_build_fields_require_nonempty_strings(self):
+        self.policy["devcontainer"] = "required"
+        for field in ("dockerfile", "context", "target"):
+            for value in (None, "", [], 42):
+                with self.subTest(field=field, value=value):
+                    build = {"dockerfile": "Dockerfile", field: value}
+                    self.write(self.root, ".devcontainer.json", json.dumps({"build": build}))
+                    self.assertEqual("fail", self.check("devcontainer")["status"])
+        self.write(self.root, ".devcontainer.json", json.dumps({"build": {
+            "dockerfile": "Dockerfile", "context": ".", "target": "development",
+        }}))
+        self.assertEqual("pass", self.check("devcontainer")["status"])
+
+    def test_cli_bounds_both_json_configuration_inputs(self):
+        parent = Path(self.temp.name)
+        metadata_path, policy_path = parent / "metadata.json", parent / "policy.json"
+        for oversized in (metadata_path, policy_path):
+            with self.subTest(input=oversized.name):
+                metadata_path.write_text(json.dumps(self.metadata), encoding="utf-8")
+                policy_path.write_text(json.dumps(self.policy), encoding="utf-8")
+                with oversized.open("a", encoding="utf-8") as stream:
+                    stream.write(" " * (audit.MAX_BYTES + 1))
+                with contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+                    code = audit.main([
+                        "--repository-dir", str(self.root),
+                        "--metadata", str(metadata_path),
+                        "--policy", str(policy_path),
+                    ])
+                self.assertEqual(2, code)
+
+    def test_cli_rejects_configuration_directory_swapped_for_symlink(self):
+        parent = Path(self.temp.name)
+        configuration, displaced, outside = parent / "configuration", parent / "displaced", parent / "outside"
+        configuration.mkdir()
+        outside.mkdir()
+        for directory in (configuration, outside):
+            (directory / "metadata.json").write_text(json.dumps(self.metadata), encoding="utf-8")
+        policy_path = parent / "policy.json"
+        policy_path.write_text(json.dumps(self.policy), encoding="utf-8")
+        original_open = audit.directory_descriptors
+
+        def swap_parent(directory, **kwargs):
+            if Path(directory) == configuration and not displaced.exists():
+                configuration.rename(displaced)
+                configuration.symlink_to(outside, target_is_directory=True)
+            return original_open(directory, **kwargs)
+
+        with patch.object(audit, "directory_descriptors", side_effect=swap_parent):
+            with contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+                code = audit.main([
+                    "--repository-dir", str(self.root),
+                    "--metadata", str(configuration / "metadata.json"),
+                    "--policy", str(policy_path),
+                ])
+        self.assertTrue(configuration.is_symlink())
+        self.assertEqual(2, code)
+
+
+
 if __name__ == "__main__":
     unittest.main()

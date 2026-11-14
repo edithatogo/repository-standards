@@ -94,6 +94,37 @@ def directory_descriptors(directory, *, create=False):
         raise
 
 
+def bounded_text(root, relative):
+    """Read UTF-8 text through bounded, no-follow directory and file descriptors."""
+    path = Path(relative)
+    if path.is_absolute() or ".." in path.parts or not path.name:
+        raise EvidenceError("unknown", "Symlink or unsafe path is not inspected")
+    descriptors = []
+    try:
+        descriptors.extend(directory_descriptors(root))
+        directory_flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+        for component in path.parts[:-1]:
+            descriptors.append(os.open(component, directory_flags, dir_fd=descriptors[-1]))
+        file_descriptor = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=descriptors[-1])
+        descriptors.append(file_descriptor)
+        if not stat.S_ISREG(os.fstat(file_descriptor).st_mode):
+            raise EvidenceError("unknown", "Non-regular files are not inspected")
+        data = b""
+        while len(data) <= MAX_BYTES:
+            chunk = os.read(file_descriptor, min(65_536, MAX_BYTES + 1 - len(data)))
+            if not chunk:
+                break
+            data += chunk
+        if len(data) > MAX_BYTES:
+            raise EvidenceError("unknown", "File exceeds bounded audit size")
+        return data.decode("utf-8-sig")
+    except (OSError, UnicodeError) as exc:
+        raise EvidenceError("unknown", "File is unavailable or not UTF-8 text") from exc
+    finally:
+        for descriptor in reversed(descriptors):
+            os.close(descriptor)
+
+
 class Tree:
     """Inventory and bounded reads that refuse symlinks and non-regular files."""
 
@@ -124,33 +155,9 @@ class Tree:
         return any(relative == item or relative.startswith(item + "/") for item in self.blocked)
 
     def read(self, relative):
-        path = Path(relative)
-        if path.is_absolute() or ".." in path.parts or self.is_blocked(relative):
+        if self.is_blocked(relative):
             raise EvidenceError("unknown", "Symlink or unsafe path is not inspected")
-        descriptors = []
-        try:
-            descriptors.extend(directory_descriptors(self.root))
-            directory_flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
-            for component in path.parts[:-1]:
-                descriptors.append(os.open(component, directory_flags, dir_fd=descriptors[-1]))
-            file_descriptor = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=descriptors[-1])
-            descriptors.append(file_descriptor)
-            if not stat.S_ISREG(os.fstat(file_descriptor).st_mode):
-                raise EvidenceError("unknown", "Non-regular files are not inspected")
-            data = b""
-            while len(data) <= MAX_BYTES:
-                chunk = os.read(file_descriptor, min(65_536, MAX_BYTES + 1 - len(data)))
-                if not chunk:
-                    break
-                data += chunk
-            if len(data) > MAX_BYTES:
-                raise EvidenceError("unknown", "File exceeds bounded audit size")
-            return data.decode("utf-8-sig")
-        except (OSError, UnicodeError) as exc:
-            raise EvidenceError("unknown", "File is unavailable or not UTF-8 text") from exc
-        finally:
-            for descriptor in reversed(descriptors):
-                os.close(descriptor)
+        return bounded_text(self.root, relative)
 
     def select(self, names, folders=(".github", "", "docs")):
         wanted = {name.casefold() for name in names}
@@ -400,19 +407,25 @@ def workflow_job_valid(job):
     if not isinstance(job, dict) or not job:
         return False
     if "uses" in job:
-        return nonempty(job["uses"]) and "steps" not in job
+        return nonempty(job["uses"]) and "steps" not in job and "runs-on" not in job
     runner = job.get("runs-on")
-    runner_valid = (
-        nonempty(runner)
-        or isinstance(runner, list) and bool(runner) and all(nonempty(item) for item in runner)
-        or isinstance(runner, dict) and bool(runner) and any(key in runner for key in ("group", "labels"))
-    )
+    if isinstance(runner, dict):
+        labels = runner.get("labels")
+        runner_valid = (
+            bool(runner) and set(runner).issubset({"group", "labels"})
+            and ("group" not in runner or nonempty(runner["group"]))
+            and ("labels" not in runner or nonempty(labels)
+                 or isinstance(labels, list) and bool(labels) and all(nonempty(item) for item in labels))
+        )
+    else:
+        runner_valid = nonempty(runner) or isinstance(runner, list) and bool(runner) and all(nonempty(item) for item in runner)
     steps = job.get("steps")
     return runner_valid and isinstance(steps, list) and bool(steps) and all(
-        isinstance(step, dict) and (nonempty(step.get("run")) != nonempty(step.get("uses")))
+        isinstance(step, dict)
+        and (("run" in step) != ("uses" in step))
+        and nonempty(step["run"] if "run" in step else step["uses"])
         for step in steps
     )
-
 
 def container_backend_valid(value):
     """Validate the types of the declared image/build/compose alternatives."""
@@ -425,8 +438,11 @@ def container_backend_valid(value):
         item = value[key]
         if key in {"image", "dockerFile"} and not nonempty(item):
             return False
-        if key == "build" and (not isinstance(item, dict) or not item):
-            return False
+        if key == "build":
+            if not isinstance(item, dict) or not item:
+                return False
+            if any(field in item and not nonempty(item[field]) for field in ("dockerfile", "context", "target")):
+                return False
         if key == "dockerComposeFile" and not (
             nonempty(item) or isinstance(item, list) and bool(item) and all(nonempty(path) for path in item)
         ):
@@ -477,6 +493,10 @@ def audit_repository(repository_dir, *, defaults_dir=None, metadata=None, policy
         def document(control=control, filename=filename):
             inherit = control not in {"readme", "agents"}
             tree, path, source = effective([filename], inherit=inherit, folders=("",) if control in {"readme", "agents"} else (".github", "", "docs"))
+            if control == "agents" and tree is None:
+                path = local.select(["copilot-instructions.md"], (".github",))
+                if path is not None:
+                    tree, source = local, "local"
             if tree is None:
                 return default_missing() if inherit else record("fail", "missing", details=["Repository-local file is required"])
             errors = guidance_errors(tree.read(path), control)
@@ -666,9 +686,11 @@ def main(argv=None):
         def config(path):
             if path is None:
                 return None
-            if any(part.is_symlink() for part in [path, *path.parents]) or not path.is_file() or path.stat().st_size > MAX_BYTES:
-                raise ValueError("Configuration must be a bounded regular JSON file")
-            return json.loads(path.read_text(encoding="utf-8"))
+            path = path.absolute()
+            if any(part.is_symlink() for part in [path, *path.parents]):
+                raise ValueError("Configuration path must not traverse symlinks")
+            path = Path(os.path.normpath(path))
+            return json.loads(bounded_text(path.parent, path.name))
         result = audit_repository(args.repository_dir, defaults_dir=args.defaults_dir, metadata=config(args.metadata), policy=config(args.policy))
         rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
         if args.output:
