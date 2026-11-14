@@ -17,19 +17,22 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
-
 API = "https://api.github.com"
 README_SECTIONS = {
-    "installation": re.compile(r"^#{1,3}\s+(installation|install|setup)\b", re.I | re.M),
-    "usage": re.compile(r"^#{1,3}\s+(usage|quick ?start|getting started)\b", re.I | re.M),
-    "development": re.compile(r"^#{1,3}\s+(development|developing|contributing)\b", re.I | re.M),
+    "installation": re.compile(
+        r"^#{1,3}\s+(installation|install|setup)\b", re.I | re.M
+    ),
+    "usage": re.compile(
+        r"^#{1,3}\s+(usage|quick ?start|getting started)\b", re.I | re.M
+    ),
+    "development": re.compile(
+        r"^#{1,3}\s+(development|developing|contributing)\b", re.I | re.M
+    ),
     "security": re.compile(r"^#{1,3}\s+security\b", re.I | re.M),
     "license": re.compile(r"^#{1,3}\s+licen[cs]e\b", re.I | re.M),
     "citation": re.compile(r"^#{1,3}\s+(citation|citing)\b", re.I | re.M),
 }
-LICENSE_NAMES = re.compile(
-    r"(^|/)(license|licence|copying|copyright)(\.[^/]+)?$", re.I
-)
+LICENSE_NAMES = re.compile(r"(^|/)(license|licence|copying|copyright)(\.[^/]+)?$", re.I)
 CITATION_NAMES = {"citation.cff", "citation.bib", "codemeta.json", ".zenodo.json"}
 EXECUTABLE_MARKERS = {
     "pyproject.toml",
@@ -126,9 +129,7 @@ class GitHub:
 
     def tree(self, repository: str, branch: str) -> list[dict[str, Any]]:
         encoded_branch = urllib.parse.quote(branch, safe="")
-        result = self.get(
-            f"/repos/{repository}/git/trees/{encoded_branch}?recursive=1"
-        )
+        result = self.get(f"/repos/{repository}/git/trees/{encoded_branch}?recursive=1")
         return [] if not result else result.get("tree", [])
 
     def text(self, repository: str, path: str, branch: str) -> str:
@@ -140,6 +141,78 @@ class GitHub:
         if not result or result.get("encoding") != "base64":
             return ""
         return base64.b64decode(result["content"]).decode("utf-8", errors="replace")
+
+    def graphql(
+        self, query: str, variables: dict[str, str] | None = None
+    ) -> dict[str, Any] | None:
+        payload: dict[str, Any] = {"query": query}
+        if variables is not None:
+            payload["variables"] = variables
+        request = urllib.request.Request(
+            f"{API}/graphql",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={**self.headers, "Content-Type": "application/json"},
+            method="POST",
+        )
+        for attempt in range(4):
+            try:
+                with urllib.request.urlopen(request, timeout=60) as response:
+                    return json.load(response)
+            except urllib.error.HTTPError as error:
+                if error.code in {404, 409, 422}:
+                    return None
+                if error.code not in {429, 500, 502, 503, 504} or attempt == 3:
+                    raise
+            except (TimeoutError, urllib.error.URLError):
+                if attempt == 3:
+                    raise
+            time.sleep(2**attempt)
+        raise RuntimeError("unreachable retry state")
+
+    def texts(self, repository: str, paths: list[str], branch: str) -> dict[str, str]:
+        valid_paths = [p for p in paths if p]
+        if not valid_paths:
+            return {}
+
+        owner, name = repository.split("/")
+
+        query_parts = []
+        aliases = []
+        variable_definitions = ["$owner: String!", "$name: String!"]
+        variables = {"owner": owner, "name": name}
+        for i, path in enumerate(valid_paths):
+            alias = f"f{i}"
+            aliases.append((alias, path))
+            variable = f"expression{i}"
+            variable_definitions.append(f"${variable}: String!")
+            variables[variable] = f"{branch}:{path}"
+            query_parts.append(
+                f"{alias}: object(expression: ${variable}) {{ ... on Blob {{ text }} }}"
+            )
+
+        query = f"""
+        query ({', '.join(variable_definitions)}) {{
+          repository(owner: $owner, name: $name) {{
+            {' '.join(query_parts)}
+          }}
+        }}
+        """
+
+        result = self.graphql(query, variables)
+        if not result:
+            return {}
+
+        repo_data = result.get("data", {}).get("repository")
+        if not repo_data:
+            return {}
+
+        contents = {}
+        for alias, path in aliases:
+            file_data = repo_data.get(alias)
+            if file_data and file_data.get("text") is not None:
+                contents[path.casefold()] = file_data["text"]
+
+        return contents
 
 
 def archetype(paths: set[str], description: str) -> str:
@@ -162,13 +235,47 @@ def archetype(paths: set[str], description: str) -> str:
 
 def badge_state(readme: str) -> dict[str, bool | int]:
     lowered = readme.casefold()
+    badge_count = 0
+    position = 0
+    alt_end = url_end = marker_position = -1
+    badge_marker = re.compile(r"badge|shields|actions", re.I)
+    # Cache the next delimiter and marker while moving forward. This preserves
+    # nested candidates without rescanning malformed remote Markdown.
+    while True:
+        start = readme.find("![", position)
+        if start < 0:
+            break
+        position = start + 2
+        if alt_end < position:
+            alt_end = readme.find("]", position)
+        if alt_end < 0:
+            break
+        if not readme.startswith("(", alt_end + 1):
+            continue
+        url_start = alt_end + 2
+        if url_end < url_start:
+            url_end = readme.find(")", url_start)
+        if url_end < 0:
+            break
+        if marker_position < url_start:
+            marker = badge_marker.search(readme, url_start)
+            if marker is None:
+                break
+            marker_position = marker.start()
+        if marker_position < url_end:
+            badge_count += 1
+            position = url_end + 1
     return {
-        "count": len(re.findall(r"!\[[^\]]*]\([^)]*(?:badge|shields|actions)[^)]*\)", readme, re.I)),
+        "count": badge_count,
         "ci": "actions/workflows" in lowered or "github/workflow/status" in lowered,
         "coverage": "codecov" in lowered or "coveralls" in lowered,
         "license": "license-" in lowered or "/license" in lowered,
-        "citation": "citation.cff" in lowered or "doi.org" in lowered or "zenodo" in lowered,
-        "version": "version-" in lowered or "/v/release" in lowered or "/v/tag" in lowered,
+        "citation": "citation.cff" in lowered
+        or "doi.org" in lowered
+        or "zenodo" in lowered,
+        "version": "version-" in lowered
+        or "/v/release" in lowered
+        or "/v/tag" in lowered,
     }
 
 
@@ -185,7 +292,9 @@ def _manifest_state(files: dict[str, str], kind: str) -> tuple[str, str | None, 
         manifest_version = match.group(1) if match else None
         dynamic = bool(
             re.search(r'(?s)dynamic\s*=\s*\[[^\]]*"version"', pyproject)
-            and re.search(r"hatch-vcs|setuptools[-_]scm|versioningit|pdm-backend", pyproject, re.I)
+            and re.search(
+                r"hatch-vcs|setuptools[-_]scm|versioningit|pdm-backend", pyproject, re.I
+            )
         )
         source = "git_tags_dynamic" if dynamic else "pyproject_manifest"
     elif cargo:
@@ -235,7 +344,11 @@ def audit_repository(client: GitHub, repository: dict[str, Any]) -> dict[str, An
     kind = archetype(paths, description)
 
     readme_path = next(
-        (actual for lowered, actual in lowered_paths.items() if lowered in {"readme.md", "readme.rst", "readme"}),
+        (
+            actual
+            for lowered, actual in lowered_paths.items()
+            if lowered in {"readme.md", "readme.rst", "readme"}
+        ),
         "",
     )
     candidate_names = [
@@ -246,33 +359,36 @@ def audit_repository(client: GitHub, repository: dict[str, Any]) -> dict[str, An
         lowered_paths.get("package.json", ""),
         lowered_paths.get("typst.toml", ""),
     ]
-    files = {
-        path.casefold(): client.text(full_name, path, branch)
-        for path in candidate_names
-        if path
-    }
+    files = client.texts(full_name, candidate_names, branch)
     readme = files.get(readme_path.casefold(), "") if readme_path else ""
     badges = badge_state(readme)
     citation_files = sorted(
         path for path in paths if path.casefold().rsplit("/", 1)[-1] in CITATION_NAMES
     )
     license_files = sorted(path for path in paths if LICENSE_NAMES.search(path))
-    executable = bool({path.casefold() for path in paths}.intersection(EXECUTABLE_MARKERS))
-    logging_warranted = kind in {"software", "data"} and executable and bool(
-        APP_TERMS.search(f"{repository['name']} {description}")
-        or any(
-            path.casefold().startswith(("src/", "app/", "cmd/", "scripts/"))
-            for path in paths
+    executable = bool(
+        {path.casefold() for path in paths}.intersection(EXECUTABLE_MARKERS)
+    )
+    logging_warranted = (
+        kind in {"software", "data"}
+        and executable
+        and bool(
+            APP_TERMS.search(f"{repository['name']} {description}")
+            or any(
+                path.casefold().startswith(("src/", "app/", "cmd/", "scripts/"))
+                for path in paths
+            )
         )
     )
     manifest_text = "\n".join(
-        files.get(name, "")
-        for name in ("pyproject.toml", "cargo.toml", "package.json")
+        files.get(name, "") for name in ("pyproject.toml", "cargo.toml", "package.json")
     )
     logging_detected = bool(
         LOGGING_TERMS.search(manifest_text)
         or any(
-            re.search(r"(^|/)(logging|logger|telemetry|observability)(\.|/)", path, re.I)
+            re.search(
+                r"(^|/)(logging|logger|telemetry|observability)(\.|/)", path, re.I
+            )
             for path in paths
         )
     )
