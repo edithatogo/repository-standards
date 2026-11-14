@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import urllib.parse
 import urllib.request
 
 
@@ -41,6 +42,8 @@ def download_tool(work):
     archive = work / "grype.tar.gz"
     size = 0
     with urllib.request.urlopen(ARCHIVE_URL, timeout=60) as response:
+        if urllib.parse.urlsplit(response.geturl()).scheme != "https":
+            raise EvidenceError(FAILURE)
         with archive.open("xb") as output:
             while block := response.read(1024 * 1024):
                 size += len(block)
@@ -78,8 +81,18 @@ def save_json(path, contents):
 
 
 def collect(image, evidence, work):
+    # This standalone collector and its scanner subprocess share a private
+    # creation mask; restore it for callers such as the source-only test suite.
+    previous_mask = os.umask(0o077)
+    try:
+        return _collect(image, evidence, work)
+    finally:
+        os.umask(previous_mask)
+
+
+def _collect(image, evidence, work):
     evidence = evidence / "vulnerability"
-    evidence.mkdir(parents=True, exist_ok=False)
+    evidence.mkdir(mode=0o700, parents=True, exist_ok=False)
     receipt = {
         "schema_version": 1,
         "kind": "offline-image-vulnerability-evidence",
@@ -100,7 +113,7 @@ def collect(image, evidence, work):
             raise EvidenceError(FAILURE)
         if platform.system() != "Linux" or platform.machine() != "x86_64":
             raise EvidenceError(FAILURE)
-        work.mkdir(parents=True, exist_ok=False)
+        work.mkdir(mode=0o700, parents=True, exist_ok=False)
         work = work.resolve(strict=True)
         # The explicit policy file and an isolated DB cache are authoritative;
         # inherited Grype/Syft settings cannot add hidden ignores or exclusions.
