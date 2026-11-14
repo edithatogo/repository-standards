@@ -1,17 +1,22 @@
 # Fresh inventory and evidence-grade conformance
 
-Status: **in progress / first source increment merged** · Priority: **P0** · Created: 2026-11-13
+Status: **source implemented and qualified; live acceptance blocked**.
+Priority: **P0**. Created: 2026-11-13. Updated: 2026-11-14.
 
 - [Specification](spec.md)
 - [Execution plan](plan.md)
 - [Track metadata](metadata.json)
-- [Implementation status and open gates](implementation-status.md)
-- [Sequential PR reconciliation (2026-11-14)](../../merge-reconciliation-20261114.md)
+- [Implementation status](implementation-status.md)
+- [Acceptance evidence and remaining credential gate](acceptance-20261114.md)
+- [Execution ledger](execution-ledger-20261114.md)
+- [Evidence standard](../../../docs/estate-evidence-standard.md)
 - [Programme roadmap](../../frontier-roadmap-20261113.md)
 
 Dependencies: none.
 
-PR #128's protection-evidence increment is merged and its source CI passed.
-This does not establish a fresh estate inventory, complete hosted canary,
-consumer deployment or frontier certification. Existing related tracks remain
-independently open. Archive only after all specification acceptance gates pass.
+PR #138 merged the remaining source implementation and passed hosted validation.
+Its main-branch live run stopped with estate_credential_unavailable before
+collection; no fresh inventory, attestation or public publication is claimed.
+The track remains in progress and is not archived. Configure the credential
+securely in Actions, execute the workflow and verify its actual receipts before
+closing the full specification's acceptance gates.

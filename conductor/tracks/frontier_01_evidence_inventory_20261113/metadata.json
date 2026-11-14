@@ -10,6 +10,12 @@
   "hosted_canary_verified": false,
   "estate_rollout_verified": false,
   "frontier_certified": false,
+  "source_implementation_complete": true,
+  "source_hosted_validation_passed": true,
+  "synthetic_pipeline_qualified": true,
+  "live_inventory_verified": false,
+  "public_attestation_verified": false,
+  "public_issue_publication_verified": false,
   "first_increment": "Protection API forbidden versus observed-absent differentiation",
   "first_increment_receipt": {
     "pull_request": 128,
@@ -19,5 +25,43 @@
     "source_workflow_run_ids": [43313239355, 43313239191, 43313239211, 43313239189],
     "scope": "Central source validation only; not complete track canary or estate acceptance"
   },
+  "implementation_receipt": {
+    "pull_request": 138,
+    "head_sha": "cd2d527a776256c095c81969f98bb343428ba63f",
+    "merge_sha": "598730dbe4b3e3053f5538f74824a147f3e18b72",
+    "source_tree_sha": "da7f2f75dc6ae920243ff268fa0fa0e403ae8e5a",
+    "hosted_validation_run": 43551028491,
+    "hosted_validation_job": 132313266066,
+    "hosted_python": "3.15.2",
+    "tests_discovered": 216,
+    "tests_passed": 182,
+    "tests_skipped": 34,
+    "schema_pipeline_tests_passed": 4,
+    "source_check_records_successful": 8,
+    "main_only_check_records_skipped_on_pr": 2
+  },
+  "live_execution_receipt": {
+    "run_id": 43551271365,
+    "job_id": 132314093289,
+    "source_sha": "598730dbe4b3e3053f5538f74824a147f3e18b72",
+    "observed_at": "2026-11-14T03:22:31Z",
+    "status": "blocked",
+    "reason": "estate_credential_unavailable",
+    "exit_code": 2,
+    "inventory_collected": false,
+    "public_artifacts": 0,
+    "attestation": "skipped",
+    "publication": "skipped"
+  },
+  "blockers": [
+    {
+      "id": "F01-credential",
+      "owner": "repository_owner",
+      "state": "open",
+      "requirement": "Provide ESTATE_AUDIT_TOKEN securely to the main-branch Actions workflow with read access to the declared owned-repository scope, then verify a successful inventory, attestation and publication run.",
+      "secret_value_requested_in_chat": false
+    }
+  ],
+  "acceptance_record": "acceptance-20261114.md",
   "reconciliation_record": "../../merge-reconciliation-20261114.md"
 }
