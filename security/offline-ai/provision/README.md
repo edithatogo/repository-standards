@@ -35,6 +35,12 @@ policy pin. It rejects a pin missing current source changes, and requires the
 calling workflow to match that source byte for byte apart from the single policy
 SHA. A generated candidate-lock artifact is preparation evidence only.
 
+A squash merge creates a new receiving source commit. Follow it with a pin-only
+PR targeting that commit, which must be an ancestor of the pin change. The
+pin-only PR reruns source selection and actual image qualification; do not relax
+the ancestor or byte-identity checks. Consumer repinning waits for the qualified
+release and the remaining gates below.
+
 All image controls run in fresh containers with no network, a read-only root and
 policy mount, UID/GID 65534, zero capabilities, no privilege escalation and
 measured finite resource limits. The real GLiNER model tests cannot be skipped.
@@ -48,6 +54,25 @@ SPDX inventory. It includes the local registry's manifests and blobs only after
 every image control passes. Restoring those exact registry bytes preserves the
 qualified digest; a generic Docker save/load round trip alone is insufficient
 evidence that the same RepoDigest is available.
+
+After the image controls and SBOM, the hosted workflow collects Grype advisory
+evidence for that exact local Docker digest. The Linux amd64 Grype 0.121.3 archive
+is fixed by URL, size and SHA256 in `collect_vulnerabilities.py`; `grype.yaml`
+is the explicit scanner configuration. The scan includes all image layers,
+including packages removed from later layers. It retains unfixed findings and
+internal matcher suppressions without adding severity cutoffs or ignore rules.
+Package recognition and advisory coverage remain limited by the scanner and its
+database; a zero-match report does not prove the image is vulnerability-free.
+
+The `vulnerability/` evidence directory contains the full JSON report, scanner
+version, configuration and database status. Its receipt binds their hashes, the
+database bytes and Docker image ID. Download, integrity, image, scanner and
+database errors fail collection without logging raw findings. The database must
+pass its update, age and integrity checks. Successful collection records
+`review_pending: true`, `vulnerability_review_qualified: false` and
+`release_qualified: false`; vulnerability disposition remains a separate gate.
+The hosted scan requires network access for the pinned tool and current advisory
+database, and does not change the network-denied scanner control execution.
 
 The registry listens on loopback only and is removed after the run. To provision
 the eventual runner, verify the archive checksum, restore it into a private

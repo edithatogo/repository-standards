@@ -1,0 +1,15 @@
+# Evidence collection only: findings require a separate vulnerability review.
+check-for-app-update: false
+fail-on-severity: ""
+only-fixed: false
+only-notfixed: false
+ignore: []
+exclude: []
+vex-documents: []
+include-matcher-suppressions: true
+db:
+  auto-update: true
+  require-update-check: true
+  validate-age: true
+  max-allowed-built-age: 120h
+  validate-by-hash-on-start: true
