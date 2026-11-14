@@ -164,7 +164,11 @@ def is_reviewed_nonsecret(
         return False
 
 
-def clean_environment(*, offline_container: bool = False) -> dict[str, str]:
+def clean_environment(
+    *,
+    offline_container: bool = False,
+    private_view: Path | None = None,
+) -> dict[str, str]:
     env = dict(os.environ)
     for key in tuple(env):
         if key.startswith("GIT_CONFIG_") or key in {
@@ -197,16 +201,30 @@ def clean_environment(*, offline_container: bool = False) -> dict[str, str]:
             GIT_CONFIG_KEY_2="safe.directory",
             GIT_CONFIG_VALUE_2=str(OFFLINE_CONSUMER_MOUNT),
         )
+        if private_view is not None:
+            env.update(
+                GIT_CONFIG_COUNT="4",
+                GIT_CONFIG_KEY_3="safe.directory",
+                GIT_CONFIG_VALUE_3=str(private_view),
+            )
     return env
 
 
-def git_output(root: Path, *args: str, offline_container: bool = False) -> str:
+def git_output(
+    root: Path,
+    *args: str,
+    offline_container: bool = False,
+    private_view: Path | None = None,
+) -> str:
     try:
         result = subprocess.run(
             ["git", "-C", str(root), *args],
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
-            env=clean_environment(offline_container=offline_container),
+            env=clean_environment(
+                offline_container=offline_container,
+                private_view=private_view,
+            ),
             check=False,
             timeout=30,
         )
@@ -390,6 +408,7 @@ def scan(
                     "rev-parse",
                     "--absolute-git-dir",
                     offline_container=offline_container,
+                    private_view=view,
                 )
             ).resolve()
             != Path(git_dir).resolve()
@@ -428,7 +447,10 @@ def scan(
             result = subprocess.run(
                 command,
                 cwd=view,
-                env=clean_environment(offline_container=offline_container),
+                env=clean_environment(
+                    offline_container=offline_container,
+                    private_view=view,
+                ),
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 check=False,
