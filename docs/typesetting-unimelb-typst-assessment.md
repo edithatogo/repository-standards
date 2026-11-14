@@ -6,8 +6,7 @@ Consumer: [edithatogo/unimelb-thesis-template-typst][consumer].
 Owners: [consumer #5][consumer-governance] and [central typesetting #5][typesetting].
 
 This assessment corrects a July registry classification. It does not activate
-settings, certify the latest consumer revision, implement a new collector, or
-complete the separate [UMTHESIS document programme][contract]. The existing
+settings, implement a new collector, or complete the separate [UMTHESIS document programme][contract]. The existing
 `typesetting-template` archetype and `typst` profile are retained.
 
 ## Registry decision and qualification boundary
@@ -16,9 +15,9 @@ complete the separate [UMTHESIS document programme][contract]. The existing
 | --- | --- | --- |
 | `archetype` / `profile` | Retain `typesetting-template` / `typst`. | Typst compilation and document-output checks remain required; Python helpers do not replace the document profile. |
 | `codecov.warranted` | `true`. | Executable Python validation/policy helpers have measured unit-test coverage. The previous no-executable-coverage exclusion is stale. |
-| `codecov.current` | `active`, scoped by `evidence_revision`. | Actual upload and Codecov-owned `codecov/patch` success exist for `7e2d09c934c3c9805a222f39c6fd073885196b48`. This qualifies the integrated source candidate; receiving-main provider verification remains separate. |
+| `codecov.current` | `active`, scoped by `evidence_revision`. | Actual upload and a `codecov[bot]`-owned `codecov/patch` status succeeded for receiving main `937579897af22d7d28f20a49e94a1bdbe4e05855`. Source-candidate check evidence is preserved separately. |
 | `codecov.target` | `active_oidc_upload_with_real_coverage`. | Preserve OIDC upload and actual producer-check verification on each final candidate and receiving revision. |
-| `codecov.receiving_main_qualified` | `false`. | No passing receiving-main coverage result is asserted by this central change. Refresh only after exact-revision execution and provider evidence. |
+| `codecov.receiving_main_qualified` | `true`. | All five receiving workflows succeeded, and Codecov status `58926800850` passed for the exact `evidence_revision`. This is dated qualification of that commit, not later revisions. |
 | `supply_chain_profile` | `published`. | Published source releases exist, and the tag-only release workflow is configured to publish a PDF. This selects applicable controls; it does not claim those controls are implemented or passed. |
 
 The consumer's qualified source candidate is
@@ -26,9 +25,10 @@ The consumer's qualified source candidate is
 Its quality, privacy, Python coverage, CodeQL and Codecov checks passed before
 merge. The actual receiving main is
 `937579897af22d7d28f20a49e94a1bdbe4e05855`, with the same source tree
-`dad36e87cc3971538228056a04c091e59023ab98`. Its fresh hosted/provider
-qualification remains pending; source-tree equality does not replace that
-execution evidence.
+`dad36e87cc3971538228056a04c091e59023ab98`. Its five hosted workflows and
+actual Codecov status completed successfully. The receiving coverage job
+independently ran all 61 tests on Python 3.15.1 and measured 97.74% combined
+coverage. Source-tree equality is recorded alongside that fresh execution evidence.
 The main migration from PR #10 was integrated as
 `b947d5ea0ad1a9c118a9c3670bcb82200052c9a2`; it is not a substitute for
 qualification of PR #12's additional executable code.
@@ -100,8 +100,8 @@ attached to their results. Obtain applicable analysis on the changed final
 candidate and its receiving revision; the historical analyses do not qualify
 the newer policy checker. The [current candidate analysis][current-codeql]
 passed both languages and the CodeQL-owned aggregate check on `7e2d09c`.
-Receiving-main analysis remains open. No CodeQL analysis of Typst layout is
-claimed.
+The [receiving-main analysis][receiving-codeql] also passed Python and Actions
+for `9375798`. No CodeQL analysis of Typst layout is claimed.
 
 The current central [`typst` profile][profiles] inherits `executable: false`
 and `coverage: not_applicable` from `documentation`. The legacy
@@ -143,14 +143,26 @@ outputs. [F07][f07] remains responsible for dated, scoped assurance claims.
 
 ## Remaining integration and ownership
 
-Source-head coverage, CodeQL and the actual provider result are qualified.
-Before completing consumer #5/#6, record the receiving-main verification and
-provider result, central integration, and the final governance read-back. The
-receiving [quality][receiving-quality], [privacy][receiving-privacy],
-[maintenance][receiving-maintenance] and [CodeQL][receiving-codeql] runs are
-registered, with qualification pending. The desired policy alone does not
-activate a ruleset. Preserve zero required approvals, conversation resolution
-and owner recovery; this central patch changes no settings.
+Source-head and receiving-main coverage, CodeQL and provider results are
+qualified for their recorded commits. The receiving [quality][receiving-quality],
+[privacy][receiving-privacy], [maintenance][receiving-maintenance],
+[CodeQL][receiving-codeql] and [dependency-graph][receiving-dependencies]
+runs all succeeded. The ordinary push event correctly skipped Dependency review
+and Extended property corpus; those skips are not counted as executed passes.
+
+The [receiving coverage upload][receiving-upload] completed at
+`2026-11-14T17:10:14Z`. GitHub's [commit-status objects][receiving-statuses]
+then recorded `codecov/patch` status **58926800850**, state **success**, at
+`2026-11-14T17:10:25Z`, created by **codecov[bot]**, user ID **22429695**.
+Its [exact-commit report][receiving-codecov] states that coverage was unaffected
+when comparing `7e2d09c...9375798`. This is a legacy status, distinct from the
+source PR's Codecov App 254 check-run; check-run-only collection would miss it.
+
+Before completing consumer #5/#6, integrate this central correction and the
+final evidence PR, qualify their exact final heads and receiving revisions, and
+retain the final governance read-back. The desired policy alone does not activate
+a ruleset. Preserve zero required approvals, conversation resolution and owner
+recovery; this central patch changes no settings.
 
 The full live ruleset inventory read back at 2026-11-14T15:51:12Z contains
 one active [ruleset, 27266891][live-ruleset]. The candidate's checker returned
@@ -158,9 +170,10 @@ MATCH / exit 0: all eight intended status contexts are bound to GitHub Actions
 app ID 15368, conversation resolution is required, approval count is zero,
 and the only recovery actor is repository owner `edithatogo`. The consumer's
 [integration receipt][integration-receipt] retains the full snapshot and its
-observation boundary. That dated receipt is being refreshed after source
-qualification; its earlier queued-source-provider observation is historical.
-The settings result does not qualify receiving-main provider execution.
+observation boundary. A fresh full read-back on 15 November 2026 (Brisbane)
+confirmed the same qualified policy. The dated receipt's earlier queued receiving
+observations are historical; final integration evidence is being reconciled in
+consumer PR #11. Settings and provider results remain distinct evidence.
 
 This change owns only the Typst registry entry and this assessment. Central
 [PR #119][registry-overlap] edits the same registry file for genomics, and
@@ -193,7 +206,7 @@ existing leaf owners; it is not added to the historical #6 child count.
 [receiving-privacy]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613547805
 [receiving-maintenance]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613547923
 [receiving-codeql]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613547696
-[integration-receipt]: https://github.com/edithatogo/unimelb-thesis-template-typst/blob/53b266a689161499b6caace29a97c677dc38521f/docs/maintenance/issue-5-integration-receipt.json
+[integration-receipt]: https://github.com/edithatogo/unimelb-thesis-template-typst/blob/1df319593c1df31d2a7314fbb309d23a8391d86f/docs/maintenance/issue-5-integration-receipt.json
 [profiles]: ../profiles/archetype-profiles.json
 [collector]: ../scripts/audit_estate_conformance.py
 [f04]: ../conductor/tracks/frontier_04_verification_harness_20261113/spec.md
@@ -207,3 +220,8 @@ existing leaf owners; it is not added to the historical #6 child count.
 [f07]: ../conductor/tracks/frontier_07_observability_certification_20261113/spec.md
 [registry-overlap]: https://github.com/edithatogo/repository-standards/pull/119
 [latex-overlap]: https://github.com/edithatogo/repository-standards/pull/141
+
+[receiving-dependencies]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613554074
+[receiving-upload]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613547923/job/132516395426
+[receiving-statuses]: https://api.github.com/repos/edithatogo/unimelb-thesis-template-typst/commits/937579897af22d7d28f20a49e94a1bdbe4e05855/statuses
+[receiving-codecov]: https://app.codecov.io/gh/edithatogo/unimelb-thesis-template-typst/commit/937579897af22d7d28f20a49e94a1bdbe4e05855

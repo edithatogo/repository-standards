@@ -4739,8 +4739,8 @@
         "current": "active",
         "warranted": true,
         "target": "active_oidc_upload_with_real_coverage",
-        "evidence_revision": "7e2d09c934c3c9805a222f39c6fd073885196b48",
-        "receiving_main_qualified": false,
+        "evidence_revision": "937579897af22d7d28f20a49e94a1bdbe4e05855",
+        "receiving_main_qualified": true,
         "assessment": "docs/typesetting-unimelb-typst-assessment.md"
       },
       "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-typst/issues/5",
