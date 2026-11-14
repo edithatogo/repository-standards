@@ -134,3 +134,47 @@ Outstanding mandatory qualification:
 3. Rust `cargo test --offline --locked` and TypeScript consumer integration with a live model-backed socket server.
 4. Deployment on a hardened ephemeral, private, self-hosted runner with measured network isolation and log review.
 5. Two GitHub repository policy exceptions, repinning 175 consumer callers to the final qualified central commit, and merging only after checks pass.
+
+## Qualification tooling repairs — 2026-11-15
+
+Follow-up for `unimelb-thesis-template-typst` PR #9:
+
+- Replaced the partial manifest with schema 2, requiring complete inventories of
+  supplied scanner binaries, locked wheels, Promptfoo files and model files.
+  Verification runs against the vendor bundle before Docker, and against image
+  paths before package installation. Unlisted files, tampering, path aliases and
+  unsafe links fail closed. The manifest still requires independent approval.
+- Added `docker/qualify_image.py` to execute eight real runtime, network,
+  manifest, asset, Gitleaks, Opengrep, model and Promptfoo controls against a
+  local digest-pinned image. All stages use one exported immutable policy
+  snapshot and explicit container entrypoints. Private outcome receipts retain
+  failed and unexecuted stages and container-cleanup results without raw output.
+- Added `scripts/qualify_model.py`, which requires the three exact real-model
+  tests and every setup/call/teardown phase to pass. Skipped, deselected, missing,
+  extra or incomplete tests cannot qualify the model. Pytest configuration,
+  plugin autoload and inherited options cannot alter the intended test set.
+- Repaired consumer-directory Python import shadowing: the trusted quiet
+  wrapper and its child controls use safe-path mode. Three process regressions
+  reproduced false success before the fix and passed after it on Python 3.15.1
+  and 3.15.2.
+- The Python 3.15.2 policy command
+  `PYTHONPATH=scripts .venv/bin/python -m unittest discover -s tests -v` completed
+  with **186 tests: 151 passed and 35 existing capability-dependent skips**.
+  This includes 7 asset-preflight, 11 image-orchestration, 12 model-orchestration
+  and 3 trusted-Python regression tests. An additional 57 focused asset cases
+  passed on both Python 3.15.1 and 3.15.2. Eight synthetic real-pytest protocol
+  scenarios confirmed acceptance of complete passes and rejection of skipped,
+  errored, incomplete or unexpected model-test execution.
+- Restored the consumer's disabled Typst CI and executed it on PR #9 head
+  `52b9ce77354183fcfe7c4a663a3901b6665e702c`.
+  [Run 43608782761](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43608782761)
+  passed all four profiles (default, draft, print and screen), including
+  formatting, compilation and PDF validation. Repository runner settings showed
+  no configured self-hosted runners; this build does not qualify offline scanning.
+
+The orchestration tests use fake Docker or synthetic pytest reports. No actual
+scanner image was built or qualified, no approved asset bundle or model was
+supplied, and no runner was registered. Steps 01–09 remain incomplete. The
+central rollout and consumer PR #9 remain draft until their real qualification
+gates pass; this tranche does not authorize a qualified-release claim or
+consumer merge. Existing application-adapter and Rust qualification gaps remain.
