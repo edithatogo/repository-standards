@@ -6,7 +6,7 @@ import sys
 _ALLOWED = frozenset({
     "gitleaks-history", "gitleaks-diff", "opengrep", "pytest", "node-tests",
     "promptfoo-mock", "promptfoo-agent", "asset-preflight",
-    "network-preflight", "sast-fixtures", "gitleaks-fixtures",
+    "network-preflight", "container-preflight", "sast-fixtures", "gitleaks-fixtures",
 })
 
 def run(label: str, command: list[str]) -> int:
