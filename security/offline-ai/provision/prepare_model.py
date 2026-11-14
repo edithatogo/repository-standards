@@ -30,6 +30,17 @@ LAYOUT = {
     "encoder_sentencepiece": ("encoder", "spm.model"),
 }
 
+ATTRIBUTION_LAYOUT = {
+    "model_card": ("attribution/gliner-model-card.md", "model-license-declaration"),
+    "encoder_card": ("attribution/mdeberta-model-card.md", "model-license-declaration"),
+    "model_source_license": ("attribution/gliner-source-LICENSE.txt", "associated-source-code-license"),
+    "encoder_source_license": ("attribution/deberta-source-LICENSE.txt", "associated-source-code-license"),
+}
+SOURCE_LICENSE_REPOS = {
+    "model_source_license": "urchade/GLiNER",
+    "encoder_source_license": "microsoft/DeBERTa",
+}
+
 
 class PreparationFailure(ValueError):
     def __init__(self, stage):
@@ -71,7 +82,7 @@ def sha256(path):
 
 def load_catalog(path=CATALOG):
     data = read_object(path)
-    if set(data) != {"schema_version", "model", "encoder", "files"} or type(data["schema_version"]) is not int or data["schema_version"] != 1:
+    if set(data) != {"schema_version", "model", "encoder", "files", "attribution"} or type(data["schema_version"]) is not int or data["schema_version"] != 2:
         raise ValueError(FAILURE)
     for kind, repo in (("model", "urchade/gliner_multi_pii-v1"), ("encoder", MODEL_ID)):
         source = data[kind]
@@ -90,6 +101,26 @@ def load_catalog(path=CATALOG):
                 or not isinstance(item["sha256"], str)
                 or not re.fullmatch(r"[0-9a-f]{64}", item["sha256"])):
             raise ValueError(FAILURE)
+    if not isinstance(data["attribution"], dict) or set(data["attribution"]) != set(ATTRIBUTION_LAYOUT):
+        raise ValueError(FAILURE)
+    for role, (filename, scope) in ATTRIBUTION_LAYOUT.items():
+        item = data["attribution"][role]
+        if (not isinstance(item, dict) or set(item) != {"url", "path", "scope", "size", "sha256"}
+                or item["path"] != filename or item["scope"] != scope
+                or not isinstance(item["url"], str)
+                or type(item["size"]) is not int or not 0 < item["size"] <= 1024**2
+                or not isinstance(item["sha256"], str)
+                or not re.fullmatch(r"[0-9a-f]{64}", item["sha256"])):
+            raise ValueError(FAILURE)
+        if role in ("model_card", "encoder_card"):
+            source = data[role.removesuffix("_card")]
+            expected = f"https://huggingface.co/{source['repo']}/resolve/{source['revision']}/README.md"
+            if item["url"] != expected:
+                raise ValueError(FAILURE)
+        else:
+            repo = re.escape(SOURCE_LICENSE_REPOS[role])
+            if not re.fullmatch(rf"https://raw\.githubusercontent\.com/{repo}/[0-9a-f]{{40}}/LICENSE", item["url"]):
+                raise ValueError(FAILURE)
     return data
 
 
@@ -182,6 +213,7 @@ def prepare(destination, receipt_path, catalog_path=CATALOG):
     common = dict(
         schema_version=1, source_catalog_sha256=sha256(catalog_path),
         source_model=catalog["model"], source_encoder=catalog["encoder"],
+        attribution_sources=catalog["attribution"],
         python_version="3.15.1", model_execution_qualified=False,
         image_qualified=False, runner_registration_qualified=False,
     )
@@ -195,6 +227,18 @@ def prepare(destination, receipt_path, catalog_path=CATALOG):
                     download(url, record, path)
                 inputs[role] = path
                 verified.append(dict(role=role, url=url, size=record["size"], sha256=record["sha256"]))
+            attribution = {}
+            for role, record in catalog["attribution"].items():
+                path = Path(temporary) / role
+                with preparation_stage("download-attribution"):
+                    download(record["url"], record, path)
+                attribution[role] = path
+                verified.append(dict(role=role, url=record["url"], size=record["size"],
+                                     sha256=record["sha256"], scope=record["scope"]))
+            with preparation_stage("retain-attribution"):
+                (destination / "attribution").mkdir()
+                for role, path in attribution.items():
+                    shutil.copyfile(path, destination / catalog["attribution"][role]["path"])
             with preparation_stage("export"):
                 export_model(inputs, destination)
         with preparation_stage("receipt"):

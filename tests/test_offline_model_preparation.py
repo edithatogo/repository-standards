@@ -35,6 +35,13 @@ class ModelPreparationTests(unittest.TestCase):
         })
         self.assertEqual(catalog["model"]["revision"], "1fcf13e85f4eef5394e1fcd406cf2ca9ea82351d")
         self.assertEqual(catalog["encoder"]["revision"], "a0484667b22365f84929a935b5e50a51f71f159d")
+        self.assertEqual(catalog["schema_version"], 2)
+        self.assertEqual(set(catalog["attribution"]), {
+            "model_card", "encoder_card", "model_source_license", "encoder_source_license",
+        })
+        for role, record in catalog["attribution"].items():
+            expected = "model-license-declaration" if role.endswith("_card") else "associated-source-code-license"
+            self.assertEqual(record["scope"], expected)
 
     def test_incomplete_or_unpinned_catalog_is_rejected(self):
         original = json.loads(preparation.CATALOG.read_text())
@@ -45,6 +52,13 @@ class ModelPreparationTests(unittest.TestCase):
             lambda data: data["files"]["checkpoint"].update(path="../unreviewed"),
             lambda data: data["files"]["checkpoint"].update(size=True),
             lambda data: data["files"]["checkpoint"].update(sha256=None),
+            lambda data: data["attribution"].pop("model_card"),
+            lambda data: data["attribution"]["model_card"].update(url="https://huggingface.co/urchade/gliner_multi_pii-v1/resolve/main/README.md"),
+            lambda data: data["attribution"]["model_source_license"].update(url="https://raw.githubusercontent.com/urchade/GLiNER/main/LICENSE"),
+            lambda data: data["attribution"]["encoder_source_license"].update(scope="model-license-declaration"),
+            lambda data: data["attribution"]["model_card"].update(path="../README.md"),
+            lambda data: data["attribution"]["model_card"].update(size=True),
+            lambda data: data["attribution"]["model_card"].update(sha256=None),
         ):
             data = json.loads(json.dumps(original))
             change(data)
@@ -97,10 +111,15 @@ class ModelPreparationTests(unittest.TestCase):
     def test_preparation_records_source_and_derived_hashes_without_qualification(self):
         fixture = json.loads((OFFLINE / "tests/fixtures/native_model.json").read_text())
         calls = []
+        catalog = preparation.load_catalog()
+        attribution_bytes = {
+            record["path"]: (f"synthetic attribution: {role}\nCopyright café\n").encode("utf-8")
+            for role, record in catalog["attribution"].items()
+        }
 
         def download(url, record, path):
             calls.append((url, record))
-            path.write_bytes(b"synthetic source")
+            path.write_bytes(attribution_bytes.get(record["path"], b"synthetic source"))
 
         def export(inputs, destination):
             self.assertEqual(set(inputs), set(preparation.LAYOUT))
@@ -116,7 +135,7 @@ class ModelPreparationTests(unittest.TestCase):
                 patch.object(preparation, "export_model", side_effect=export), \
                 patch.object(preparation, "version", return_value="synthetic"):
             result = preparation.prepare(destination, receipt)
-        self.assertEqual(len(calls), 5)
+        self.assertEqual(len(calls), 9)
         self.assertEqual(result["status"], "prepared")
         self.assertFalse(result["model_execution_qualified"])
         self.assertFalse(result["image_qualified"])
@@ -124,15 +143,25 @@ class ModelPreparationTests(unittest.TestCase):
         self.assertEqual(receipt.stat().st_mode & 0o777, 0o600)
         for record in result["derived_files"]:
             self.assertEqual(record["sha256"], preparation.sha256(destination / record["path"]))
+        self.assertEqual(result["attribution_sources"], catalog["attribution"])
+        derived = {record["path"]: record for record in result["derived_files"]}
+        verified = {record["role"]: record for record in result["verified_inputs"]}
+        for role, source in catalog["attribution"].items():
+            payload = attribution_bytes[source["path"]]
+            self.assertEqual((destination / source["path"]).read_bytes(), payload)
+            self.assertEqual(derived[source["path"]]["sha256"], hashlib.sha256(payload).hexdigest())
+            self.assertEqual(verified[role]["url"], source["url"])
+            self.assertEqual(verified[role]["sha256"], source["sha256"])
+            self.assertEqual(verified[role]["scope"], source["scope"])
 
     def test_failures_write_private_value_free_stage_receipts(self):
-        for stage in ("download", "export-tokenizer", "export-weights", "validate-bundle"):
+        for stage in ("download", "download-attribution", "export-tokenizer", "export-weights", "validate-bundle"):
             with self.subTest(stage=stage):
                 destination = self.root / stage
                 receipt = self.root / f"{stage}.json"
 
                 def download(url, record, path):
-                    if stage == "download":
+                    if stage == "download" or (stage == "download-attribution" and "scope" in record):
                         raise ValueError("synthetic-private-download-marker")
                     path.write_bytes(b"synthetic source")
 
@@ -151,7 +180,8 @@ class ModelPreparationTests(unittest.TestCase):
                 result = json.loads(receipt.read_text())
                 self.assertEqual(result["status"], "failed")
                 self.assertEqual(result["failed_stage"], stage)
-                self.assertEqual(len(result["verified_inputs"]), 0 if stage == "download" else 5)
+                completed = {"download": 0, "download-attribution": 5}.get(stage, 9)
+                self.assertEqual(len(result["verified_inputs"]), completed)
                 self.assertFalse(result["model_execution_qualified"])
                 self.assertFalse(result["image_qualified"])
                 self.assertFalse(result["runner_registration_qualified"])
