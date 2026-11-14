@@ -4,7 +4,7 @@ cd /work
 # The readonly workspace is owned by the checkout runner, not by the sandbox UID.
 git config --global --add safe.directory /work
 for executable in gitleaks opengrep python promptfoo git node; do command -v "$executable" >/dev/null || exit 2; done
-quiet() { PYTHONPATH=/policy/security/offline-ai python -m security.quiet_exec "$@"; }
+quiet() { PYTHONPATH=/policy/security/offline-ai PYTHONSAFEPATH=1 python -P -m security.quiet_exec "$@"; }
 test "${HF_HUB_OFFLINE:-}" = 1 && test "${npm_config_offline:-}" = true || exit 2
 # A checked-out repository must never supply or override the scanner's trusted asset manifest.
 quiet network-preflight python -m security.verify_network
@@ -41,7 +41,8 @@ else
 fi
 if [[ "$ai" == true ]]; then
   test -f /opt/models/gliner-pii/config.json || { echo "Offline GLiNER model missing"; exit 2; }
-  quiet pytest python -m pytest -q -p no:cacheprovider /policy/security/offline-ai/tests/test_local_dlp.py /policy/security/offline-ai/tests/test_local_dlp_integration.py
+  quiet pytest python -m pytest -q -p no:cacheprovider /policy/security/offline-ai/tests/test_local_dlp.py
+  quiet pytest python /policy/security/offline-ai/scripts/qualify_model.py
   cd /policy/security/offline-ai
   # Mock corpus verifies runner wiring, not application prompt safety.
   quiet promptfoo-mock promptfoo eval -c promptfooconfig.yaml --no-cache --no-progress
