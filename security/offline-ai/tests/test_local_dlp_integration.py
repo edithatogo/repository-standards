@@ -11,7 +11,9 @@ from security.local_dlp import DLPUnavailable, redact_sensitive_data, sanitize_c
 
 def test_real_model_is_locally_available():
     root = Path(os.environ.get("GLINER_MODEL_DIR", "/opt/models/gliner-pii"))
-    assert (root / "config.json").is_file(), "GLiNER model missing from offline image"
+    from security.model_assets import validate_model_bundle
+    validate_model_bundle(root)
+    assert (root / "gliner_config.json").is_file(), "GLiNER model missing from offline image"
     from gliner import GLiNER  # noqa: F401
     from presidio_analyzer import AnalyzerEngine  # noqa: F401
     from presidio_anonymizer import AnonymizerEngine  # noqa: F401

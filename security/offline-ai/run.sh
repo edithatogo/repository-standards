@@ -40,7 +40,7 @@ else
   fi
 fi
 if [[ "$ai" == true ]]; then
-  test -f /opt/models/gliner-pii/config.json || { echo "Offline GLiNER model missing"; exit 2; }
+  test -f /opt/models/gliner-pii/gliner_config.json || { echo "Offline GLiNER model missing"; exit 2; }
   quiet pytest python -m pytest -q -p no:cacheprovider /policy/security/offline-ai/tests/test_local_dlp.py
   quiet pytest python /policy/security/offline-ai/scripts/qualify_model.py
   cd /policy/security/offline-ai

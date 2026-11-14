@@ -127,3 +127,24 @@ They do not build or qualify an image. The model-wrapper unit tests simulate
 pytest's reporting contract and likewise do not replace the real model suite.
 
 Do not commit real clinical data, private repository content, or sensitive model weights to this standards repository. No GitHub-hosted Actions job can be described as wholly air-gapped, because checkout and orchestration require GitHub connectivity.
+
+## Native GLiNER model bundle
+
+The supported candidate uses the GLiNER 0.2.30 uni-encoder span model with
+mDeBERTa-v3-base. Its native configuration is `gliner_config.json`; a generic
+`config.json` is not a substitute. The complete bundle includes the embedded
+encoder configuration and its matching source under `encoder/config.json`, a
+local fast tokenizer (`tokenizer_config.json` and `tokenizer.json`), and
+`model.safetensors`. Auxiliary model architectures, custom Python code, remote
+code mappings and adapters are rejected. Runtime loading uses the built-in
+Deberta model, explicit local-only tokenizer loading with remote code disabled,
+and strict state-dictionary matching.
+
+`provision/model-sources.json` pins the model checkpoint and its encoder/tokenizer
+inputs to exact upstream revisions, sizes and SHA-256 digests.
+`provision/prepare_model.py --destination NEW_DIRECTORY --receipt NEW_JSON_FILE`
+prepares those inputs on a network-enabled provisioning host using Python 3.15.1.
+It converts the verified checkpoint with PyTorch's `weights_only=True` loader,
+exports safetensors and a local tokenizer, and records derived-file hashes and
+source provenance. A preparation receipt is not model or image qualification;
+execute the real qualification suite with network disabled afterward.
