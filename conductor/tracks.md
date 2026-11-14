@@ -1,9 +1,13 @@
 # Tracks
 
 ## Frontier control-plane programme (13 November 2026)
-[Programme roadmap](frontier-roadmap-20261113.md). These are **planned tracks**, not completed deployments.
 
-- [ ] **P0 Fresh inventory and evidence-grade conformance** — [Track](tracks/frontier_01_evidence_inventory_20261113/index.md).
+[Programme roadmap](frontier-roadmap-20261113.md). F01 is in progress; the other
+programme tracks remain planned. Merged source changes are not completed estate
+deployments. See the [2026-11-14 reconciliation](merge-reconciliation-20261114.md)
+for exact-head evidence, superseded PRs and open gates.
+
+- [~] **P0 Fresh inventory and evidence-grade conformance** — [Track](tracks/frontier_01_evidence_inventory_20261113/index.md).
 - [ ] **P0 Risk-tiered enforcement and privacy rollout** — [Track](tracks/frontier_02_enforcement_20261113/index.md); depends on `frontier_01_evidence_inventory_20261113`, `privacy_secrets_rollout_20261110`.
 - [ ] **P0 Bounded GitHub App remediation control plane** — [Track](tracks/frontier_03_managed_remediation_20261113/index.md); depends on `frontier_01_evidence_inventory_20261113`, `frontier_02_enforcement_20261113`.
 - [ ] **P1 Archetype-based verification and scientific reproducibility** — [Track](tracks/frontier_04_verification_harness_20261113/index.md); depends on `frontier_01_evidence_inventory_20261113`, `bounded_execution_merkle_lineage_20261110`.
