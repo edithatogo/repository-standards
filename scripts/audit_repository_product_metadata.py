@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Audit an owner's active GitHub repositories for product-metadata standards."""
 
-from __future__ import annotations
-
 import argparse
 import base64
 import json
