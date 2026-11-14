@@ -125,6 +125,40 @@ class ModelPreparationTests(unittest.TestCase):
         for record in result["derived_files"]:
             self.assertEqual(record["sha256"], preparation.sha256(destination / record["path"]))
 
+    def test_failures_write_private_value_free_stage_receipts(self):
+        for stage in ("download", "export-tokenizer", "export-weights", "validate-bundle"):
+            with self.subTest(stage=stage):
+                destination = self.root / stage
+                receipt = self.root / f"{stage}.json"
+
+                def download(url, record, path):
+                    if stage == "download":
+                        raise ValueError("synthetic-private-download-marker")
+                    path.write_bytes(b"synthetic source")
+
+                def export(inputs, output):
+                    with preparation.preparation_stage(stage):
+                        raise ValueError("synthetic-private-export-marker")
+
+                with patch.object(preparation.sys, "version_info", (3, 15, 1)), \
+                        patch.object(preparation, "download", side_effect=download), \
+                        patch.object(preparation, "export_model", side_effect=export):
+                    with self.assertRaises(preparation.PreparationFailure) as caught:
+                        preparation.prepare(destination, receipt)
+
+                self.assertEqual(str(caught.exception), preparation.FAILURE)
+                self.assertEqual(caught.exception.stage, stage)
+                result = json.loads(receipt.read_text())
+                self.assertEqual(result["status"], "failed")
+                self.assertEqual(result["failed_stage"], stage)
+                self.assertEqual(len(result["verified_inputs"]), 0 if stage == "download" else 5)
+                self.assertFalse(result["model_execution_qualified"])
+                self.assertFalse(result["image_qualified"])
+                self.assertFalse(result["runner_registration_qualified"])
+                self.assertEqual(receipt.stat().st_mode & 0o777, 0o600)
+                self.assertNotIn("synthetic-private", receipt.read_text())
+                self.assertNotIn("derived_files", result)
+
     def test_export_uses_local_tokenizer_and_tensor_only_checkpoint_loading(self):
         fixture = json.loads((OFFLINE / "tests/fixtures/native_model.json").read_text())
         raw = self.root / "inputs"
@@ -183,6 +217,21 @@ class ModelPreparationTests(unittest.TestCase):
         config = json.loads((output / "gliner_config.json").read_text())
         self.assertEqual(config["encoder_config"], fixture["encoder/config.json"])
         preparation.validate_model_bundle(output)
+
+        for stage, target, attribute in (
+                ("export-tokenizer", transformers.AutoTokenizer, "from_pretrained"),
+                ("export-weights", torch, "load"),
+                ("validate-bundle", preparation, "validate_model_bundle")):
+            with self.subTest(stage=stage):
+                failed_output = self.root / stage
+                failed_output.mkdir()
+                with patch.dict(sys.modules, {"torch": torch, "safetensors": safetensors,
+                                              "safetensors.torch": safe_torch, "transformers": transformers}), \
+                        patch.object(target, attribute, side_effect=ValueError("synthetic-private-marker")):
+                    with self.assertRaises(preparation.PreparationFailure) as caught:
+                        preparation.export_model(inputs, failed_output)
+                self.assertEqual(caught.exception.stage, stage)
+                self.assertEqual(str(caught.exception), preparation.FAILURE)
 
     def test_cli_suppresses_buffered_and_native_failure_output(self):
         code = (

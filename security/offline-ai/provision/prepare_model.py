@@ -31,6 +31,39 @@ LAYOUT = {
 }
 
 
+class PreparationFailure(ValueError):
+    def __init__(self, stage):
+        self.stage = stage
+        super().__init__(FAILURE)
+
+
+@contextmanager
+def preparation_stage(stage):
+    try:
+        yield
+    except PreparationFailure:
+        raise
+    except Exception:
+        raise PreparationFailure(stage) from None
+
+
+def write_receipt(path, receipt):
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
+                                         prefix=".model-preparation-", delete=False) as stream:
+            temporary = Path(stream.name)
+            os.fchmod(stream.fileno(), 0o600)
+            json.dump(receipt, stream, indent=2, sort_keys=True)
+            stream.write("\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.link(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
 def sha256(path):
     with Path(path).open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
@@ -78,55 +111,58 @@ def download(url, record, destination):
 
 def export_model(inputs, destination):
     """Use only built-in local tokenizer code and tensor-only checkpoint loading."""
-    import torch
-    from safetensors.torch import save_file
-    from transformers import AutoTokenizer
+    with preparation_stage("export-tokenizer"):
+        from transformers import AutoTokenizer
+        config = read_object(inputs["model_config"])
+        encoder = read_object(inputs["encoder_config"])
+        if config.get("model_name") != MODEL_ID or encoder.get("model_type") != "deberta-v2":
+            raise ValueError(FAILURE)
+        encoder_dir = destination / "encoder"
+        encoder_dir.mkdir()
+        shutil.copyfile(inputs["encoder_config"], encoder_dir / "config.json")
+        shutil.copyfile(inputs["encoder_tokenizer_config"], encoder_dir / "tokenizer_config.json")
+        shutil.copyfile(inputs["encoder_sentencepiece"], encoder_dir / "spm.model")
+        tokenizer = AutoTokenizer.from_pretrained(
+            str(encoder_dir), local_files_only=True, trust_remote_code=False, token=False, use_fast=True,
+        )
+        if not tokenizer.is_fast:
+            raise ValueError(FAILURE)
+        tokenizer.save_pretrained(destination)
+        token_config = read_object(destination / "tokenizer_config.json")
+        for key in ("name_or_path", "_name_or_path"):
+            token_config.pop(key, None)
+        for key in ("tokenizer_file", "vocab_file", "special_tokens_map_file", "added_tokens_file"):
+            value = token_config.get(key)
+            if value is not None:
+                local = Path(value).name
+                if not (destination / local).is_file():
+                    raise ValueError(FAILURE)
+                token_config[key] = local
+        token_config["trust_remote_code"] = False
+        (destination / "tokenizer_config.json").write_text(
+            json.dumps(token_config, indent=2, sort_keys=True) + "\n", encoding="utf-8",
+        )
+        config.update(model_type="gliner_uni_encoder_span", words_splitter_type="whitespace",
+                      encoder_config=encoder)
+        (destination / "gliner_config.json").write_text(
+            json.dumps(config, indent=2, sort_keys=True) + "\n", encoding="utf-8",
+        )
 
-    config = read_object(inputs["model_config"])
-    encoder = read_object(inputs["encoder_config"])
-    if config.get("model_name") != MODEL_ID or encoder.get("model_type") != "deberta-v2":
-        raise ValueError(FAILURE)
-    encoder_dir = destination / "encoder"
-    encoder_dir.mkdir()
-    shutil.copyfile(inputs["encoder_config"], encoder_dir / "config.json")
-    shutil.copyfile(inputs["encoder_tokenizer_config"], encoder_dir / "tokenizer_config.json")
-    shutil.copyfile(inputs["encoder_sentencepiece"], encoder_dir / "spm.model")
-    tokenizer = AutoTokenizer.from_pretrained(
-        str(encoder_dir), local_files_only=True, trust_remote_code=False, token=False, use_fast=True,
-    )
-    if not tokenizer.is_fast:
-        raise ValueError(FAILURE)
-    tokenizer.save_pretrained(destination)
-    token_config = read_object(destination / "tokenizer_config.json")
-    for key in ("name_or_path", "_name_or_path"):
-        token_config.pop(key, None)
-    for key in ("tokenizer_file", "vocab_file", "special_tokens_map_file", "added_tokens_file"):
-        value = token_config.get(key)
-        if value is not None:
-            local = Path(value).name
-            if not (destination / local).is_file():
-                raise ValueError(FAILURE)
-            token_config[key] = local
-    token_config["trust_remote_code"] = False
-    (destination / "tokenizer_config.json").write_text(
-        json.dumps(token_config, indent=2, sort_keys=True) + "\n", encoding="utf-8",
-    )
-    config.update(model_type="gliner_uni_encoder_span", words_splitter_type="whitespace",
-                  encoder_config=encoder)
-    (destination / "gliner_config.json").write_text(
-        json.dumps(config, indent=2, sort_keys=True) + "\n", encoding="utf-8",
-    )
+    with preparation_stage("export-weights"):
+        import torch
+        from safetensors.torch import save_file
+        state = torch.load(inputs["checkpoint"], map_location="cpu", weights_only=True)
+        if not isinstance(state, dict) or not state or any(
+                not isinstance(name, str) or not torch.is_tensor(value) for name, value in state.items()):
+            raise ValueError(FAILURE)
+        # Keep all state keys and values while separating shared storage for safetensors.
+        tensors = {name: value.contiguous().clone() for name, value in state.items()}
+        del state
+        save_file(tensors, str(destination / "model.safetensors"))
+        del tensors
 
-    state = torch.load(inputs["checkpoint"], map_location="cpu", weights_only=True)
-    if not isinstance(state, dict) or not state or any(
-            not isinstance(name, str) or not torch.is_tensor(value) for name, value in state.items()):
-        raise ValueError(FAILURE)
-    # Keep all state keys and values while separating shared storage for safetensors.
-    tensors = {name: value.contiguous().clone() for name, value in state.items()}
-    del state
-    save_file(tensors, str(destination / "model.safetensors"))
-    del tensors
-    validate_model_bundle(destination)
+    with preparation_stage("validate-bundle"):
+        validate_model_bundle(destination)
 
 
 def prepare(destination, receipt_path, catalog_path=CATALOG):
@@ -143,36 +179,46 @@ def prepare(destination, receipt_path, catalog_path=CATALOG):
     receipt_path.parent.mkdir(parents=True, exist_ok=True)
     destination.mkdir(mode=0o755)
     inputs, verified = {}, []
-    with tempfile.TemporaryDirectory(prefix="offline-model-inputs-", dir=destination.parent) as temporary:
-        for role, record in catalog["files"].items():
-            source = catalog[record["source"]]
-            url = f"https://huggingface.co/{source['repo']}/resolve/{source['revision']}/{record['path']}"
-            path = Path(temporary) / role
-            download(url, record, path)
-            inputs[role] = path
-            verified.append(dict(role=role, url=url, size=record["size"], sha256=record["sha256"]))
-        export_model(inputs, destination)
-    outputs = []
-    for path in sorted(destination.rglob("*")):
-        if path.is_dir():
-            path.chmod(0o755)
-        elif path.is_file():
-            path.chmod(0o644)
-            outputs.append(dict(path=path.relative_to(destination).as_posix(),
-                                size=path.stat().st_size, sha256=sha256(path)))
-    receipt = dict(
-        schema_version=1, status="prepared", source_catalog_sha256=sha256(catalog_path),
+    common = dict(
+        schema_version=1, source_catalog_sha256=sha256(catalog_path),
         source_model=catalog["model"], source_encoder=catalog["encoder"],
-        verified_inputs=verified, derived_files=outputs,
-        python_version="3.15.1",
-        libraries={name: version(name) for name in
-                   ("gliner", "torch", "transformers", "safetensors", "sentencepiece", "protobuf")},
-        model_execution_qualified=False, image_qualified=False, runner_registration_qualified=False,
+        python_version="3.15.1", model_execution_qualified=False,
+        image_qualified=False, runner_registration_qualified=False,
     )
-    with receipt_path.open("x", encoding="utf-8") as stream:
-        os.fchmod(stream.fileno(), 0o600)
-        json.dump(receipt, stream, indent=2, sort_keys=True)
-        stream.write("\n")
+    try:
+        with tempfile.TemporaryDirectory(prefix="offline-model-inputs-", dir=destination.parent) as temporary:
+            for role, record in catalog["files"].items():
+                source = catalog[record["source"]]
+                url = f"https://huggingface.co/{source['repo']}/resolve/{source['revision']}/{record['path']}"
+                path = Path(temporary) / role
+                with preparation_stage("download"):
+                    download(url, record, path)
+                inputs[role] = path
+                verified.append(dict(role=role, url=url, size=record["size"], sha256=record["sha256"]))
+            with preparation_stage("export"):
+                export_model(inputs, destination)
+        with preparation_stage("receipt"):
+            outputs = []
+            for path in sorted(destination.rglob("*")):
+                if path.is_dir():
+                    path.chmod(0o755)
+                elif path.is_file():
+                    path.chmod(0o644)
+                    outputs.append(dict(path=path.relative_to(destination).as_posix(),
+                                        size=path.stat().st_size, sha256=sha256(path)))
+            receipt = dict(
+                common, status="prepared", verified_inputs=verified, derived_files=outputs,
+                libraries={name: version(name) for name in
+                           ("gliner", "torch", "transformers", "safetensors", "sentencepiece", "protobuf")},
+            )
+            write_receipt(receipt_path, receipt)
+    except PreparationFailure as error:
+        failed = dict(common, status="failed", failed_stage=error.stage, verified_inputs=verified)
+        try:
+            write_receipt(receipt_path, failed)
+        except Exception:
+            raise PreparationFailure("receipt") from None
+        raise
     return receipt
 
 
