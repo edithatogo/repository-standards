@@ -1,0 +1,68 @@
+name: Privacy guard tests
+on:
+  pull_request:
+    paths:
+      - .github/actions/privacy-secrets/**
+      - .github/workflows/privacy-guard-tests.yml
+      - privacy/**
+      - scripts/privacy_guard.py
+      - scripts/privacy_scan.py
+      - scripts/secrets_scan.py
+      - scripts/install_gitleaks.py
+      - scripts/build_privacy_wheels.py
+      - tests/test_privacy*.py
+      - tests/test_secrets_scan.py
+  push:
+    branches: [main]
+    paths:
+      - .github/actions/privacy-secrets/**
+      - .github/workflows/privacy-guard-tests.yml
+      - privacy/**
+      - scripts/privacy_guard.py
+      - scripts/privacy_scan.py
+      - scripts/secrets_scan.py
+      - scripts/install_gitleaks.py
+      - scripts/build_privacy_wheels.py
+      - tests/test_privacy*.py
+      - tests/test_secrets_scan.py
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: privacy-guard-tests-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  behavioral-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.15.1'
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          version: '0.13.8'
+          enable-cache: false
+      - name: Install locked scanners
+        run: |
+          bash privacy/install.sh "$(command -v python)" "$RUNNER_TEMP/privacy-guard"
+      - name: Verify detection, reporting and failure behavior
+        env:
+          PYTHONPATH: scripts
+          GITLEAKS_BINARY: ${{ runner.temp }}/privacy-guard/bin/gitleaks
+        run: |
+          "$RUNNER_TEMP/privacy-guard/venv/bin/python" -m unittest discover -s tests -p 'test_privacy*.py' -v
+          "$RUNNER_TEMP/privacy-guard/venv/bin/python" -m unittest discover -s tests -p 'test_secrets_scan.py' -v
+  canary-scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Exercise the complete composite action
+        uses: ./.github/actions/privacy-secrets

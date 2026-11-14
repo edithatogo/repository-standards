@@ -34,7 +34,7 @@ jobs:
           owner: edithatogo
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: "3.14"
+          python-version: "3.15.2"
       - name: Refuse unimplemented write mode
         if: inputs.apply
         run: |
@@ -50,6 +50,8 @@ jobs:
             --managed-files managed-files/manifest.json \
             --output-dir remediation-output
       - name: Simulate and plan
+        env:
+          CANDIDATE_LIMIT: ${{ inputs.candidate_limit }}
         run: |
           python scripts/simulate_policy_impact.py \
             --audit remediation-output/estate-conformance.json \
@@ -58,7 +60,7 @@ jobs:
           python scripts/plan_managed_remediation.py \
             --audit remediation-output/estate-conformance.json \
             --output remediation-output/managed-remediation-plan.json \
-            --limit "${{ inputs.candidate_limit }}"
+            --limit "$CANDIDATE_LIMIT"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:

@@ -48,6 +48,7 @@ class GitHub:
         payload: dict[str, Any] | None = None,
         *,
         tolerated: set[int] | None = None,
+        fail_fast: set[int] | None = None,
     ) -> Any:
         data = None if payload is None else json.dumps(payload).encode()
         request = urllib.request.Request(
@@ -69,6 +70,8 @@ class GitHub:
                     with self._metrics_lock:
                         self.metrics["tolerated_errors"] += 1
                     return None
+                if error.code in (fail_fast or set()):
+                    raise
                 if error.code not in {403, 429, 500, 502, 503, 504} or attempt == 3:
                     raise
                 retry_after = error.headers.get("Retry-After")
@@ -83,8 +86,11 @@ class GitHub:
             time.sleep(2**attempt)
         raise RuntimeError("unreachable retry state")
 
-    def get(self, path: str, *, tolerated: set[int] | None = None) -> Any:
-        return self.request("GET", path, tolerated=tolerated)
+    def get(
+        self, path: str, *, tolerated: set[int] | None = None,
+        fail_fast: set[int] | None = None,
+    ) -> Any:
+        return self.request("GET", path, tolerated=tolerated, fail_fast=fail_fast)
 
     def tree(self, repository: str, branch: str) -> list[dict[str, Any]]:
         result = self.get(
@@ -171,9 +177,18 @@ def exception_dates(entry: dict[str, Any]) -> tuple[list[str], list[str]]:
     return sorted(set(expired)), sorted(set(upcoming))
 
 
-def protection_state(rulesets: Any, branch_protection: Any) -> str:
+def protection_state(
+    rulesets: Any,
+    branch_protection: Any,
+    *,
+    rulesets_accessible: bool = True,
+    branch_protection_accessible: bool = True,
+) -> str:
+    """Separate proven absence from a permission-denied or incomplete read."""
     if rulesets or branch_protection:
         return "present"
+    if not rulesets_accessible or not branch_protection_accessible:
+        return "unknown"
     return "unknown" if rulesets is None else "absent"
 
 
@@ -230,15 +245,37 @@ def audit_one(
         )
     )
     expired_exceptions, upcoming_exceptions = exception_dates(entry)
-    rulesets = client.get(
-        f"/repos/{repository}/rulesets?includes_parents=false",
-        tolerated={403, 404},
+    # A forbidden read is not proof that protection is absent.
+    rulesets_accessible = True
+    try:
+        rulesets = client.get(
+            f"/repos/{repository}/rulesets?includes_parents=false",
+            tolerated={404},
+            fail_fast={403},
+        )
+    except urllib.error.HTTPError as error:
+        if error.code != 403:
+            raise
+        rulesets_accessible = False
+        rulesets = None
+    branch_protection_accessible = True
+    try:
+        branch_protection = client.get(
+            f"/repos/{repository}/branches/{urllib.parse.quote(branch, safe='')}/protection",
+            tolerated={404},
+            fail_fast={403},
+        )
+    except urllib.error.HTTPError as error:
+        if error.code != 403:
+            raise
+        branch_protection_accessible = False
+        branch_protection = None
+    ruleset_state = protection_state(
+        rulesets,
+        branch_protection,
+        rulesets_accessible=rulesets_accessible and rulesets is not None,
+        branch_protection_accessible=branch_protection_accessible,
     )
-    branch_protection = client.get(
-        f"/repos/{repository}/branches/{urllib.parse.quote(branch, safe='')}/protection",
-        tolerated={403, 404},
-    )
-    ruleset_state = protection_state(rulesets, branch_protection)
 
     profile_name = entry["profile"]
     profile = inherited_profile(profile_name, profiles_document["profiles"])
@@ -405,6 +442,13 @@ def audit_one(
         "unpinned_actions": unpinned,
         "invalid_action_pins": invalid_pins,
         "ruleset": ruleset_state,
+        "protection_evidence": {
+            "state": ruleset_state,
+            "rulesets_readable": rulesets_accessible and rulesets is not None,
+            "branch_protection_readable": branch_protection_accessible,
+            "assurance": "configuration_observed_not_enforcement_tested"
+            if ruleset_state == "present" else "not_verified",
+        },
         "scheduled": scheduled,
         "last_scheduled_run": (
             None
@@ -445,6 +489,12 @@ def audit_safely(
             "unpinned_actions": [],
             "invalid_action_pins": [],
             "ruleset": "unknown",
+            "protection_evidence": {
+                "state": "unknown",
+                "rulesets_readable": False,
+                "branch_protection_readable": False,
+                "assurance": "not_verified",
+            },
             "scheduled": None,
             "last_scheduled_run": None,
             "controls": {},
@@ -482,7 +532,9 @@ def summary_markdown(rows: list[dict[str, Any]], scope: str) -> str:
         f"| Job timeouts | {missing('job_timeouts')} |",
         f"| Immutable action pins | {missing('immutable_action_pins')} ({unpinned} with detected floating refs) |",
         f"| Resolvable immutable pins | {missing('resolvable_action_pins')} ({invalid_pins} with invalid pins) |",
-        f"| Ruleset/protection profile | {missing('ruleset')} |",
+        f"| Ruleset/protection profile | {missing('ruleset')} "
+        f"({sum(row.get('ruleset') == 'unknown' for row in rows)} unknown; "
+        f"{sum(row.get('ruleset') == 'absent' for row in rows)} observed absent) |",
         f"| One-command harness | {missing('harness')} |",
         f"| Machine-readable verification receipt | {missing('verification_receipt')} |",
         f"| Repository AGENTS.md | {missing('agents')} |",
@@ -570,6 +622,11 @@ def main() -> int:
         "generated_at": datetime.now(UTC).isoformat(),
         "scope": scope,
         "repository_count": len(rows),
+        "assurance_semantics": {
+            "control_presence": "configuration evidence only; not proof of execution or merge enforcement",
+            "unknown_status": "not passed, not proven absent",
+            "protection_unknown_count": sum(row.get("ruleset") == "unknown" for row in rows),
+        },
         "repositories": rows,
         "telemetry": client.metrics,
     }
