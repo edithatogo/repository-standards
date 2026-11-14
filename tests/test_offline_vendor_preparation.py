@@ -7,6 +7,7 @@ import hashlib
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -81,6 +82,62 @@ class VendorPreparationTests(unittest.TestCase):
         second.write_text("example==2.0 --hash=sha256:" + "1" * 64 + "\n")
         with self.assertRaises(PREP.PreparationError):
             PREP.merge_locks(first, second)
+
+    def built_wheels_fixture(self):
+        directory = self.root / "built-wheels"
+        directory.mkdir()
+        names = ("presidio_analyzer-2.2.366+python315.1-py3-none-any.whl",
+                 "presidio_anonymizer-2.2.366+python315.1-py3-none-any.whl",
+                 "pyyaml-6.0.3-py3-none-any.whl")
+        for name in names:
+            (directory / name).write_bytes(b"synthetic built wheel")
+        (directory / ".gitignore").write_bytes(b"*")
+        wheels = self.root / "vendor-wheels"
+        wheels.mkdir()
+        return directory, wheels, names
+
+    def test_uv_build_metadata_stays_outside_the_vendor_wheelhouse(self):
+        built, wheels, names = self.built_wheels_fixture()
+        pins = PREP.stage_privacy_wheels(built, wheels)
+        self.assertEqual({path.name for path in wheels.iterdir()}, set(names))
+        self.assertEqual((built / ".gitignore").read_bytes(), b"*")
+        self.assertEqual(set(pins), {"presidio-analyzer", "presidio-anonymizer", "pyyaml"})
+        for name in names:
+            self.assertEqual((wheels / name).read_bytes(), (built / name).read_bytes())
+            self.assertEqual((wheels / name).stat().st_nlink, 1)
+
+    def test_unexpected_or_aliased_build_outputs_are_rejected_before_copying(self):
+        for kind in ("unknown-file", "changed-metadata", "missing-wheel", "extra-wheel",
+                     "symlink", "hardlink", "directory", "symlink-directory"):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory(dir=self.root) as temporary:
+                with mock.patch.object(self, "root", Path(temporary)):
+                    built, wheels, names = self.built_wheels_fixture()
+                if kind == "unknown-file":
+                    (built / "unexpected.txt").write_text("synthetic")
+                elif kind == "changed-metadata":
+                    (built / ".gitignore").write_text("unexpected")
+                elif kind == "missing-wheel":
+                    (built / names[0]).unlink()
+                elif kind == "extra-wheel":
+                    (built / "unexpected-1-py3-none-any.whl").write_text("synthetic")
+                elif kind in ("symlink", "hardlink"):
+                    target = built.parent / "outside"
+                    target.write_bytes(b"synthetic outside bytes")
+                    wheel = built / names[0]
+                    wheel.unlink()
+                    if kind == "symlink":
+                        wheel.symlink_to(target)
+                    else:
+                        os.link(target, wheel)
+                elif kind == "symlink-directory":
+                    original = built.with_name("original-build")
+                    built.rename(original)
+                    built.symlink_to(original, target_is_directory=True)
+                else:
+                    (built / "nested").mkdir()
+                with self.assertRaisesRegex(PREP.PreparationError, "built-wheel-inventory"):
+                    PREP.stage_privacy_wheels(built, wheels)
+                self.assertEqual(list(wheels.iterdir()), [])
 
     def test_verified_stream_is_published_only_after_hash_and_size_checks(self):
         content = b"synthetic upstream bytes"

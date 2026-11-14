@@ -254,6 +254,39 @@ def binaries(vendor, work, catalog):
         path.chmod(0o755)
 
 
+def stage_privacy_wheels(built_directory, wheels):
+    """Copy only the exact built wheels; uv output metadata stays in scratch."""
+    if not stat.S_ISDIR(built_directory.lstat().st_mode):
+        raise PreparationError("built-wheel-inventory")
+    expected = {"presidio_analyzer": "2.2.366+python315.1",
+                "presidio_anonymizer": "2.2.366+python315.1", "pyyaml": "6.0.3"}
+    built = []
+    for path in sorted(built_directory.iterdir()):
+        info = path.lstat()
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+            raise PreparationError("built-wheel-inventory")
+        # uv 0.13.8 prepare_output_directory writes this exact build-only file.
+        if path.name == ".gitignore" and path.read_bytes() == b"*":
+            continue
+        if path.suffix != ".whl":
+            raise PreparationError("built-wheel-inventory")
+        built.append(path)
+    if len(built) != len(expected):
+        raise PreparationError("built-wheel-inventory")
+    selected = {}
+    for name, version in expected.items():
+        matches = [path for path in built if path.name.lower().startswith(f"{name}-{version}-")]
+        if len(matches) != 1:
+            raise PreparationError("built-wheel-inventory")
+        selected[name.replace("_", "-")] = (version, matches[0])
+    pins = {}
+    for name, (version, source) in selected.items():
+        destination = wheels / source.name
+        shutil.copyfile(source, destination)
+        pins[name] = (version, {digest(destination)})
+    return pins
+
+
 def python_wheels(vendor, work, catalog):
     wheels, builder = vendor / "python-wheels", work / "builder"
     wheels.mkdir(mode=0o755)
@@ -261,20 +294,12 @@ def python_wheels(vendor, work, catalog):
     python = str(builder / "bin/python")
     run(["uv", "pip", "install", "--python", python, "--require-hashes", "--only-binary=:all:",
          "--default-index", "https://pypi.org/simple", "-r", str(ROOT / "privacy/build-requirements.lock")])
-    run([python, "-I", str(ROOT / "scripts/build_privacy_wheels.py"), "--destination", str(wheels)])
-    expected = {"presidio_analyzer": "2.2.366+python315.1",
-                "presidio_anonymizer": "2.2.366+python315.1", "pyyaml": "6.0.3"}
+    built_directory = work / "built-wheels"
+    run([python, "-I", str(ROOT / "scripts/build_privacy_wheels.py"), "--destination", str(built_directory)])
     pins = merge_locks(ROOT / "privacy/requirements.lock", HERE / "requirements.extra.lock")
     for name, source in catalog["python_roots"].items():
         pins[name] = (source["version"], {source["sha256"]})
-    built = sorted(wheels.glob("*.whl"))
-    if len(built) != len(expected):
-        raise PreparationError("built-wheel-inventory")
-    for name, version in expected.items():
-        matches = [p for p in built if p.name.lower().startswith(f"{name}-{version}-")]
-        if len(matches) != 1:
-            raise PreparationError("built-wheel-inventory")
-        pins[name.replace("_", "-")] = (version, {digest(matches[0])})
+    pins.update(stage_privacy_wheels(built_directory, wheels))
     torch = catalog["downloads"]["torch"]
     torch_name = urllib.parse.unquote(Path(urllib.parse.urlsplit(torch["url"]).path).name)
     download(torch, wheels / torch_name)
