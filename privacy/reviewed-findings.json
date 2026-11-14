@@ -96,6 +96,30 @@
         "https://github.com/edithatogo/tobac/commit/d402431b1c6d3e61a07cb71b5efff739051e791e",
         "https://api.github.com/repos/edithatogo/tobac/git/blobs/393b9582fd2ff7ba07ffd2c1947ed7d0e93b7e4f"
       ]
+    },
+    {
+      "commit": "73eafbf95267244965df91262028442c8411a7e2",
+      "path": "docs/security_procedures.md",
+      "rule_id": "generic-api-key",
+      "line": 137,
+      "value_sha256": "03cf574544f0ead22cd533b61f1ee6b314f66fd99a2d2adbba018a05c6ff8673",
+      "reason": "Reviewed historical synthetic API key example. The immutable source uses the value only as a demonstration in documentation or the configuration example, with no provider or credential assignment.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/microcosting_genomics/commit/73eafbf95267244965df91262028442c8411a7e2",
+        "https://api.github.com/repos/edithatogo/microcosting_genomics/git/blobs/3a7543ff4b5b067543fe13aa4d6451b61197444c"
+      ]
+    },
+    {
+      "commit": "73eafbf95267244965df91262028442c8411a7e2",
+      "path": "src/unimelb_phd_phase_1/security.py",
+      "rule_id": "generic-api-key",
+      "line": 685,
+      "value_sha256": "03cf574544f0ead22cd533b61f1ee6b314f66fd99a2d2adbba018a05c6ff8673",
+      "reason": "Reviewed historical synthetic API key example. The immutable source uses the value only as a demonstration in documentation or the configuration example, with no provider or credential assignment.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/microcosting_genomics/commit/73eafbf95267244965df91262028442c8411a7e2",
+        "https://api.github.com/repos/edithatogo/microcosting_genomics/git/blobs/cb2585d1504d3026be1fdeb3360a5f0cfdc20053"
+      ]
     }
   ]
 }
