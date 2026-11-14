@@ -172,12 +172,11 @@ def badge_state(readme: str) -> dict[str, bool | int]:
     }
 
 
-def version_state(files: dict[str, str], kind: str) -> dict[str, Any]:
+def _manifest_state(files: dict[str, str], kind: str) -> tuple[str, str | None, bool]:
     pyproject = files.get("pyproject.toml", "")
     cargo = files.get("cargo.toml", "")
     package = files.get("package.json", "")
     typst = files.get("typst.toml", "")
-    citation = files.get("citation.cff", "")
     source = "not_applicable"
     manifest_version: str | None = None
     dynamic = False
@@ -205,7 +204,12 @@ def version_state(files: dict[str, str], kind: str) -> dict[str, Any]:
         source = "typst_manifest"
     elif kind in {"documentation", "typesetting", "data"}:
         source = "release_tags_or_doi"
+    return source, manifest_version, dynamic
 
+
+def version_state(files: dict[str, str], kind: str) -> dict[str, Any]:
+    source, manifest_version, dynamic = _manifest_state(files, kind)
+    citation = files.get("citation.cff", "")
     citation_match = re.search(r'(?m)^version:\s*["\']?([^"\'\s]+)', citation)
     citation_version = citation_match.group(1) if citation_match else None
     return {

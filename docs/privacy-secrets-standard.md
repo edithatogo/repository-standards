@@ -19,12 +19,13 @@ dependencies are installed from `privacy/requirements.lock` with required hashes
 Anonymizer is available in the tooling environment; automatic redaction of source
 files and application-runtime redaction are not part of this implementation.
 
-The tooling uses an isolated **Python 3.12** environment. This is a scoped
-compatibility exception to repositories selecting Python 3.15 for their own
-software: Presidio 2.2.366 declares Python `>=3.11,<3.15`. It does not change a
-consumer's `.python-version`, environment, dependency lock or production runtime.
-Requalify the isolated version and hash lock together when upstream compatibility
-changes; never silently install into an existing product environment.
+The tooling uses an isolated **Python 3.15.1** environment. The installer
+verifies the upstream Presidio and PyYAML source archives before building
+wheels with hash-locked tools. The Presidio compatibility build retains the
+2.2.366 scanner code and updates its package metadata for Python 3.15.1,
+NumPy 2.5.4 and preshed 3.0.15. The install checks the complete dependency
+set. Requalify the guard's behavioral tests and dependency locks when
+upstream support changes.
 
 ## Detection contract
 
