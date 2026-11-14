@@ -252,3 +252,33 @@ Central PR #145 contains this preparation work. Central PR #126 and consumer
 PR #9 remain draft while real image execution, image vulnerability review,
 isolated self-hosted runner eligibility and applicable integration gates remain
 open. No runner has been registered and no consumer pin has been changed.
+
+
+## First hosted preparation result — 2026-11-15
+
+[Run 43653722717](https://github.com/edithatogo/repository-standards/actions/runs/43653722717)
+passed the actual binary downloads, Python wheel installation and dependency
+check, Promptfoo native SQLite/esbuild smoke, and model export on Python 3.15.1.
+The retained model receipt records GLiNER 0.2.30, CPU Torch 2.15.0+cpu,
+Transformers 5.22.2, safetensors 0.8.0, sentencepiece 0.2.3 and protobuf 7.36.2.
+Its tokenizer export is 16,034,016 bytes, within the existing 16 MiB limit.
+Model inference and scanner-image qualification remain separate unexecuted gates.
+
+Preparation then failed during manifest finalization. The wheel builder puts
+uv's one-byte build-only metadata beside its wheels, which the strict flat
+wheelhouse verifier rejects. The follow-up stages the exact three expected
+regular wheels from temporary build output. Unexpected and aliased outputs
+remain rejected, and the complete manifest verifier is unchanged.
+
+The same source increment adds a checksum-pinned Grype collector for the exact
+qualified image, retaining the complete findings, internal suppressions,
+database provenance and hashes with review and release qualification false.
+Pin-only workflow changes now trigger image qualification. The repository permits
+squash merges, so a receiving squash source requires a subsequent pin-only PR;
+the ancestor and source-byte checks remain in force.
+
+The Grype source increment completed the Python 3.15.2 policy suite with 265
+tests and 35 existing capability skips. The three additional wheel-staging
+regressions were published after the workspace disconnected; their final local
+completion was not observed. The combined source requires hosted validation.
+No runner or consumer has been activated.

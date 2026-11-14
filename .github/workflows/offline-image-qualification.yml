@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/offline-image-qualification.yml
+      - .github/workflows/reusable-ai-sec-pipeline.yml
       - security/offline-ai/**
       - privacy/**
       - scripts/build_privacy_wheels.py
@@ -65,6 +66,14 @@ jobs:
           upload-artifact: "false"
           upload-release-assets: "false"
           dependency-snapshot: "false"
+      - name: Collect image vulnerability evidence for review
+        env:
+          POLICY_ROOT: ${{ steps.policy.outputs.path }}
+          QUALIFIED_IMAGE: ${{ steps.qualify.outputs.image }}
+        run: |
+          python -I "$POLICY_ROOT/security/offline-ai/provision/collect_vulnerabilities.py" \
+            "$QUALIFIED_IMAGE" "$RUNNER_TEMP/offline-runtime/evidence" \
+            "$RUNNER_TEMP/offline-grype"
       - name: Retain qualification evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

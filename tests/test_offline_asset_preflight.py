@@ -78,6 +78,17 @@ class OfflineAssetPreflightTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout + result.stderr, "")
 
+    def test_uv_metadata_is_rejected_even_when_included_in_the_manifest(self):
+        vendor = self.bundle(self.root)
+        metadata = vendor / "python-wheels/.gitignore"
+        metadata.write_bytes(b"*")
+        manifest = vendor / "manifest.json"
+        payload = json.loads(manifest.read_text())
+        payload["files"].append({"path": "/opt/offline-ai/wheels/.gitignore",
+                                 "sha256": hashlib.sha256(b"*").hexdigest()})
+        manifest.write_text(json.dumps(payload))
+        self.assert_rejected(self.verify(vendor))
+
     def test_missing_supplied_components_are_rejected(self):
         for relative in ("bin/opengrep", "requirements.lock", "promptfoo/package-lock.json",
                          "models/gliner-pii/model.safetensors", "python-wheels/fixture-0.0-py3-none-any.whl"):

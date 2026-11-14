@@ -35,6 +35,12 @@ policy pin. It rejects a pin missing current source changes, and requires the
 calling workflow to match that source byte for byte apart from the single policy
 SHA. A generated candidate-lock artifact is preparation evidence only.
 
+A squash merge creates a new receiving source commit. Follow it with a pin-only
+PR targeting that commit, which must be an ancestor of the pin change. The
+pin-only PR reruns source selection and actual image qualification; do not relax
+the ancestor or byte-identity checks. Consumer repinning waits for the qualified
+release and the remaining gates below.
+
 All image controls run in fresh containers with no network, a read-only root and
 policy mount, UID/GID 65534, zero capabilities, no privilege escalation and
 measured finite resource limits. The real GLiNER model tests cannot be skipped.
@@ -48,6 +54,25 @@ SPDX inventory. It includes the local registry's manifests and blobs only after
 every image control passes. Restoring those exact registry bytes preserves the
 qualified digest; a generic Docker save/load round trip alone is insufficient
 evidence that the same RepoDigest is available.
+
+After the image controls and SBOM, the hosted workflow collects Grype advisory
+evidence for that exact local Docker digest. The Linux amd64 Grype 0.121.3 archive
+is fixed by URL, size and SHA256 in `collect_vulnerabilities.py`; `grype.yaml`
+is the explicit scanner configuration. The scan includes all image layers,
+including packages removed from later layers. It retains unfixed findings and
+internal matcher suppressions without adding severity cutoffs or ignore rules.
+Package recognition and advisory coverage remain limited by the scanner and its
+database; a zero-match report does not prove the image is vulnerability-free.
+
+The `vulnerability/` evidence directory contains the full JSON report, scanner
+version, configuration and database status. Its receipt binds their hashes, the
+database bytes and Docker image ID. Download, integrity, image, scanner and
+database errors fail collection without logging raw findings. The database must
+pass its update, age and integrity checks. Successful collection records
+`review_pending: true`, `vulnerability_review_qualified: false` and
+`release_qualified: false`; vulnerability disposition remains a separate gate.
+The hosted scan requires network access for the pinned tool and current advisory
+database, and does not change the network-denied scanner control execution.
 
 The registry listens on loopback only and is removed after the run. To provision
 the eventual runner, verify the archive checksum, restore it into a private
@@ -91,6 +116,8 @@ python security/offline-ai/provision/prepare_vendor.py \
 Both output paths must be new. Keep the vendor tree outside the clean policy checkout. The script verifies the committed source catalog, review evidence and policy input hashes, downloads checksum-bound Gitleaks/Opengrep/CPU Torch assets, builds the three existing source-pinned privacy wheels, downloads the exact hash-locked remaining wheel closure, and verifies that closure in an isolated environment. It installs Promptfoo with `npm ci --ignore-scripts --include=optional` against the reviewed lock. Published optional packages supply the libsql SQLite binding and esbuild binary. A silent, bounded check exercises an in-memory database query and TypeScript transform before model preparation, without invoking install scripts or downloading replacement native binaries. Model preparation is delegated to the adjacent `prepare_model.py`, which has its own pinned model sources and receipt.
 
 Only after those stages pass does preparation generate and verify the complete schema-v2 vendor manifest. A private receipt binds source records, policy inputs, model provenance and the resulting manifest. A failed run records the failed stage and unexecuted stages and does not mark the image or runner qualified. Raw third-party process output is suppressed during preparation; the candidate resolver uses only public dependency metadata.
+
+The privacy wheel builder writes into temporary storage. The preparer checks the exact three expected wheel outputs and copies only regular, unaliased wheels into the vendor wheelhouse. It retains uv's known build-only `.gitignore` in temporary storage; the [pinned uv 0.13.8 output-directory implementation](https://github.com/astral-sh/uv/blob/0.13.8/crates/uv-build-commands/src/lib.rs) writes that file with the single byte `*`. A local uv 0.13.6 build of a synthetic dependency-free backend reproduced that output; no scanner or model was involved. Any other unexpected build output is rejected. The schema-v2 verifier continues to require a complete inventory and a flat wheelhouse containing only `.whl` files.
 
 The Gitleaks and Opengrep digests were independently checked against their upstream GitHub release APIs. The CPU Torch digest and metadata digest were checked against the official PyTorch CPU index; this avoids CUDA packages. Promptfoo's package integrity was checked against the npm registry and its release tag resolves to source commit `8569e72ed6cf7737082a6042be8d925e40f9739d`. Exact provenance URLs are retained in `sources.json`. Source-built and exported artifacts are bound by their recorded outputs; byte-identical rebuilds have not been demonstrated.
 
