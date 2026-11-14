@@ -24,7 +24,8 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/repository-standards
-          ref: 597d1822fd5c5d79d392d4f599c63957a5ec3ed9
+          # Immutable snapshot containing the Rust macro rules and replay controls.
+          ref: 026b4b95fa1b07f453efe06183c6b00c160276fc
           persist-credentials: false
           submodules: false
           path: policy
