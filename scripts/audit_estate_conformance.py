@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Measure repository-estate conformance and reconcile a bounded central issue."""
 
-from __future__ import annotations
-
 import argparse
 import base64
 import json
