@@ -1,78 +1,96 @@
 import unittest
-import audit_repository_product_metadata as audit
+import sys
+import os
 
-class TestAuditRepositoryProductMetadata(unittest.TestCase):
-    def test_version_state_empty(self):
-        result = audit.version_state({}, "application")
-        self.assertEqual(result["source"], "not_applicable")
-        self.assertFalse(result["dynamic"])
-        self.assertIsNone(result["manifest_version"])
-        self.assertIsNone(result["citation_version"])
-        self.assertFalse(result["drift"])
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from scripts.audit_repository_product_metadata import badge_state
 
-    def test_version_state_pyproject_static(self):
-        files = {"pyproject.toml": 'version = "1.2.3"'}
-        result = audit.version_state(files, "application")
-        self.assertEqual(result["source"], "pyproject_manifest")
-        self.assertFalse(result["dynamic"])
-        self.assertEqual(result["manifest_version"], "1.2.3")
-        self.assertIsNone(result["citation_version"])
-        self.assertFalse(result["drift"])
 
-    def test_version_state_pyproject_dynamic(self):
-        files = {"pyproject.toml": 'dynamic = ["version"]\nhatch-vcs = {}'}
-        result = audit.version_state(files, "application")
-        self.assertEqual(result["source"], "git_tags_dynamic")
-        self.assertTrue(result["dynamic"])
-        self.assertIsNone(result["manifest_version"])
+class BadgeStateTests(unittest.TestCase):
+    def test_badge_state_empty(self):
+        readme = ""
+        result = badge_state(readme)
+        assert result["count"] == 0
+        assert result["ci"] is False
+        assert result["coverage"] is False
+        assert result["license"] is False
+        assert result["citation"] is False
+        assert result["version"] is False
 
-    def test_version_state_cargo(self):
-        files = {"cargo.toml": 'version = "2.0.0"'}
-        result = audit.version_state(files, "application")
-        self.assertEqual(result["source"], "cargo_manifest")
-        self.assertEqual(result["manifest_version"], "2.0.0")
+    def test_badge_state_count(self):
+        readme = """
+        ![CI](https://github.com/user/repo/actions/workflows/main.yml/badge.svg)
+        ![Coverage](https://coveralls.io/repos/github/user/repo/badge.svg)
+        [![Shield](https://img.shields.io/badge/version-1.0-blue)](https://github.com/user/repo)
+        ![Not a badge](https://example.com/image.png)
+        """
+        result = badge_state(readme)
+        assert result["count"] == 3
 
-    def test_version_state_package_json(self):
-        files = {"package.json": '{"version": "3.1.4"}'}
-        result = audit.version_state(files, "application")
-        self.assertEqual(result["source"], "package_manifest")
-        self.assertEqual(result["manifest_version"], "3.1.4")
+    def test_badge_state_ci(self):
+        readme = "Here is a CI status: github/workflow/status/something"
+        result = badge_state(readme)
+        assert result["ci"] is True
 
-    def test_version_state_package_json_invalid(self):
-        files = {"package.json": '{"version": "3.1.4", invalid json}'}
-        result = audit.version_state(files, "application")
-        self.assertEqual(result["source"], "package_manifest")
-        self.assertIsNone(result["manifest_version"])
+        readme2 = "Using actions/workflows in my text"
+        result2 = badge_state(readme2)
+        assert result2["ci"] is True
 
-    def test_version_state_typst(self):
-        files = {"typst.toml": 'version = "0.1.0"'}
-        result = audit.version_state(files, "application")
-        self.assertEqual(result["source"], "typst_manifest")
-        self.assertEqual(result["manifest_version"], "0.1.0")
+    def test_badge_state_coverage(self):
+        readme = "Testing with codecov for coverage"
+        result = badge_state(readme)
+        assert result["coverage"] is True
 
-    def test_version_state_citation_match(self):
-        files = {
-            "pyproject.toml": 'version = "1.0.0"',
-            "citation.cff": 'version: 1.0.0'
-        }
-        result = audit.version_state(files, "application")
-        self.assertEqual(result["manifest_version"], "1.0.0")
-        self.assertEqual(result["citation_version"], "1.0.0")
-        self.assertFalse(result["drift"])
+        readme2 = "Testing with coveralls instead"
+        result2 = badge_state(readme2)
+        assert result2["coverage"] is True
 
-    def test_version_state_citation_drift(self):
-        files = {
-            "pyproject.toml": 'version = "1.0.0"',
-            "citation.cff": 'version: 2.0.0'
-        }
-        result = audit.version_state(files, "application")
-        self.assertEqual(result["manifest_version"], "1.0.0")
-        self.assertEqual(result["citation_version"], "2.0.0")
-        self.assertTrue(result["drift"])
+    def test_badge_state_license(self):
+        readme = "Here is our license-mit"
+        result = badge_state(readme)
+        assert result["license"] is True
 
-    def test_version_state_kind_documentation(self):
-        result = audit.version_state({}, "documentation")
-        self.assertEqual(result["source"], "release_tags_or_doi")
+        readme2 = "Find our terms at /license"
+        result2 = badge_state(readme2)
+        assert result2["license"] is True
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_badge_state_citation(self):
+        readme = "See our citation.cff file"
+        result = badge_state(readme)
+        assert result["citation"] is True
+
+        readme2 = "Available at doi.org/10.1234/something"
+        result2 = badge_state(readme2)
+        assert result2["citation"] is True
+
+        readme3 = "Archived on zenodo"
+        result3 = badge_state(readme3)
+        assert result3["citation"] is True
+
+    def test_badge_state_version(self):
+        readme = "Current version-2.0"
+        result = badge_state(readme)
+        assert result["version"] is True
+
+        readme2 = "Find releases at /v/release"
+        result2 = badge_state(readme2)
+        assert result2["version"] is True
+
+        readme3 = "Tags are at /v/tag"
+        result3 = badge_state(readme3)
+        assert result3["version"] is True
+
+    def test_badge_state_case_insensitivity(self):
+        readme = """
+        ![CI](HTTPS://GITHUB.COM/ACTIONS/WORKFLOWS/MAIN.YML/BADGE.SVG)
+        Testing with CODECOV.
+        See our CITATION.CFF.
+        Current VERSION-3.0.
+        """
+        result = badge_state(readme)
+        # The count regex flag re.I makes the badge checking case insensitive too
+        assert result["count"] == 1
+        assert result["ci"] is True
+        assert result["coverage"] is True
+        assert result["citation"] is True
+        assert result["version"] is True

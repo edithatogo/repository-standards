@@ -1,0 +1,16 @@
+{
+  "track_id": "frontier_05_release_supplychain_20261113",
+  "type": "supply-chain",
+  "priority": "P1",
+  "status": "new",
+  "created_at": "2026-11-13",
+  "updated_at": "2026-11-13",
+  "dependencies": [
+    "frontier_03_managed_remediation_20261113",
+    "frontier_04_verification_harness_20261113"
+  ],
+  "implementation_complete": false,
+  "hosted_canary_verified": false,
+  "estate_rollout_verified": false,
+  "frontier_certified": false
+}
