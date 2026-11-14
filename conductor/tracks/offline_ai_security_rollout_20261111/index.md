@@ -178,3 +178,33 @@ supplied, and no runner was registered. Steps 01–09 remain incomplete. The
 central rollout and consumer PR #9 remain draft until their real qualification
 gates pass; this tranche does not authorize a qualified-release claim or
 consumer merge. Existing application-adapter and Rust qualification gaps remain.
+
+## Runtime provisioning continuation — 2026-11-15
+
+- Reconciled source repair PR #140: merged into the existing rollout branch at
+  `0523a1d450476f5e49265f9ec1c888691e1b4884`, with successful source checks and
+  the fix branch already pruned. Central PR #126 remains draft.
+- No remote device was connected at this checkpoint. The development workspace
+  had no container engine or writable cgroup controls and subsequently became
+  unavailable. It was not registered as a security runner.
+- Added independently pinned upstream acquisition and a separate metadata-only
+  candidate-lock workflow. Missing reviewed locks fail preparation before any
+  download. Generated candidates remain unreviewed until their complete hashes,
+  versions and provenance are checked and committed.
+- Repaired the native GLiNER model format and selected a built-in, local-only
+  Deberta uni-encoder path. Preparation converts the verified tensor checkpoint
+  to safetensors and supplies its complete local tokenizer/encoder configuration.
+- Added actual container-state checks for non-root identity, zero capabilities,
+  no privilege escalation, read-only policy/root mounts and finite cgroup-v2
+  memory, process and CPU limits. Requested Docker flags alone are insufficient.
+- Added hosted preparation followed by network-denied Docker build and the real
+  image controls. Evidence retains exact source/image/manifest identities and
+  intact registry blobs for later provisioning. Hosted success cannot register
+  a runner or qualify the central release by itself.
+
+Eleven native-model contract tests passed on Python 3.15.2 before the workspace
+connection was lost. The combined source and subsequent preparation/container
+regressions require hosted verification; no image/model execution result is
+claimed by this source checkpoint. Requirements 01–09 remain open, including
+real self-hosted runner eligibility, host isolation, vulnerability review and
+applicable application/language qualification. Consumer PR #9 remains draft.

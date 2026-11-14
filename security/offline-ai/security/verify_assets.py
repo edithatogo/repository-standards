@@ -12,6 +12,7 @@ import os
 from pathlib import Path, PurePosixPath
 import stat
 import sys
+from .model_assets import MODEL_FILES, validate_model_bundle
 
 ERROR_MESSAGE = "Scanner toolchain asset verification failed"
 WHEELS = PurePosixPath("/opt/offline-ai/wheels")
@@ -29,7 +30,7 @@ TREES = {
     MODEL: "models/gliner-pii",
 }
 REQUIRED_FILES = frozenset(SINGLE_FILES) | {
-    MODEL / "config.json",
+    *(MODEL / name for name in MODEL_FILES),
     PROMPTFOO / "package.json",
     PROMPTFOO / "package-lock.json",
 }
@@ -203,6 +204,8 @@ def _verify_bundle(manifest_path: Path, root: Path, *, vendor: bool) -> int:
             target = path.resolve(strict=True)
             if not target.is_relative_to(local(PROMPTFOO)) or target not in verified:
                 raise ValueError("Link target not verified")
+
+        validate_model_bundle(local(MODEL))
 
         for entry in (*SINGLE_FILES.keys(), PROMPTFOO_ENTRY):
             if entry.name == "requirements.lock":

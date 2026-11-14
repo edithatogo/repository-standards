@@ -6,6 +6,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 from .identifiers import identifier_spans
+from .model_assets import load_local_model
 
 class DLPUnavailable(RuntimeError):
     pass
@@ -19,10 +20,9 @@ def _engine():
     os.environ["HF_HUB_OFFLINE"] = "1"
     os.environ["TRANSFORMERS_OFFLINE"] = "1"
     model_path = Path(os.environ.get("GLINER_MODEL_DIR", "/opt/models/gliner-pii"))
-    if not (model_path / "config.json").is_file():
+    if not (model_path / "gliner_config.json").is_file():
         raise DLPUnavailable("Required local GLiNER model is unavailable")
     try:
-        from gliner import GLiNER
         from presidio_analyzer import AnalyzerEngine, EntityRecognizer, RecognizerRegistry, RecognizerResult
         from presidio_analyzer.nlp_engine import NlpEngine
         class EmptyNlp(NlpEngine):
@@ -39,7 +39,7 @@ def _engine():
         class LocalRecognizer(EntityRecognizer):
             def __init__(self):
                 super().__init__(supported_entities=["PERSON", "LOCATION", "MEDICAL_CONDITION", "ID_NUMBER"], supported_language="en", name="local_gliner")
-                self.model = GLiNER.from_pretrained(str(model_path))
+                self.model = load_local_model(model_path)
             def load(self): pass
             def analyze(self, text, entities, nlp_artifacts=None):
                 names = {"person": "PERSON", "location": "LOCATION", "medical condition": "MEDICAL_CONDITION", "identification number": "ID_NUMBER"}
