@@ -2,6 +2,9 @@
 
 The `docker/Dockerfile` is a **build recipe**, not a qualified image. No dependencies, GLiNER model weights, or binary bundles are downloaded by this repo. Procurement and verification of these assets happen independently in an approved build environment.
 
+Supply a digest-pinned base with Python 3.15.1, Node and Git. The build checks
+the actual interpreter before installing the locked wheels.
+
 Expected local vendor tree at the build context root:
 
 - `vendor/python-wheels/`: audited compatible wheels, including Presidio Analyzer/Anonymizer, GLiNER, pytest, and pinned transitive dependencies.

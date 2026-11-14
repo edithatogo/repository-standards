@@ -1,10 +1,11 @@
-# Offline-only build. Supply a preloaded, digest-pinned image with Python 3.12, Node and git.
+# Offline-only build. Supply a preloaded, digest-pinned image with Python 3.15.1, Node and Git.
 # Never substitute a remote tag, or run this with build network access.
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 ENV PIP_NO_INDEX=1 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
     HF_HUB_DISABLE_TELEMETRY=1 npm_config_offline=true \
     PROMPTFOO_DISABLE_TELEMETRY=1 PROMPTFOO_DISABLE_UPDATE=1
+RUN --network=none python -c 'import sys; assert sys.version_info[:3] == (3, 15, 1), sys.version'
 COPY vendor/python-wheels/ /opt/offline-ai/wheels/
 COPY vendor/requirements.lock /opt/offline-ai/requirements.lock
 RUN --network=none python -m pip install --disable-pip-version-check --no-index \

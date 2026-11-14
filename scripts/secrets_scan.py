@@ -32,6 +32,7 @@ TRUSTED_REVIEWED_FINDINGS = (
 )
 MAX_REVIEW_REGISTRY_BYTES = 64 * 1024
 PRIVATE_MATCH_PROCESSING = os.name == "posix"
+OFFLINE_CONSUMER_MOUNT = Path("/work")
 FindingIdentity = tuple[str, str, str, int]
 
 
@@ -163,7 +164,7 @@ def is_reviewed_nonsecret(
         return False
 
 
-def clean_environment() -> dict[str, str]:
+def clean_environment(*, offline_container: bool = False) -> dict[str, str]:
     env = dict(os.environ)
     for key in tuple(env):
         if key.startswith("GIT_CONFIG_") or key in {
@@ -190,16 +191,22 @@ def clean_environment() -> dict[str, str]:
         GIT_PAGER="cat",
         GIT_OPTIONAL_LOCKS="0",
     )
+    if offline_container:
+        env.update(
+            GIT_CONFIG_COUNT="3",
+            GIT_CONFIG_KEY_2="safe.directory",
+            GIT_CONFIG_VALUE_2=str(OFFLINE_CONSUMER_MOUNT),
+        )
     return env
 
 
-def git_output(root: Path, *args: str) -> str:
+def git_output(root: Path, *args: str, offline_container: bool = False) -> str:
     try:
         result = subprocess.run(
             ["git", "-C", str(root), *args],
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
-            env=clean_environment(),
+            env=clean_environment(offline_container=offline_container),
             check=False,
             timeout=30,
         )
@@ -213,11 +220,22 @@ def git_output(root: Path, *args: str) -> str:
         raise ScanError("git_validation_failed") from error
 
 
-def resolve_revision(root: Path, revision: str, *, allow_head: bool = False) -> str:
+def resolve_revision(
+    root: Path,
+    revision: str,
+    *,
+    allow_head: bool = False,
+    offline_container: bool = False,
+) -> str:
     if not REVISION.fullmatch(revision) and not (allow_head and revision == "HEAD"):
         raise ScanError("invalid_revision")
     resolved = git_output(
-        root, "rev-parse", "--verify", "--end-of-options", revision + "^{commit}"
+        root,
+        "rev-parse",
+        "--verify",
+        "--end-of-options",
+        revision + "^{commit}",
+        offline_container=offline_container,
     )
     if not REVISION.fullmatch(resolved):
         raise ScanError("invalid_revision")
@@ -281,6 +299,7 @@ def scan(
     full_history: bool = False,
     binary: str = "gitleaks",
     config_path: Path = TRUSTED_CONFIG,
+    offline_container: bool = False,
 ) -> tuple[int, dict[str, Any]]:
     if (staged and (base is not None or full_history)) or (
         base is not None and full_history
@@ -302,7 +321,17 @@ def scan(
     if extension.get("disabledRules") or extension.get("path"):
         raise ScanError("default_rules_required")
     reviewed = load_reviewed_findings()
-    if git_output(root, "rev-parse", "--is-inside-work-tree") != "true":
+    if offline_container and root != OFFLINE_CONSUMER_MOUNT:
+        raise ScanError("invalid_offline_mount")
+    if (
+        git_output(
+            root,
+            "rev-parse",
+            "--is-inside-work-tree",
+            offline_container=offline_container,
+        )
+        != "true"
+    ):
         raise ScanError("invalid_repository")
 
     mode = (
@@ -316,13 +345,25 @@ def scan(
         # Explicitly select staged diff mode rather than the working copy.
         scan_args = ["--pre-commit", "--staged"]
     elif full_history or base is None:
-        resolve_revision(root, head, allow_head=True)
-        if git_output(root, "rev-parse", "--is-shallow-repository") == "true":
+        resolve_revision(
+            root, head, allow_head=True, offline_container=offline_container
+        )
+        if (
+            git_output(
+                root,
+                "rev-parse",
+                "--is-shallow-repository",
+                offline_container=offline_container,
+            )
+            == "true"
+        ):
             raise ScanError("full_history_requires_complete_clone")
         scan_args = ["--log-opts=--all --full-history --no-ext-diff --no-textconv"]
     else:
-        tip = resolve_revision(root, head, allow_head=True)
-        start = resolve_revision(root, base)
+        tip = resolve_revision(
+            root, head, allow_head=True, offline_container=offline_container
+        )
+        start = resolve_revision(root, base, offline_container=offline_container)
         # A..B visits every submitted commit, including subsequently deleted leaks.
         scan_args = [
             f"--log-opts=--full-history --no-ext-diff --no-textconv {start}..{tip}"
@@ -334,14 +375,23 @@ def scan(
         # --gitleaks-ignore-path is provided. A private Git view reuses the exact
         # object database and index without copying or modifying the repository.
         # Neither the target's ignore file nor its inline allows can hide leaks.
-        git_dir = git_output(root, "rev-parse", "--absolute-git-dir")
+        git_dir = git_output(
+            root, "rev-parse", "--absolute-git-dir", offline_container=offline_container
+        )
         if "\n" in git_dir or "\r" in git_dir:
             raise ScanError("unsupported_git_directory")
         view = private_dir / "repository"
         view.mkdir(mode=0o700)
         (view / ".git").write_text(f"gitdir: {git_dir}\n", encoding="utf-8")
         if (
-            Path(git_output(view, "rev-parse", "--absolute-git-dir")).resolve()
+            Path(
+                git_output(
+                    view,
+                    "rev-parse",
+                    "--absolute-git-dir",
+                    offline_container=offline_container,
+                )
+            ).resolve()
             != Path(git_dir).resolve()
         ):
             raise ScanError("git_view_validation_failed")
@@ -378,7 +428,7 @@ def scan(
             result = subprocess.run(
                 command,
                 cwd=view,
-                env=clean_environment(),
+                env=clean_environment(offline_container=offline_container),
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 check=False,

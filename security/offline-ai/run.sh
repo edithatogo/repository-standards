@@ -11,15 +11,10 @@ quiet network-preflight python -m security.verify_network
 quiet asset-preflight python -m security.verify_assets
 # Verify the installed binary and trusted rules against ephemeral positive/negative controls.
 quiet gitleaks-fixtures python /policy/security/offline-ai/scripts/verify_gitleaks.py
-# History scan is independent from untrusted repository configuration.
-quiet gitleaks-history gitleaks git /work --config /policy/security/offline-ai/.gitleaks.toml --redact --exit-code 1
-if [[ "${EVENT_NAME:-}" == push || "${EVENT_NAME:-}" == pull_request ]]; then
-  if [[ "${BASE_SHA:-}" =~ ^[0-9a-f]{40}$ ]] && git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
-    git diff "${BASE_SHA}" HEAD --binary --no-ext-diff 2>/dev/null | quiet gitleaks-diff gitleaks stdin --config /policy/security/offline-ai/.gitleaks.toml --redact --exit-code 1
-  fi
-fi
+# Reuse exact reviewed fingerprints and the isolated Git view with offline rules.
+quiet gitleaks-history python -I /policy/security/offline-ai/scripts/scan_gitleaks.py
 quiet sast-fixtures python /policy/security/offline-ai/scripts/verify_sast_fixtures.py
-quiet opengrep opengrep scan --taint-intrafile --config /policy/security/offline-ai/.opengrep/rules.yaml --error --exclude .git .
+quiet opengrep opengrep scan --strict --disable-nosem --taint-intrafile --config /policy/security/offline-ai/.opengrep/rules.yaml --error --exclude .git .
 quiet pytest python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_detect_ai.py \
   /policy/security/offline-ai/tests/test_agent_boundary.py \
