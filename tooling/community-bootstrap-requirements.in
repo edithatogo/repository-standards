@@ -1,0 +1,2 @@
+# Isolated audit parser; product dependencies are unchanged.
+PyYAML==6.0.3

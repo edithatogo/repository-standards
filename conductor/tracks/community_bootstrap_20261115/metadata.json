@@ -1,0 +1,37 @@
+{
+  "track_id": "community_bootstrap_20261115",
+  "type": "implementation",
+  "priority": "P1",
+  "status": "in_progress",
+  "created_at": "2026-11-15",
+  "updated_at": "2026-11-15",
+  "dependencies": [],
+  "source_implementation_complete": true,
+  "source_hosted_validation_passed": false,
+  "shared_defaults_deployed": false,
+  "starter_repositories_deployed": 0,
+  "starter_repositories_expected": 7,
+  "estate_rollout_verified": false,
+  "frontier_certified": false,
+  "related_issues": [
+    10,
+    18,
+    40
+  ],
+  "shared_defaults_candidate": {
+    "pull_request": "https://github.com/edithatogo/.github/pull/9",
+    "head_sha": "52987aa2a6d9904a15e62226a02e02b72bca4cbd",
+    "draft": true
+  },
+  "source_recovery": {
+    "local_executor_available": false,
+    "exact_defaults_payload_preserved": true,
+    "other_final_sources_reconstructed": true,
+    "fresh_qualification_required": true
+  },
+  "remaining_gates": [
+    "Final source hosted checks and independent review",
+    "Scoped PR integration and bounded deployment receipts",
+    "Separate whole-estate F01/F03 acceptance"
+  ]
+}
