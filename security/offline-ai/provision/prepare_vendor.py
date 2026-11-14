@@ -36,7 +36,21 @@ POLICY_INPUTS = {
     "security/offline-ai/provision/requirements.extra.lock",
     "security/offline-ai/provision/promptfoo/package.json",
     "security/offline-ai/provision/promptfoo/package-lock.json",
+    "security/offline-ai/provision/dependency-review.json",
 }
+NATIVE_SMOKE = """import assert from 'node:assert/strict';
+import {createClient} from '@libsql/client/node';
+import {transformSync} from 'esbuild';
+const db = createClient({url: 'file::memory:'});
+try {
+  await db.execute('CREATE TABLE native_smoke (value INTEGER NOT NULL)');
+  await db.execute({sql: 'INSERT INTO native_smoke VALUES (?)', args: [42]});
+  const result = await db.execute('SELECT value FROM native_smoke');
+  assert.equal(result.rows[0].value, 42);
+} finally { db.close(); }
+assert.match(transformSync('const value: number = 42;', {loader: 'ts'}).code,
+             /value = 42/);
+"""
 
 
 class PreparationError(RuntimeError):
@@ -163,6 +177,15 @@ def load_catalog():
         if (not path.resolve().is_relative_to(ROOT) or not HASH.fullmatch(expected)
                 or digest(path) != expected):
             raise PreparationError("policy-input")
+    review = read_json(HERE / "dependency-review.json")
+    if (review.get("schema_version") != 1
+            or review.get("status") != "reviewed-for-preparation"):
+        raise PreparationError("dependency-review")
+    for relative in ("requirements.extra.lock", "promptfoo/package.json",
+                     "promptfoo/package-lock.json"):
+        key = "security/offline-ai/provision/" + relative
+        if review.get("locked_inputs", {}).get(key, {}).get("sha256") != catalog["policy_inputs"][key]:
+            raise PreparationError("dependency-review")
     pins = merge_locks(ROOT / "privacy/requirements.lock", HERE / "requirements.extra.lock")
     for name, version in {"gliner": "0.2.30", "pytest": "9.2.0", "protobuf": "7.36.2"}.items():
         if pins.get(name, (None,))[0] != version:
@@ -276,8 +299,11 @@ def promptfoo(vendor):
     target.mkdir(mode=0o755)
     for name in ("package.json", "package-lock.json"):
         shutil.copyfile(HERE / "promptfoo" / name, target / name)
-    run(["npm", "ci", "--ignore-scripts", "--omit=dev", "--no-audit", "--no-fund",
+    run(["npm", "ci", "--ignore-scripts", "--omit=dev", "--include=optional", "--no-audit", "--no-fund",
          "--registry=https://registry.npmjs.org"], cwd=target)
+    # Both native artifacts are published, SRI-bound optional packages in the lock.
+    # Exercise the local SQLite binding and esbuild binary without install scripts.
+    run(["node", "--input-type=module", "-e", NATIVE_SMOKE], cwd=target, timeout=60)
 
 
 def inventory(vendor):

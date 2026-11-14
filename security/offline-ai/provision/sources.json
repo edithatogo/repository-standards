@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "lock_status": "candidate_required",
-  "verified_on": "2026-11-15",
+  "lock_status": "reviewed",
+  "verified_on": "2026-11-14",
   "target": {
     "os": "linux",
     "architecture": "x86_64",
@@ -58,7 +58,10 @@
     "privacy/build-requirements.lock": "e126a74900098c89d847b7e3d19b7786edca3cb288cd0a681522726acbdff336",
     "scripts/build_privacy_wheels.py": "ef3d29ede13d8d00cd30efbd5fdb6dd6252e26b1fe549defe211b0aaeb579def",
     "scripts/install_gitleaks.py": "5995885e3d1e39da26680ebe5e18cf32f03a2a28ffdaeb37ccad6c1a9f29c711",
-    "security/offline-ai/provision/promptfoo/package.json": "0bca93bdbdc9c5fc184227cc18a74802e5b07eb381622b68e13a4701ffdf013f"
+    "security/offline-ai/provision/promptfoo/package.json": "57619aa529d4e5d3d2bb8589b21f74558fad323c469384dfb6714ebd6141365e",
+    "security/offline-ai/provision/requirements.extra.lock": "8dff90e3d0de90b82e4685c505a5e2099487ea42ad0933b5b07cc302c966e302",
+    "security/offline-ai/provision/promptfoo/package-lock.json": "28794c2307783f00db6d389b1a89824f0f1f4ca38f70e4a27a4c9aa24132447b",
+    "security/offline-ai/provision/dependency-review.json": "b78adc58c61f5aa2eb56ddeb1dd62688e69800f7959f3f828420c1cef02a3197"
   },
   "qualification": {
     "image": false,

@@ -34,10 +34,28 @@ class VendorPreparationTests(unittest.TestCase):
         self.root = Path(self.temporary.name)
 
     def test_committed_catalog_matches_actual_policy_input_bytes(self):
-        catalog = PREP.read_json(HERE / "sources.json")
+        catalog = PREP.load_catalog()
+        self.assertEqual(catalog["lock_status"], "reviewed")
         for relative, expected in catalog["policy_inputs"].items():
             with self.subTest(relative=relative):
                 self.assertEqual(PREP.digest(ROOT / relative), expected)
+
+    def test_missing_reviewed_input_fails_before_installation(self):
+        catalog = PREP.read_json(HERE / "sources.json")
+        del catalog["policy_inputs"]["security/offline-ai/provision/requirements.extra.lock"]
+        with mock.patch.object(PREP, "read_json", return_value=catalog):
+            with self.assertRaisesRegex(PREP.PreparationError, "policy-input"):
+                PREP.load_catalog()
+
+    def test_review_must_bind_the_committed_lock_bytes(self):
+        original = PREP.read_json
+        review = original(HERE / "dependency-review.json")
+        review["locked_inputs"]["security/offline-ai/provision/requirements.extra.lock"]["sha256"] = "0" * 64
+        def read(path):
+            return review if path.name == "dependency-review.json" else original(path)
+        with mock.patch.object(PREP, "read_json", side_effect=read):
+            with self.assertRaisesRegex(PREP.PreparationError, "dependency-review"):
+                PREP.load_catalog()
 
     def test_unreviewed_catalog_fails_before_using_candidate_files(self):
         (self.root / "sources.json").write_text(json.dumps({
