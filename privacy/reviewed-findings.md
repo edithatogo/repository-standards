@@ -31,6 +31,22 @@ into an approved path. Staged findings and findings lacking a commit are never
 admitted. Duplicate coordinates or JSON keys, unknown fields, invalid types,
 missing files and malformed registries fail closed.
 
+## Tobacco capsule and historical full audit — 14 November 2026
+
+Six additional exact coordinates cover a public native-capsule workflow digest,
+a scanner-log digest and four occurrences of a reCAPTCHA site identifier across
+two immutable commits. The workflow blob reproduces the capsule's SHA-256.
+Two retained original scanner logs reproduce the checkpoint's log digest.
+The HTML occurrences are `data-sitekey` attributes in browser-rendered widget
+markup, matching the documented client integration. Review records contain the
+matched-value digests and immutable public Git object links. Raw values and
+scanner reports stay outside this repository. The browser integration is
+documented by [Google](https://developers.google.com/recaptcha/docs/display).
+
+The consumer issues new capsule pins as `sha256:` content identifiers. Real
+Gitleaks regressions retain SHA-1 and SHA-256 exact-admission coverage and verify
+that a nearby bare hexadecimal credential continues to block.
+
 ## Change process
 
 1. Establish the exact scanner finding locally, without posting raw values or
