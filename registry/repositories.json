@@ -4736,9 +4736,12 @@
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "not_applicable_no_executable_coverage",
-        "warranted": false,
-        "target": "not_applicable_until_executable_tests_exist"
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage",
+        "evidence_revision": "66beec5cd7b78a9cdc1aad37dd288350184ef14d",
+        "receiving_main_qualified": false,
+        "assessment": "docs/typesetting-unimelb-typst-assessment.md"
       },
       "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-typst/issues/5",
       "policy_version": 1,
@@ -4747,7 +4750,7 @@
       "maintenance_tier": "review_required",
       "release_maturity": "review_required",
       "canonical_status": "review_required",
-      "supply_chain_profile": "none",
+      "supply_chain_profile": "published",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
       "exceptions": []
