@@ -76,3 +76,11 @@ workflow defaults and current runtime guidance now select the qualified 3.15.2
 patch. Those workflow declarations, `conductor/workflow.md` and
 `conductor/tech-stack.md` are also owned by this slice. Hosted publication and
 the consuming immutable pin are pending.
+
+The first source candidate passed eleven hosted checks, including real scanner
+behavior, the complete composite canary, policy validation and both CodeQL
+languages. Receiving main then advanced through PRs #130, #77 and #78 to
+`e136074`. The source branch incorporates that main through a normal merge.
+The combined candidate receives fresh complete-policy and hosted verification
+before its guarded merge. The consumer handoff records the resulting source
+commit and exact adopted pin.
