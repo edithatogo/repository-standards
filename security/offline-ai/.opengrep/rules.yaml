@@ -57,13 +57,48 @@ rules:
           - pattern: $AGENT.invoke(...)
           - pattern: console.log(...)
           - pattern: $LOGGER.error(...)
+  # Opengrep's Rust AST keeps qualified expressions inside a macro as tokens.
+  # Restrict token matching to these logging macros and skip strings and comments.
   - id: offline-rust-direct-env-log
     languages: [rust]
     severity: ERROR
-    message: "Do not log raw environment secrets"
-    pattern-either:
-      - pattern: println!(..., std::env::var($KEY), ...)
-      - pattern: eprintln!(..., std::env::var($KEY), ...)
+    message: Do not log raw environment secrets
+    patterns:
+      - pattern-either:
+          - pattern: println!(...)
+          - pattern: eprintln!(...)
+          - pattern: std::println!(...)
+          - pattern: std::eprintln!(...)
+      - pattern-regex: >-
+          (?x)
+          (?(DEFINE)
+            (?<line> //[^\r\n]* )
+            (?<block> /\* (?: (?&block) | (?! /\* | \*/ ) [\s\S] )* \*/ )
+            (?<gap> (?:\s+|(?&line)|(?&block))* )
+          )
+          (?:
+            r(?<hashes>\#*)"(?s:.*?)"\k<hashes>
+            | "(?:\\.|[^"\\])*"
+            | (?&line)
+            | (?&block)
+          )(*SKIP)(*F)
+          |
+          \bstd(?&gap)::(?&gap)env(?&gap)::(?&gap)var(?:_os)?(?&gap)\(
+  - id: offline-rust-env-log-taint
+    languages: [rust]
+    severity: ERROR
+    message: Do not log raw environment secrets
+    mode: taint
+    pattern-sources:
+      - pattern-either:
+          - pattern: std::env::var(...)
+          - pattern: std::env::var_os(...)
+    pattern-sinks:
+      - pattern-either:
+          - pattern: println!(...)
+          - pattern: eprintln!(...)
+          - pattern: std::println!(...)
+          - pattern: std::eprintln!(...)
   - id: offline-rust-env-http
     languages: [rust]
     severity: ERROR
