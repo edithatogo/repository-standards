@@ -9,16 +9,28 @@ on:
       - "registry/**"
       - "schemas/**"
       - "scripts/audit_estate_conformance.py"
+      - "scripts/estate_evidence.py"
+      - "scripts/publish_estate_evidence.py"
+      - "tests/*evidence*.py"
+      - "tooling/estate-evidence-requirements.txt"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/estate-conformance.yml"
+      - "scripts/estate_evidence.py"
+      - "scripts/publish_estate_evidence.py"
+      - "schemas/estate-evidence*.json"
+      - "tooling/estate-evidence-requirements.txt"
   schedule:
-    - cron: "17 18 * * 0"
+    - cron: "17 18 * * *"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: estate-conformance-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: estate-conformance-${{ github.event.pull_request.number || 'live' }}
+  cancel-in-progress: false
 
 jobs:
   validate-policy:
@@ -26,84 +38,106 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.15.2"
-      - name: Validate policy files
+      - name: Install hash-verified schema tooling
+        run: |
+          python -m pip install --disable-pip-version-check --only-binary=:all: --require-hashes -r tooling/estate-evidence-requirements.txt
+      - name: Validate policy and adversarial evidence fixtures
         run: |
           python -m json.tool profiles/archetype-profiles.json >/dev/null
           python -m json.tool registry/repositories.json >/dev/null
           python -m json.tool schemas/repository-entry.schema.json >/dev/null
           python -m json.tool schemas/verification-receipt.schema.json >/dev/null
           python -m json.tool registry/canaries.json >/dev/null
-          python -m py_compile scripts/audit_estate_conformance.py
-          python -m py_compile scripts/simulate_policy_impact.py
-          python -m py_compile scripts/plan_managed_remediation.py
-          python -m py_compile scripts/export_policy_bundle.py
-          python -m py_compile scripts/build_blast_radius.py
+          python -m json.tool schemas/estate-evidence.schema.json >/dev/null
+          python -m json.tool schemas/estate-evidence-public.schema.json >/dev/null
+          python -m compileall -q scripts tests
           PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_*.py' -v
+          PYTHONPATH=scripts:tests python tests/evidence_schema_acceptance.py -v
 
   reconcile-estate:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: validate-policy
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
       contents: read
-      issues: write
       id-token: write
       attestations: write
-    env:
-      ESTATE_AUDIT_TOKEN: ${{ secrets.ESTATE_AUDIT_TOKEN }}
-      ISSUE_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.15.2"
-      - name: Require an estate-readable token
+      - name: Install hash-verified schema tooling
         run: |
-          if [ -z "${ESTATE_AUDIT_TOKEN:-}" ]; then
-            echo "::error::Configure ESTATE_AUDIT_TOKEN with read access to all in-scope repositories."
-            exit 2
-          fi
-      - name: Audit and reconcile the control issue
+          python -m pip install --disable-pip-version-check --only-binary=:all: --require-hashes -r tooling/estate-evidence-requirements.txt
+      - name: Collect and validate live evidence
+        env:
+          ESTATE_AUDIT_TOKEN: ${{ secrets.ESTATE_AUDIT_TOKEN }}
         run: |
-          python scripts/audit_estate_conformance.py \
-            --registry registry/repositories.json \
-            --profiles profiles/archetype-profiles.json \
-            --managed-files managed-files/manifest.json \
-            --output-dir conformance-output \
-            --issue-repository "${{ github.repository }}" \
-            --issue-number "${{ vars.CONFORMANCE_ISSUE_NUMBER || '16' }}"
-      - name: Simulate policy impact
-        run: |
-          python scripts/simulate_policy_impact.py \
-            --audit conformance-output/estate-conformance.json \
-            --profiles profiles/archetype-profiles.json \
-            --output conformance-output/policy-impact.json
-      - name: Plan bounded managed remediation
-        run: |
-          python scripts/plan_managed_remediation.py \
-            --audit conformance-output/estate-conformance.json \
-            --output conformance-output/managed-remediation-plan.json \
-            --limit 25
-      - name: Export policy bundle and blast-radius graph
-        run: |
-          python scripts/export_policy_bundle.py \
-            --profiles profiles/archetype-profiles.json \
-            --registry registry/repositories.json \
-            --output-dir conformance-output/opa-bundle
-          python scripts/build_blast_radius.py \
-            --registry registry/repositories.json \
-            --canaries registry/canaries.json \
-            --output conformance-output/blast-radius.json
-      - uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
+          umask 077
+          python -I scripts/estate_evidence.py \
+            --private-output "$RUNNER_TEMP/f01-private/estate-evidence.json" \
+            --public-dir "$RUNNER_TEMP/f01-public" \
+            --registry registry/repositories.json
+      - name: Attest public aggregates only
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
         with:
-          subject-path: conformance-output/estate-conformance.json
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+          subject-path: ${{ runner.temp }}/f01-public/estate-evidence.json
+      - name: Upload aggregate-only receipt
         if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: estate-conformance-${{ github.run_id }}
-          path: conformance-output/
-          retention-days: 30
+          name: estate-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/f01-public/estate-evidence.json
+            ${{ runner.temp }}/f01-public/estate-evidence.md
+            ${{ runner.temp }}/f01-public/CHECKSUMS.sha256
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Remove ephemeral private evidence
+        if: always()
+        run: rm -f -- "$RUNNER_TEMP/f01-private/estate-evidence.json"
+
+  publish-aggregate:
+    needs: reconcile-estate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.15.2"
+      - name: Install hash-verified schema tooling
+        run: |
+          python -m pip install --disable-pip-version-check --only-binary=:all: --require-hashes -r tooling/estate-evidence-requirements.txt
+      - name: Download only this run's public receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          gh run download "$RUN_ID" \
+            --name "estate-evidence-$RUN_ID-$RUN_ATTEMPT" \
+            --dir "$RUNNER_TEMP/f01-public"
+      - name: Reconcile the existing aggregate issue section
+        env:
+          ISSUE_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ vars.CONFORMANCE_ISSUE_NUMBER || '16' }}
+        run: |
+          python -I scripts/publish_estate_evidence.py \
+            --report "$RUNNER_TEMP/f01-public/estate-evidence.json" \
+            --issue-number "$ISSUE_NUMBER"
