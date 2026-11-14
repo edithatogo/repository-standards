@@ -9,18 +9,14 @@ environment. These commands do not install a hook automatically.
 
 Select an absolute checkout path and verify its commit against the consumer's
 `uses:` pin before installation. Do not run setup from an unreviewed PR checkout.
-Python 3.12 is the qualified tooling runtime; see the scoped compatibility
-exception in the [standard](../docs/privacy-secrets-standard.md).
+Use Python 3.15.1 and uv 0.13.8. The installer verifies the selected
+interpreter, source archive digests and dependency hashes.
 
 ```bash
 PRIVACY_TOOL_ROOT=/absolute/path/to/verified/repository-standards
-python3.12 -I -m venv "$PRIVACY_TOOL_ROOT/.venv-privacy"
-"$PRIVACY_TOOL_ROOT/.venv-privacy/bin/python" -I -m pip install \
-  --disable-pip-version-check --only-binary=:all: --require-hashes \
-  -r "$PRIVACY_TOOL_ROOT/privacy/requirements.lock"
-"$PRIVACY_TOOL_ROOT/.venv-privacy/bin/python" -I \
-  "$PRIVACY_TOOL_ROOT/scripts/install_gitleaks.py" \
-  --destination "$PRIVACY_TOOL_ROOT/.privacy-bin"
+uv venv --python 3.15.1 "$PRIVACY_TOOL_ROOT/.venv"
+bash "$PRIVACY_TOOL_ROOT/privacy/install.sh" \
+  "$PRIVACY_TOOL_ROOT/.venv/bin/python" "$PRIVACY_TOOL_ROOT/.venv/privacy-guard"
 ```
 
 Do not commit the environment or downloaded binary. Linux CI is the deployment
@@ -35,10 +31,10 @@ other checks. Configure the absolute tooling and repository paths locally; do no
 replace an existing hook or `core.hooksPath` without inspecting it.
 
 ```bash
-"$PRIVACY_TOOL_ROOT/.venv-privacy/bin/python" -I \
+"$PRIVACY_TOOL_ROOT/.venv/privacy-guard/venv/bin/python" -I \
   "$PRIVACY_TOOL_ROOT/scripts/privacy_guard.py" \
   --root /absolute/path/to/consumer \
-  --binary "$PRIVACY_TOOL_ROOT/.privacy-bin/gitleaks" --staged
+  --binary "$PRIVACY_TOOL_ROOT/.venv/privacy-guard/bin/gitleaks" --staged
 ```
 
 Use `--profile sensitive` to block the supported contact and identifier matches
@@ -53,10 +49,10 @@ Run a complete audit from a complete clone, or invoke it from the existing
 pre-push mechanism:
 
 ```bash
-"$PRIVACY_TOOL_ROOT/.venv-privacy/bin/python" -I \
+"$PRIVACY_TOOL_ROOT/.venv/privacy-guard/venv/bin/python" -I \
   "$PRIVACY_TOOL_ROOT/scripts/privacy_guard.py" \
   --root /absolute/path/to/consumer \
-  --binary "$PRIVACY_TOOL_ROOT/.privacy-bin/gitleaks" --mode full
+  --binary "$PRIVACY_TOOL_ROOT/.venv/privacy-guard/bin/gitleaks" --mode full
 ```
 
 Exit `1` identifies blocking findings and `2` identifies execution errors. Preserve

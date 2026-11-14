@@ -497,7 +497,16 @@ class GitleaksIntegrationTests(RepositoryCase):
         return "ghp_" + hashlib.sha256(b"synthetic-regression-canary").hexdigest()[:36]
 
     def test_real_cli_exact_admission_and_extra_secret_resistance(self) -> None:
-        value = hashlib.sha1(b"public-object-regression-fixture").hexdigest()
+        self.verify_exact_admission(
+            hashlib.sha1(b"public-object-regression-fixture").hexdigest()
+        )
+
+    def test_real_cli_exact_sha256_admission_and_extra_secret_resistance(self) -> None:
+        self.verify_exact_admission(
+            hashlib.sha256(b"public-object-regression-fixture").hexdigest()
+        )
+
+    def verify_exact_admission(self, value: str) -> None:
         source = self.root / "inventory.json"
         source.write_text(
             json.dumps({"privacy-" + "secrets.yml": value}, indent=2) + "\n"
@@ -571,6 +580,29 @@ class GitleaksIntegrationTests(RepositoryCase):
         )
         self.assertNotIn(value, result.stdout + result.stderr)
         self.assertNotIn(self.synthetic_secret(), result.stdout + result.stderr)
+
+    def test_algorithm_qualified_hash_preserves_nearby_credential_detection(
+        self,
+    ) -> None:
+        value = hashlib.sha256(b"public-workflow-format-fixture").hexdigest()
+        source = self.root / "capsule.json"
+        fields = {"privacy-" + "secrets.yml": "sha256:" + value}
+        source.write_text(json.dumps(fields, indent=2) + "\n")
+        self.git("add", "capsule.json")
+        self.git("commit", "--quiet", "-m", "Qualified public digest fixture")
+        code, summary = self.scan(base=self.base, binary=GITLEAKS_BINARY)
+        self.assertEqual((code, summary["finding_count"]), (0, 0))
+
+        credential = hashlib.sha256(b"synthetic-nearby-credential-canary").hexdigest()
+        fields["api_" + "key"] = credential
+        source.write_text(json.dumps(fields, indent=2) + "\n")
+        self.git("add", "capsule.json")
+        self.git("commit", "--quiet", "-m", "Nearby credential fixture")
+        code, summary = self.scan(base=self.base, binary=GITLEAKS_BINARY)
+        self.assertEqual(code, 1)
+        self.assertGreater(summary["counts_by_rule"].get("generic-api-key", 0), 0)
+        self.assertNotIn(credential, json.dumps(summary))
+        self.assertNotIn(value, json.dumps(summary))
 
     def test_real_report_is_private_after_gitleaks_replaces_it(self) -> None:
         (self.root / "leak.txt").write_text(self.synthetic_secret() + "\n")
