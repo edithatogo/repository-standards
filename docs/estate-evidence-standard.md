@@ -86,8 +86,10 @@ available for explicit private analysis; they are not silently presented as fres
 live-estate evidence. Managed remediation remains separately gated and plan-only.
 
 The workflow uses Python 3.15.2. Credentialed collection runs only from main, never
-from a pull request. It accepts the existing `ESTATE_AUDIT_TOKEN`, or the configured
-short-lived estate App (`ESTATE_AUTOMATION_APP_ID` and its private-key secret).
+from a pull request. It accepts the existing dedicated `ESTATE_AUDIT_TOKEN`. The initially proposed
+automatic installation-wide App fallback was removed following the hosted
+security review; no linter exception was introduced. A separately qualified
+scoped App credential can be supplied through the same explicit token boundary.
 Missing credentials fail closed; the repository-scoped default token is not used
 as a substitute for estate access. No token value is printed or persisted.
 

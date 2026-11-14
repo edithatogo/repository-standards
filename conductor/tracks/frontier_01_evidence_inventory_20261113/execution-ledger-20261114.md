@@ -39,9 +39,11 @@ Hosted full-suite and real inventory results remain separate acceptance gates.
 
 The previously inspected scheduled conformance run 42528581448 passed source
 validation but failed at "Require an estate-readable token"; collection never
-executed. The updated workflow offers the already-defined estate App credential
-route as well as ESTATE_AUDIT_TOKEN. Neither route is assumed configured merely
-because its workflow definition exists. F01 must remain open if current live
+executed. The updated workflow retains ESTATE_AUDIT_TOKEN as the explicit credential
+boundary. The proposed automatic installation-wide App fallback was removed
+after the hosted Zizmor alert gate correctly flagged its scope. There is no
+linter suppression, token creation or repository-token fallback. Credential
+availability is not inferred merely from the workflow definition. F01 must remain open if current live
 execution cannot enumerate the authenticated scope.
 
 ## Remaining acceptance at this checkpoint
@@ -50,3 +52,12 @@ Publish source and schema changes in a PR, inspect exact-head CI/security result
 merge only after they pass, execute/read the main-branch live collection and public
 publication, then reconcile the track using actual receipts. No full-track
 completion or archive is claimed by this source checkpoint.
+
+## Hosted review repair
+
+At initial head 486bd46c56a3d00140b4f05c642869caebe707f6 the workflow jobs
+succeeded, but the separate Zizmor alert gate failed for an implicit
+installation-wide App token. The fallback was withdrawn, not suppressed. Two
+credential-boundary regression tests first failed, then passed after removal.
+The updated local focused suite contains 64 passing tests; the four explicit
+schema/pipeline tests also pass. Fresh hosted checks are required for this repair.

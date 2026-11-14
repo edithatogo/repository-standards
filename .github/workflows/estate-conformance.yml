@@ -68,8 +68,6 @@ jobs:
       contents: read
       id-token: write
       attestations: write
-    env:
-      ESTATE_TOKEN_PRESENT: ${{ secrets.ESTATE_AUDIT_TOKEN != '' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -80,19 +78,9 @@ jobs:
       - name: Install hash-verified schema tooling
         run: |
           python -m pip install --disable-pip-version-check --only-binary=:all: --require-hashes -r tooling/estate-evidence-requirements.txt
-      - name: Obtain optional short-lived estate App token
-        if: env.ESTATE_TOKEN_PRESENT != 'true' && vars.ESTATE_AUTOMATION_APP_ID != ''
-        id: app-token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        with:
-          app-id: ${{ vars.ESTATE_AUTOMATION_APP_ID }}
-          private-key: ${{ secrets.ESTATE_AUTOMATION_APP_PRIVATE_KEY }}
-          owner: edithatogo
-          permission-contents: read
-          permission-actions: read
       - name: Collect and validate live evidence
         env:
-          ESTATE_AUDIT_TOKEN: ${{ secrets.ESTATE_AUDIT_TOKEN || steps.app-token.outputs.token }}
+          ESTATE_AUDIT_TOKEN: ${{ secrets.ESTATE_AUDIT_TOKEN }}
         run: |
           umask 077
           python -I scripts/estate_evidence.py \
