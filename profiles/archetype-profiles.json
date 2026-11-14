@@ -68,6 +68,12 @@
       "block_branch_deletion": true,
       "require_conversation_resolution": true,
       "owner_recovery_path": true
+    },
+    "community_bootstrap": {
+      "policy": "profiles/community-bootstrap.json",
+      "declaration": ".github/community-bootstrap.json",
+      "evidence": "offline_snapshot_report_plus_separate_hosted_and_setting_evidence",
+      "mandatory_human_approvals": 0
     }
   },
   "supply_chain_profiles": {

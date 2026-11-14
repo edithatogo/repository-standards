@@ -1,0 +1,104 @@
+{
+  "track_id": "community_bootstrap_20261115",
+  "type": "implementation",
+  "priority": "P1",
+  "status": "in_progress",
+  "created_at": "2026-11-15",
+  "updated_at": "2026-11-15",
+  "dependencies": [],
+  "source_implementation_complete": true,
+  "source_hosted_validation_passed": false,
+  "shared_defaults_deployed": false,
+  "starter_repositories_deployed": 1,
+  "starter_repositories_expected": 7,
+  "estate_rollout_verified": false,
+  "frontier_certified": false,
+  "related_issues": [
+    10,
+    18,
+    40
+  ],
+  "shared_defaults_candidate": {
+    "pull_request": "https://github.com/edithatogo/.github/pull/9",
+    "head_sha": "52987aa2a6d9904a15e62226a02e02b72bca4cbd",
+    "draft": true
+  },
+  "source_recovery": {
+    "local_executor_available": true,
+    "exact_defaults_payload_preserved": true,
+    "other_final_sources_reconstructed": true,
+    "fresh_qualification_required": false,
+    "fresh_local_qualification_completed": true,
+    "hosted_qualification_required": true
+  },
+  "remaining_gates": [
+    "Final source hosted checks and independent review",
+    "Scoped PR integration and bounded deployment receipts",
+    "Separate whole-estate F01/F03 acceptance"
+  ],
+  "candidate_pull_requests": [
+    {
+      "repository": "edithatogo/repository-standards",
+      "url": "https://github.com/edithatogo/repository-standards/pull/144",
+      "draft": true
+    },
+    {
+      "repository": "edithatogo/.github",
+      "url": "https://github.com/edithatogo/.github/pull/9",
+      "draft": true
+    },
+    {
+      "repository": "edithatogo/template-solo-python",
+      "url": "https://github.com/edithatogo/template-solo-python/pull/9",
+      "draft": false,
+      "merged": true,
+      "merge_sha": "126d23c1f4c0e020fba87fb0ddfa5f3cbdb81d5d"
+    },
+    {
+      "repository": "edithatogo/template-solo-rust",
+      "url": "https://github.com/edithatogo/template-solo-rust/pull/7",
+      "draft": true
+    },
+    {
+      "repository": "edithatogo/template-solo-node",
+      "url": "https://github.com/edithatogo/template-solo-node/pull/9",
+      "draft": true
+    },
+    {
+      "repository": "edithatogo/template-solo-data",
+      "url": "https://github.com/edithatogo/template-solo-data/pull/9",
+      "draft": true
+    },
+    {
+      "repository": "edithatogo/template-solo-docs",
+      "url": "https://github.com/edithatogo/template-solo-docs/pull/6",
+      "draft": true
+    },
+    {
+      "repository": "edithatogo/template-solo-latex",
+      "url": "https://github.com/edithatogo/template-solo-latex/pull/7",
+      "draft": true
+    },
+    {
+      "repository": "edithatogo/template-solo-typst",
+      "url": "https://github.com/edithatogo/template-solo-typst/pull/8",
+      "draft": true
+    }
+  ],
+  "publication_record": "publication-20261115.md",
+  "source_local_validation_passed": true,
+  "local_validation": {
+    "python": "3.15.2",
+    "pyyaml": "6.0.3",
+    "libyaml": false,
+    "fastjsonschema": "2.21.2",
+    "tests_selected": 274,
+    "tests_passed": 240,
+    "tests_skipped": 34,
+    "new_behavioral_tests_executed": 50,
+    "new_contract_tests_executed": 8,
+    "schema_pipeline_tests_passed": 4,
+    "validator_blob": "077852291908c900d719b86e50be6e70d63998f6",
+    "tests_blob": "30b708b4b778986708243596b42c025784e1c2ee"
+  }
+}

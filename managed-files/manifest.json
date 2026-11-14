@@ -111,5 +111,30 @@
       "upstream_commit": "985503bc8eae58e7d6ef36a6e5427d0077e0193c",
       "runtime": "isolated scanner tooling; no product dependency change"
     }
-  ]
+  ],
+  "community_bootstrap": {
+    "policy": "profiles/community-bootstrap.json",
+    "schema": "schemas/community-bootstrap-policy.schema.json",
+    "declaration": ".github/community-bootstrap.json",
+    "auditor": "scripts/audit_community_bootstrap.py",
+    "sources": {
+      "community": "edithatogo/.github",
+      "starters": "template-solo-{python,rust,node,data,docs,latex,typst}"
+    },
+    "inheritance": "Resolve supported GitHub defaults before remediation; local issue directories replace the default group.",
+    "delivery": "Focused reviewed PRs; preserve local extensions. F03 apply mode remains gated.",
+    "controls": [
+      "issue_templates",
+      "issue_chooser",
+      "pull_request_template",
+      "discussion_templates",
+      "code_of_conduct",
+      "support",
+      "gitignore",
+      "editorconfig",
+      "env_example",
+      "devcontainer"
+    ],
+    "legacy_scan": "The files array retains legacy presence checks; community content and inheritance are evaluated by the separate auditor."
+  }
 }
