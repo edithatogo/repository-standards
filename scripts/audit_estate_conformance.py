@@ -26,6 +26,7 @@ END = "<!-- estate-conformance:end -->"
 ACTION_REF = re.compile(r"(?m)^\s*uses:\s*([^#\s]+)")
 FULL_SHA = re.compile(r"@[0-9a-f]{40}$", re.I)
 SCHEDULE = re.compile(r"(?m)^\s*schedule\s*:")
+TODAY = date.today()
 
 
 class GitHub:
@@ -147,12 +148,11 @@ def present(paths: set[str], patterns: tuple[str, ...]) -> bool:
 
 
 def active_exception(entry: dict[str, Any], control: str) -> bool:
-    today = date.today()
     for exception in entry.get("exceptions", []):
         if exception.get("control") != control:
             continue
         try:
-            return date.fromisoformat(exception["review_after"]) >= today
+            return date.fromisoformat(exception["review_after"]) >= TODAY
         except (KeyError, ValueError):
             return False
     return False
@@ -160,7 +160,6 @@ def active_exception(entry: dict[str, Any], control: str) -> bool:
 
 def exception_dates(entry: dict[str, Any]) -> tuple[list[str], list[str]]:
     """Return expired and soon-to-expire exception control names."""
-    today = date.today()
     expired: list[str] = []
     upcoming: list[str] = []
     for exception in entry.get("exceptions", []):
@@ -170,9 +169,9 @@ def exception_dates(entry: dict[str, Any]) -> tuple[list[str], list[str]]:
         except (KeyError, ValueError):
             expired.append(control)
             continue
-        if review_after < today:
+        if review_after < TODAY:
             expired.append(control)
-        elif (review_after - today).days <= 30:
+        elif (review_after - TODAY).days <= 30:
             upcoming.append(control)
     return sorted(set(expired)), sorted(set(upcoming))
 
