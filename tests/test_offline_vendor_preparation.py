@@ -33,6 +33,12 @@ class VendorPreparationTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
 
+    def test_committed_catalog_matches_actual_policy_input_bytes(self):
+        catalog = PREP.read_json(HERE / "sources.json")
+        for relative, expected in catalog["policy_inputs"].items():
+            with self.subTest(relative=relative):
+                self.assertEqual(PREP.digest(ROOT / relative), expected)
+
     def test_unreviewed_catalog_fails_before_using_candidate_files(self):
         (self.root / "sources.json").write_text(json.dumps({
             "schema_version": 1, "lock_status": "candidate_required",
