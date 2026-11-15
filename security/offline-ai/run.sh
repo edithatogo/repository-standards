@@ -7,6 +7,7 @@ for executable in gitleaks opengrep python promptfoo git node; do command -v "$e
 quiet() { PYTHONPATH=/policy/security/offline-ai PYTHONSAFEPATH=1 python -P -m security.quiet_exec "$@"; }
 test "${HF_HUB_OFFLINE:-}" = 1 && test "${npm_config_offline:-}" = true || exit 2
 # A checked-out repository must never supply or override the scanner's trusted asset manifest.
+quiet container-preflight python -m security.verify_container
 quiet network-preflight python -m security.verify_network
 quiet asset-preflight python -m security.verify_assets
 # Verify the installed binary and trusted rules against ephemeral positive/negative controls.
@@ -40,16 +41,16 @@ else
   fi
 fi
 if [[ "$ai" == true ]]; then
-  test -f /opt/models/gliner-pii/config.json || { echo "Offline GLiNER model missing"; exit 2; }
+  test -f /opt/models/gliner-pii/gliner_config.json || { echo "Offline GLiNER model missing"; exit 2; }
   quiet pytest python -m pytest -q -p no:cacheprovider /policy/security/offline-ai/tests/test_local_dlp.py
   quiet pytest python /policy/security/offline-ai/scripts/qualify_model.py
   cd /policy/security/offline-ai
   # Mock corpus verifies runner wiring, not application prompt safety.
-  quiet promptfoo-mock promptfoo eval -c promptfooconfig.yaml --no-cache --no-progress
+  quiet promptfoo-mock promptfoo eval -c promptfooconfig.yaml --no-cache --no-progress-bar
   if [[ -f /work/security/agent_security_adapter.py ]]; then
     export SECURITY_AGENT_WORKSPACE=/work
     export SECURITY_AGENT_ADAPTER=/work/security/agent_security_adapter.py
-    quiet promptfoo-agent promptfoo eval -c promptfooconfig.integration.yaml --no-cache --no-progress
+    quiet promptfoo-agent promptfoo eval -c promptfooconfig.integration.yaml --no-cache --no-progress-bar
   elif [[ "${ENFORCE_AI:-false}" == true ]]; then
     echo 'Real local agent adapter required for enforced AI security profile' >&2
     exit 2

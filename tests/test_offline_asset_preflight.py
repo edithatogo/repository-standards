@@ -19,6 +19,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 OFFLINE = ROOT / "security/offline-ai"
 FAILURE = "Scanner toolchain asset verification failed\n"
+MODEL_FIXTURE = json.loads((OFFLINE / "tests/fixtures/native_model.json").read_text())
 
 
 class OfflineAssetPreflightTests(unittest.TestCase):
@@ -37,14 +38,17 @@ class OfflineAssetPreflightTests(unittest.TestCase):
             "promptfoo/package.json": "/opt/promptfoo/package.json",
             "promptfoo/package-lock.json": "/opt/promptfoo/package-lock.json",
             "promptfoo/node_modules/promptfoo/bin/cli.js": "/opt/promptfoo/node_modules/promptfoo/bin/cli.js",
-            "models/gliner-pii/config.json": "/opt/models/gliner-pii/config.json",
-            "models/gliner-pii/model.safetensors": "/opt/models/gliner-pii/model.safetensors",
+            **{"models/gliner-pii/" + name: "/opt/models/gliner-pii/" + name for name in MODEL_FIXTURE},
         }
         records = []
         for relative, installed in files.items():
             path = vendor / relative
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(b"synthetic reviewed fixture: " + relative.encode())
+            if relative.startswith("models/gliner-pii/"):
+                value = MODEL_FIXTURE[relative.removeprefix("models/gliner-pii/")]
+                path.write_text(value if isinstance(value, str) else json.dumps(value))
+            else:
+                path.write_bytes(b"synthetic reviewed fixture: " + relative.encode())
             path.chmod(0o755 if relative.startswith("bin/") or relative.endswith("cli.js") else 0o644)
             records.append({"path": installed, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
         link = vendor / "promptfoo/node_modules/.bin/promptfoo"
@@ -73,6 +77,17 @@ class OfflineAssetPreflightTests(unittest.TestCase):
         result = self.verify(self.bundle(self.root))
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout + result.stderr, "")
+
+    def test_uv_metadata_is_rejected_even_when_included_in_the_manifest(self):
+        vendor = self.bundle(self.root)
+        metadata = vendor / "python-wheels/.gitignore"
+        metadata.write_bytes(b"*")
+        manifest = vendor / "manifest.json"
+        payload = json.loads(manifest.read_text())
+        payload["files"].append({"path": "/opt/offline-ai/wheels/.gitignore",
+                                 "sha256": hashlib.sha256(b"*").hexdigest()})
+        manifest.write_text(json.dumps(payload))
+        self.assert_rejected(self.verify(vendor))
 
     def test_missing_supplied_components_are_rejected(self):
         for relative in ("bin/opengrep", "requirements.lock", "promptfoo/package-lock.json",

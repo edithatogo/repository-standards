@@ -18,6 +18,7 @@ LINK = "/opt/promptfoo/node_modules/.bin/promptfoo"
 TARGET = "/opt/promptfoo/node_modules/promptfoo/bin/promptfoo.js"
 MODEL = "/opt/models/gliner-pii"
 WHEEL = "/opt/offline-ai/wheels/fixture_package-0.0.0-py3-none-any.whl"
+MODEL_FIXTURE = json.loads((Path(__file__).parent / "fixtures/native_model.json").read_text())
 PATHS = {
     "/usr/local/bin/gitleaks": "bin/gitleaks",
     "/usr/local/bin/opengrep": "bin/opengrep",
@@ -27,9 +28,7 @@ PATHS = {
     "/opt/promptfoo/package-lock.json": "promptfoo/package-lock.json",
     "/opt/promptfoo/node_modules/promptfoo/package.json": "promptfoo/node_modules/promptfoo/package.json",
     TARGET: "promptfoo/node_modules/promptfoo/bin/promptfoo.js",
-    MODEL + "/config.json": "models/gliner-pii/config.json",
-    MODEL + "/model.safetensors": "models/gliner-pii/model.safetensors",
-    MODEL + "/tokenizer.json": "models/gliner-pii/tokenizer.json",
+    **{MODEL + "/" + name: "models/gliner-pii/" + name for name in MODEL_FIXTURE},
 }
 
 
@@ -40,7 +39,11 @@ def make_bundle(tmp_path, *, vendor=False):
     for image_path, vendor_path in PATHS.items():
         path = root / (vendor_path if vendor else image_path.removeprefix("/"))
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(b"synthetic asset: " + image_path.encode())
+        if image_path.startswith(MODEL + "/"):
+            value = MODEL_FIXTURE[image_path.removeprefix(MODEL + "/")]
+            path.write_text(value if isinstance(value, str) else json.dumps(value))
+        else:
+            path.write_bytes(b"synthetic asset: " + image_path.encode())
         path.chmod(0o755 if image_path in {"/usr/local/bin/gitleaks", "/usr/local/bin/opengrep", TARGET} else 0o644)
         local[image_path] = path
         records.append({"path": image_path, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
@@ -78,7 +81,7 @@ def test_legacy_model_only_schema_cannot_qualify_toolchain(tmp_path):
     "/usr/local/bin/gitleaks", "/usr/local/bin/opengrep",
     "/opt/offline-ai/requirements.lock", WHEEL,
     "/opt/promptfoo/package.json", "/opt/promptfoo/package-lock.json",
-    MODEL + "/config.json", MODEL + "/model.safetensors", LINK,
+    *(MODEL + "/" + name for name in MODEL_FIXTURE), LINK,
 ])
 def test_required_component_cannot_be_omitted(tmp_path, missing):
     root, manifest, payload, local = make_bundle(tmp_path)
@@ -166,7 +169,7 @@ def test_symlinked_image_root_is_rejected(tmp_path):
 
 def test_hardlinked_asset_is_rejected(tmp_path):
     root, manifest, payload, local = make_bundle(tmp_path)
-    source = local[MODEL + "/config.json"]
+    source = local[MODEL + "/gliner_config.json"]
     os.link(source, root / "opt/promptfoo/alias.json")
     payload["files"].append({"path": "/opt/promptfoo/alias.json", "sha256": hashlib.sha256(source.read_bytes()).hexdigest()})
     manifest.write_text(json.dumps(payload))
@@ -200,10 +203,10 @@ def test_unlisted_promptfoo_link_fails(tmp_path):
 
 def test_links_outside_promptfoo_are_rejected(tmp_path):
     root, manifest, payload, local = make_bundle(tmp_path)
-    local[MODEL + "/config.json"].unlink()
-    local[MODEL + "/config.json"].symlink_to("tokenizer.json")
-    payload["files"] = [item for item in payload["files"] if item["path"] != MODEL + "/config.json"]
-    payload["symlinks"].append({"path": MODEL + "/config.json", "target": "tokenizer.json"})
+    local[MODEL + "/gliner_config.json"].unlink()
+    local[MODEL + "/gliner_config.json"].symlink_to("tokenizer.json")
+    payload["files"] = [item for item in payload["files"] if item["path"] != MODEL + "/gliner_config.json"]
+    payload["symlinks"].append({"path": MODEL + "/gliner_config.json", "target": "tokenizer.json"})
     manifest.write_text(json.dumps(payload))
     assert_invalid(manifest, root)
 

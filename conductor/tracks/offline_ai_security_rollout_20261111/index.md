@@ -178,3 +178,152 @@ supplied, and no runner was registered. Steps 01–09 remain incomplete. The
 central rollout and consumer PR #9 remain draft until their real qualification
 gates pass; this tranche does not authorize a qualified-release claim or
 consumer merge. Existing application-adapter and Rust qualification gaps remain.
+
+## Runtime provisioning continuation — 2026-11-15
+
+- Reconciled source repair PR #140: merged into the existing rollout branch at
+  `0523a1d450476f5e49265f9ec1c888691e1b4884`, with successful source checks and
+  the fix branch already pruned. Central PR #126 remains draft.
+- No remote device was connected at this checkpoint. The development workspace
+  had no container engine or writable cgroup controls and subsequently became
+  unavailable. It was not registered as a security runner.
+- Added independently pinned upstream acquisition and a separate metadata-only
+  candidate-lock workflow. Missing reviewed locks fail preparation before any
+  download. Generated candidates remain unreviewed until their complete hashes,
+  versions and provenance are checked and committed.
+- Repaired the native GLiNER model format and selected a built-in, local-only
+  Deberta uni-encoder path. Preparation converts the verified tensor checkpoint
+  to safetensors and supplies its complete local tokenizer/encoder configuration.
+- Added actual container-state checks for non-root identity, zero capabilities,
+  no privilege escalation, read-only policy/root mounts and finite cgroup-v2
+  memory, process and CPU limits. Requested Docker flags alone are insufficient.
+- Added hosted preparation followed by network-denied Docker build and the real
+  image controls. Evidence retains exact source/image/manifest identities.
+  Binary registry export was subsequently withheld pending the redistribution
+  review recorded below. Hosted success cannot register a runner or qualify the
+  central release by itself.
+
+Eleven native-model contract tests passed on Python 3.15.2 before the workspace
+connection was lost. The combined source and subsequent preparation/container
+regressions require hosted verification; no image/model execution result is
+claimed by this source checkpoint. Requirements 01–09 remain open, including
+real self-hosted runner eligibility, host isolation, vulnerability review and
+applicable application/language qualification. Consumer PR #9 remains draft.
+
+## Reviewed preparation follow-up — 2026-11-15
+
+The workspace recovered and Python 3.15.2 was restored. The combined policy
+suite initially reproduced a stale image-test failure marker left after the
+runtime check became `security.verify_container`; correcting the marker restored
+the required failure-path coverage. The first hosted policy run reproduced that
+same defect. Its privacy and Actions-security checks passed, and
+[candidate run 43651617676](https://github.com/edithatogo/repository-standards/actions/runs/43651617676)
+completed using Python 3.15.1. Its three public candidate files were reconstructed
+from retained chunks and verified against their exact byte lengths, SHA256 and
+Git blob identifiers.
+
+The first image run reached the Docker host and failed at upstream preparation
+with the expected unreviewed-lock catalog. Its retained execution receipt keeps
+release, runner and application qualification false. No scanner execution is
+inferred from that attempt.
+
+The follow-up also requires byte equality between the selected policy workflow
+and the calling commit after normalizing only the single immutable policy SHA.
+Regression cases reproduced the old acceptance of changed container entrypoints
+and network flags, then verified rejection. Model preparation now preserves
+private fixed-stage failure receipts, pinned model cards and associated
+source-code license texts, with exact attribution hashes and explicit scopes.
+
+The reviewed dependency commit retains all 21 shared privacy pins/hash sets and
+verifies all 18 additional Python releases and 603 unique npm releases against
+upstream metadata. Four exact transitive npm overrides resolve the reported
+advisories; the final npm audit reports zero known advisories. The committed
+`security/offline-ai/provision/dependency-review.json` binds the reviewed lock
+bytes and records the source checks, advisory dispositions and remaining real
+execution gates. Native optional packages remain included without lifecycle
+scripts, with a silent libsql/esbuild execution check during preparation.
+
+The integrated Python 3.15.2 policy suite completed with **250 tests: 215 passed
+and 35 existing capability-dependent skips**. It includes 19 container-control,
+12 immutable-source, 13 vendor-preparation and 9 model-preparation cases. Shell
+syntax and diff whitespace checks passed. These source tests do not substitute
+for the required Python 3.15.1 model and image execution.
+
+Central PR #145 contains this preparation work. Central PR #126 and consumer
+PR #9 remain draft while real image execution, image vulnerability review,
+isolated self-hosted runner eligibility and applicable integration gates remain
+open. No runner has been registered and no consumer pin has been changed.
+
+
+## First hosted preparation result — 2026-11-15
+
+[Run 43653722717](https://github.com/edithatogo/repository-standards/actions/runs/43653722717)
+passed the actual binary downloads, Python wheel installation and dependency
+check, Promptfoo native SQLite/esbuild smoke, and model export on Python 3.15.1.
+The retained model receipt records GLiNER 0.2.30, CPU Torch 2.15.0+cpu,
+Transformers 5.22.2, safetensors 0.8.0, sentencepiece 0.2.3 and protobuf 7.36.2.
+Its tokenizer export is 16,034,016 bytes, within the existing 16 MiB limit.
+Model inference and scanner-image qualification remain separate unexecuted gates.
+
+Preparation then failed during manifest finalization. The wheel builder puts
+uv's one-byte build-only metadata beside its wheels, which the strict flat
+wheelhouse verifier rejects. The follow-up stages the exact three expected
+regular wheels from temporary build output. Unexpected and aliased outputs
+remain rejected, and the complete manifest verifier is unchanged.
+
+The same source increment adds a checksum-pinned Grype collector for the exact
+qualified image, retaining the complete findings, internal suppressions,
+database provenance and hashes with review and release qualification false.
+Pin-only workflow changes now trigger image qualification. The repository permits
+squash merges, so a receiving squash source requires a subsequent pin-only PR;
+the ancestor and source-byte checks remain in force.
+
+The Grype source increment completed the Python 3.15.2 policy suite with 265
+tests and 35 existing capability skips. The three additional wheel-staging
+regressions were published after the workspace disconnected; their final local
+completion was not observed. The combined source requires hosted validation.
+No runner or consumer has been activated.
+
+## Actual controls and packaging correction — 2026-11-15
+
+[Run 43655829149](https://github.com/edithatogo/repository-standards/actions/runs/43655829149)
+passed complete preparation and the strict manifest check, built the image
+without build network access, and passed seven actual controls: runtime
+restrictions, network preflight, manifest binding, asset verification,
+Gitleaks fixtures, Opengrep fixtures and the required real-model DLP tests.
+The receipt binds policy `f44ec9e4c1e1fb28f70292b73ab3c6dd31469c22`, manifest
+`f83008306612aeeb980cb6d6813c58639563ac9eb358539221c88c9ad8c5a25e` and image
+`sha256:b460fc731abe0f09a7880e6bc726965e711bc67a4757d17132f9d4f86aa405a9`.
+The artifact's full SHA256 was independently verified. Promptfoo mock evaluation
+failed, while container cleanup passed; inventory and vulnerability collection
+did not run after that failure.
+
+The exact Promptfoo release and its Node/Commander parser confirmed that all
+three eval invocations used an unsupported progress option. They now use
+`--no-progress-bar`. The regression first failed on all three old calls, then
+passed; full local Python 3.15.2 validation completed 269 tests with 234 passes
+and 35 existing capability-dependent skips. The pinned Python wrapper also
+executed all four configured mock cases successfully. Full image execution
+remains required after the correction.
+
+The subsequent bounded packaging review identified missing attributable license
+notices for the pinned Gitleaks and Opengrep binaries. Their exact upstream
+license texts and source records are retained in the policy and copied into the
+image. This does not establish complete binary-redistribution qualification.
+The optional image/registry archive is therefore no longer produced or uploaded;
+the artifact retains execution receipts, the manifest, inventory and advisory
+evidence. The approved host must build from the verified inputs, qualify its own
+actual digest and manifest, and obtain SPDX and vulnerability review for those
+bytes. Existing runner, release and applicable integration gates remain open.
+
+The pinned SBOM action was also found to retrieve an installer from a mutable
+upstream branch. A bounded collector now downloads the exact Syft 1.57.1 Linux
+amd64 archive (31,432,061 bytes; SHA256
+`bf52519eb57f675d47c07d43213cb6dff6449f3d6d1147ff6701ed91f44eef0c`),
+verifies those bytes and runs no installer script. It records private SPDX,
+configuration, version and provenance evidence, binds the described container
+to the local digest, and retains the prior squashed-image inventory scope.
+The existing Grype collector still inventories vulnerabilities across all
+layers. Thirteen focused source tests passed; the full Python 3.15.2 source
+suite completed 282 tests with 247 passes and 35 existing skips. These fixture
+tests do not replace actual Syft execution, image review or runner qualification.

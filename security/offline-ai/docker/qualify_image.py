@@ -60,10 +60,7 @@ def execute(command, label, *, capture=False, timeout=30, env=None):
 
 def stages(manifest_sha256):
     return [
-        ("runtime", ["python", "-I", "-c",
-                     "import sys, shutil; assert sys.version_info[:3] == (3, 15, 1); "
-                     "assert all(shutil.which(name) for name in "
-                     "('gitleaks', 'opengrep', 'python', 'promptfoo', 'git', 'node'))"]),
+        ("runtime", ["python", "-m", "security.verify_container"]),
         ("network-preflight", ["python", "-m", "security.verify_network"]),
         ("manifest-binding", ["python", "-I", "-c",
                               "import hashlib, pathlib, sys; "
@@ -74,7 +71,7 @@ def stages(manifest_sha256):
         ("sast-fixtures", ["python", "/policy/security/offline-ai/scripts/verify_sast_fixtures.py"]),
         ("dlp-model", ["python", "/policy/security/offline-ai/scripts/qualify_model.py"]),
         ("promptfoo-mock", ["promptfoo", "eval", "-c",
-                            "/policy/security/offline-ai/promptfooconfig.yaml", "--no-cache", "--no-progress"]),
+                            "/policy/security/offline-ai/promptfooconfig.yaml", "--no-cache", "--no-progress-bar"]),
     ]
 
 
