@@ -44,6 +44,8 @@ record = {
     "scanner_network_access": False,
     "runner_registration_qualified": False,
     "application_adapters_qualified": False,
+    "image_exported": False,
+    "image_redistribution_qualified": False,
     "release_qualified": False,
 }
 with pathlib.Path(path).open("x", encoding="utf-8") as stream:
@@ -149,14 +151,11 @@ assert all(item["status"] == "passed" for item in receipt["stages"])
 assert receipt["runner_registration_qualified"] is False
 PY
 
-stage=portable-image-export
-# Keep registry manifests and blobs intact: docker save/load alone need not
-# preserve RepoDigests. A receiving host restores this loopback-only registry.
+stage=registry-cleanup
+# Keep the candidate image local. Binary redistribution needs a separate
+# license and corresponding-source review; retain execution evidence only.
 docker stop --time 10 "$registry_name" >/dev/null
 registry_created=false
-tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
-  -C "$destination/registry" -czf "$evidence/scanner-registry.tar.gz" .
-sha256sum "$evidence/scanner-registry.tar.gz" > "$evidence/scanner-registry.sha256"
 if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
   printf 'image=%s\npolicy_sha=%s\nevidence=%s\n' "$image" "$policy_sha" "$evidence" >> "$GITHUB_OUTPUT"
 fi

@@ -46,14 +46,15 @@ policy mount, UID/GID 65534, zero capabilities, no privilege escalation and
 measured finite resource limits. The real GLiNER model tests cannot be skipped.
 Raw detector findings and model responses are suppressed.
 
-## Evidence and portability
+## Execution evidence and runner provisioning
 
 The artifact records the upstream preparation, complete asset manifest,
 dependency lock, base and scanner digests, actual image-control receipt and
-SPDX inventory. It includes the local registry's manifests and blobs only after
-every image control passes. Restoring those exact registry bytes preserves the
-qualified digest; a generic Docker save/load round trip alone is insufficient
-evidence that the same RepoDigest is available.
+SPDX inventory. The candidate image and vendor bundle remain on the job's host.
+This workflow does not export or upload their binary contents. Redistributing
+the image requires a separate review of all applicable notices and complete
+corresponding-source obligations; retaining the two scanner notices alone does
+not establish that redistribution is qualified.
 
 After the image controls and SBOM, the hosted workflow collects Grype advisory
 evidence for that exact local Docker digest. The Linux amd64 Grype 0.121.3 archive
@@ -75,11 +76,24 @@ The hosted scan requires network access for the pinned tool and current advisory
 database, and does not change the network-denied scanner control execution.
 
 The registry listens on loopback only and is removed after the run. To provision
-the eventual runner, verify the archive checksum, restore it into a private
-directory, start the pinned registry image on loopback, and preload the exact
-recorded scanner digest. Rerun the qualification command on that host before
-registering its repository-scoped ephemeral runner. Never register an ordinary
-workstation or hosted job under misleading runner labels.
+the eventual runner, execute the preparation/build/qualification command above
+on the approved Linux x64 host using the exact reviewed policy checkout and
+listed preparation tools. Public source acquisition is a separate preparation
+phase; the build and scanner controls retain their network denial. Record and
+review that host's actual image digest, manifest and qualification receipts
+before registering its repository-scoped ephemeral runner. Source-built outputs
+are not claimed to be byte-identical across hosts, so a hosted image's digest
+does not qualify a new local build. Never register an ordinary workstation or
+hosted job under misleading runner labels.
+
+The preparation/build command executes the eight image controls; the workflow's
+SPDX and vulnerability steps are separate. Generate an SPDX inventory with the
+same pinned Syft version and collect/review Grype evidence for the approved
+host's newly built digest. Use `collect_vulnerabilities.py` with that digest,
+the host's evidence directory and a new Grype working directory. Bind the
+inventory, complete report, database provenance and review to that host's actual
+image and manifest. Hosted-image advisory evidence cannot qualify different
+rebuilt bytes, and none of these steps registers or approves a runner.
 
 `runner_registration_qualified`, `application_adapters_qualified` and
 `release_qualified` remain false in hosted evidence. Real runner eligibility,

@@ -198,9 +198,10 @@ consumer merge. Existing application-adapter and Rust qualification gaps remain.
   no privilege escalation, read-only policy/root mounts and finite cgroup-v2
   memory, process and CPU limits. Requested Docker flags alone are insufficient.
 - Added hosted preparation followed by network-denied Docker build and the real
-  image controls. Evidence retains exact source/image/manifest identities and
-  intact registry blobs for later provisioning. Hosted success cannot register
-  a runner or qualify the central release by itself.
+  image controls. Evidence retains exact source/image/manifest identities.
+  Binary registry export was subsequently withheld pending the redistribution
+  review recorded below. Hosted success cannot register a runner or qualify the
+  central release by itself.
 
 Eleven native-model contract tests passed on Python 3.15.2 before the workspace
 connection was lost. The combined source and subsequent preparation/container
@@ -282,3 +283,35 @@ tests and 35 existing capability skips. The three additional wheel-staging
 regressions were published after the workspace disconnected; their final local
 completion was not observed. The combined source requires hosted validation.
 No runner or consumer has been activated.
+
+## Actual controls and packaging correction — 2026-11-15
+
+[Run 43655829149](https://github.com/edithatogo/repository-standards/actions/runs/43655829149)
+passed complete preparation and the strict manifest check, built the image
+without build network access, and passed seven actual controls: runtime
+restrictions, network preflight, manifest binding, asset verification,
+Gitleaks fixtures, Opengrep fixtures and the required real-model DLP tests.
+The receipt binds policy `f44ec9e4c1e1fb28f70292b73ab3c6dd31469c22`, manifest
+`f83008306612aeeb980cb6d6813c58639563ac9eb358539221c88c9ad8c5a25e` and image
+`sha256:b460fc731abe0f09a7880e6bc726965e711bc67a4757d17132f9d4f86aa405a9`.
+The artifact's full SHA256 was independently verified. Promptfoo mock evaluation
+failed, while container cleanup passed; inventory and vulnerability collection
+did not run after that failure.
+
+The exact Promptfoo release and its Node/Commander parser confirmed that all
+three eval invocations used an unsupported progress option. They now use
+`--no-progress-bar`. The regression first failed on all three old calls, then
+passed; full local Python 3.15.2 validation completed 269 tests with 234 passes
+and 35 existing capability-dependent skips. The pinned Python wrapper also
+executed all four configured mock cases successfully. Full image execution
+remains required after the correction.
+
+The subsequent bounded packaging review identified missing attributable license
+notices for the pinned Gitleaks and Opengrep binaries. Their exact upstream
+license texts and source records are retained in the policy and copied into the
+image. This does not establish complete binary-redistribution qualification.
+The optional image/registry archive is therefore no longer produced or uploaded;
+the artifact retains execution receipts, the manifest, inventory and advisory
+evidence. The approved host must build from the verified inputs, qualify its own
+actual digest and manifest, and obtain SPDX and vulnerability review for those
+bytes. Existing runner, release and applicable integration gates remain open.

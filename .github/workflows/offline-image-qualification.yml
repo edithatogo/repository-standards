@@ -79,7 +79,12 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: offline-image-evidence-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/offline-runtime/evidence/
+          path: |
+            ${{ runner.temp }}/offline-runtime/evidence/*.json
+            ${{ runner.temp }}/offline-runtime/evidence/*.txt
+            ${{ runner.temp }}/offline-runtime/evidence/requirements.lock
+            ${{ runner.temp }}/offline-runtime/evidence/sbom/
+            ${{ runner.temp }}/offline-runtime/evidence/vulnerability/
           if-no-files-found: warn
           compression-level: 0
           retention-days: 14
