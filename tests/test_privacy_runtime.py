@@ -1,5 +1,6 @@
 """Keep the source-built privacy guard bound to its qualified Python patch."""
 
+import json
 import os
 import tempfile
 import tomllib
@@ -93,6 +94,26 @@ dependencies = ["numpy (>=1.19.0,<2.5.0)", "preshed (<3.0.14)"]
             self.assertIn(f"presidio-{component}==2.2.366+python315.2", requirements)
             self.assertIn(f"presidio_{component}-2.2.366+python315.2-", installer)
         self.assertIn("--require-hashes --only-binary=:all:", installer)
+
+    def test_self_scan_pins_the_qualified_action_commit(self):
+        workflow = (ROOT / ".github/workflows/privacy-secrets.yml").read_text()
+        template = (ROOT / "managed-files/templates/privacy-secrets.yml").read_text()
+        manifest = json.loads((ROOT / "managed-files/manifest.json").read_text())
+        pin = "b30b07bcdaa6aebad2c6a57a4d0adc3616dabfe4"
+        self.assertIn(
+            "uses: edithatogo/repository-standards/.github/actions/"
+            f"privacy-secrets@{pin}",
+            workflow,
+        )
+        self.assertIn("Python 3.15.2", workflow)
+        self.assertEqual(workflow, template)
+        entries = [
+            item
+            for item in manifest["files"]
+            if item["path"] == ".github/workflows/privacy-secrets.yml"
+        ]
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["upstream_commit"], pin)
 
 
 if __name__ == "__main__":
