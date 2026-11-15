@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Community bootstrap applicability version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "environment_configuration",
+    "devcontainer",
+    "template_repository",
+    "rationale"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "environment_configuration": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "devcontainer": {
+      "enum": [
+        "required",
+        "optional"
+      ]
+    },
+    "template_repository": {
+      "type": "boolean"
+    },
+    "rationale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment_configuration",
+        "devcontainer"
+      ],
+      "properties": {
+        "environment_configuration": {
+          "type": "string",
+          "minLength": 20
+        },
+        "devcontainer": {
+          "type": "string",
+          "minLength": 20
+        }
+      }
+    }
+  }
+}
