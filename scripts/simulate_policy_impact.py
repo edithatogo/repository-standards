@@ -18,12 +18,16 @@ def main() -> int:
     profiles = json.loads(args.profiles.read_text(encoding="utf-8-sig"))
     supply = profiles["supply_chain_profiles"]
     impacts = []
+    resolved_required = {}
     for row in audit["repositories"]:
-        profile = dict(profiles["profiles"][row["profile"]])
-        while "extends" in profile:
-            parent_name = profile.pop("extends")
-            profile = {**profiles["profiles"][parent_name], **profile}
-        required = set(supply[profile.get("supply_chain", "baseline")])
+        profile_name = row["profile"]
+        if profile_name not in resolved_required:
+            profile = dict(profiles["profiles"][profile_name])
+            while "extends" in profile:
+                parent_name = profile.pop("extends")
+                profile = {**profiles["profiles"][parent_name], **profile}
+            resolved_required[profile_name] = set(supply[profile.get("supply_chain", "baseline")])
+        required = resolved_required[profile_name]
         missing = sorted(control for control in required if not row["controls"].get(control))
         if missing:
             impacts.append({"repository": row["repository"], "new_failures": missing})

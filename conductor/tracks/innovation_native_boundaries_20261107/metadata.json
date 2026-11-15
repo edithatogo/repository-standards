@@ -1,0 +1,10 @@
+{
+  "track_id": "innovation_native_boundaries_20261107",
+  "type": "policy",
+  "status": "in_progress",
+  "created_at": "2026-11-07",
+  "updated_at": "2026-11-07",
+  "central_policy_implemented": true,
+  "consumer_runtime_accepted": false,
+  "automatic_rollout": false
+}

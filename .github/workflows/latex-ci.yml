@@ -37,6 +37,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes qpdf poppler-utils
+          # The LaTeX container may create the PDF as root with restrictive permissions.
+          # Transfer only the output file to the runner; do not make it world-readable.
+          sudo chown "$(id -u):$(id -g)" "$PDF_FILE"
+          chmod u+r "$PDF_FILE"
           test -s "$PDF_FILE"
           qpdf --check "$PDF_FILE"
           pdfinfo "$PDF_FILE"

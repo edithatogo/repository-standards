@@ -1,0 +1,4 @@
+# PyYAML 6.0.3 source distribution, independently verified against PyPI.
+# https://pypi.org/project/PyYAML/6.0.3/#files
+# Build pure Python on 3.15 with PYYAML_FORCE_LIBYAML=0 and locked build tooling.
+PyYAML==6.0.3 --hash=sha256:d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f
