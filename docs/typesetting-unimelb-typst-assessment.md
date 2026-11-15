@@ -17,7 +17,7 @@ adds `scripts/thesis_contract.py` to the measured validation component. Both
 `preflight.py`, `validate_template.py`, `check_repository_policy.py` and
 `thesis_contract.py`, all under `scripts/`. The existing 80% thresholds remain.
 The central base for this scoped addendum is
-`fc64db9e46942dbe64e3f2b596e18047e94506ae`.
+`52a093de92ac1f5a5d59a2f55c16da946a81556d`.
 
 PR #28's source passed, but its receiving commit
 `60a95ba6863e602347ebf64ee16a689486473237` failed the native pip dependency graph:
