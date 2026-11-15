@@ -3,10 +3,11 @@ from __future__ import annotations
 
 import json
 import tempfile
+import urllib.error
 import unittest
 from datetime import date, timedelta
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import audit_estate_conformance as audit
 import simulate_policy_impact as impact
@@ -26,6 +27,21 @@ class PolicyTests(unittest.TestCase):
         review = (date.today() + timedelta(days=7)).isoformat()
         entry = {"exceptions": [{"control": "x", "review_after": review}]}
         self.assertEqual(audit.exception_dates(entry)[1], ["x"])
+
+    def test_missing_or_invalid_review_after_date_is_expired(self) -> None:
+        entry_missing = {"exceptions": [{"control": "x"}]}
+        entry_invalid = {"exceptions": [{"control": "y", "review_after": "invalid-date"}]}
+
+        self.assertEqual(audit.exception_dates(entry_missing)[0], ["x"])
+        self.assertEqual(audit.exception_dates(entry_invalid)[0], ["y"])
+
+    def test_exception_missing_review_after_is_not_active(self) -> None:
+        entry = {"exceptions": [{"control": "x"}]}
+        self.assertFalse(audit.active_exception(entry, "x"))
+
+    def test_exception_malformed_review_after_is_not_active(self) -> None:
+        entry = {"exceptions": [{"control": "x", "review_after": "not-a-date"}]}
+        self.assertFalse(audit.active_exception(entry, "x"))
 
     def test_resolvable_pin_is_checked_not_inferred_from_shape(self) -> None:
         client = audit.GitHub("not-used")
@@ -58,6 +74,46 @@ class PolicyTests(unittest.TestCase):
         protection = {"required_status_checks": {"strict": True}}
         self.assertEqual(audit.protection_state([], protection), "present")
         self.assertEqual(audit.protection_state([], None), "absent")
+
+    def test_protection_permission_denial_does_not_retry_or_sleep(self) -> None:
+        error = urllib.error.HTTPError(
+            "https://api.github.com/example", 403, "Forbidden", {}, None
+        )
+        client = audit.GitHub("not-used")
+        with patch.object(audit.urllib.request, "urlopen", side_effect=error) as urlopen:
+            with patch.object(audit.time, "sleep") as sleep:
+                with self.assertRaises(urllib.error.HTTPError):
+                    client.get("/example", tolerated={404}, fail_fast={403})
+        self.assertEqual(urlopen.call_count, 1)
+        sleep.assert_not_called()
+
+    def test_protection_denied_cannot_be_called_absent(self) -> None:
+        self.assertEqual(
+            audit.protection_state(
+                [], None, branch_protection_accessible=False
+            ),
+            "unknown",
+        )
+        self.assertEqual(
+            audit.protection_state(
+                None, None, rulesets_accessible=False
+            ),
+            "unknown",
+        )
+
+    def test_protection_observed_trumps_other_denied_api(self) -> None:
+        self.assertEqual(
+            audit.protection_state(
+                [{"id": 1}], None, branch_protection_accessible=False
+            ),
+            "present",
+        )
+
+    def test_no_protection_requires_two_conclusive_reads(self) -> None:
+        self.assertEqual(
+            audit.protection_state([], None),
+            "absent",
+        )
 
     def test_scan_failure_is_preserved_without_fabricated_controls(self) -> None:
         client = Mock()

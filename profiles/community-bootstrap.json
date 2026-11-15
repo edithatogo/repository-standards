@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "required": [
+    "readme",
+    "contributing",
+    "code_of_conduct",
+    "security",
+    "support",
+    "issue_templates",
+    "issue_chooser",
+    "pull_request_template",
+    "agents",
+    "workflows",
+    "dependency_updates",
+    "gitignore",
+    "editorconfig",
+    "env_example",
+    "devcontainer",
+    "discussion_templates",
+    "template_repository"
+  ],
+  "recommended": [],
+  "environment_configuration": null,
+  "devcontainer": "optional",
+  "template_repository": false,
+  "issue_form_kinds": {
+    "bug": [
+      "bug",
+      "bug_report",
+      "bug-report"
+    ],
+    "feature": [
+      "feature",
+      "feature_request",
+      "feature-request",
+      "enhancement"
+    ],
+    "documentation": [
+      "documentation",
+      "documentation_issue",
+      "documentation-issue",
+      "docs"
+    ]
+  }
+}
