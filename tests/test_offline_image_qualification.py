@@ -1,9 +1,11 @@
 """Executable orchestration tests; fake Docker is never image qualification."""
 from __future__ import annotations
 
+import argparse
 import json
 import os
 from pathlib import Path
+import shlex
 import shutil
 import subprocess
 import sys
@@ -150,6 +152,36 @@ else:
                 self.assertEqual(statuses[failed + 1:], ["not-run"] * (7 - failed))
                 self.assertNotIn(CANARY, result.stdout + result.stderr + self.receipt.read_text())
                 self.receipt.unlink()
+
+    def test_promptfoo_commands_match_the_pinned_eval_cli(self):
+        result = self.invoke()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        commands = [
+            ["promptfoo", *call[call.index(IMAGE) + 1:]]
+            for call in self.calls() if "--entrypoint=promptfoo" in call
+        ]
+        for line in (REPO / "security/offline-ai/run.sh").read_text().splitlines():
+            if not line.lstrip().startswith("quiet promptfoo-"):
+                continue
+            arguments = shlex.split(line)
+            if (len(arguments) > 2 and arguments[0] == "quiet"
+                    and arguments[1] in ("promptfoo-mock", "promptfoo-agent")):
+                commands.append(arguments[2:])
+        self.assertEqual(len(commands), 3)
+        # Promptfoo 0.125.1's external CLI contract, at release commit
+        # 8569e72ed6cf7737082a6042be8d925e40f9739d, src/commands/eval.ts.
+        # Commander does not accept abbreviated long options.
+        parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
+        parser.add_argument("-c", dest="config", required=True)
+        parser.add_argument("--no-cache", dest="cache", action="store_false")
+        parser.add_argument("--no-progress-bar", dest="progress_bar", action="store_false")
+        for command in commands:
+            with self.subTest(config=command[command.index("-c") + 1]):
+                self.assertEqual(command[:2], ["promptfoo", "eval"])
+                options, unknown = parser.parse_known_args(command[2:])
+                self.assertEqual(unknown, [], "Unsupported pinned Promptfoo eval option")
+                self.assertFalse(options.cache)
+                self.assertFalse(options.progress_bar)
 
     def test_unpinned_or_mismatched_inputs_never_run_docker(self):
         for args in (("--image", "localhost/offline-ai-security:latest"),

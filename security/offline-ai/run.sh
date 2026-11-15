@@ -46,11 +46,11 @@ if [[ "$ai" == true ]]; then
   quiet pytest python /policy/security/offline-ai/scripts/qualify_model.py
   cd /policy/security/offline-ai
   # Mock corpus verifies runner wiring, not application prompt safety.
-  quiet promptfoo-mock promptfoo eval -c promptfooconfig.yaml --no-cache --no-progress
+  quiet promptfoo-mock promptfoo eval -c promptfooconfig.yaml --no-cache --no-progress-bar
   if [[ -f /work/security/agent_security_adapter.py ]]; then
     export SECURITY_AGENT_WORKSPACE=/work
     export SECURITY_AGENT_ADAPTER=/work/security/agent_security_adapter.py
-    quiet promptfoo-agent promptfoo eval -c promptfooconfig.integration.yaml --no-cache --no-progress
+    quiet promptfoo-agent promptfoo eval -c promptfooconfig.integration.yaml --no-cache --no-progress-bar
   elif [[ "${ENFORCE_AI:-false}" == true ]]; then
     echo 'Real local agent adapter required for enforced AI security profile' >&2
     exit 2

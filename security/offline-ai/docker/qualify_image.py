@@ -71,7 +71,7 @@ def stages(manifest_sha256):
         ("sast-fixtures", ["python", "/policy/security/offline-ai/scripts/verify_sast_fixtures.py"]),
         ("dlp-model", ["python", "/policy/security/offline-ai/scripts/qualify_model.py"]),
         ("promptfoo-mock", ["promptfoo", "eval", "-c",
-                            "/policy/security/offline-ai/promptfooconfig.yaml", "--no-cache", "--no-progress"]),
+                            "/policy/security/offline-ai/promptfooconfig.yaml", "--no-cache", "--no-progress-bar"]),
     ]
 
 
