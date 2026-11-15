@@ -43,6 +43,15 @@ class ModelPreparationTests(unittest.TestCase):
             expected = "model-license-declaration" if role.endswith("_card") else "associated-source-code-license"
             self.assertEqual(record["scope"], expected)
 
+    def test_other_runtime_patches_fail_before_model_acquisition(self):
+        for version in ((3, 15, 1), (3, 15, 3)):
+            with self.subTest(version=version), patch.object(
+                    preparation.sys, "version_info", version), patch.object(preparation, "load_catalog") as load:
+                with self.assertRaisesRegex(ValueError, "Offline model preparation failed"):
+                    preparation.prepare(self.root / "model", self.root / "receipt.json")
+                load.assert_not_called()
+        self.assertFalse((self.root / "model").exists())
+
     def test_incomplete_or_unpinned_catalog_is_rejected(self):
         original = json.loads(preparation.CATALOG.read_text())
         path = self.root / "sources.json"
@@ -101,7 +110,7 @@ class ModelPreparationTests(unittest.TestCase):
         destination.mkdir()
         marker = destination / "existing"
         marker.write_text("preserved")
-        with patch.object(preparation.sys, "version_info", (3, 15, 1)), \
+        with patch.object(preparation.sys, "version_info", (3, 15, 2)), \
                 patch.object(preparation, "download") as download:
             with self.assertRaises(ValueError):
                 preparation.prepare(destination, receipt)
@@ -130,7 +139,7 @@ class ModelPreparationTests(unittest.TestCase):
             preparation.validate_model_bundle(destination)
 
         destination, receipt = self.root / "model", self.root / "receipt.json"
-        with patch.object(preparation.sys, "version_info", (3, 15, 1)), \
+        with patch.object(preparation.sys, "version_info", (3, 15, 2)), \
                 patch.object(preparation, "download", side_effect=download), \
                 patch.object(preparation, "export_model", side_effect=export), \
                 patch.object(preparation, "version", return_value="synthetic"):
@@ -169,7 +178,7 @@ class ModelPreparationTests(unittest.TestCase):
                     with preparation.preparation_stage(stage):
                         raise ValueError("synthetic-private-export-marker")
 
-                with patch.object(preparation.sys, "version_info", (3, 15, 1)), \
+                with patch.object(preparation.sys, "version_info", (3, 15, 2)), \
                         patch.object(preparation, "download", side_effect=download), \
                         patch.object(preparation, "export_model", side_effect=export):
                     with self.assertRaises(preparation.PreparationFailure) as caught:

@@ -15,7 +15,7 @@ policy_sha="$(git --no-replace-objects -C "$policy_root" rev-parse HEAD)"
 [[ "$destination" != *","* && "$destination" != *$'\n'* && "$destination" != *$'\r'* ]] || exit 2
 [[ ! -e "$destination" && ! -L "$destination" ]] || { echo "Choose a new preparation destination" >&2; exit 2; }
 [[ -z "$(git --no-replace-objects -C "$policy_root" status --porcelain --untracked-files=all)" ]] || exit 2
-python -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 1)'
+python -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
 [[ "$(uname -s)" = Linux && "$(uname -m)" = x86_64 ]] || exit 2
 mkdir -p "$destination/evidence" "$destination/context" "$destination/base-context" "$destination/registry"
 evidence="$destination/evidence"
@@ -64,6 +64,11 @@ export DOCKER_HOST="$endpoint"
 unset DOCKER_CONTEXT
 [[ "$(docker info --format '{{.OSType}}')" = linux ]] || exit 2
 docker version --format '{{json .}}' > "$evidence/docker-version.json"
+
+# Acquire only the reviewed Debian runtime closure before the offline build.
+stage=os-package-preparation
+python -I "$policy_root/security/offline-ai/provision/prepare_os_packages.py" \
+  --destination "$destination/base-context/os" --receipt "$evidence/os-packages.json"
 
 stage=upstream-preparation
 # Missing committed locks fail here; candidate-lock generation is a separate job.
@@ -115,6 +120,7 @@ for attempt in $(seq 1 30); do
 done
 [[ "$ready" = true ]] || exit 2
 
+stage=offline-base-build
 docker build --network none --pull=false \
   --build-arg "PYTHON_IMAGE=$python_image" --build-arg "NODE_IMAGE=$node_image" \
   --file "$policy_root/security/offline-ai/provision/Base.Dockerfile" \

@@ -37,9 +37,36 @@ class VendorPreparationTests(unittest.TestCase):
     def test_committed_catalog_matches_actual_policy_input_bytes(self):
         catalog = PREP.load_catalog()
         self.assertEqual(catalog["lock_status"], "reviewed")
+        self.assertEqual(catalog["target"]["python"], "3.15.2")
         for relative, expected in catalog["policy_inputs"].items():
             with self.subTest(relative=relative):
                 self.assertEqual(PREP.digest(ROOT / relative), expected)
+
+    def test_unqualified_python_patch_is_rejected_before_acquisition(self):
+        for version in ((3, 15, 1), (3, 15, 3)):
+            with self.subTest(version=version), mock.patch.object(
+                    PREP.sys, "version_info", version), mock.patch.object(PREP, "load_catalog") as load:
+                with self.assertRaisesRegex(PREP.PreparationError, "runtime"):
+                    PREP.prepare(self.root / "vendor", self.root / "receipt.json")
+                load.assert_not_called()
+        self.assertFalse((self.root / "vendor").exists())
+
+    def test_offline_wheel_builder_explicitly_selects_the_runtime_patch(self):
+        vendor, work = self.root / "vendor", self.root / "work"
+        vendor.mkdir()
+        work.mkdir()
+        commands = []
+        catalog = {"python_roots": {}, "downloads": {"torch": {
+            "url": "https://download-r2.pytorch.org/torch.whl", "sha256": "0" * 64}}}
+        with mock.patch.object(PREP, "run", side_effect=lambda command: commands.append(command)), \
+                mock.patch.object(PREP, "stage_privacy_wheels", return_value={}), \
+                mock.patch.object(PREP, "merge_locks", return_value={}), \
+                mock.patch.object(PREP, "download"):
+            PREP.python_wheels(vendor, work, catalog)
+        calls = [command for command in commands
+                 if str(ROOT / "scripts/build_privacy_wheels.py") in command]
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(calls[0][calls[0].index("--python-version") + 1], "3.15.2")
 
     def test_missing_reviewed_input_fails_before_installation(self):
         catalog = PREP.read_json(HERE / "sources.json")
@@ -61,7 +88,7 @@ class VendorPreparationTests(unittest.TestCase):
     def test_unreviewed_catalog_fails_before_using_candidate_files(self):
         (self.root / "sources.json").write_text(json.dumps({
             "schema_version": 1, "lock_status": "candidate_required",
-            "target": {"os": "linux", "architecture": "x86_64", "python": "3.15.1"}}))
+            "target": {"os": "linux", "architecture": "x86_64", "python": "3.15.2"}}))
         with mock.patch.object(PREP, "HERE", self.root):
             with self.assertRaisesRegex(PREP.PreparationError, "lock-readiness"):
                 PREP.load_catalog()
@@ -86,8 +113,8 @@ class VendorPreparationTests(unittest.TestCase):
     def built_wheels_fixture(self):
         directory = self.root / "built-wheels"
         directory.mkdir()
-        names = ("presidio_analyzer-2.2.366+python315.1-py3-none-any.whl",
-                 "presidio_anonymizer-2.2.366+python315.1-py3-none-any.whl",
+        names = ("presidio_analyzer-2.2.366+python315.2-py3-none-any.whl",
+                 "presidio_anonymizer-2.2.366+python315.2-py3-none-any.whl",
                  "pyyaml-6.0.3-py3-none-any.whl")
         for name in names:
             (directory / name).write_bytes(b"synthetic built wheel")
@@ -107,7 +134,7 @@ class VendorPreparationTests(unittest.TestCase):
             self.assertEqual((wheels / name).stat().st_nlink, 1)
 
     def test_unexpected_or_aliased_build_outputs_are_rejected_before_copying(self):
-        for kind in ("unknown-file", "changed-metadata", "missing-wheel", "extra-wheel",
+        for kind in ("unknown-file", "changed-metadata", "missing-wheel", "extra-wheel", "old-python-patch",
                      "symlink", "hardlink", "directory", "symlink-directory"):
             with self.subTest(kind=kind), tempfile.TemporaryDirectory(dir=self.root) as temporary:
                 with mock.patch.object(self, "root", Path(temporary)):
@@ -120,6 +147,8 @@ class VendorPreparationTests(unittest.TestCase):
                     (built / names[0]).unlink()
                 elif kind == "extra-wheel":
                     (built / "unexpected-1-py3-none-any.whl").write_text("synthetic")
+                elif kind == "old-python-patch":
+                    (built / names[0]).rename(built / names[0].replace("python315.2", "python315.1"))
                 elif kind in ("symlink", "hardlink"):
                     target = built.parent / "outside"
                     target.write_bytes(b"synthetic outside bytes")
@@ -210,7 +239,7 @@ class VendorPreparationTests(unittest.TestCase):
         receipt_path = self.root / "preparation.json"
         catalog = {"policy_inputs": {}, "downloads": {}}
         with mock.patch.object(PREP, "HERE", self.root), \
-                mock.patch.object(PREP.sys, "version_info", (3, 15, 1)), \
+                mock.patch.object(PREP.sys, "version_info", (3, 15, 2)), \
                 mock.patch.object(PREP.platform, "system", return_value="Linux"), \
                 mock.patch.object(PREP.platform, "machine", return_value="x86_64"), \
                 mock.patch.object(PREP, "load_catalog", return_value=catalog), \
