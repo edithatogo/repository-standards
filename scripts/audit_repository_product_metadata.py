@@ -49,6 +49,10 @@ LOGGING_TERMS = re.compile(
     r"bunyan|serilog|nlog|slf4j|log4j|zap|zerolog)\b",
     re.I,
 )
+LOGGING_PATHS = re.compile(
+    r"(^|/)(logging|logger|telemetry|observability)(\.|/)",
+    re.I,
+)
 APP_TERMS = re.compile(
     r"\b(api|service|server|cli|command.line|pipeline|etl|daemon|worker|bot|"
     r"application|app|scraper|crawler|ingest)\b",
@@ -255,12 +259,12 @@ def audit_repository(client: GitHub, repository: dict[str, Any]) -> dict[str, An
         path for path in paths if path.casefold().rsplit("/", 1)[-1] in CITATION_NAMES
     )
     license_files = sorted(path for path in paths if LICENSE_NAMES.search(path))
-    executable = bool({path.casefold() for path in paths}.intersection(EXECUTABLE_MARKERS))
+    executable = bool(lowered_paths.keys() & EXECUTABLE_MARKERS)
     logging_warranted = kind in {"software", "data"} and executable and bool(
         APP_TERMS.search(f"{repository['name']} {description}")
         or any(
-            path.casefold().startswith(("src/", "app/", "cmd/", "scripts/"))
-            for path in paths
+            lowered.startswith(("src/", "app/", "cmd/", "scripts/"))
+            for lowered in lowered_paths
         )
     )
     manifest_text = "\n".join(
@@ -270,7 +274,7 @@ def audit_repository(client: GitHub, repository: dict[str, Any]) -> dict[str, An
     logging_detected = bool(
         LOGGING_TERMS.search(manifest_text)
         or any(
-            re.search(r"(^|/)(logging|logger|telemetry|observability)(\.|/)", path, re.I)
+            LOGGING_PATHS.search(path)
             for path in paths
         )
     )
