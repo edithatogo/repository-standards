@@ -1,0 +1,17 @@
+{
+  "track_id": "bounded_execution_merkle_lineage_20261110",
+  "type": "policy",
+  "status": "new",
+  "created_at": "2026-11-10",
+  "updated_at": "2026-11-10",
+  "central_policy_implemented": false,
+  "consumer_runtime_accepted": false,
+  "automatic_rollout": false,
+  "reference_consumers": [
+    "edithatogo/tobac",
+    "edithatogo/archive-govt-nz",
+    "edithatogo/voiage",
+    "edithatogo/innovate",
+    "edithatogo/kairos"
+  ]
+}
