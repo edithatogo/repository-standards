@@ -9,7 +9,100 @@ This assessment corrects a July registry classification. It does not activate
 settings, implement a new collector, or complete the separate [UMTHESIS document programme][contract]. The existing
 `typesetting-template` archetype and `typst` profile are retained.
 
-## Registry decision and qualification boundary
+## Contract validator scope update — 15 November 2026
+
+[Consumer PR #28](https://github.com/edithatogo/unimelb-thesis-template-typst/pull/28)
+adds `scripts/thesis_contract.py` to the measured validation component. Both
+`.coveragerc` and Codecov's `validation-tools` paths name the same four helpers:
+`preflight.py`, `validate_template.py`, `check_repository_policy.py` and
+`thesis_contract.py`, all under `scripts/`. The existing 80% thresholds remain.
+The central base for this scoped addendum is
+`8177a5860ada781cff5410deada5430da1c8bc81`.
+
+PR #28's source passed, but its receiving commit
+`60a95ba6863e602347ebf64ee16a689486473237` failed the native pip dependency graph:
+an archived prose file ending in `requirements.txt` was misclassified as a pip
+manifest. It remains an unqualified receiving observation. The completed
+provider result for that commit does not erase the graph failure.
+[PR #30](https://github.com/edithatogo/unimelb-thesis-template-typst/pull/30)
+renames that archive to `.md`, retaining all 23,561 bytes and SHA-256
+`af9c04793dfe2738bf77b658c3d60d8cd0531d0be6121531c6467c82c4753cbc`.
+Only the filename, bundle references and migration note changed.
+
+The corrected source `708b5b2c8a66ff949d97ece070eeb48977991066`, tree
+`8b2ce42e2550d9b00f426810c28914edea08cfd2`, passed all fourteen applicable hosted
+checks; the scheduled/manual property corpus was the one expected skip.
+[Quality](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43657758447)
+ran 106 contract tests, 65 maintenance tests, 640 generated cases, all eighteen
+configuration fixtures, 55/7-page thesis/sample PDF checks and four profiles.
+The final independent and automated source reviews found no blocker.
+
+[Coverage](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43657758166)
+measured 92.84615384615384% combined line/branch coverage: 802/854 statements and
+405/446 branches, with zero excluded lines. The contract helper measured
+88.96551724137932% combined coverage. These are four-file denominators, not
+whole-repository coverage or Typst output correctness. Actual
+[Codecov check 132646999341](https://github.com/edithatogo/unimelb-thesis-template-typst/runs/132646999341),
+app 254, succeeded at 10:48:34 AEST and reported coverage unaffected; no numerical
+diff percentage is inferred. Python/Actions CodeQL, dependency review and the
+selected-file privacy scan also executed successfully.
+
+The source qualification receipt has SHA-256
+`3e7db2c501ba98897a6b6fa1530eaa6b56a06f54f3dcb4df79f3a64fe52cfb90`.
+Downloaded verification and coverage archive digests are respectively
+`70b1dcaf4db9f46e1db4826a4e356b5984d7f3413e31a1e3ce23a64d59bba0e7`
+and `f4495edb43f918ae516410f407b02f4c79e195651373f496dc7a4ccbdb973acd`.
+The corrected contract bundle digest is
+`338f93c64ce84621670f267c0919555d77c592e92e75f04e12afd6cab57cea7c`.
+The original `19fc08a02c4851301718d3a7a06fa9366633c67590a8be9a7ba0dabb4087b4d4`
+remains a historical pin, with the path-only migration documented in the consumer.
+
+PR #30 merged normally at 10:50:33 AEST as
+`402dec742a80278cd239554b929092e75724c1e6`, with the qualified source tree.
+The receiving revision was qualified at **11:24:28 AEST**: all twelve
+applicable executable checks succeeded, with two expected event-condition skips.
+[Receiving Quality](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660182750)
+ran the full 106-contract/65-maintenance/640-generated-case gate and four profiles;
+[receiving Maintenance](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660182535)
+measured the same four-helper scope and uploaded the results successfully.
+The actual `codecov/patch` status `58942556250`, owned by `codecov[bot]`, succeeded
+at 11:23:51 AEST for this exact receiving revision and reported coverage unaffected.
+No numerical diff percentage is inferred from that message.
+
+The [native pip graph](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660186496)
+job `132647540445` executed successfully. Its archival-source directory correctly
+reported no pip manifest files, and GitHub accepted the empty dependency
+submission for the `dependabot-pip-contracts/thesis/v1/sources` correlator.
+This is the observed check outcome, not a vulnerability-scan result for archived
+prose or an independent read-back of the resulting graph state. The
+[privacy](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660182491)
+and [CodeQL](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660181538)
+workflows also completed successfully. The full receiving receipt, including
+actual run/job/provider identities, twelve retained logs and downloaded artifact
+digests, has SHA-256
+`904eb4802585bd8aaccf21e2182b951c544b2d391a9b0de0ce92c245a48be962`.
+The registry's evidence revision now records this qualified receiving commit;
+the earlier failed `60a95ba` observation remains retained.
+
+Both canonical document adapters remain planned in this bundle. A separate
+local Typst adapter prototype is not merged or qualified receiving evidence.
+Schema/API results do not establish rendered conformance, institutional
+approval or LaTeX execution. Existing compiler/font and nonfatal PDF-tool
+warnings remain recorded, with accessibility and full output qualification
+owned by their document-programme issues.
+
+The foundation observations below retain their original three-helper scope,
+denominators and commit identities. This addendum changes no archetype, profile,
+collector, approval rule or release control. The independent offline-security
+rollout retains its existing runtime prerequisites.
+
+## Historical foundation: receiving `9375798`
+
+The foundation assessment below records the earlier receiving revision
+`937579897af22d7d28f20a49e94a1bdbe4e05855` and its three-helper scope. References
+to the candidate, current coverage and `evidence_revision` in this historical
+assessment retain those original identities; the dated addendum above records
+the later four-helper qualification.
 
 | Field | Decision | Evidence boundary |
 | --- | --- | --- |
