@@ -15,7 +15,7 @@ policy_sha="$(git --no-replace-objects -C "$policy_root" rev-parse HEAD)"
 [[ "$destination" != *","* && "$destination" != *$'\n'* && "$destination" != *$'\r'* ]] || exit 2
 [[ ! -e "$destination" && ! -L "$destination" ]] || { echo "Choose a new preparation destination" >&2; exit 2; }
 [[ -z "$(git --no-replace-objects -C "$policy_root" status --porcelain --untracked-files=all)" ]] || exit 2
-python -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 1)'
+python -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
 [[ "$(uname -s)" = Linux && "$(uname -m)" = x86_64 ]] || exit 2
 mkdir -p "$destination/evidence" "$destination/context" "$destination/base-context" "$destination/registry"
 evidence="$destination/evidence"

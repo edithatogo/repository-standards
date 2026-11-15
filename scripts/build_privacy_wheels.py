@@ -13,6 +13,7 @@ import urllib.request
 from pathlib import Path
 
 PYTHON_VERSION = (3, 15, 1)
+SUPPORTED_PYTHON_VERSIONS = ((3, 15, 1), (3, 15, 2))
 MAX_SOURCE_BYTES = 10 * 1024 * 1024
 SOURCES = {
     "presidio_analyzer-2.2.366": (
@@ -28,10 +29,6 @@ SOURCES = {
         "d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f",
     ),
 }
-PRESIDIO_CHANGES = (
-    ('version = "2.2.366"', 'version = "2.2.366+python315.1"'),
-    ('requires-python = ">=3.11,<3.15"', 'requires-python = "==3.15.1"'),
-)
 ANALYZER_CHANGES = (
     ('"numpy (>=1.19.0,<2.5.0)"', '"numpy (==2.5.4)"'),
     ('"preshed (<3.0.14)"', '"preshed (==3.0.15)"'),
@@ -54,11 +51,18 @@ def verified_source(name: str, directory: Path) -> Path:
     return source
 
 
-def patch_presidio(source: Path) -> None:
+def patch_presidio(source: Path, python_version: tuple[int, int, int] = PYTHON_VERSION) -> None:
     """Declare the exact compatibility build without changing scanner code."""
+    if python_version not in SUPPORTED_PYTHON_VERSIONS:
+        raise ValueError("Unsupported privacy wheel Python version")
+    major, minor, patch = python_version
+    runtime = f"{major}.{minor}.{patch}"
     project = source / "pyproject.toml"
     content = project.read_text(encoding="utf-8")
-    changes = PRESIDIO_CHANGES
+    changes = (
+        ('version = "2.2.366"', f'version = "2.2.366+python{major}{minor}.{patch}"'),
+        ('requires-python = ">=3.11,<3.15"', f'requires-python = "=={runtime}"'),
+    )
     if source.name.startswith("presidio_analyzer"):
         changes += ANALYZER_CHANGES
     for before, after in changes:
@@ -68,10 +72,13 @@ def patch_presidio(source: Path) -> None:
     project.write_text(content, encoding="utf-8")
 
 
-def build(destination: Path) -> None:
+def build(destination: Path, python_version: tuple[int, int, int] = PYTHON_VERSION) -> None:
     """Build in a temporary directory using the verified interpreter and toolset."""
-    if sys.version_info[:3] != PYTHON_VERSION:
-        raise RuntimeError("The privacy wheel build requires Python 3.15.1")
+    if python_version not in SUPPORTED_PYTHON_VERSIONS:
+        raise ValueError("Unsupported privacy wheel Python version")
+    if sys.version_info[:3] != python_version:
+        runtime = ".".join(map(str, python_version))
+        raise RuntimeError(f"The privacy wheel build requires Python {runtime}")
     uv = shutil.which("uv")
     if uv is None:
         raise RuntimeError("The privacy wheel build requires uv")
@@ -81,7 +88,7 @@ def build(destination: Path) -> None:
         for name in SOURCES:
             source = verified_source(name, root)
             if name.startswith("presidio_"):
-                patch_presidio(source)
+                patch_presidio(source, python_version)
             subprocess.run(
                 [
                     uv,
@@ -103,7 +110,9 @@ def build(destination: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--destination", required=True, type=Path)
-    build(parser.parse_args().destination.resolve())
+    parser.add_argument("--python-version", choices=("3.15.1", "3.15.2"), default="3.15.1")
+    args = parser.parse_args()
+    build(args.destination.resolve(), tuple(map(int, args.python_version.split("."))))
 
 
 if __name__ == "__main__":
