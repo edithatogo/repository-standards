@@ -18,6 +18,7 @@ COPY vendor/promptfoo /opt/promptfoo
 COPY vendor/models/gliner-pii /opt/models/gliner-pii
 COPY vendor/manifest.json /opt/offline-ai/manifest.json
 COPY security/offline-ai/security /opt/offline-ai/security
+COPY security/offline-ai/scanner-notices/ /usr/share/doc/offline-scanners/
 ENV PYTHONPATH=/opt/offline-ai
 # Direct builds also verify the complete supplied inventory before pip runs.
 RUN --network=none python -m security.verify_assets
