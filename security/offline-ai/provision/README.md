@@ -56,6 +56,16 @@ the image requires a separate review of all applicable notices and complete
 corresponding-source obligations; retaining the two scanner notices alone does
 not establish that redistribution is qualified.
 
+After the image controls, `collect_sbom.py` downloads the exact Syft 1.57.1
+Linux amd64 archive, verifies its size and SHA256, and extracts only the regular
+binary. It executes no installer script. The `sbom/` evidence directory retains
+the SPDX 2.3 inventory, version output, explicit configuration and private
+receipt. The receipt binds the local Docker image ID and digest, tool/source
+identity and evidence hashes. The collector checks the SPDX creator and
+described container's name/digest, retains the previous action's squashed-image
+scope, and leaves release qualification false. The later Grype scan separately
+covers all image layers.
+
 After the image controls and SBOM, the hosted workflow collects Grype advisory
 evidence for that exact local Docker digest. The Linux amd64 Grype 0.121.3 archive
 is fixed by URL, size and SHA256 in `collect_vulnerabilities.py`; `grype.yaml`
@@ -87,10 +97,10 @@ does not qualify a new local build. Never register an ordinary workstation or
 hosted job under misleading runner labels.
 
 The preparation/build command executes the eight image controls; the workflow's
-SPDX and vulnerability steps are separate. Generate an SPDX inventory with the
-same pinned Syft version and collect/review Grype evidence for the approved
-host's newly built digest. Use `collect_vulnerabilities.py` with that digest,
-the host's evidence directory and a new Grype working directory. Bind the
+SPDX and vulnerability steps are separate. Run `collect_sbom.py` and
+`collect_vulnerabilities.py` with the approved host's newly built digest, its
+evidence directory and separate new working directories for the two tools.
+Collect and review both evidence products for that local build. Bind the
 inventory, complete report, database provenance and review to that host's actual
 image and manifest. Hosted-image advisory evidence cannot qualify different
 rebuilt bytes, and none of these steps registers or approves a runner.

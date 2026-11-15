@@ -315,3 +315,15 @@ the artifact retains execution receipts, the manifest, inventory and advisory
 evidence. The approved host must build from the verified inputs, qualify its own
 actual digest and manifest, and obtain SPDX and vulnerability review for those
 bytes. Existing runner, release and applicable integration gates remain open.
+
+The pinned SBOM action was also found to retrieve an installer from a mutable
+upstream branch. A bounded collector now downloads the exact Syft 1.57.1 Linux
+amd64 archive (31,432,061 bytes; SHA256
+`bf52519eb57f675d47c07d43213cb6dff6449f3d6d1147ff6701ed91f44eef0c`),
+verifies those bytes and runs no installer script. It records private SPDX,
+configuration, version and provenance evidence, binds the described container
+to the local digest, and retains the prior squashed-image inventory scope.
+The existing Grype collector still inventories vulnerabilities across all
+layers. Thirteen focused source tests passed; the full Python 3.15.2 source
+suite completed 282 tests with 247 passes and 35 existing skips. These fixture
+tests do not replace actual Syft execution, image review or runner qualification.
