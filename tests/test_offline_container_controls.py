@@ -57,7 +57,7 @@ class ContainerControlTests(unittest.TestCase):
             context = patch.object(CONTROL.os, target, return_value=value)
             context.start()
             self.addCleanup(context.stop)
-        context = patch.object(CONTROL.sys, "version_info", (3, 15, 1))
+        context = patch.object(CONTROL.sys, "version_info", (3, 15, 2))
         context.start()
         self.addCleanup(context.stop)
         context = patch.object(CONTROL.shutil, "which", return_value="/verified/tool")
@@ -233,8 +233,9 @@ class ContainerControlTests(unittest.TestCase):
         self.assert_rejected()
 
     def test_wrong_runtime_or_missing_required_tool_fails(self):
-        with patch.object(CONTROL.sys, "version_info", (3, 15, 2)):
-            self.assert_rejected()
+        for version in ((3, 15, 1), (3, 15, 3), (3, 14, 10)):
+            with self.subTest(version=version), patch.object(CONTROL.sys, "version_info", version):
+                self.assert_rejected()
         with patch.object(CONTROL.shutil, "which", return_value=None):
             self.assert_rejected()
 

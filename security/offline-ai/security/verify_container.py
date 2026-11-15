@@ -190,7 +190,7 @@ def _limits(directory):
 def verify_container():
     """Check the real process, mount table and its own cgroup; no host mutation."""
     try:
-        if sys.version_info[:3] != (3, 15, 1) or not all(shutil.which(name) for name in TOOLS):
+        if sys.version_info[:3] != (3, 15, 2) or not all(shutil.which(name) for name in TOOLS):
             _fail()
         _identity(_read_proc("status", 65536))
         mounts = _mounts(_read_proc("mountinfo", 1024 * 1024))

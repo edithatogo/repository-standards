@@ -6,7 +6,7 @@ acquires source-pinned public dependencies, model weights and binaries online,
 then records their provenance and complete inventory. A successful build still
 requires the actual image controls described below.
 
-Supply a digest-pinned base with Python 3.15.1, Node and Git. The build checks
+Supply a digest-pinned base with Python 3.15.2, Node and Git. The build checks
 the actual interpreter before installing the locked wheels.
 
 Expected local vendor tree at the build context root:
@@ -148,7 +148,7 @@ and strict state-dictionary matching.
 `provision/model-sources.json` pins the model checkpoint and its encoder/tokenizer
 inputs to exact upstream revisions, sizes and SHA-256 digests.
 `provision/prepare_model.py --destination NEW_DIRECTORY --receipt NEW_JSON_FILE`
-prepares those inputs on a network-enabled provisioning host using Python 3.15.1.
+prepares those inputs on a network-enabled provisioning host using Python 3.15.2.
 It converts the verified checkpoint with PyTorch's `weights_only=True` loader,
 exports safetensors and a local tokenizer, and records derived-file hashes and
 source provenance. A preparation receipt is not model or image qualification;

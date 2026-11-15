@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "kind": "offline-image-review-baseline",
+  "observed_on": "2026-11-15",
+  "status": "remediation-required",
+  "source": {
+    "repository": "edithatogo/repository-standards",
+    "policy_commit": "cfa1bd3736e25516a1aba8da88009f8e075cc714",
+    "head_commit": "258b590d01506da42c7113fc17eac992fab803d5",
+    "merged_preparation_commit": "3c47f49719a7c862c4a4870955303db2f4b2b55d",
+    "workflow_run": 43660592619,
+    "workflow_url": "https://github.com/edithatogo/repository-standards/actions/runs/43660592619"
+  },
+  "artifact": {
+    "id": 14140484647,
+    "size_bytes": 58000358,
+    "sha256": "a6045446103e66dd410340342858b0c9366e8f4da83f5df20b1f53a67d1304c8",
+    "complete_download_hash_verified": true,
+    "expires_at": "2026-11-29T01:29:16Z",
+    "url": "https://github.com/edithatogo/repository-standards/actions/runs/43660592619/artifacts/14140484647"
+  },
+  "image": {
+    "reference": "localhost/offline-ai-security@sha256:59a5411504a65deaa1143621e3d955fbc90508a84817a93f857029ed95a642bf",
+    "id": "sha256:fda5c147262b22d9081392249acb2a78e7bead6f77247f8f17ba66fc148bb908",
+    "asset_manifest_sha256": "9009e4fa5585687fb7c0f5e3c26490c8ffa5cf33f9b0ebbd72ec5c9135c6d4b6",
+    "controls_passed": [
+      "runtime",
+      "network-preflight",
+      "manifest-binding",
+      "asset-preflight",
+      "gitleaks-fixtures",
+      "sast-fixtures",
+      "dlp-model",
+      "promptfoo-mock"
+    ],
+    "image_exported": false
+  },
+  "sbom": {
+    "tool": "syft",
+    "version": "1.57.1",
+    "scope": "squashed",
+    "package_count": 1409,
+    "debian_package_count": 429,
+    "sha256": "665869cfab919c273d5ed580e9ae8bdba483ac4ca7f3f5c3a3c542e89ad596f8",
+    "independent_report_hash_and_root_identity_verified": true
+  },
+  "vulnerability": {
+    "tool": "grype",
+    "version": "0.121.3",
+    "scope": "all-layers",
+    "report_sha256": "f9fad07e2e3377eea9032654ed1b6739a9a0a4eccc7ae8c8ce0d30cfa40878d9",
+    "independent_report_hash_and_image_identity_verified": true,
+    "database_schema": "v6.1.10",
+    "database_built": "2026-11-14T06:19:25Z",
+    "database_sha256_recorded_by_collector": "822674a9d4f3cbeff8db3f8f1795f8ce8684e6ef2a3636a1cf4cba130e8fc96e",
+    "database_bytes_in_artifact": false,
+    "matches": 3246,
+    "distinct_match_advisory_ids": 748,
+    "ignored_matches": 1985,
+    "counts_are_package_advisory_matches": true,
+    "matches_by_type": {
+      "deb": 3190,
+      "go-module": 33,
+      "npm": 19,
+      "binary": 4
+    },
+    "matches_by_severity": {
+      "Critical": 84,
+      "High": 778,
+      "Medium": 1051,
+      "Low": 212,
+      "Negligible": 1035,
+      "Unknown": 86
+    },
+    "scanner_internal_suppressions": [
+      {
+        "package": "linux-libc-dev",
+        "count": 1984,
+        "match_type": "exact-indirect-match",
+        "upstream": "linux"
+      },
+      {
+        "package": "zlib1g",
+        "count": 1,
+        "advisory": "CVE-2023-45853"
+      }
+    ],
+    "complete_report_retained": true,
+    "suppressions_are_not_new_project_exceptions": true
+  },
+  "remediation_scope": [
+    {
+      "component": "Debian runtime base",
+      "observation": "The full buildpack-derived image contains ImageMagick, compilers and development packages. Thirteen ImageMagick packages account for 13 critical and 208 high fixed package/advisory matches.",
+      "action": "Use the digest-pinned Python 3.15.2 slim base and a checksum-pinned offline Debian runtime closure. Preserve actual dpkg inventory and all-layer vulnerability evidence; assess any superseded lower-layer records separately."
+    },
+    {
+      "component": "Global npm",
+      "observation": "All 19 npm matches refer to six packages under /usr/local/lib/node_modules/npm/node_modules. No match in this report refers to /opt/promptfoo.",
+      "action": "Omit unused global npm/npx from the runtime base; retain Node and the existing reviewed Promptfoo lock."
+    },
+    {
+      "component": "Python",
+      "observation": "The baseline's four binary matches identify the actual Python 3.15.1 binary/shared library.",
+      "action": "Upgrade the exact offline runtime to 3.15.2, including the rebuilt Presidio Requires-Python metadata. Retain residual findings rather than claiming that all four are fixed.",
+      "fixed_by_3_15_2": [
+        "CVE-2026-115557",
+        "CVE-2026-114583"
+      ],
+      "remaining_in_3_15_2": [
+        "CVE-2026-116566",
+        "CVE-2026-103995"
+      ],
+      "primary_sources": [
+        "https://docs.python.org/3.15/whatsnew/changelog.html",
+        "https://github.com/python/cpython/pull/160925",
+        "https://github.com/python/cpython/pull/159021"
+      ]
+    },
+    {
+      "component": "Gitleaks",
+      "observation": "All 33 Go-module matches refer to the upstream 8.30.1 release binary, compiled with Go 1.24.11. The current upstream release remains 8.30.1.",
+      "action": "Evaluate a rebuild of the exact release source with a checksum-pinned current Go compiler and the smallest valid fixed module closure. Review and commit complete candidate go.mod/go.sum before a strict read-only preparation build. Candidate resolution is not approval.",
+      "upstream_source_commit": "83d9cd684c87d95d656c1458ef04895a7f1cbd8e",
+      "primary_sources": [
+        "https://api.github.com/repos/gitleaks/gitleaks/releases/latest",
+        "https://github.com/gitleaks/gitleaks/tree/83d9cd684c87d95d656c1458ef04895a7f1cbd8e"
+      ]
+    }
+  ],
+  "qualification": {
+    "remediation_execution_qualified": false,
+    "vulnerability_review_qualified": false,
+    "release_qualified": false,
+    "runner_registration_qualified": false,
+    "application_adapters_qualified": false,
+    "image_redistribution_qualified": false,
+    "note": "This immutable baseline records observed findings and remediation scope. Subsequent source commits and actual image receipts must establish results; it grants no exception or rollout approval."
+  }
+}

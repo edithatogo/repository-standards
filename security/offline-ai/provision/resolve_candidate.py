@@ -36,7 +36,7 @@ def run(command, *, cwd=None):
 
 
 def candidate(destination):
-    if sys.version_info[:3] != (3, 15, 1) or destination.exists() or destination.is_symlink():
+    if sys.version_info[:3] != (3, 15, 2) or destination.exists() or destination.is_symlink():
         raise ValueError("candidate-preflight")
     destination.mkdir(parents=True)
     prep = module()

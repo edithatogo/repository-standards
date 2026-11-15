@@ -197,7 +197,7 @@ def export_model(inputs, destination):
 
 
 def prepare(destination, receipt_path, catalog_path=CATALOG):
-    if sys.version_info[:3] != (3, 15, 1):
+    if sys.version_info[:3] != (3, 15, 2):
         raise ValueError(FAILURE)
     catalog = load_catalog(catalog_path)
     destination = Path(destination).absolute()
@@ -214,7 +214,7 @@ def prepare(destination, receipt_path, catalog_path=CATALOG):
         schema_version=1, source_catalog_sha256=sha256(catalog_path),
         source_model=catalog["model"], source_encoder=catalog["encoder"],
         attribution_sources=catalog["attribution"],
-        python_version="3.15.1", model_execution_qualified=False,
+        python_version="3.15.2", model_execution_qualified=False,
         image_qualified=False, runner_registration_qualified=False,
     )
     try:

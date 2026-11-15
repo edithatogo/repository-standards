@@ -3,9 +3,9 @@
   "retrieved_on": "2026-11-15",
   "architecture": "linux/amd64",
   "python": {
-    "reference": "docker.io/library/python@sha256:b852d3c507d3ccaade2c2a0951505dc1f78933b85db8f5aeddf3d489bf8406ed",
-    "source": "https://hub.docker.com/v2/repositories/library/python/tags/3.15.1-bookworm",
-    "expected_version": "3.15.1"
+    "reference": "docker.io/library/python@sha256:6cae5760197a96ea5d0a41ae2e045733c351d605c61148dd030aafdf4919e33a",
+    "source": "https://hub.docker.com/v2/repositories/library/python/tags/3.15.2-slim-bookworm",
+    "expected_version": "3.15.2"
   },
   "node": {
     "reference": "docker.io/library/node@sha256:0e2646ab57e77b7a384a0cb59b6815b182c77e1f9c3ba36bd8435bd9c4e6680e",
