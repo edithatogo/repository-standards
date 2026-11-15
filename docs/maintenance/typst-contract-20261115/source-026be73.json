@@ -1,0 +1,629 @@
+{
+  "schema_version": 1,
+  "repository": "edithatogo/repository-standards",
+  "pr": 146,
+  "scope": "Narrow four-helper Typst coverage/receiving evidence addendum; exact final-source hosted acceptance",
+  "source_sha": "026be73a60513f204a5461774f53754cbeed423e",
+  "source_tree": "18998682eded53ead938699a20aa89970841f7bc",
+  "parents": [
+    "feba97429db2ccaedc09ba9710f181048e870b73",
+    "52a093de92ac1f5a5d59a2f55c16da946a81556d"
+  ],
+  "base_sha": "52a093de92ac1f5a5d59a2f55c16da946a81556d",
+  "synthetic_checkout": {
+    "sha": "61fc808e52f21da0177de21b169210409b20f44d",
+    "tree": "18998682eded53ead938699a20aa89970841f7bc",
+    "tree_matches_source": true,
+    "parents": [
+      "52a093de92ac1f5a5d59a2f55c16da946a81556d",
+      "026be73a60513f204a5461774f53754cbeed423e"
+    ]
+  },
+  "qualified": true,
+  "receiving_qualified": false,
+  "observed_at": "2026-11-15T02:51:20Z",
+  "observed_at_aest": "2026-11-15T12:51:20+10:00",
+  "timezone": "Australia/Brisbane",
+  "live_main_at_last_read": "52a093de92ac1f5a5d59a2f55c16da946a81556d",
+  "final_pr_state": {
+    "state": "open",
+    "head": "026be73a60513f204a5461774f53754cbeed423e",
+    "base": "52a093de92ac1f5a5d59a2f55c16da946a81556d",
+    "mergeable": true,
+    "mergeable_state": "clean"
+  },
+  "check_counts": {
+    "successful_actions_jobs": 6,
+    "successful_code_scanning_producers": 2,
+    "expected_event_skips": 2
+  },
+  "change_scope": {
+    "paths": [
+      {
+        "path": "docs/typesetting-unimelb-typst-assessment.md",
+        "blob": "cc95cbe14c510fc7d8754c9c0cd06bb16058dadb",
+        "additions": 94,
+        "deletions": 1
+      },
+      {
+        "path": "registry/repositories.json",
+        "blob": "2de0810a8caca0be8e4fa4e1dda121fce26765d4",
+        "additions": 1,
+        "deletions": 1
+      }
+    ],
+    "registry_change": "Only the Typst Codecov evidence_revision from 9375798 to qualified receiving 402dec7; receiving_main_qualified stays true. Other rows and CRLF encoding preserved.",
+    "assessment_change": "Dated four-helper scope/qualification addendum, precise native empty dependency-submission outcome, and explicit historical foundation boundary.",
+    "base_reconciliation": "Normal two-parent refresh onto 52a093d preserves PR93's precompiled WORKFLOW_PATH change, as well as prior cleanup. The pattern/flags and behavior were independently reviewed unchanged; no overlap with the two owned files. The latest assessment header names 52a093d. No workflow/security-control/suppression/collector/archetype/profile edit.",
+    "historical_source_observations": [
+      "90c81ca local canonical tests and earlier Codex summary remain historical.",
+      "61ef302 actual hosted tests and scanner findings are retained separately and not reused as new-source execution.",
+      "feba974 was fully qualified against fc64db9 and is preserved unchanged as historical source evidence; current 026 results were freshly executed."
+    ]
+  },
+  "executed_results": {
+    "policy": {
+      "run": 43668656873,
+      "job": 132673577084,
+      "checkout": "61fc808e52f21da0177de21b169210409b20f44d",
+      "python": "3.15.2",
+      "command": "PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_*.py' -v",
+      "methods": 274,
+      "passes": 240,
+      "capability_skips": 34,
+      "skip_reasons": {
+        "'install the isolated Presidio tooling requirements'": 24,
+        "'Verified Gitleaks binary not available; set GITLEAKS_BINARY'": 10
+      },
+      "conclusion": "success"
+    },
+    "estate_validation": {
+      "run": 43668656836,
+      "job": 132673577107,
+      "checkout": "61fc808e52f21da0177de21b169210409b20f44d",
+      "python": "3.15.2",
+      "methods": 274,
+      "passes": 240,
+      "capability_skips": 34,
+      "schema_acceptance_command": "PYTHONPATH=scripts:tests python tests/evidence_schema_acceptance.py -v",
+      "schema_acceptance_methods": 4,
+      "schema_acceptance_passes": 4,
+      "conclusion": "success"
+    },
+    "privacy": {
+      "run": 43668656839,
+      "job": 132673577131,
+      "checkout": "61fc808e52f21da0177de21b169210409b20f44d",
+      "gitleaks_findings": 0,
+      "presidio_selected_text_blobs": 2,
+      "presidio_scanned_text_blobs": 2,
+      "presidio_advisory_findings": 0,
+      "presidio_blocking_findings": 0,
+      "scope": "Selected changed Git text blobs; no runtime/binary/all-identifier qualification.",
+      "conclusion": "success"
+    },
+    "codeql": {
+      "run": 43668652769,
+      "actual_checkout": "026be73a60513f204a5461774f53754cbeed423e",
+      "actions_job": 132673565611,
+      "python_job": 132673565841,
+      "upload_processed": true,
+      "producer_check": 132675729346,
+      "producer_app_id": 57789,
+      "producer_conclusion": "success",
+      "producer_title": "No new alerts in code changed by this pull request"
+    }
+  },
+  "zizmor": {
+    "job_id": 132673576937,
+    "run_id": 43668656829,
+    "producer_check_id": 132676166100,
+    "producer_app_id": 57789,
+    "native_log_sha256": "89a2b6d3d9a8d9bb825130ab61d599d3aa0a54d05e65191bb8b2365e7497950c",
+    "count": 15,
+    "counts_by_severity": {
+      "Low": 6,
+      "High": 8,
+      "Medium": 1
+    },
+    "findings": [
+      {
+        "rule_id": "zizmor/artipacked",
+        "severity": "Low",
+        "confidence": "Low",
+        "level": "note",
+        "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+        "locations": [
+          {
+            "path": ".github/workflows/data-ci.yml",
+            "line": 22
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/template-injection",
+        "severity": "High",
+        "confidence": "High",
+        "level": "error",
+        "message": "code injection via template expansion: may expand into attacker-controllable code",
+        "locations": [
+          {
+            "path": ".github/workflows/data-ci.yml",
+            "line": 27
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/template-injection",
+        "severity": "High",
+        "confidence": "High",
+        "level": "error",
+        "message": "code injection via template expansion: may expand into attacker-controllable code",
+        "locations": [
+          {
+            "path": ".github/workflows/data-ci.yml",
+            "line": 28
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/artipacked",
+        "severity": "Low",
+        "confidence": "Low",
+        "level": "note",
+        "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+        "locations": [
+          {
+            "path": ".github/workflows/docs-ci.yml",
+            "line": 11
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/artipacked",
+        "severity": "Low",
+        "confidence": "Low",
+        "level": "note",
+        "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+        "locations": [
+          {
+            "path": ".github/workflows/managed-remediation.yml",
+            "line": 28
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/github-app",
+        "severity": "High",
+        "confidence": "High",
+        "level": "error",
+        "message": "dangerous use of GitHub App tokens: token granted access to all repositories for this owner's app installation",
+        "locations": [
+          {
+            "path": ".github/workflows/managed-remediation.yml",
+            "line": 34
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/github-app",
+        "severity": "High",
+        "confidence": "High",
+        "level": "error",
+        "message": "dangerous use of GitHub App tokens: app token inherits blanket installation permissions",
+        "locations": [
+          {
+            "path": ".github/workflows/managed-remediation.yml",
+            "line": 29
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/artipacked",
+        "severity": "Low",
+        "confidence": "Low",
+        "level": "note",
+        "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+        "locations": [
+          {
+            "path": ".github/workflows/node-ci.yml",
+            "line": 19
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/template-injection",
+        "severity": "High",
+        "confidence": "High",
+        "level": "error",
+        "message": "code injection via template expansion: may expand into attacker-controllable code",
+        "locations": [
+          {
+            "path": ".github/workflows/node-ci.yml",
+            "line": 25
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/artipacked",
+        "severity": "Low",
+        "confidence": "Low",
+        "level": "note",
+        "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+        "locations": [
+          {
+            "path": ".github/workflows/python-ci.yml",
+            "line": 22
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/template-injection",
+        "severity": "High",
+        "confidence": "High",
+        "level": "error",
+        "message": "code injection via template expansion: may expand into attacker-controllable code",
+        "locations": [
+          {
+            "path": ".github/workflows/python-ci.yml",
+            "line": 27
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/template-injection",
+        "severity": "High",
+        "confidence": "High",
+        "level": "error",
+        "message": "code injection via template expansion: may expand into attacker-controllable code",
+        "locations": [
+          {
+            "path": ".github/workflows/python-ci.yml",
+            "line": 28
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/artipacked",
+        "severity": "Low",
+        "confidence": "Low",
+        "level": "note",
+        "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+        "locations": [
+          {
+            "path": ".github/workflows/rust-ci.yml",
+            "line": 12
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/impostor-commit",
+        "severity": "High",
+        "confidence": "High",
+        "level": "error",
+        "message": "commit with no history in referenced repository: uses a commit that doesn't belong to the specified org/repo",
+        "locations": [
+          {
+            "path": ".github/workflows/rust-ci.yml",
+            "line": 13
+          }
+        ],
+        "suppressions": []
+      },
+      {
+        "rule_id": "zizmor/ref-version-mismatch",
+        "severity": "Medium",
+        "confidence": "High",
+        "level": "warning",
+        "message": "action's hash pin has mismatched or missing version comment: points to commit 39008827e6b4",
+        "locations": [
+          {
+            "path": ".github/workflows/rust-ci.yml",
+            "line": 13
+          }
+        ],
+        "suppressions": []
+      }
+    ],
+    "current_pr_paths": [
+      "docs/typesetting-unimelb-typst-assessment.md",
+      "registry/repositories.json"
+    ],
+    "finding_paths_overlap_pr_paths": false,
+    "interpretation": "Actual current-source execution and SARIF upload succeeded; the 15 reported findings remain in unchanged workflow files. This is not a finding-free scan and exploitability was not independently triaged for this narrow patch."
+  },
+  "expected_skips": [
+    {
+      "job": 132676394530,
+      "name": "reconcile-estate",
+      "reason": "Not applicable to pull_request event"
+    },
+    {
+      "job": 132676394310,
+      "name": "publish-aggregate",
+      "reason": "Not applicable to pull_request event"
+    }
+  ],
+  "review": {
+    "formal_reviews": [],
+    "review_threads": [],
+    "review_boundary": "Earlier automated Codex summary concerns 90c81ca; no new automated review of 026 is inferred."
+  },
+  "checks": [
+    {
+      "id": 132676394530,
+      "name": "reconcile-estate",
+      "app_id": 15368,
+      "status": "completed",
+      "conclusion": "skipped",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656836/job/132676394530",
+      "started_at": "2026-11-15T02:49:46Z",
+      "completed_at": "2026-11-15T02:49:46Z",
+      "output_title": null
+    },
+    {
+      "id": 132676394310,
+      "name": "publish-aggregate",
+      "app_id": 15368,
+      "status": "completed",
+      "conclusion": "skipped",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656836/job/132676394310",
+      "started_at": "2026-11-15T02:49:46Z",
+      "completed_at": "2026-11-15T02:49:46Z",
+      "output_title": null
+    },
+    {
+      "id": 132676166100,
+      "name": "zizmor",
+      "app_id": 57789,
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://github.com/edithatogo/repository-standards/runs/132676166100",
+      "started_at": "2026-11-15T02:48:47Z",
+      "completed_at": "2026-11-15T02:48:51Z",
+      "output_title": "No new alerts in code changed by this pull request"
+    },
+    {
+      "id": 132675729346,
+      "name": "CodeQL",
+      "app_id": 57789,
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://github.com/edithatogo/repository-standards/runs/132675729346",
+      "started_at": "2026-11-15T02:46:54Z",
+      "completed_at": "2026-11-15T02:46:57Z",
+      "output_title": "No new alerts in code changed by this pull request"
+    },
+    {
+      "id": 132673577131,
+      "name": "privacy-and-secrets",
+      "app_id": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656839/job/132673577131",
+      "started_at": "2026-11-15T02:46:00Z",
+      "completed_at": "2026-11-15T02:46:31Z",
+      "output_title": null
+    },
+    {
+      "id": 132673577107,
+      "name": "validate-policy",
+      "app_id": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656836/job/132673577107",
+      "started_at": "2026-11-15T02:49:29Z",
+      "completed_at": "2026-11-15T02:49:46Z",
+      "output_title": null
+    },
+    {
+      "id": 132673577084,
+      "name": "policy-gate",
+      "app_id": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656873/job/132673577084",
+      "started_at": "2026-11-15T02:48:05Z",
+      "completed_at": "2026-11-15T02:48:27Z",
+      "output_title": null
+    },
+    {
+      "id": 132673576937,
+      "name": "zizmor",
+      "app_id": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656829/job/132673576937",
+      "started_at": "2026-11-15T02:48:35Z",
+      "completed_at": "2026-11-15T02:48:54Z",
+      "output_title": null
+    },
+    {
+      "id": 132673565841,
+      "name": "Analyze (python)",
+      "app_id": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668652769/job/132673565841",
+      "started_at": "2026-11-15T02:46:52Z",
+      "completed_at": "2026-11-15T02:47:40Z",
+      "output_title": null
+    },
+    {
+      "id": 132673565611,
+      "name": "Analyze (actions)",
+      "app_id": 15368,
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668652769/job/132673565611",
+      "started_at": "2026-11-15T02:46:32Z",
+      "completed_at": "2026-11-15T02:47:04Z",
+      "output_title": null
+    }
+  ],
+  "runs": [
+    {
+      "id": 43668656839,
+      "name": "Privacy and secrets",
+      "head_sha": "026be73a60513f204a5461774f53754cbeed423e",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656839",
+      "created_at": "2026-11-15T02:37:28Z",
+      "updated_at": "2026-11-15T02:46:32Z"
+    },
+    {
+      "id": 43668656873,
+      "name": "Policy gate",
+      "head_sha": "026be73a60513f204a5461774f53754cbeed423e",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656873",
+      "created_at": "2026-11-15T02:37:28Z",
+      "updated_at": "2026-11-15T02:48:27Z"
+    },
+    {
+      "id": 43668656829,
+      "name": "GitHub Actions security lint",
+      "head_sha": "026be73a60513f204a5461774f53754cbeed423e",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656829",
+      "created_at": "2026-11-15T02:37:28Z",
+      "updated_at": "2026-11-15T02:48:55Z"
+    },
+    {
+      "id": 43668656836,
+      "name": "Estate conformance",
+      "head_sha": "026be73a60513f204a5461774f53754cbeed423e",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668656836",
+      "created_at": "2026-11-15T02:37:28Z",
+      "updated_at": "2026-11-15T02:49:46Z"
+    },
+    {
+      "id": 43668652769,
+      "name": "PR #146",
+      "head_sha": "026be73a60513f204a5461774f53754cbeed423e",
+      "event": "dynamic",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43668652769",
+      "created_at": "2026-11-15T02:37:25Z",
+      "updated_at": "2026-11-15T02:47:40Z"
+    }
+  ],
+  "retained_logs": [
+    {
+      "job_id": 132673577084,
+      "sha256": "e95f9b0e2f3795c00fd363788d4e12bbdc67e15a221a68f03d04d040229e1ff4",
+      "bytes": 74424,
+      "retrieved_at": "2026-11-15T02:51:19Z",
+      "local_write_completed": true,
+      "path": "/tmp/central146-source-026be73/logs/job-132673577084.log"
+    },
+    {
+      "job_id": 132673577107,
+      "sha256": "9a5debaea30f9c808b0a96fed425fde320ffe1fbee777e9f2890c294ba81cffb",
+      "bytes": 75480,
+      "retrieved_at": "2026-11-15T02:51:19Z",
+      "local_write_completed": true,
+      "path": "/tmp/central146-source-026be73/logs/job-132673577107.log"
+    },
+    {
+      "job_id": 132673577131,
+      "sha256": "85394fdaa5abbd205a4a0d566fbdaf4db0aa1cd97fb369450690c3f13f581928",
+      "bytes": 52147,
+      "retrieved_at": "2026-11-15T02:51:19Z",
+      "local_write_completed": true,
+      "path": "/tmp/central146-source-026be73/logs/job-132673577131.log"
+    },
+    {
+      "job_id": 132673576937,
+      "sha256": "89a2b6d3d9a8d9bb825130ab61d599d3aa0a54d05e65191bb8b2365e7497950c",
+      "bytes": 202200,
+      "retrieved_at": "2026-11-15T02:51:20Z",
+      "local_write_completed": true,
+      "path": "/tmp/central146-source-026be73/logs/job-132673576937.log"
+    },
+    {
+      "job_id": 132673565841,
+      "sha256": "1ac234e84b5ee98fb7cf4bb2cf684be5f972791c91e3ef363bc18ab5e17b60aa",
+      "bytes": 118952,
+      "retrieved_at": "2026-11-15T02:51:19Z",
+      "local_write_completed": true,
+      "path": "/tmp/central146-source-026be73/logs/job-132673565841.log"
+    },
+    {
+      "job_id": 132673565611,
+      "sha256": "e6fb2e3610f94c3812da25afc3b7e58f29c80591d64c26a7a79907b01b8a9bd9",
+      "bytes": 124065,
+      "retrieved_at": "2026-11-15T02:51:19Z",
+      "local_write_completed": true,
+      "path": "/tmp/central146-source-026be73/logs/job-132673565611.log"
+    }
+  ],
+  "retained_diagnostics": {
+    "zizmor": "Actual current source reported 15 findings (8 High, 1 Medium, 6 Low) in unchanged workflow files. This is executed success and no new alerts in changed code, not a finding-free scan.",
+    "resource_warning": [
+      "2026-11-15T02:48:22.0849246Z test_extracts_only_named_regular_binary (test_privacy_guard.InstallerTests.test_extracts_only_named_regular_binary) ... /opt/hostedtoolcache/Python/3.15.2/x64/lib/python3.15/tempfile.py:538: ResourceWarning: Implicitly cleaning up <HTTPError 403: 'Forbidden'>"
+    ],
+    "codeql_dynload_warnings": [
+      "2026-11-15T02:47:14.0578459Z [2026-11-15 02:47:14] [build-stdout] [WARN] Failed to find dynload path",
+      "2026-11-15T02:47:14.3551731Z [2026-11-15 02:47:14] [build-stdout] [WARN] [2] Failed to find dynload path",
+      "2026-11-15T02:47:14.3605037Z [2026-11-15 02:47:14] [build-stdout] [WARN] [1] Failed to find dynload path",
+      "2026-11-15T02:47:14.3636063Z [2026-11-15 02:47:14] [build-stdout] [WARN] [3] Failed to find dynload path",
+      "2026-11-15T02:47:14.3800883Z [2026-11-15 02:47:14] [build-stdout] [WARN] [4] Failed to find dynload path"
+    ]
+  },
+  "controls_boundary": {
+    "merge_method_observed": "squash only",
+    "required_contexts_observed": [
+      {
+        "name": "policy-gate",
+        "app_id": 15368
+      },
+      {
+        "name": "Analyze (actions)",
+        "app_id": 15368
+      },
+      {
+        "name": "Analyze (python)",
+        "app_id": 15368
+      }
+    ],
+    "branch_enforcement_observed": "non_admins",
+    "ruleset_inventory_observed": [],
+    "full_branch_protection_read": "403 Resource not accessible by integration; do not infer unobserved controls.",
+    "final_control_reconciliation": "Root owns fresh controls/head/base read and merge; no bypass or mutation by this reviewer."
+  },
+  "local_write_completed": true,
+  "remote_mutations": [],
+  "local_path": "/tmp/central146-source-026be73/qualification.json",
+  "receipt_compiled_at": "2026-11-15T02:53:50Z",
+  "root_reported_merge": {
+    "receiving_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+    "merged_at": "2026-11-15T02:51:54Z",
+    "method": "ordinary squash with expected source head",
+    "controls": "Root reread eight successful checks, two expected skips, current main 52, three provider-bound required contexts, empty reviews/threads and exactly two changed files, then reread main immediately before merge.",
+    "receiving_qualification": "pending"
+  }
+}

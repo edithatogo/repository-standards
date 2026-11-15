@@ -1,0 +1,1445 @@
+{
+  "schema_version": 1,
+  "scope": "PR146 receiving-main qualification",
+  "repository": "edithatogo/repository-standards",
+  "observed_at_utc": "2026-11-15T03:05:30Z",
+  "observed_at_aest": "2026-11-15T13:05:30+10:00",
+  "timezone": "Australia/Brisbane",
+  "result": "qualified",
+  "qualification_basis": "Exact receiving revision passed applicable hosted push workflows and the separately executed documented local canonical suite",
+  "identity": {
+    "receiving_revision": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+    "receiving_tree": "18998682eded53ead938699a20aa89970841f7bc",
+    "parents": [
+      "52a093de92ac1f5a5d59a2f55c16da946a81556d"
+    ],
+    "source_revision": "026be73a60513f204a5461774f53754cbeed423e",
+    "source_tree": "18998682eded53ead938699a20aa89970841f7bc",
+    "tree_correspondence_verified": true,
+    "live_main_observed": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+    "git_commit_url": "https://github.com/edithatogo/repository-standards/commit/bef6721531ae014e583ca420b2e27e66475fe5d5"
+  },
+  "source_receipt": {
+    "path": "/tmp/central146-source-026be73/qualification.json",
+    "sha256": "c377fa7ed4e2919dca6d198ffb4c269656f9aa38d9e8545eaf2d3695d133ac98",
+    "historical_source_evidence_only": true
+  },
+  "workflow_runs": [
+    {
+      "id": 43669739644,
+      "name": "GitHub Actions security lint",
+      "path": ".github/workflows/zizmor.yml",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "run_started_at": "2026-11-15T02:51:55Z",
+      "updated_at": "2026-11-15T02:56:24Z",
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739644",
+      "referenced_workflows": []
+    },
+    {
+      "id": 43669739690,
+      "name": "Privacy and secrets",
+      "path": ".github/workflows/privacy-secrets.yml",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "run_started_at": "2026-11-15T02:51:55Z",
+      "updated_at": "2026-11-15T02:56:03Z",
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739690",
+      "referenced_workflows": []
+    },
+    {
+      "id": 43669739748,
+      "name": "Scorecard supply-chain security",
+      "path": ".github/workflows/scorecard.yml",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "run_started_at": "2026-11-15T02:51:55Z",
+      "updated_at": "2026-11-15T02:56:56Z",
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739748",
+      "referenced_workflows": []
+    },
+    {
+      "id": 43669739176,
+      "name": "Push on main",
+      "path": "dynamic/github-code-scanning/codeql",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "event": "dynamic",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "run_started_at": "2026-11-15T02:51:55Z",
+      "updated_at": "2026-11-15T02:59:10Z",
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739176",
+      "referenced_workflows": []
+    }
+  ],
+  "check_runs": [
+    {
+      "id": 132676914572,
+      "name": "Analyze (python)",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:58:22Z",
+      "completed_at": "2026-11-15T02:59:09Z",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739176/job/132676914572",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions",
+        "name": "GitHub Actions",
+        "html_url": "https://github.com/apps/github-actions"
+      },
+      "output": {
+        "title": null,
+        "summary": null,
+        "annotations_count": 1
+      }
+    },
+    {
+      "id": 132676914420,
+      "name": "Analyze (actions)",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:57:43Z",
+      "completed_at": "2026-11-15T02:58:15Z",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739176/job/132676914420",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions",
+        "name": "GitHub Actions",
+        "html_url": "https://github.com/apps/github-actions"
+      },
+      "output": {
+        "title": null,
+        "summary": null,
+        "annotations_count": 1
+      }
+    },
+    {
+      "id": 132676912610,
+      "name": "analysis",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:56:22Z",
+      "completed_at": "2026-11-15T02:56:55Z",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739748/job/132676912610",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions",
+        "name": "GitHub Actions",
+        "html_url": "https://github.com/apps/github-actions"
+      },
+      "output": {
+        "title": null,
+        "summary": null,
+        "annotations_count": 1
+      }
+    },
+    {
+      "id": 132676912225,
+      "name": "privacy-and-secrets",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:55:39Z",
+      "completed_at": "2026-11-15T02:56:03Z",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739690/job/132676912225",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions",
+        "name": "GitHub Actions",
+        "html_url": "https://github.com/apps/github-actions"
+      },
+      "output": {
+        "title": null,
+        "summary": null,
+        "annotations_count": 0
+      }
+    },
+    {
+      "id": 132676912072,
+      "name": "zizmor",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:56:02Z",
+      "completed_at": "2026-11-15T02:56:23Z",
+      "details_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739644/job/132676912072",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions",
+        "name": "GitHub Actions",
+        "html_url": "https://github.com/apps/github-actions"
+      },
+      "output": {
+        "title": null,
+        "summary": null,
+        "annotations_count": 1
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "id": 132676912225,
+      "run_id": 43669739690,
+      "name": "privacy-and-secrets",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:55:39Z",
+      "completed_at": "2026-11-15T02:56:03Z",
+      "runner_id": 1000836865,
+      "runner_name": "GitHub Actions 1000836865",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739690/job/132676912225",
+      "steps": [
+        {
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:55:39Z",
+          "completed_at": "2026-11-15T02:55:41Z"
+        },
+        {
+          "name": "Check out complete repository history",
+          "number": 2,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:55:41Z",
+          "completed_at": "2026-11-15T02:55:42Z"
+        },
+        {
+          "name": "Scan with Presidio and Gitleaks",
+          "number": 3,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:55:42Z",
+          "completed_at": "2026-11-15T02:56:00Z"
+        },
+        {
+          "name": "Post Scan with Presidio and Gitleaks",
+          "number": 5,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:00Z",
+          "completed_at": "2026-11-15T02:56:00Z"
+        },
+        {
+          "name": "Post Check out complete repository history",
+          "number": 6,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:00Z",
+          "completed_at": "2026-11-15T02:56:00Z"
+        },
+        {
+          "name": "Complete job",
+          "number": 7,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:00Z",
+          "completed_at": "2026-11-15T02:56:00Z"
+        }
+      ]
+    },
+    {
+      "id": 132676912072,
+      "run_id": 43669739644,
+      "name": "zizmor",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:56:02Z",
+      "completed_at": "2026-11-15T02:56:23Z",
+      "runner_id": 1000836878,
+      "runner_name": "GitHub Actions 1000836878",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739644/job/132676912072",
+      "steps": [
+        {
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:03Z",
+          "completed_at": "2026-11-15T02:56:04Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 2,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:04Z",
+          "completed_at": "2026-11-15T02:56:06Z"
+        },
+        {
+          "name": "Audit workflows",
+          "number": 3,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:06Z",
+          "completed_at": "2026-11-15T02:56:20Z"
+        },
+        {
+          "name": "Post Audit workflows",
+          "number": 5,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:20Z",
+          "completed_at": "2026-11-15T02:56:21Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 6,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:21Z",
+          "completed_at": "2026-11-15T02:56:21Z"
+        },
+        {
+          "name": "Complete job",
+          "number": 7,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:21Z",
+          "completed_at": "2026-11-15T02:56:21Z"
+        }
+      ]
+    },
+    {
+      "id": 132676912610,
+      "run_id": 43669739748,
+      "name": "analysis",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:56:22Z",
+      "completed_at": "2026-11-15T02:56:55Z",
+      "runner_id": 1000836892,
+      "runner_name": "GitHub Actions 1000836892",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739748/job/132676912610",
+      "steps": [
+        {
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:23Z",
+          "completed_at": "2026-11-15T02:56:24Z"
+        },
+        {
+          "name": "Pull ghcr.io/ossf/scorecard-action:v2.4.4",
+          "number": 2,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:24Z",
+          "completed_at": "2026-11-15T02:56:27Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 3,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:27Z",
+          "completed_at": "2026-11-15T02:56:28Z"
+        },
+        {
+          "name": "Run ossf/scorecard-action@2d1146689b8cda280b9bc96326124645441f03bc",
+          "number": 4,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:28Z",
+          "completed_at": "2026-11-15T02:56:43Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+          "number": 5,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:43Z",
+          "completed_at": "2026-11-15T02:56:44Z"
+        },
+        {
+          "name": "Run github/codeql-action/upload-sarif@f205ea1c3313d32999d8d6a48b4f6530d4437b38",
+          "number": 6,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:44Z",
+          "completed_at": "2026-11-15T02:56:52Z"
+        },
+        {
+          "name": "Post Run github/codeql-action/upload-sarif@f205ea1c3313d32999d8d6a48b4f6530d4437b38",
+          "number": 11,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:52Z",
+          "completed_at": "2026-11-15T02:56:52Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 12,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:52Z",
+          "completed_at": "2026-11-15T02:56:52Z"
+        },
+        {
+          "name": "Complete job",
+          "number": 13,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:56:52Z",
+          "completed_at": "2026-11-15T02:56:52Z"
+        }
+      ]
+    },
+    {
+      "id": 132676914420,
+      "run_id": 43669739176,
+      "name": "Analyze (actions)",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:57:43Z",
+      "completed_at": "2026-11-15T02:58:15Z",
+      "runner_id": 1000836928,
+      "runner_name": "GitHub Actions 1000836928",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739176/job/132676914420",
+      "steps": [
+        {
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:57:44Z",
+          "completed_at": "2026-11-15T02:57:45Z"
+        },
+        {
+          "name": "Checkout repository",
+          "number": 2,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:57:45Z",
+          "completed_at": "2026-11-15T02:57:46Z"
+        },
+        {
+          "name": "Setup proxy for registries",
+          "number": 3,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:57:46Z",
+          "completed_at": "2026-11-15T02:57:46Z"
+        },
+        {
+          "name": "Initialize CodeQL",
+          "number": 4,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:57:46Z",
+          "completed_at": "2026-11-15T02:57:52Z"
+        },
+        {
+          "name": "Perform CodeQL Analysis",
+          "number": 5,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:57:52Z",
+          "completed_at": "2026-11-15T02:58:12Z"
+        },
+        {
+          "name": "Post Perform CodeQL Analysis",
+          "number": 7,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:12Z",
+          "completed_at": "2026-11-15T02:58:12Z"
+        },
+        {
+          "name": "Post Initialize CodeQL",
+          "number": 8,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:12Z",
+          "completed_at": "2026-11-15T02:58:13Z"
+        },
+        {
+          "name": "Post Setup proxy for registries",
+          "number": 9,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:13Z",
+          "completed_at": "2026-11-15T02:58:13Z"
+        },
+        {
+          "name": "Post Checkout repository",
+          "number": 10,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:13Z",
+          "completed_at": "2026-11-15T02:58:13Z"
+        },
+        {
+          "name": "Complete job",
+          "number": 11,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:13Z",
+          "completed_at": "2026-11-15T02:58:13Z"
+        }
+      ]
+    },
+    {
+      "id": 132676914572,
+      "run_id": 43669739176,
+      "name": "Analyze (python)",
+      "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-15T02:58:22Z",
+      "completed_at": "2026-11-15T02:59:09Z",
+      "runner_id": 1000836951,
+      "runner_name": "GitHub Actions 1000836951",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "html_url": "https://github.com/edithatogo/repository-standards/actions/runs/43669739176/job/132676914572",
+      "steps": [
+        {
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:23Z",
+          "completed_at": "2026-11-15T02:58:23Z"
+        },
+        {
+          "name": "Checkout repository",
+          "number": 2,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:23Z",
+          "completed_at": "2026-11-15T02:58:24Z"
+        },
+        {
+          "name": "Setup proxy for registries",
+          "number": 3,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:24Z",
+          "completed_at": "2026-11-15T02:58:25Z"
+        },
+        {
+          "name": "Initialize CodeQL",
+          "number": 4,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:25Z",
+          "completed_at": "2026-11-15T02:58:32Z"
+        },
+        {
+          "name": "Perform CodeQL Analysis",
+          "number": 5,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:58:32Z",
+          "completed_at": "2026-11-15T02:59:06Z"
+        },
+        {
+          "name": "Post Perform CodeQL Analysis",
+          "number": 7,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:59:06Z",
+          "completed_at": "2026-11-15T02:59:06Z"
+        },
+        {
+          "name": "Post Initialize CodeQL",
+          "number": 8,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:59:06Z",
+          "completed_at": "2026-11-15T02:59:07Z"
+        },
+        {
+          "name": "Post Setup proxy for registries",
+          "number": 9,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:59:07Z",
+          "completed_at": "2026-11-15T02:59:07Z"
+        },
+        {
+          "name": "Post Checkout repository",
+          "number": 10,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:59:07Z",
+          "completed_at": "2026-11-15T02:59:07Z"
+        },
+        {
+          "name": "Complete job",
+          "number": 11,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-15T02:59:07Z",
+          "completed_at": "2026-11-15T02:59:07Z"
+        }
+      ]
+    }
+  ],
+  "legacy_statuses": [],
+  "check_summary": {
+    "executed_success": 5,
+    "failed": 0,
+    "pending": 0,
+    "applicable_workflows": 4,
+    "all_applicable_receiving_workflows_succeeded": true
+  },
+  "untriggered_workflow_applicability": [
+    {
+      "path": ".github/workflows/policy-gate.yml",
+      "result": "not-applicable",
+      "reason": "Only pull_request/workflow_dispatch triggers; no receiving push trigger",
+      "counted_as_pass": false
+    },
+    {
+      "path": ".github/workflows/estate-conformance.yml",
+      "result": "not-applicable",
+      "reason": "Push-main path filter includes its workflow, estate_evidence.py, publish_estate_evidence.py, estate-evidence schemas and pinned tooling; this merge changes only the Typst assessment and registry",
+      "counted_as_pass": false
+    }
+  ],
+  "local_canonical_validation": {
+    "command_receipt": {
+      "schema_version": 1,
+      "scope": "documented central receiving canonical suite",
+      "source_revision": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+      "expected_tree": "18998682eded53ead938699a20aa89970841f7bc",
+      "started_at_utc": "2026-11-15T03:03:48.672459+00:00",
+      "runtime_path": "/tmp/central-receiving-bef672-python/cpython-3.15.2-linux-x86_64-gnu/bin/python3.15",
+      "commands": [
+        {
+          "command": [
+            "/tmp/central-receiving-bef672-python/cpython-3.15.2-linux-x86_64-gnu/bin/python3.15",
+            "-c",
+            "import sys; assert sys.version_info[:3] == (3,15,2),sys.version; print(sys.version)"
+          ],
+          "cwd": "/tmp/central-receiving-bef672/checkout",
+          "environment_overrides": {},
+          "started_at_utc": "2026-11-15T03:03:48.682194+00:00",
+          "finished_at_utc": "2026-11-15T03:03:48.695675+00:00",
+          "duration_seconds": 0.013488397002220154,
+          "exit_code": 0,
+          "log": "/tmp/central-receiving-bef672/local-validation/runtime.log",
+          "log_sha256": "b89ab4c9adeda9d03897dd9d79ccc8d6b24ebf8a0c027f38e138f9935196e6ec",
+          "log_bytes": 53
+        },
+        {
+          "command": [
+            "/tmp/central-receiving-bef672-python/cpython-3.15.2-linux-x86_64-gnu/bin/python3.15",
+            "-m",
+            "venv",
+            ".venv"
+          ],
+          "cwd": "/tmp/central-receiving-bef672/checkout",
+          "environment_overrides": {},
+          "started_at_utc": "2026-11-15T03:03:48.695860+00:00",
+          "finished_at_utc": "2026-11-15T03:03:50.446759+00:00",
+          "duration_seconds": 1.7509171979909297,
+          "exit_code": 0,
+          "log": "/tmp/central-receiving-bef672/local-validation/venv.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "log_bytes": 0
+        },
+        {
+          "command": [
+            "/tmp/central-receiving-bef672/checkout/.venv/bin/python",
+            "-m",
+            "pip",
+            "install",
+            "--disable-pip-version-check",
+            "--only-binary=:all:",
+            "--require-hashes",
+            "-r",
+            "tooling/estate-evidence-requirements.txt",
+            "-r",
+            "tooling/community-bootstrap-build-requirements.txt"
+          ],
+          "cwd": "/tmp/central-receiving-bef672/checkout",
+          "environment_overrides": {},
+          "started_at_utc": "2026-11-15T03:03:50.447122+00:00",
+          "finished_at_utc": "2026-11-15T03:04:03.860168+00:00",
+          "duration_seconds": 13.413064414009568,
+          "exit_code": 0,
+          "log": "/tmp/central-receiving-bef672/local-validation/hash-verified-tools.log",
+          "log_sha256": "02fa569c5794366336ccc9b2e1a746c1e6f6d1db0c3e21d2c4ef0b791e1ecae4",
+          "log_bytes": 940
+        },
+        {
+          "command": [
+            "/tmp/central-receiving-bef672/checkout/.venv/bin/python",
+            "-m",
+            "pip",
+            "install",
+            "--disable-pip-version-check",
+            "--no-build-isolation",
+            "--no-deps",
+            "--no-binary=pyyaml",
+            "--require-hashes",
+            "-r",
+            "tooling/community-bootstrap-requirements.txt"
+          ],
+          "cwd": "/tmp/central-receiving-bef672/checkout",
+          "environment_overrides": {
+            "PYYAML_FORCE_LIBYAML": "0"
+          },
+          "started_at_utc": "2026-11-15T03:04:03.860697+00:00",
+          "finished_at_utc": "2026-11-15T03:04:15.385590+00:00",
+          "duration_seconds": 11.524911858999985,
+          "exit_code": 0,
+          "log": "/tmp/central-receiving-bef672/local-validation/hash-verified-parser.log",
+          "log_sha256": "c5ae11c09d4e1cbc0132a1038d1c5199af50f9824371afbd3ed5159c27d2d5c1",
+          "log_bytes": 784
+        },
+        {
+          "command": [
+            "/tmp/central-receiving-bef672/checkout/.venv/bin/python",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "cwd": "/tmp/central-receiving-bef672/checkout",
+          "environment_overrides": {
+            "PYTHONPATH": "scripts"
+          },
+          "started_at_utc": "2026-11-15T03:04:15.386210+00:00",
+          "finished_at_utc": "2026-11-15T03:04:17.068467+00:00",
+          "duration_seconds": 1.6822729999985313,
+          "exit_code": 0,
+          "log": "/tmp/central-receiving-bef672/local-validation/canonical.log",
+          "log_sha256": "fe68d8a620c12d6ec313700a5613150672e205b6cdda673feeec6f4f2d9425be",
+          "log_bytes": 43986
+        }
+      ],
+      "setup_result": "pass",
+      "canonical_result": "pass",
+      "before": {
+        "revision": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+        "tree": "18998682eded53ead938699a20aa89970841f7bc",
+        "status": ""
+      },
+      "source_inputs": {
+        "AGENTS.md": "b1b29dfd055dd02f8458f8bfbc00a4ef1a8bedb8b72a6ec30d29115b37de60f4",
+        "README.md": "2ea3efb6040cc97c8d653a214ff2a6d06d709821e8711ea4f9a385f7e0fdf923",
+        "tooling/estate-evidence-requirements.txt": "f33dd995fc143e9ae0b8f8cbbc1ab05632dc06c8cee283641187d952d2f96cba",
+        "tooling/community-bootstrap-build-requirements.txt": "bfaa2ce967e9dc0e4db30721a236dcc3b5a8dd48f03126f72ef71bb1d104dbed",
+        "tooling/community-bootstrap-requirements.txt": "e7f442f6452d66eeba575df784cdc721bc456d4b90813398c9c8906cd24e9056"
+      },
+      "runtime_version": "3.15.2 (main, Oct 26 2026, 14:06:56) [Clang 23.1.3 ]",
+      "after": {
+        "revision": "bef6721531ae014e583ca420b2e27e66475fe5d5",
+        "tree": "18998682eded53ead938699a20aa89970841f7bc",
+        "status": ""
+      },
+      "source_unchanged": true,
+      "finished_at_utc": "2026-11-15T03:04:17.073703+00:00"
+    },
+    "receipt_file": {
+      "path": "/tmp/central-receiving-bef672/local-validation/command-receipt.json",
+      "sha256": "a0f85e9924d262069b5ff511aa5e8c8b28a759e9ea28b85e08709e7b42920219"
+    },
+    "documented_command": "PYTHONPATH=scripts .venv/bin/python -m unittest discover -s tests -v",
+    "runtime_capabilities": {
+      "python": "3.15.2 (main, Oct 26 2026, 14:06:56) [Clang 23.1.3 ]",
+      "pyyaml": "6.0.3",
+      "libyaml_enabled": false
+    },
+    "capabilities_file": {
+      "path": "/tmp/central-receiving-bef672/local-validation/runtime-capabilities.json",
+      "sha256": "5072b655e353beaceda7762b146d40fdd6b940d11c285cd98c36262ed9171606"
+    },
+    "test_methods": 274,
+    "executed_pass": 240,
+    "capability_skips": {
+      "total": 34,
+      "presidio": 24,
+      "gitleaks": 10
+    },
+    "source_clean_before_and_after": true,
+    "warning": "ResourceWarning while cleaning up deliberate HTTPError 403 fixture; suite exited 0",
+    "schema_acceptance_extra_not_rerun_reason": "The two-file receiving delta does not change evidence schemas; the documented canonical gate was required and executed. Source026's four hosted schema methods remain historical source evidence."
+  },
+  "privacy": {
+    "gitleaks": {
+      "counts_by_rule": {},
+      "finding_count": 0,
+      "findings": [],
+      "mode": "commit_range",
+      "scanner": "gitleaks",
+      "status": "clean",
+      "summary_truncated": false
+    },
+    "presidio": {
+      "advisory_findings": 0,
+      "blocking_findings": 0,
+      "coverage_complete": true,
+      "engine": "presidio",
+      "files_scanned": 2,
+      "files_selected": 2,
+      "findings": [],
+      "findings_omitted": 0,
+      "limitations": [
+        "Names, addresses, clinical narratives and re-identification risk are not covered by this baseline.",
+        "Only selected Git text blobs are scanned; images, binary documents, LFS payloads and submodule contents are not scanned.",
+        "Repository checks do not inspect application runtime data or prevent upload before CI executes.",
+        "Detection is probabilistic; no findings is not a declaration that data is anonymous or safe to publish."
+      ],
+      "profile": "repository",
+      "schema_version": 1,
+      "scope": "changed",
+      "skipped": [],
+      "skipped_count": 0,
+      "skipped_counts_by_reason": {},
+      "skipped_omitted": 0,
+      "status": "no_supported_identifiers_detected"
+    }
+  },
+  "zizmor": {
+    "job_id": 132676912072,
+    "executed_result": "success",
+    "findings": {
+      "count": 15,
+      "severities": {
+        "Low": 6,
+        "High": 8,
+        "Medium": 1
+      },
+      "findings": [
+        {
+          "rule_id": "zizmor/artipacked",
+          "severity": "Low",
+          "confidence": "Low",
+          "level": "note",
+          "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+          "locations": [
+            {
+              "path": ".github/workflows/data-ci.yml",
+              "line": 22
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/template-injection",
+          "severity": "High",
+          "confidence": "High",
+          "level": "error",
+          "message": "code injection via template expansion: may expand into attacker-controllable code",
+          "locations": [
+            {
+              "path": ".github/workflows/data-ci.yml",
+              "line": 27
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/template-injection",
+          "severity": "High",
+          "confidence": "High",
+          "level": "error",
+          "message": "code injection via template expansion: may expand into attacker-controllable code",
+          "locations": [
+            {
+              "path": ".github/workflows/data-ci.yml",
+              "line": 28
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/artipacked",
+          "severity": "Low",
+          "confidence": "Low",
+          "level": "note",
+          "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+          "locations": [
+            {
+              "path": ".github/workflows/docs-ci.yml",
+              "line": 11
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/artipacked",
+          "severity": "Low",
+          "confidence": "Low",
+          "level": "note",
+          "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+          "locations": [
+            {
+              "path": ".github/workflows/managed-remediation.yml",
+              "line": 28
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/github-app",
+          "severity": "High",
+          "confidence": "High",
+          "level": "error",
+          "message": "dangerous use of GitHub App tokens: token granted access to all repositories for this owner's app installation",
+          "locations": [
+            {
+              "path": ".github/workflows/managed-remediation.yml",
+              "line": 34
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/github-app",
+          "severity": "High",
+          "confidence": "High",
+          "level": "error",
+          "message": "dangerous use of GitHub App tokens: app token inherits blanket installation permissions",
+          "locations": [
+            {
+              "path": ".github/workflows/managed-remediation.yml",
+              "line": 29
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/artipacked",
+          "severity": "Low",
+          "confidence": "Low",
+          "level": "note",
+          "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+          "locations": [
+            {
+              "path": ".github/workflows/node-ci.yml",
+              "line": 19
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/template-injection",
+          "severity": "High",
+          "confidence": "High",
+          "level": "error",
+          "message": "code injection via template expansion: may expand into attacker-controllable code",
+          "locations": [
+            {
+              "path": ".github/workflows/node-ci.yml",
+              "line": 25
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/artipacked",
+          "severity": "Low",
+          "confidence": "Low",
+          "level": "note",
+          "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+          "locations": [
+            {
+              "path": ".github/workflows/python-ci.yml",
+              "line": 22
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/template-injection",
+          "severity": "High",
+          "confidence": "High",
+          "level": "error",
+          "message": "code injection via template expansion: may expand into attacker-controllable code",
+          "locations": [
+            {
+              "path": ".github/workflows/python-ci.yml",
+              "line": 27
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/template-injection",
+          "severity": "High",
+          "confidence": "High",
+          "level": "error",
+          "message": "code injection via template expansion: may expand into attacker-controllable code",
+          "locations": [
+            {
+              "path": ".github/workflows/python-ci.yml",
+              "line": 28
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/artipacked",
+          "severity": "Low",
+          "confidence": "Low",
+          "level": "note",
+          "message": "credential persistence through GitHub Actions artifacts: does not set persist-credentials: false",
+          "locations": [
+            {
+              "path": ".github/workflows/rust-ci.yml",
+              "line": 12
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/impostor-commit",
+          "severity": "High",
+          "confidence": "High",
+          "level": "error",
+          "message": "commit with no history in referenced repository: uses a commit that doesn't belong to the specified org/repo",
+          "locations": [
+            {
+              "path": ".github/workflows/rust-ci.yml",
+              "line": 13
+            }
+          ],
+          "suppressions": []
+        },
+        {
+          "rule_id": "zizmor/ref-version-mismatch",
+          "severity": "Medium",
+          "confidence": "High",
+          "level": "warning",
+          "message": "action's hash pin has mismatched or missing version comment: points to commit 39008827e6b4",
+          "locations": [
+            {
+              "path": ".github/workflows/rust-ci.yml",
+              "line": 13
+            }
+          ],
+          "suppressions": []
+        }
+      ]
+    },
+    "finding_file_scope": "All 15 finding locations are in workflow files unchanged by PR146. No workflow or suppression changes are in this two-file assessment/registry merge.",
+    "security_inventory_finding_free": false,
+    "exploitability_independently_triaged": false
+  },
+  "scorecard": {
+    "job_id": 132676912610,
+    "executed_result": "success",
+    "native_json_from_job_log": {
+      "date": "2026-11-15T02:56:28Z",
+      "repo": {
+        "name": "github.com/edithatogo/repository-standards",
+        "commit": "bef6721531ae014e583ca420b2e27e66475fe5d5"
+      },
+      "scorecard": {
+        "version": "v5.5.0",
+        "commit": "c395761df6afe1a69e476bc60a013a94bcbc153f"
+      },
+      "score": 8,
+      "checks": [
+        {
+          "details": [
+            "Warn: no GitHub/GitLab publishing workflow detected."
+          ],
+          "score": -1,
+          "reason": "packaging workflow not detected",
+          "name": "Packaging",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#packaging",
+            "short": "Determines if the project is published as a package that others can easily download, install, easily update, and uninstall."
+          }
+        },
+        {
+          "details": null,
+          "score": 10,
+          "reason": "no binaries found in the repo",
+          "name": "Binary-Artifacts",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#binary-artifacts",
+            "short": "Determines if the project has generated executable (binary) artifacts in the source repository."
+          }
+        },
+        {
+          "details": null,
+          "score": 0,
+          "reason": "Found 0/30 approved changesets -- score normalized to 0",
+          "name": "Code-Review",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#code-review",
+            "short": "Determines if the project requires human code review before pull requests (aka merge requests) are merged."
+          }
+        },
+        {
+          "details": [
+            "Info: security policy file detected: SECURITY.md:1",
+            "Info: Found linked content: SECURITY.md:1",
+            "Info: Found disclosure, vulnerability, and/or timelines in security policy: SECURITY.md:1",
+            "Info: Found text in security policy: SECURITY.md:1"
+          ],
+          "score": 10,
+          "reason": "security policy file detected",
+          "name": "Security-Policy",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#security-policy",
+            "short": "Determines if the project has published a security policy."
+          }
+        },
+        {
+          "details": null,
+          "score": 10,
+          "reason": "30 commit(s) and 2 issue activity found in the last 90 days -- score normalized to 10",
+          "name": "Maintained",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#maintained",
+            "short": "Determines if the project is \"actively maintained\"."
+          }
+        },
+        {
+          "details": [
+            "Info: detected update tool: RenovateBot: renovate.json:1"
+          ],
+          "score": 10,
+          "reason": "update tool detected",
+          "name": "Dependency-Update-Tool",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#dependency-update-tool",
+            "short": "Determines if the project uses a dependency update tool."
+          }
+        },
+        {
+          "details": null,
+          "score": 10,
+          "reason": "no dangerous workflow patterns detected",
+          "name": "Dangerous-Workflow",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#dangerous-workflow",
+            "short": "Determines if the project's GitHub Action workflows avoid dangerous patterns."
+          }
+        },
+        {
+          "details": [
+            "Info:  43 out of  43 GitHub-owned GitHubAction dependencies pinned",
+            "Info:  15 out of  15 third-party GitHubAction dependencies pinned",
+            "Info:   1 out of   1 goCommand dependencies pinned",
+            "Info:   6 out of   6 pipCommand dependencies pinned",
+            "Info:   1 out of   1 npmCommand dependencies pinned"
+          ],
+          "score": 10,
+          "reason": "all dependencies are pinned",
+          "name": "Pinned-Dependencies",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#pinned-dependencies",
+            "short": "Determines if the project has declared and pinned the dependencies of its build process."
+          }
+        },
+        {
+          "details": [
+            "Info: jobLevel 'contents' permission set to 'read': .github/workflows/estate-conformance.yml:72",
+            "Info: jobLevel 'contents' permission set to 'read': .github/workflows/estate-conformance.yml:118",
+            "Info: jobLevel 'actions' permission set to 'read': .github/workflows/estate-conformance.yml:119",
+            "Info: jobLevel 'contents' permission set to 'read': .github/workflows/scorecard.yml:25",
+            "Info: jobLevel 'actions' permission set to 'read': .github/workflows/scorecard.yml:26",
+            "Info: jobLevel 'contents' permission set to 'read': .github/workflows/zizmor.yml:22",
+            "Info: jobLevel 'actions' permission set to 'read': .github/workflows/zizmor.yml:23",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/coverage-evidence.yml:19",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/criticality-score.yml:12",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/data-ci.yml:15",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/docs-ci.yml:5",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/estate-conformance.yml:32",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/latex-ci.yml:18",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/managed-remediation.yml:17",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/node-ci.yml:12",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/policy-gate.yml:8",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/privacy-guard-tests.yml:30",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/privacy-secrets.yml:26",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/product-metadata-audit.yml:14",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/python-ci.yml:15",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/rust-ci.yml:5",
+            "Info: topLevel permissions set to 'read-all': .github/workflows/scorecard.yml:11",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/supply-chain-evidence.yml:12",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/typst-ci.yml:18",
+            "Info: topLevel 'contents' permission set to 'read': .github/workflows/zizmor.yml:11",
+            "Info: no jobLevel write permissions found"
+          ],
+          "score": 10,
+          "reason": "GitHub workflow tokens follow principle of least privilege",
+          "name": "Token-Permissions",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#token-permissions",
+            "short": "Determines if the project's workflows follow the principle of least privilege."
+          }
+        },
+        {
+          "details": null,
+          "score": 0,
+          "reason": "no effort to earn an OpenSSF best practices badge detected",
+          "name": "CII-Best-Practices",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#cii-best-practices",
+            "short": "Determines if the project has an OpenSSF (formerly CII) Best Practices Badge."
+          }
+        },
+        {
+          "details": null,
+          "score": 10,
+          "reason": "0 existing vulnerabilities detected",
+          "name": "Vulnerabilities",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#vulnerabilities",
+            "short": "Determines if the project has open, known unfixed vulnerabilities."
+          }
+        },
+        {
+          "details": null,
+          "score": -1,
+          "reason": "no releases found",
+          "name": "Signed-Releases",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#signed-releases",
+            "short": "Determines if the project cryptographically signs release artifacts."
+          }
+        },
+        {
+          "details": [
+            "Warn: no fuzzer integrations found"
+          ],
+          "score": 0,
+          "reason": "project is not fuzzed",
+          "name": "Fuzzing",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#fuzzing",
+            "short": "Determines if the project uses fuzzing."
+          }
+        },
+        {
+          "details": [
+            "Info: all commits (30) are checked with a SAST tool"
+          ],
+          "score": 10,
+          "reason": "SAST tool is run on all commits",
+          "name": "SAST",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#sast",
+            "short": "Determines if the project uses static code analysis."
+          }
+        },
+        {
+          "details": [
+            "Info: found contributions from: rare insights"
+          ],
+          "score": 3,
+          "reason": "project has 1 contributing companies or organizations -- score normalized to 3",
+          "name": "Contributors",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#contributors",
+            "short": "Determines if the project has a set of contributors from multiple organizations (e.g., companies)."
+          }
+        },
+        {
+          "details": null,
+          "score": -1,
+          "reason": "internal error: error during branchesHandler.setup: internal error: some github tokens can't read classic branch protection rules: https://github.com/ossf/scorecard-action/blob/main/docs/authentication/fine-grained-auth-token.md",
+          "name": "Branch-Protection",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#branch-protection",
+            "short": "Determines if the default and release branches are protected with GitHub's branch protection settings."
+          }
+        },
+        {
+          "details": [
+            "Info: project has a license file: LICENSE:0",
+            "Info: FSF or OSI recognized license: Apache License 2.0: LICENSE:0"
+          ],
+          "score": 10,
+          "reason": "license file detected",
+          "name": "License",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#license",
+            "short": "Determines if the project has defined a license."
+          }
+        },
+        {
+          "details": null,
+          "score": 10,
+          "reason": "30 out of 30 merged PRs checked by a CI test -- score normalized to 10",
+          "name": "CI-Tests",
+          "documentation": {
+            "url": "https://github.com/ossf/scorecard/blob/c395761df6afe1a69e476bc60a013a94bcbc153f/docs/checks.md#ci-tests",
+            "short": "Determines if the project runs tests before pull requests are merged."
+          }
+        }
+      ],
+      "metadata": null
+    },
+    "artifact_metadata": [
+      {
+        "id": 14143891904,
+        "name": "scorecard-sarif-43669739748",
+        "size_in_bytes": 16110,
+        "digest": "sha256:ebcd21c2692547af6893f0bc9842194952a7394c7ce672ca7ec430af4d933d5b",
+        "expired": false,
+        "created_at": "2026-11-15T02:56:44Z",
+        "updated_at": "2026-11-15T02:56:44Z",
+        "workflow_run": {
+          "id": 43669739748,
+          "repository_id": 1318044577,
+          "head_repository_id": 1318044577,
+          "head_branch": "main",
+          "head_sha": "bef6721531ae014e583ca420b2e27e66475fe5d5"
+        }
+      }
+    ],
+    "artifact_zip_independently_downloaded": false,
+    "limitations": "Native score is 8.0; classic branch-protection evaluation is unknown (-1) because the token cannot read it. Packaging and signed releases are also unassessed (-1); other lower-scoring checks and SARIF URI warnings are retained."
+  },
+  "codeql": {
+    "python_files_scanned": 35,
+    "python_files_selected": 35,
+    "actions_files_scanned": 19,
+    "actions_files_selected": 19,
+    "uploads_succeeded": true
+  },
+  "logs": [
+    {
+      "job_id": 132676912225,
+      "sha256": "332ad8ccb1799f619d5f687cfe4648369df832a94d0c07b6f8e46833e9de4ded",
+      "bytes": 50812,
+      "retrieved_at": "2026-11-15 03:03:23 UTC",
+      "local_write_completed": true,
+      "local_path": "/tmp/central-receiving-bef672/logs/job-132676912225.log"
+    },
+    {
+      "job_id": 132676912072,
+      "sha256": "355b751c3f66d2bfc2ca85a570bd29421518de38c05abb137caa91cf12441259",
+      "bytes": 201414,
+      "retrieved_at": "2026-11-15 03:03:23 UTC",
+      "local_write_completed": true,
+      "local_path": "/tmp/central-receiving-bef672/logs/job-132676912072.log"
+    },
+    {
+      "job_id": 132676912610,
+      "sha256": "fefd8204f88e032806526412ce6ad7c55570f69c59de687f698a4a261a478c5a",
+      "bytes": 152284,
+      "retrieved_at": "2026-11-15 03:03:23 UTC",
+      "local_write_completed": true,
+      "local_path": "/tmp/central-receiving-bef672/logs/job-132676912610.log"
+    },
+    {
+      "job_id": 132676914420,
+      "sha256": "23f54131cda34ea68df03471206b53fabb6703a1696cb4d15a00e5e50777d7d6",
+      "bytes": 124814,
+      "retrieved_at": "2026-11-15 03:03:23 UTC",
+      "local_write_completed": true,
+      "local_path": "/tmp/central-receiving-bef672/logs/job-132676914420.log"
+    },
+    {
+      "job_id": 132676914572,
+      "sha256": "c27ac70e2b4c988d581720736b6710e5d7c52f8c8d8e2d302fc8a1be55825765",
+      "bytes": 133396,
+      "retrieved_at": "2026-11-15 03:03:23 UTC",
+      "local_write_completed": true,
+      "local_path": "/tmp/central-receiving-bef672/logs/job-132676914572.log"
+    }
+  ],
+  "log_observations": [
+    {
+      "job_id": 132676912225,
+      "exact_revision_mentions": [
+        "bef6721531ae014e583ca420b2e27e66475fe5d5",
+        "bef6721531ae014e583ca420b2e27e66475fe5d5"
+      ],
+      "warning_lines": []
+    },
+    {
+      "job_id": 132676912072,
+      "exact_revision_mentions": [
+        "[command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +bef6721531ae014e583ca420b2e27e66475fe5d5:refs/remotes/origin/main",
+        " * [new ref]         bef6721531ae014e583ca420b2e27e66475fe5d5 -> origin/main",
+        "bef6721531ae014e583ca420b2e27e66475fe5d5",
+        "bef6721531ae014e583ca420b2e27e66475fe5d5"
+      ],
+      "warning_lines": []
+    },
+    {
+      "job_id": 132676912610,
+      "exact_revision_mentions": [
+        "[command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +bef6721531ae014e583ca420b2e27e66475fe5d5:refs/remotes/origin/main",
+        " * [new ref]         bef6721531ae014e583ca420b2e27e66475fe5d5 -> origin/main",
+        "bef6721531ae014e583ca420b2e27e66475fe5d5",
+        "bef6721531ae014e583ca420b2e27e66475fe5d5",
+        "\"after\": \"bef6721531ae014e583ca420b2e27e66475fe5d5\",",
+        "\"id\": \"bef6721531ae014e583ca420b2e27e66475fe5d5\",",
+        "\"url\": \"https://github.com/edithatogo/repository-standards/commit/bef6721531ae014e583ca420b2e27e66475fe5d5\"",
+        "\"id\": \"bef6721531ae014e583ca420b2e27e66475fe5d5\","
+      ],
+      "warning_lines": [
+        "Warning: 'no file associated with this alert' is not a valid URI in 'instance.runs[1].results[0].locations[0].physicalLocation.artifactLocation.uri'.",
+        "Warning: 'no file associated with this alert' is not a valid URI in 'instance.runs[2].results[0].locations[0].physicalLocation.artifactLocation.uri'.",
+        "Warning: 'no file associated with this alert' is not a valid URI in 'instance.runs[2].results[1].locations[0].physicalLocation.artifactLocation.uri'."
+      ]
+    },
+    {
+      "job_id": 132676914420,
+      "exact_revision_mentions": [
+        "[command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +bef6721531ae014e583ca420b2e27e66475fe5d5:refs/remotes/origin/main",
+        " * [new ref]         bef6721531ae014e583ca420b2e27e66475fe5d5 -> origin/main",
+        "bef6721531ae014e583ca420b2e27e66475fe5d5",
+        "bef6721531ae014e583ca420b2e27e66475fe5d5"
+      ],
+      "warning_lines": []
+    },
+    {
+      "job_id": 132676914572,
+      "exact_revision_mentions": [
+        "[command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +bef6721531ae014e583ca420b2e27e66475fe5d5:refs/remotes/origin/main",
+        " * [new ref]         bef6721531ae014e583ca420b2e27e66475fe5d5 -> origin/main",
+        "bef6721531ae014e583ca420b2e27e66475fe5d5",
+        "bef6721531ae014e583ca420b2e27e66475fe5d5",
+        "Uploading overlay-base database to Actions cache with key codeql-overlay-base-database-1-d953d79b74456ce0-python-2.27.4-bef6721531ae014e583ca420b2e27e66475fe5d5-43669739176-1"
+      ],
+      "warning_lines": []
+    }
+  ],
+  "boundaries": [
+    "Hosted workflow success is distinct from a finding-free security inventory; all inherited Zizmor findings and actual Scorecard unknowns remain recorded.",
+    "The receiving local canonical result is separately executed on actual Python3.15.2 with README hash-verified requirements and pure-Python PyYAML. The 34 scanner capability skips remain unexecuted local integration evidence.",
+    "No policy/Estate push pass is invented for untriggered workflows.",
+    "This two-file change records the historical qualified consumer402 four-helper evidence; later consumer revisions do not silently update the central registry.",
+    "Offline runtime/image/model/isolated-runner drafts and institutional/document acceptance remain outside this scope.",
+    "This qualification made no remote mutations, reruns, cancellations, settings changes or bypasses."
+  ]
+}
