@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "findings": [
+    {
+      "commit": "068283c039369bfd293d04c8afb811220ff4ffe3",
+      "path": "engineering/publication-policy.json",
+      "rule_id": "generic-api-key",
+      "line": 453,
+      "value_sha256": "c1271cbe3675dc62b290857d26cc68bb418117077fe1284fe92cfe18b6a52fd9",
+      "reason": "Independently reviewed public Git blob identifier binding the pinned privacy workflow. Object bytes reproduce the identifier; this exact finding contains no credential.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/068283c039369bfd293d04c8afb811220ff4ffe3",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/43610e2ff130b26bc50f1e3fc9423ce2f86fb510"
+      ]
+    },
+    {
+      "commit": "068283c039369bfd293d04c8afb811220ff4ffe3",
+      "path": "engineering/publication-policy.json",
+      "rule_id": "generic-api-key",
+      "line": 456,
+      "value_sha256": "ed4069335525f692ec25ed1e5a6f21823ec2eb3fdf9937cdb6088353d3c5fc5a",
+      "reason": "Independently reviewed public Git blob identifier binding the pinned privacy workflow. Object bytes reproduce the identifier; this exact finding contains no credential.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/068283c039369bfd293d04c8afb811220ff4ffe3",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/2be6113547ec4dfc22a07db1e827b07f8955e965"
+      ]
+    },
+    {
+      "commit": "13335d0e5a4f6e0b9c1a261002cadfe0886d39c0",
+      "path": "data/raw/aihw/aihw_wastewater_page.html",
+      "rule_id": "generic-api-key",
+      "line": 1318,
+      "value_sha256": "53cddc4f8ba6781aead1f27ba057bef56f60398a5b9b6bd689be38f8bcf371a7",
+      "reason": "Public reCAPTCHA site identifier used in client-rendered data-sitekey HTML attributes. The immutable source contains the documented browser widget integration.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/13335d0e5a4f6e0b9c1a261002cadfe0886d39c0",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/393b9582fd2ff7ba07ffd2c1947ed7d0e93b7e4f"
+      ]
+    },
+    {
+      "commit": "13335d0e5a4f6e0b9c1a261002cadfe0886d39c0",
+      "path": "data/raw/aihw/aihw_wastewater_page.html",
+      "rule_id": "generic-api-key",
+      "line": 3042,
+      "value_sha256": "53cddc4f8ba6781aead1f27ba057bef56f60398a5b9b6bd689be38f8bcf371a7",
+      "reason": "Public reCAPTCHA site identifier used in client-rendered data-sitekey HTML attributes. The immutable source contains the documented browser widget integration.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/13335d0e5a4f6e0b9c1a261002cadfe0886d39c0",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/393b9582fd2ff7ba07ffd2c1947ed7d0e93b7e4f"
+      ]
+    },
+    {
+      "commit": "a018ae13a248a178c1a759ed85eabdf08efa1f4b",
+      "path": "integration/archive/hosted-native-attestation.json",
+      "rule_id": "generic-api-key",
+      "line": 77,
+      "value_sha256": "cecca47c4cf308b2bbff29e8468354c46f38a5429d8a5a12a819503a913b2770",
+      "reason": "Reviewed public SHA-256 binding of the privacy workflow in a signed native capsule. Hashing the immutable workflow Git blob reproduces the value.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/a018ae13a248a178c1a759ed85eabdf08efa1f4b",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/697b0a2adbc08149d10d491d2971f7cfa70271f2"
+      ]
+    },
+    {
+      "commit": "ce40fa1be5125bbdb8b5a6904a4cbacae2eec6ee",
+      "path": "integration/archive/runner-material-checkpoint_20261102.json",
+      "rule_id": "generic-api-key",
+      "line": 151,
+      "value_sha256": "f32a5324c6b592d8bd6129f4042039329397a96f19792f8ed1aa4268945b178d",
+      "reason": "SHA-256 digest recorded under log_sha256 for release-secrets.log. Two retained original scanner logs rehash to this exact recorded value.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/ce40fa1be5125bbdb8b5a6904a4cbacae2eec6ee",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/55053f7be90b1ec067947d43214ae4a53984da26"
+      ]
+    },
+    {
+      "commit": "d402431b1c6d3e61a07cb71b5efff739051e791e",
+      "path": "data/raw/aihw/aihw_wastewater_page.html",
+      "rule_id": "generic-api-key",
+      "line": 1318,
+      "value_sha256": "53cddc4f8ba6781aead1f27ba057bef56f60398a5b9b6bd689be38f8bcf371a7",
+      "reason": "Public reCAPTCHA site identifier used in client-rendered data-sitekey HTML attributes. The immutable source contains the documented browser widget integration.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/d402431b1c6d3e61a07cb71b5efff739051e791e",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/393b9582fd2ff7ba07ffd2c1947ed7d0e93b7e4f"
+      ]
+    },
+    {
+      "commit": "d402431b1c6d3e61a07cb71b5efff739051e791e",
+      "path": "data/raw/aihw/aihw_wastewater_page.html",
+      "rule_id": "generic-api-key",
+      "line": 3042,
+      "value_sha256": "53cddc4f8ba6781aead1f27ba057bef56f60398a5b9b6bd689be38f8bcf371a7",
+      "reason": "Public reCAPTCHA site identifier used in client-rendered data-sitekey HTML attributes. The immutable source contains the documented browser widget integration.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/tobac/commit/d402431b1c6d3e61a07cb71b5efff739051e791e",
+        "https://api.github.com/repos/edithatogo/tobac/git/blobs/393b9582fd2ff7ba07ffd2c1947ed7d0e93b7e4f"
+      ]
+    },
+    {
+      "commit": "73eafbf95267244965df91262028442c8411a7e2",
+      "path": "docs/security_procedures.md",
+      "rule_id": "generic-api-key",
+      "line": 137,
+      "value_sha256": "03cf574544f0ead22cd533b61f1ee6b314f66fd99a2d2adbba018a05c6ff8673",
+      "reason": "Reviewed historical synthetic API key example. The immutable source uses the value only as a demonstration in documentation or the configuration example, with no provider or credential assignment.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/microcosting_genomics/commit/73eafbf95267244965df91262028442c8411a7e2",
+        "https://api.github.com/repos/edithatogo/microcosting_genomics/git/blobs/3a7543ff4b5b067543fe13aa4d6451b61197444c"
+      ]
+    },
+    {
+      "commit": "73eafbf95267244965df91262028442c8411a7e2",
+      "path": "src/unimelb_phd_phase_1/security.py",
+      "rule_id": "generic-api-key",
+      "line": 685,
+      "value_sha256": "03cf574544f0ead22cd533b61f1ee6b314f66fd99a2d2adbba018a05c6ff8673",
+      "reason": "Reviewed historical synthetic API key example. The immutable source uses the value only as a demonstration in documentation or the configuration example, with no provider or credential assignment.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/microcosting_genomics/commit/73eafbf95267244965df91262028442c8411a7e2",
+        "https://api.github.com/repos/edithatogo/microcosting_genomics/git/blobs/cb2585d1504d3026be1fdeb3360a5f0cfdc20053"
+      ]
+    }
+  ]
+}
