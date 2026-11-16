@@ -63,3 +63,31 @@ receiving repository installation and execution remain in progress. See
 [the dated rollout checkpoint](rollout-status.md) for aggregate evidence.
 Prepared changes, successful scans and installed default-branch workflows are
 separate states. The full repository audit remains private.
+
+## Python 3.15.1 action maintenance snapshot — 16 November 2026
+
+Owner: chat `01a1aa8f-ba44-78f1-a79b-e14bd3e07236`; isolated checkout
+`/Users/doughnut/.codex/worktrees/gma-privacy-standards-20261116`, branch
+`codex/privacy-action-3151-notice`, based on the qualified Python 3.15.1 action
+commit `a5e25796939e43b81141f5cd0b55400377421a58`. Scope is the shared action
+and its build evidence for a Global Medicines Atlas CI repair; it does not
+change this repository's current default branch or publish a release.
+
+- [x] Backport the Presidio MIT notice retention and reproducible build inputs
+  from the later qualified Python 3.15.2 implementation in PR #148, preserving
+  the 3.15.1 runtime, scanner logic, dependency locks and detection policy.
+- [x] Build and install the real scanners on Python 3.15.1. Verify the notice
+  digest inside both rebuilt Presidio wheels and run 35 privacy and 35 Gitleaks
+  tests, including four focused notice regressions. An advisory lookup covered
+  all 55 installed identities after mapping the two compatibility versions to
+  their exact upstream sources; no known vulnerabilities were reported. The
+  first lookup skipped those two due to name normalization and was repeated.
+- [~] Verify the exact source commit in the hosted action canary and retain a
+  receiving-repository audit without suppressions. A version tag and any public
+  release remain a separate maintainer decision.
+
+Only the action subpath and its pinned source dependencies are proposed for this
+maintenance snapshot; inherited rollout templates are historical and do not
+authorize the older Python 3.12 tooling in a new consumer. No participant or
+cohort-derived data, data acquisition, dataset publication or messages are in
+scope.
