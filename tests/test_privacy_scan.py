@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import contextlib
+import hashlib
 import importlib.util
 import io
 import json
@@ -12,6 +13,8 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import privacy_scan
@@ -104,8 +107,214 @@ class GitFixture(unittest.TestCase):
         return code, json.loads(raw), raw
 
 
+class GitBatchIOTests(GitFixture):
+    def test_large_batch_input_and_output_do_not_deadlock(self) -> None:
+        # A cat-file-like child may produce output before it has consumed all
+        # input. Run in a bounded subprocess so a pipe deadlock cannot stall CI.
+        child = (
+            "import sys; "
+            "sys.stdin.buffer.read(1); "
+            "sys.stdout.buffer.write(b'x' * 262144); "
+            "sys.stdout.buffer.flush(); "
+            "sys.stdin.buffer.read()"
+        )
+        probe = (
+            "import sys; from pathlib import Path; "
+            "sys.path.insert(0, sys.argv[1]); import privacy_scan; "
+            "child = sys.argv[3]; "
+            "privacy_scan.git_command = lambda *args: [sys.executable, '-c', child]; "
+            "result = privacy_scan.git(Path(sys.argv[2]), 'batch', "
+            "input_data=b'y' * 262144); "
+            "assert result == b'x' * 262144"
+        )
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-I",
+                "-c",
+                probe,
+                str(Path(privacy_scan.__file__).parent),
+                str(self.root),
+                child,
+            ],
+            capture_output=True,
+            timeout=10,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr.decode())
+
+
+class ReviewedPrivacyFindingTests(GitFixture):
+    def setUp(self) -> None:
+        super().setUp()
+        self.values = ("FIRST-SYNTHETIC-MATCH", "SECOND-SYNTHETIC-MATCH")
+        self.text = " ".join(self.values) + "\n"
+        self.path = "data/synthetic.txt"
+        self.put(self.path, self.text)
+        self.commit()
+        self.blob = self.git("rev-parse", "HEAD:" + self.path)
+        self.registry = self.root / "trusted-review.json"
+
+        class Recognizer:
+            supported_entities = ["PHONE_NUMBER"]
+
+            def analyze(inner_self, *, text, entities, nlp_artifacts):
+                return [
+                    SimpleNamespace(
+                        entity_type="PHONE_NUMBER",
+                        start=text.index(value),
+                        end=text.index(value) + len(value),
+                        score=1,
+                    )
+                    for value in self.values
+                    if value in text
+                ]
+
+        self.recognizer = Recognizer()
+        self.write_registry(self.blob)
+        self.patcher = patch.object(
+            privacy_scan, "TRUSTED_PRIVACY_REVIEWS", self.registry, create=True
+        )
+        self.patcher.start()
+        self.addCleanup(self.patcher.stop)
+
+    def entry(self, blob: str) -> dict:
+        start = self.text.index(self.values[0])
+        return {
+            "blob": blob,
+            "path": self.path,
+            "entity": "PHONE_NUMBER",
+            "line": 1,
+            "start": start,
+            "end": start + len(self.values[0]),
+            "value_sha256": hashlib.sha256(self.values[0].encode()).hexdigest(),
+            "profile": "repository",
+            "reason": "Synthetic match in a temporary behavioral test fixture.",
+            "evidence_urls": ["https://github.com/example/project/commit/" + self.blob],
+        }
+
+    def write_registry(self, blob: str) -> None:
+        self.registry.write_text(
+            json.dumps({"schema_version": 1, "findings": [self.entry(blob)]})
+        )
+
+    def test_reviewed_span_does_not_hide_another_match_on_the_same_line(self) -> None:
+        report = privacy_scan.scan_repository(self.root, recognizers=[self.recognizer])
+        self.assertEqual(report["reviewed_nonidentifier_count"], 1)
+        self.assertEqual(report["blocking_findings"], 1)
+        for value in self.values:
+            self.assertNotIn(value, json.dumps(report))
+
+    def test_review_does_not_apply_to_changed_blob_sensitive_or_staged_scope(self) -> None:
+        report = privacy_scan.scan_repository(
+            self.root, profile="sensitive", recognizers=[self.recognizer]
+        )
+        self.assertEqual(report["blocking_findings"], 2)
+        self.put(self.path, self.text + "extra\n")
+        report = privacy_scan.scan_repository(
+            self.root, staged=True, recognizers=[self.recognizer]
+        )
+        self.assertEqual(report["blocking_findings"], 2)
+        staged_blob = self.git("rev-parse", ":" + self.path)
+        self.write_registry(staged_blob)
+        report = privacy_scan.scan_repository(
+            self.root, staged=True, recognizers=[self.recognizer]
+        )
+        self.assertEqual(report["blocking_findings"], 2)
+        self.commit()
+        self.write_registry(self.blob)
+        report = privacy_scan.scan_repository(self.root, recognizers=[self.recognizer])
+        self.assertEqual(report["blocking_findings"], 2)
+
+    def test_every_identity_mismatch_remains_blocking(self) -> None:
+        entry = self.entry(self.blob)
+        for field, value in (
+            ("blob", "1" * 40),
+            ("path", "data/other.txt"),
+            ("entity", "AU_TFN"),
+            ("line", 2),
+            ("start", 1),
+            ("end", entry["end"] + 1),
+            ("value_sha256", "2" * 64),
+        ):
+            with self.subTest(field=field):
+                self.registry.write_text(
+                    json.dumps({"schema_version": 1, "findings": [{**entry, field: value}]})
+                )
+                report = privacy_scan.scan_repository(
+                    self.root, recognizers=[self.recognizer]
+                )
+                self.assertEqual(report["blocking_findings"], 2)
+
+    def test_consumer_registry_and_environment_cannot_add_reviews(self) -> None:
+        target = self.root / "privacy" / "reviewed-privacy-findings.json"
+        target.parent.mkdir()
+        target.write_bytes(self.registry.read_bytes())
+        self.registry.write_text(json.dumps({"schema_version": 1, "findings": []}))
+        with patch.dict(os.environ, {"PRIVACY_REVIEWED_FINDINGS": str(target)}):
+            report = privacy_scan.scan_repository(
+                self.root, recognizers=[self.recognizer]
+            )
+        self.assertEqual(report["blocking_findings"], 2)
+
+    def test_malformed_and_duplicate_reviews_fail_closed(self) -> None:
+        entry = self.entry(self.blob)
+        for value in (
+            {"schema_version": 1, "findings": [entry, entry]},
+            {"schema_version": 1, "findings": [{**entry, "start": True}]},
+            {"schema_version": 1, "findings": [{**entry, "path": "../input"}]},
+            {"schema_version": 1, "findings": [{**entry, "value_sha256": "*"}]},
+            {"schema_version": 1, "findings": [{**entry, "profile": "sensitive"}]},
+        ):
+            with self.subTest(value=value):
+                self.registry.write_text(json.dumps(value))
+                with self.assertRaises(privacy_scan.ScanError):
+                    privacy_scan.scan_repository(self.root, recognizers=[self.recognizer])
+
+
 @unittest.skipUnless(HAS_PRESIDIO, "install the isolated Presidio tooling requirements")
 class PresidioIntegrationTests(GitFixture):
+    def test_real_phone_review_keeps_an_unreviewed_phone_blocking(self) -> None:
+        values = ("+61 " + "491 " + "570 " + "006", "+61 " + "491 " + "570 " + "007")
+        text = "\n".join(values) + "\n"
+        path = "data/fictional-phones.txt"
+        self.put(path, text)
+        self.commit()
+        blob = self.git("rev-parse", "HEAD:" + path)
+        recognizer = next(
+            item for item in privacy_scan.build_recognizers()
+            if "PHONE_NUMBER" in item.supported_entities
+        )
+        matches = [
+            item for item in recognizer.analyze(
+                text=text, entities=recognizer.supported_entities, nlp_artifacts=None
+            )
+            if item.score > 0
+        ]
+        self.assertEqual(len(matches), 2)
+        match = matches[0]
+        reviewed_value = text[match.start:match.end]
+        entry = {
+            "blob": blob,
+            "path": path,
+            "entity": "PHONE_NUMBER",
+            "line": 1,
+            "start": match.start,
+            "end": match.end,
+            "value_sha256": hashlib.sha256(reviewed_value.encode()).hexdigest(),
+            "profile": "repository",
+            "reason": "Fictional reserved phone number in a temporary regression fixture.",
+            "evidence_urls": ["https://github.com/example/project/commit/" + blob],
+        }
+        registry = self.root / "trusted-review.json"
+        registry.write_text(json.dumps({"schema_version": 1, "findings": [entry]}))
+        with patch.object(privacy_scan, "TRUSTED_PRIVACY_REVIEWS", registry):
+            report = privacy_scan.scan_repository(self.root, recognizers=[recognizer])
+        self.assertEqual(report["reviewed_nonidentifier_count"], 1)
+        self.assertEqual(report["blocking_findings"], 1)
+        for value in values:
+            self.assertNotIn(value, json.dumps(report))
+
     def test_contextual_australian_identifier_blocks_without_plaintext(self) -> None:
         value = _synthetic(("123", "456", "782"))
         self.put("notes.txt", "tax file number: " + value + "\n")

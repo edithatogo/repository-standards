@@ -60,13 +60,20 @@ Individually verified false positives may use the pinned tooling's
 binds commit, path, rule, line and matched-value digest; other findings still block.
 The safe summary separately counts reviewed nonsecrets and remaining findings.
 
+The separate [privacy finding registry](../privacy/reviewed-privacy-findings.md)
+records individually verified nonidentifiers against an exact Git blob, path,
+entity, line, character offsets and matched-value digest. It applies only to the
+repository profile and never to staged content. An unreviewed match, a changed
+blob or the sensitive profile still blocks. Reports count reviewed matches
+separately and retain the original coverage limitations.
+
 ## Scan scope
 
 | Invocation | Secret scan | Personal-identifier scan |
 | --- | --- | --- |
-| Pull request | Submitted commit range, including a secret added and later deleted | Complete final blobs of changed tracked files |
+| Pull request | Submitted commit range, including merge changes and a secret added and later deleted | Complete final blobs of changed tracked files |
 | Push to configured default branch | Introduced commit range; initial branch falls back to full history | Complete final blobs of changed tracked files; initial branch scans tracked text |
-| Weekly schedule or manual full audit | All locally reachable Git history in a complete clone | Current tracked text snapshot |
+| Weekly schedule or manual full audit | All locally reachable Git history in a complete clone, including merge changes | Current tracked text snapshot |
 | Local `--staged` | Staged Git diff, including an initial commit | Complete blobs of changed staged/index files |
 
 The personal-identifier check does not inspect every historical blob. A PII value

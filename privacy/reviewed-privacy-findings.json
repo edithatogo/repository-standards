@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "findings": [
+    {
+      "blob": "046bcf7f5486c106144e3ecb907cc522f5d6c8b9",
+      "path": "specs/frontier/implementation-information/v1/fixtures/normative/expected.json",
+      "entity": "PHONE_NUMBER",
+      "line": 269,
+      "start": 5898,
+      "end": 5905,
+      "value_sha256": "5127c1f63bcc473a31740d21940c014e7749c9c0a5469825fc0889491626dec9",
+      "profile": "repository",
+      "reason": "A numeric aggregate value in a synthetic normative result fixture, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/specs/frontier/implementation-information/v1/fixtures/normative/expected.json#L269",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/specs/frontier/implementation-information/v1/README.md"
+      ]
+    },
+    {
+      "blob": "046bcf7f5486c106144e3ecb907cc522f5d6c8b9",
+      "path": "specs/frontier/implementation-information/v1/fixtures/normative/expected.json",
+      "entity": "PHONE_NUMBER",
+      "line": 291,
+      "start": 6350,
+      "end": 6357,
+      "value_sha256": "41f0735cf52b2a52e4f9515515ab28e45527d46c4d5d182e5a61de7687330ca9",
+      "profile": "repository",
+      "reason": "A numeric aggregate value in a synthetic normative result fixture, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/specs/frontier/implementation-information/v1/fixtures/normative/expected.json#L291",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/specs/frontier/implementation-information/v1/README.md"
+      ]
+    },
+    {
+      "blob": "1da4cf0739fbaed4ef5a76b6b522285fd13e5b74",
+      "path": "paper/data/synthetic_health_example_summary.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 2,
+      "start": 114,
+      "end": 124,
+      "value_sha256": "6599c93d333949a70f11addd85fd27ac02b5507bed17207a95e6d1532c9f1da7",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_summary.csv#L2",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "1da4cf0739fbaed4ef5a76b6b522285fd13e5b74",
+      "path": "paper/data/synthetic_health_example_summary.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 2,
+      "start": 136,
+      "end": 146,
+      "value_sha256": "78f4c1b04f33d11d7655b38bf8ab7b0b89597b173347edd2375cf17fc00e16d4",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_summary.csv#L2",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 18,
+      "start": 369,
+      "end": 379,
+      "value_sha256": "7595b8c13971266f9c7fd215da3d887e60871a6284f9ea3526eb4d0b3ba7cf80",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L18",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 19,
+      "start": 389,
+      "end": 399,
+      "value_sha256": "1d163947ecd96b90c4dc9dfe30432d3ab6a9fc982ac86a2470a0b4acb0b01fc1",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L19",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 21,
+      "start": 429,
+      "end": 439,
+      "value_sha256": "ad2b82a5a796a2220757be28e6b0d524fe433eec2ee75c7d4377e3e53ae0fbd2",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L21",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 22,
+      "start": 449,
+      "end": 459,
+      "value_sha256": "6599c93d333949a70f11addd85fd27ac02b5507bed17207a95e6d1532c9f1da7",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L22",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 28,
+      "start": 569,
+      "end": 579,
+      "value_sha256": "e17a80f83754604b4111feb10088b1a311c780cce2da4a7ed7568df5cbab1dda",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L28",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 29,
+      "start": 589,
+      "end": 599,
+      "value_sha256": "670c8a82a25c9a92470b13cb3d794874e03d6347f41c7bb4efec2d4eeb190eb2",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L29",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 32,
+      "start": 649,
+      "end": 659,
+      "value_sha256": "9dfdd1e5543bac8ff52f70b9aad90108a0da87d0701db761a6066f668e26f635",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L32",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 33,
+      "start": 669,
+      "end": 679,
+      "value_sha256": "a348892f02f4afc13b6b6f17be23eae73bfa2904e3f53e53a715f4acdb229beb",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L33",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 35,
+      "start": 709,
+      "end": 719,
+      "value_sha256": "75871aebbe94697c784239f689391bd17d3c826def630e786a62020210460e57",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L35",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 36,
+      "start": 729,
+      "end": 739,
+      "value_sha256": "3df1f475d5411c5caecacaba015cfde6c25524841015e606edebca0c2c7ce0e5",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L36",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 37,
+      "start": 749,
+      "end": 759,
+      "value_sha256": "ebc31d1f8dba6bd0af12ce7c8a6d017438c19309f543024ddb4f3cb82c65f129",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L37",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 38,
+      "start": 769,
+      "end": 779,
+      "value_sha256": "3b41e2c6356f0c94c30f8aee19e488c21349cd17ed594f5cc36c376072ce5702",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L38",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "423727f4f9971229552597620b2bd9358ba1aa2f",
+      "path": "paper/data/synthetic_health_example_curve.csv",
+      "entity": "PHONE_NUMBER",
+      "line": 42,
+      "start": 850,
+      "end": 860,
+      "value_sha256": "6cf51486b0fcce4c66659c6cef9baaa60265f735ec5549b93f9f694080110581",
+      "profile": "repository",
+      "reason": "A decimal probability or interval in a deterministic synthetic health-example output, not a telephone number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/paper/data/synthetic_health_example_curve.csv#L42",
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/scripts/generate_paper_health_example.py"
+      ]
+    },
+    {
+      "blob": "fe4b6868e9f6d2809b057acc7fa2d408be554819",
+      "path": "tests/test_arrow_capacity_observation.py",
+      "entity": "AU_TFN",
+      "line": 362,
+      "start": 11792,
+      "end": 11803,
+      "value_sha256": "ee8f38e6ed784a156a5bf5a03cb2535d99aa20220621068a582ac2ae9cc10c17",
+      "profile": "repository",
+      "reason": "A fictional process-table output literal inside a resource-sampling unit test, not a tax file number.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/tests/test_arrow_capacity_observation.py#L362"
+      ]
+    }
+  ]
+}
