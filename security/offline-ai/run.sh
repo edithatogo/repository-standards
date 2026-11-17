@@ -15,7 +15,8 @@ quiet gitleaks-fixtures python /policy/security/offline-ai/scripts/verify_gitlea
 # Reuse exact reviewed fingerprints and the isolated Git view with offline rules.
 quiet gitleaks-history python -I /policy/security/offline-ai/scripts/scan_gitleaks.py
 quiet sast-fixtures python /policy/security/offline-ai/scripts/verify_sast_fixtures.py
-quiet opengrep opengrep scan --strict --disable-nosem --taint-intrafile --config /policy/security/offline-ai/.opengrep/rules.yaml --error --exclude .git .
+quiet pytest python -m pytest -q -p no:cacheprovider /policy/security/offline-ai/tests/test_scan_opengrep.py
+quiet opengrep python -I /policy/security/offline-ai/scripts/scan_opengrep.py
 quiet pytest python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_detect_ai.py \
   /policy/security/offline-ai/tests/test_agent_boundary.py \

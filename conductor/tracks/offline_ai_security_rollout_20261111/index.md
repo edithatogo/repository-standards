@@ -402,6 +402,69 @@ return and was cancelled; readback showed no attached artifact or additional
 Git worktree. This lane reuses its existing isolated clone and does not claim an
 app-managed worktree. The merged privacy branch remains preserved separately.
 
+### Tracked-source SAST coverage follow-up
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the bounded coverage
+correction in this checkout, based on `21fa8674305687671988a2cdb12b1846bbec1a67`.
+Allowed paths are `security/offline-ai/scripts/scan_opengrep.py`, its focused
+tests and fixture qualification, `security/offline-ai/run.sh`, the exact-hosted
+canary's consumer SHA, the required runtime-policy pin and this track. Native and
+authentication scope: none. The next operation is an explicit tracked-source
+inventory and fail-closed scanner result check, retaining the pinned rules and
+their positive and negative controls. Source discovery, parser coverage and
+finding review must each succeed; listing a path as scanned alone is not proof of
+complete parsing. An uninitialized Git submodule is outside the parent index's
+source inventory and is not represented as scanned. A materialized submodule must
+not be silently ignored. Image-vulnerability review and release qualification
+remain open.
+
+The current local probe on Innovate `74a4d0690636ca9f6e445b4d778b5e2f6488234d`
+enumerated and reported all 888 supported parent-index files, with one
+uninitialized submodule outside that scope. Opengrep returned seven findings,
+one partial-parse report and 46 per-file parser failures; this is a failing
+scan, not complete coverage. An independent review reproduced omitted tracked
+dotfiles and a false clean on an unresolved LFS pointer. The candidate includes
+those dotfiles, rejects LFS pointers and unreported files, and verifies parser
+status per target. It also independently compiles Python for syntax and uses the
+existing hash-inventoried esbuild binary to check JavaScript/TypeScript syntax;
+neither executes consumer code. Synthetic real-tool controls cover a clean
+Python/JSX/TypeScript set, an ignored tracked finding, bare dotfiles and eight
+invalid syntax cases. Eight focused wrapper tests passed on Python 3.15.2.
+These controls do not prove complete Rust parsing or authorize an exemption for
+the 46 failures. Hosted Linux validation remains necessary.
+
+Actionlint and shell/Python syntax checks passed. A 47-test shared-policy run
+passed 46 tests and failed one on macOS because the synthetic expected path used
+`/var` while the tested resolver returned `/private/var`. An exact rerun with a
+resolved temporary root passed; the initial run is not represented as an
+unqualified 47-test pass. The hosted Linux policy and scanner runs remain open.
+
+An isolated Python 3.15.2 experiment built tree-sitter 0.26.1 from source and
+installed its Rust grammar 0.24.2. It parsed the affected faer file and rejected
+synthetic malformed input and an LFS pointer; this is a local feasibility probe,
+not a pinned scanner dependency or proof that Opengrep analyzed the same syntax.
+
+### Unreviewed Gitleaks dependency candidate
+
+The same chat and checkout own the bounded source-build candidate follow-up
+against `21fa8674305687671988a2cdb12b1846bbec1a67`. The allowed source paths
+also include `security/offline-ai/provision/gitleaks-build-sources.json`,
+`security/offline-ai/provision/gitleaks_candidate.py`, its focused tests and
+this track. This is candidate preparation only: it does not install or publish a
+binary, alter the image, approve advisory dispositions or qualify a release.
+The next operation is to resolve fixed candidate versions for the four modules
+identified by version-level advisory queries, retain exact checksums and run the
+existing isolated build and fixture workflow. The earlier candidate's build and
+fixtures passed, but its four module version matches require a new candidate and
+fresh whole-closure evidence.
+
+The local Go 1.27.4 resolution selected 203 modules and exactly the requested
+versions, including rardecode 2.4.6, x/crypto 0.59.0, x/sys 0.50.0 and x/text
+0.44.0. The initial offline cross-build probe failed because it had not populated
+the complete module cache; it is not build evidence. The candidate's 12 focused
+source-build tests passed. The full closure, Linux binary controls and image
+scan remain required before this can replace the current upstream binary.
+
 ## Hosted canary scanner correction — 17 November 2026
 
 The same chat and isolated checkout own the follow-up to hosted run

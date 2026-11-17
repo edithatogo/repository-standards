@@ -36,7 +36,7 @@
     "provenance_url": "https://go.dev/dl/?mode=json&include=all"
   },
   "go_minimum_before": "1.24.11",
-  "go_minimum_after": "1.25.0",
+  "go_minimum_after": "1.26.0",
   "selected_module_entries": 203,
   "updates": [
     {
@@ -58,10 +58,10 @@
     {
       "path": "golang.org/x/text",
       "before": "v0.22.0",
-      "after": "v0.39.0",
+      "after": "v0.44.0",
       "requested": true,
-      "sum": "h1:UbZz4pLOvn600D6Oh6GGEI6VAmndrEBLv8/6BEXzyus=",
-      "go_mod_sum": "h1:3UwRclnC2g0TU9x8PZiyfOajCd1zaUNHF9cvqcQZ+ZM="
+      "sum": "h1:YItdp/mQNGnsmrgpcdA5yQ3bnRxCfo/Tj/iByGW9GGo=",
+      "go_mod_sum": "h1:S4FR1waQ9LbjQTls97SyRjDaUUVkaM+cXwwuG/G+MwY="
     },
     {
       "path": "github.com/ulikunitz/xz",
@@ -72,11 +72,35 @@
       "go_mod_sum": "h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14="
     },
     {
+      "path": "github.com/nwaples/rardecode/v2",
+      "before": "v2.1.0",
+      "after": "v2.4.6",
+      "requested": true,
+      "sum": "h1:ddDMXtry2leooYMOXn0F8RzCvt+9tfq6SpleiRRvS1o=",
+      "go_mod_sum": "h1:7uz379lSxPe6j9nvzxUZ+n7mnJNgjsRNb6IbvGVHRmw="
+    },
+    {
+      "path": "golang.org/x/crypto",
+      "before": "v0.35.0",
+      "after": "v0.59.0",
+      "requested": true,
+      "sum": "h1:xS2jhqYbzNrpvkWP2YTDf4TJwBy3ykR03i8vFDxEc7c=",
+      "go_mod_sum": "h1:veDyUwATGs3c+vN3VfTbzViMGXeTBk3WyhBOkn+F/4U="
+    },
+    {
+      "path": "golang.org/x/sys",
+      "before": "v0.30.0",
+      "after": "v0.50.0",
+      "requested": true,
+      "sum": "h1:dkKZEFTEKaLr1sjhs0WiKqoi8Jj5nHbS3Njmx1UoMJs=",
+      "go_mod_sum": "h1:hNLxWAXmnKAxqDtdwIYC4bM9oQPEecfsnNMuSxOs3og="
+    },
+    {
       "path": "golang.org/x/sync",
       "before": "v0.11.0",
-      "after": "v0.21.0",
+      "after": "v0.25.0",
       "requested": false,
-      "reason": "Required by golang.org/x/text v0.39.0; selected by the observed minimal version resolution."
+      "reason": "Selected by the observed minimal version resolution for the requested Go module updates."
     }
   ],
   "build": {

@@ -95,8 +95,8 @@ def load_catalog():
         require(type(record["size_bytes"]) is int and record["size_bytes"] > 0
                 and re.fullmatch(r"[0-9a-f]{64}", record["sha256"]) is not None, "inputs")
     updates = catalog["updates"]
-    require(len(updates) == 5 and sum(x["requested"] is True for x in updates) == 4
-            and len({x["path"] for x in updates}) == 5, "inputs")
+    require(len(updates) == 8 and sum(x["requested"] is True for x in updates) == 7
+            and len({x["path"] for x in updates}) == 8, "inputs")
     for update in updates:
         require(MODULE_PATH.fullmatch(update["path"])
                 and VERSION.fullmatch(update["before"])
