@@ -38,6 +38,32 @@ installation, and the candidate's source-verified PyYAML wheel. No other
 environment was modified. Hosted scanner and canary checks, independent review,
 the Innovate pin update and its actual receiving scan remain open.
 
+### Bounded integration handoff — 17 November 2026
+
+At the user's subsequent direction, chat `01a1e448-3a28-7653-a681-cd3fdb41f498`
+also owns integration of this shared privacy packet and the corresponding
+Innovate PR #674, using the isolated clone and branch recorded above and
+`/Volumes/PortableSSD/GitHub/innovate-security-alert-44` on
+`codex/security-alert-44`. The previously recorded integrators retain their
+unrelated repository work; their latest turns were complete at this handoff.
+The shared packet remains limited to the four paths listed above, and the
+Innovate receiving change is limited to its privacy workflow and evidence plan.
+Native and authentication scope: none. Next: pass current hosted checks,
+integrate the shared packet, verify its receiving main and then repin and
+retest the Innovate candidate. Scientific release and qualified offline-runner
+gates remain mandatory and independent of this handoff.
+
+The independent review found no actionable security issue in
+`dd3a6d89..cf6a3451`, verified all three identities with real Presidio, and
+confirmed that changed blobs or paths and an additional unreviewed match still
+block. All hosted checks on `cf6a3451` passed, including the scanner canary.
+Innovate's receiving PR privacy job passed at head `3fb0cd6f` on its synthetic
+merge with base `cc2e4da4`. A separate exact-head local scan covered 761 of 761
+changed files with three reviewed matches, zero blocking, 1,145 advisory and no
+skips; Gitleaks found zero. The hosted log did not expose its Presidio counts.
+This handoff changes only this plan, so the existing source and independent
+review evidence is unchanged; the new exact head still requires hosted checks.
+
 ## 1. Inventory and design
 
 - [x] Enumerate the owner's accessible repository inventory.
