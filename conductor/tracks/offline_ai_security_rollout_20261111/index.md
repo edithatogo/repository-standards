@@ -640,3 +640,23 @@ positive control returned matches. The value-free local receipt has SHA-256
 `6e7e1f2dbfa928928c1c6bd015357a2da1efa67ecb4c70b0fc1cda37e453ddaa`.
 These matches do not establish reachability, and the query did not cover Debian
 or other image layers. The candidate is not an approved substitute for review.
+
+### Alert 44 exact-consumer follow-up
+
+The existing integrator in chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns
+this checkout `/Volumes/PortableSSD/GitHub/repository-standards-innovate44`,
+starting at `44fd2045ab6dc8cb359ff318dc3e0ebd68c4e20e`. The bounded scope is
+the hosted canary's immutable Innovate commit, this record, and the separate
+pin-only runtime-policy commit. The next operation is to rerun the hosted canary
+for Innovate head `e2a3ce65f330252c9ad74b182a19a0e8cdb19418` without weakening
+its scanner or image gates.
+
+On the preceding shared head, hosted run `44051618007` passed image controls,
+network denial, full-history secret scanning, SAST fixtures and scanner-wrapper
+tests; the actual consumer scan failed at Opengrep. Artifact `14315055546` has
+SHA-256 `461b6f5dc33e7db7cbe72f405d805fca39c8caa582d1803c5b722c068f3d30c5`.
+Its SBOM and vulnerability receipt evidence hashes were verified. The all-layer
+report retains 484 matches, including 14 critical and 150 high, plus one
+scanner-ignored critical match. Vulnerability review and release qualification
+remain false. Separate image-controls run `44051618055` passed its controls; it
+does not qualify the vulnerable image or the consumer SAST result.
