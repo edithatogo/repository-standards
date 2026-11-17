@@ -269,6 +269,51 @@
       "evidence_urls": [
         "https://github.com/edithatogo/voiage/blob/5aee53582e1bbb3ccba8849f00be47743c022bbe/tests/test_arrow_capacity_observation.py#L362"
       ]
+    },
+    {
+      "blob": "10db683d632277443e5ed5a2730e3aeb5bee85c2",
+      "path": "rust/vendor/faer-0.24.4/test_data/sparse_cholesky/medium-1.txt",
+      "entity": "CREDIT_CARD",
+      "line": 219,
+      "start": 8790,
+      "end": 8806,
+      "value_sha256": "782fed05e74fd7b8f6633cc0ef3053fdf26cf1054bd0cc9c50a53d971b4d725c",
+      "profile": "repository",
+      "reason": "Digits cross the minus sign between real and imaginary parts of an upstream complex matrix coefficient, not an identifier.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/innovate/blob/3337f6f3c4efbe534be6edebbe34bcee0580dc51/rust/vendor/faer-0.24.4/test_data/sparse_cholesky/medium-1.txt#L219",
+        "https://github.com/edithatogo/innovate/blob/3337f6f3c4efbe534be6edebbe34bcee0580dc51/rust/vendor/faer-0.24.4/src/sparse/linalg/cholesky.rs#L5174-L5177"
+      ]
+    },
+    {
+      "blob": "10db683d632277443e5ed5a2730e3aeb5bee85c2",
+      "path": "rust/vendor/faer-0.24.4/test_data/sparse_cholesky/medium-1.txt",
+      "entity": "CREDIT_CARD",
+      "line": 247,
+      "start": 9840,
+      "end": 9857,
+      "value_sha256": "8b78717e7dea3aece72e10f5e40ca3deb352f60bfa314af315f76ccbf77fcc7e",
+      "profile": "repository",
+      "reason": "Digits cross the minus sign between real and imaginary parts of an upstream complex matrix coefficient, not an identifier.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/innovate/blob/3337f6f3c4efbe534be6edebbe34bcee0580dc51/rust/vendor/faer-0.24.4/test_data/sparse_cholesky/medium-1.txt#L247",
+        "https://github.com/edithatogo/innovate/blob/3337f6f3c4efbe534be6edebbe34bcee0580dc51/rust/vendor/faer-0.24.4/src/sparse/linalg/cholesky.rs#L5174-L5177"
+      ]
+    },
+    {
+      "blob": "10db683d632277443e5ed5a2730e3aeb5bee85c2",
+      "path": "rust/vendor/faer-0.24.4/test_data/sparse_cholesky/medium-1.txt",
+      "entity": "CREDIT_CARD",
+      "line": 297,
+      "start": 11702,
+      "end": 11719,
+      "value_sha256": "20a0684cbb8dddddf6240aaa7ec1bd181a54c27d7f1ea308ed76393bb4f8c097",
+      "profile": "repository",
+      "reason": "Digits cross the minus sign between real and imaginary parts of an upstream complex matrix coefficient, not an identifier.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/innovate/blob/3337f6f3c4efbe534be6edebbe34bcee0580dc51/rust/vendor/faer-0.24.4/test_data/sparse_cholesky/medium-1.txt#L297",
+        "https://github.com/edithatogo/innovate/blob/3337f6f3c4efbe534be6edebbe34bcee0580dc51/rust/vendor/faer-0.24.4/src/sparse/linalg/cholesky.rs#L5174-L5177"
+      ]
     }
   ]
 }

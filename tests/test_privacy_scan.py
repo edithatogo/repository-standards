@@ -274,6 +274,51 @@ class ReviewedPrivacyFindingTests(GitFixture):
 
 @unittest.skipUnless(HAS_PRESIDIO, "install the isolated Presidio tooling requirements")
 class PresidioIntegrationTests(GitFixture):
+    def test_real_credit_card_review_keeps_a_neighboring_match_blocking(self) -> None:
+        # Public payment-test vectors are generated only in a temporary Git fixture.
+        values = ("4" + "1" * 15, "5" * 12 + "4" * 4)
+        text = "credit card number: " + values[0] + " credit card number: " + values[1] + "\n"
+        path = "data/synthetic-cards.txt"
+        self.put(path, text)
+        self.commit()
+        blob = self.git("rev-parse", "HEAD:" + path)
+        recognizer = next(
+            item for item in privacy_scan.build_recognizers()
+            if "CREDIT_CARD" in item.supported_entities
+        )
+        matches = [
+            item for item in recognizer.analyze(
+                text=text, entities=recognizer.supported_entities, nlp_artifacts=None
+            )
+            if item.score > 0
+        ]
+        self.assertEqual(len(matches), 2)
+        match = matches[0]
+        entry = {
+            "blob": blob,
+            "path": path,
+            "entity": "CREDIT_CARD",
+            "line": 1,
+            "start": match.start,
+            "end": match.end,
+            "value_sha256": hashlib.sha256(text[match.start:match.end].encode()).hexdigest(),
+            "profile": "repository",
+            "reason": "Public synthetic payment-test value in a temporary regression fixture.",
+            "evidence_urls": ["https://github.com/example/project/commit/" + blob],
+        }
+        registry = self.root / "trusted-review.json"
+        registry.write_text(json.dumps({"schema_version": 1, "findings": [entry]}))
+        with patch.object(privacy_scan, "TRUSTED_PRIVACY_REVIEWS", registry):
+            report = privacy_scan.scan_repository(self.root, recognizers=[recognizer])
+            sensitive = privacy_scan.scan_repository(
+                self.root, profile="sensitive", recognizers=[recognizer]
+            )
+        self.assertEqual(report["reviewed_nonidentifier_count"], 1)
+        self.assertEqual(report["blocking_findings"], 1)
+        self.assertEqual(sensitive["blocking_findings"], 2)
+        for value in values:
+            self.assertNotIn(value, json.dumps(report))
+
     def test_real_phone_review_keeps_an_unreviewed_phone_blocking(self) -> None:
         values = ("+61 " + "491 " + "570 " + "006", "+61 " + "491 " + "570 " + "007")
         text = "\n".join(values) + "\n"
