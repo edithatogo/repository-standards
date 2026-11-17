@@ -4739,7 +4739,7 @@
         "current": "active",
         "warranted": true,
         "target": "active_oidc_upload_with_real_coverage",
-        "evidence_revision": "937579897af22d7d28f20a49e94a1bdbe4e05855",
+        "evidence_revision": "402dec742a80278cd239554b929092e75724c1e6",
         "receiving_main_qualified": true,
         "assessment": "docs/typesetting-unimelb-typst-assessment.md"
       },

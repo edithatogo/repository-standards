@@ -11,8 +11,17 @@ import tarfile
 import tempfile
 import urllib.request
 from pathlib import Path
+from zipfile import ZipFile
 
-PYTHON_VERSION = (3, 15, 1)
+PYTHON_VERSION = (3, 15, 2)
+# Presidio 2.2.366 release date; keep generated archive timestamps stable.
+SOURCE_DATE_EPOCH = 1793059200
+PRESIDIO_NOTICE = (
+    Path(__file__).resolve().parent.parent / "privacy/licenses/presidio-MIT.txt"
+)
+PRESIDIO_NOTICE_SHA256 = (
+    "f3e86ee59a49bcfb0d9a9547484d55224ea7b2d04f95b1947b4d18d17f6de535"
+)
 MAX_SOURCE_BYTES = 10 * 1024 * 1024
 SOURCES = {
     "presidio_analyzer-2.2.366": (
@@ -29,8 +38,8 @@ SOURCES = {
     ),
 }
 PRESIDIO_CHANGES = (
-    ('version = "2.2.366"', 'version = "2.2.366+python315.1"'),
-    ('requires-python = ">=3.11,<3.15"', 'requires-python = "==3.15.1"'),
+    ('version = "2.2.366"', 'version = "2.2.366+python315.2"'),
+    ('requires-python = ">=3.11,<3.15"', 'requires-python = "==3.15.2"'),
 )
 ANALYZER_CHANGES = (
     ('"numpy (>=1.19.0,<2.5.0)"', '"numpy (==2.5.4)"'),
@@ -65,13 +74,47 @@ def patch_presidio(source: Path) -> None:
         if content.count(before) != 1:
             raise ValueError(f"Unexpected upstream metadata: {source.name}")
         content = content.replace(before, after, 1)
+    notice = PRESIDIO_NOTICE.read_bytes()
+    if hashlib.sha256(notice).hexdigest() != PRESIDIO_NOTICE_SHA256:
+        raise ValueError("Presidio MIT notice does not match the upstream release")
+    target = source / "LICENSE"
+    if target.is_symlink() or (target.exists() and target.read_bytes() != notice):
+        raise ValueError("Unexpected Presidio MIT notice in source")
+    target.write_bytes(notice)
     project.write_text(content, encoding="utf-8")
+
+
+def verify_presidio_notice(wheel: Path) -> None:
+    """Require the exact upstream MIT notice in every rebuilt Presidio wheel."""
+    with ZipFile(wheel) as archive:
+        matches = [
+            name
+            for name in archive.namelist()
+            if name.endswith(".dist-info/licenses/LICENSE")
+        ]
+        if (
+            len(matches) != 1
+            or hashlib.sha256(archive.read(matches[0])).hexdigest()
+            != PRESIDIO_NOTICE_SHA256
+        ):
+            raise ValueError("Presidio wheel is missing the verified MIT notice")
+
+
+def build_environment() -> dict[str, str]:
+    """Keep wheel timestamps stable and omit variable native debug paths."""
+    env = os.environ.copy()
+    env["SOURCE_DATE_EPOCH"] = str(SOURCE_DATE_EPOCH)
+    if os.name != "nt":
+        env["CFLAGS"] = " ".join(
+            part for part in (env.get("CFLAGS", ""), "-g0") if part
+        )
+    return env
 
 
 def build(destination: Path) -> None:
     """Build in a temporary directory using the verified interpreter and toolset."""
     if sys.version_info[:3] != PYTHON_VERSION:
-        raise RuntimeError("The privacy wheel build requires Python 3.15.1")
+        raise RuntimeError("The privacy wheel build requires Python 3.15.2")
     uv = shutil.which("uv")
     if uv is None:
         raise RuntimeError("The privacy wheel build requires uv")
@@ -97,7 +140,14 @@ def build(destination: Path) -> None:
                     os.fspath(source),
                 ],
                 check=True,
+                env=build_environment(),
             )
+            if name.startswith("presidio_"):
+                prefix = name.removesuffix("-2.2.366")
+                matches = list(destination.glob(f"{prefix}-2.2.366+python315.2-*.whl"))
+                if len(matches) != 1:
+                    raise ValueError(f"Unexpected Presidio wheel inventory: {name}")
+                verify_presidio_notice(matches[0])
 
 
 def main() -> None:

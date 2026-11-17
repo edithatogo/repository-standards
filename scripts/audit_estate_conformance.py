@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Measure repository-estate conformance and reconcile a bounded central issue."""
 
-from __future__ import annotations
-
 import argparse
 import base64
 import json
@@ -26,6 +24,7 @@ END = "<!-- estate-conformance:end -->"
 ACTION_REF = re.compile(r"(?m)^\s*uses:\s*([^#\s]+)")
 FULL_SHA = re.compile(r"@[0-9a-f]{40}$", re.I)
 SCHEDULE = re.compile(r"(?m)^\s*schedule\s*:")
+WORKFLOW_PATH = re.compile(r"^\.github/workflows/[^/]+\.ya?ml$", re.I)
 
 
 class GitHub:
@@ -202,11 +201,7 @@ def audit_one(
     branch = entry["default_branch"]
     tree = client.tree(repository, branch)
     paths = {item["path"] for item in tree if item.get("type") == "blob"}
-    workflow_paths = sorted(
-        path
-        for path in paths
-        if re.match(r"^\.github/workflows/[^/]+\.ya?ml$", path, re.I)
-    )
+    workflow_paths = sorted(path for path in paths if WORKFLOW_PATH.match(path))
     workflow_texts = [
         client.text(repository, path, branch) for path in workflow_paths
     ]
