@@ -9,12 +9,13 @@ environment. These commands do not install a hook automatically.
 
 Select an absolute checkout path and verify its commit against the consumer's
 `uses:` pin before installation. Do not run setup from an unreviewed PR checkout.
-Use Python 3.15.1 and uv 0.13.8. The installer verifies the selected
+Use Python 3.15.2 and uv 0.13.8. The installer verifies the selected
 interpreter, source archive digests and dependency hashes.
 
 ```bash
 PRIVACY_TOOL_ROOT=/absolute/path/to/verified/repository-standards
-uv venv --python 3.15.1 "$PRIVACY_TOOL_ROOT/.venv"
+uv venv --python 3.15.2 "$PRIVACY_TOOL_ROOT/.venv"
+"$PRIVACY_TOOL_ROOT/.venv/bin/python" -c 'import sys; assert sys.version_info[:3] == (3, 15, 2), sys.version'
 bash "$PRIVACY_TOOL_ROOT/privacy/install.sh" \
   "$PRIVACY_TOOL_ROOT/.venv/bin/python" "$PRIVACY_TOOL_ROOT/.venv/privacy-guard"
 ```

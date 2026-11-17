@@ -15,10 +15,11 @@ dependency hashes, verified binary installation, tests, documentation and the
 managed workflow template. Consumers own application dependencies, existing
 scanner policy, optional stronger privacy profiles and branch protection.
 
-No scanner runtime enters a consumer's production package. Python 3.12 is an
-isolated tooling compatibility exception because Presidio 2.2.366 excludes Python
-3.15; preserve consumer interpreter pins and environments. Consumer workflows use
-an immutable shared-action commit and minimal read-only permissions.
+No scanner runtime enters a consumer's production package. The isolated guard
+uses Python 3.15.2 and source-verified compatibility wheels because upstream
+Presidio 2.2.366 does not declare Python 3.15 support. Preserve consumer
+interpreter pins and environments. Consumer workflows use an immutable
+shared-action commit and minimal read-only permissions.
 
 ## Acceptance criteria
 

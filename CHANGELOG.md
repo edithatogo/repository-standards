@@ -2,6 +2,10 @@
 
 All notable changes to the repository standards control plane are documented here.
 
+## 2026-11-15
+
+- Qualify the isolated privacy and secret scanner on Python 3.15.2.
+
 ## [2026.08.03] - 2026-08-03
 
 ### Added

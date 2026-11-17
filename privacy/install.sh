@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# Build the scanner in an isolated, hash-locked Python 3.15.1 environment.
+# Build the scanner in an isolated, hash-locked Python 3.15.2 environment.
 set -euo pipefail
 umask 077
 if [[ "$#" != 2 ]]; then
-  echo 'Usage: privacy/install.sh ABSOLUTE_PYTHON_3_15_1 DESTINATION' >&2
+  echo 'Usage: privacy/install.sh ABSOLUTE_PYTHON_3_15_2 DESTINATION' >&2
   exit 2
 fi
 python="$1"
 destination="$2"
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-"$python" -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 1), sys.version'
+"$python" -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2), sys.version'
 if [[ -e "$destination" ]]; then
   echo 'Choose a new directory for the isolated scanner' >&2
   exit 2
@@ -28,7 +28,7 @@ from pathlib import Path
 from sys import argv
 
 wheel_dir = Path(argv[1]).resolve()
-names = ("presidio_analyzer-2.2.366+python315.1-", "presidio_anonymizer-2.2.366+python315.1-", "pyyaml-6.0.3-")
+names = ("presidio_analyzer-2.2.366+python315.2-", "presidio_anonymizer-2.2.366+python315.2-", "pyyaml-6.0.3-")
 wheels = sorted(wheel_dir.glob("*.whl"))
 if len(wheels) != len(names) or any(sum(p.name.startswith(n) for p in wheels) != 1 for n in names):
     raise SystemExit("Privacy wheel inventory mismatch")

@@ -294,6 +294,28 @@ class ReviewedFindingTests(RepositoryCase):
         self.assertEqual(summary["detected_finding_count"], 2)
         self.assertNotIn("UNREVIEWED", json.dumps(summary))
 
+    def test_distinct_values_at_one_coordinate_are_reviewed_individually(self) -> None:
+        second_value = "SECOND-PUBLIC-OBJECT"
+        second_entry = {
+            **self.admission,
+            "value_sha256": hashlib.sha256(second_value.encode()).hexdigest(),
+        }
+        self.write_registry([self.admission, second_entry])
+        second_finding = {**self.finding, "Secret": second_value}
+        extra_finding = {**self.finding, "Secret": "UNREVIEWED-THIRD-VALUE"}
+        code, summary = self.scan(
+            binary=self.fake_binary([self.finding, second_finding, extra_finding], 1)
+        )
+        self.assertEqual(code, 1)
+        self.assertEqual(summary["reviewed_nonsecret_count"], 2)
+        self.assertEqual(summary["finding_count"], 1)
+        self.assertNotIn(second_value, json.dumps(summary))
+        self.assertNotIn("UNREVIEWED-THIRD-VALUE", json.dumps(summary))
+
+        code, summary = self.scan(binary=self.fake_binary([self.finding, second_finding], 1))
+        self.assertEqual((code, summary["status"]), (0, "reviewed_nonsecret"))
+        self.assertEqual(summary["reviewed_nonsecret_count"], 2)
+
     def test_scanner_failure_is_not_admitted(self) -> None:
         with self.assertRaisesRegex(scanner.ScanError, "scanner_failed"):
             self.scan(binary=self.fake_binary([self.finding], 2))
@@ -310,6 +332,11 @@ class ReviewedFindingTests(RepositoryCase):
     def test_registry_is_revalidated_for_every_scan(self) -> None:
         self.scan(binary=self.fake_binary([self.finding], 1))
         self.registry.write_text("not JSON", encoding="utf-8")
+        with self.assertRaisesRegex(scanner.ScanError, "invalid_reviewed_findings"):
+            self.scan(binary=self.fake_binary([]))
+
+    def test_oversized_registry_fails_closed(self) -> None:
+        self.registry.write_bytes(b" " * (scanner.MAX_REVIEW_REGISTRY_BYTES + 1))
         with self.assertRaisesRegex(scanner.ScanError, "invalid_reviewed_findings"):
             self.scan(binary=self.fake_binary([]))
 
@@ -505,6 +532,77 @@ class GitleaksIntegrationTests(RepositoryCase):
         self.verify_exact_admission(
             hashlib.sha256(b"public-object-regression-fixture").hexdigest()
         )
+
+    def test_merge_only_and_removed_side_branch_secrets_are_both_scanned(self) -> None:
+        original_branch = self.git("branch", "--show-current")
+        side_value = "ghp_" + hashlib.sha256(b"fictional-side-canary").hexdigest()[:36]
+        merge_value = "ghp_" + hashlib.sha256(b"fictional-merge-canary").hexdigest()[:36]
+        self.git("checkout", "--quiet", "-b", "side")
+        (self.root / "side.txt").write_text(side_value + "\n")
+        self.git("add", "side.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic side commit")
+        self.git("checkout", "--quiet", original_branch)
+        (self.root / "main.txt").write_text("main branch\n")
+        self.git("add", "main.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic main commit")
+        self.git("merge", "--quiet", "--no-ff", "--no-commit", "side")
+        self.git("rm", "--force", "--quiet", "side.txt")
+        (self.root / "merge-only.txt").write_text(merge_value + "\n")
+        self.git("add", "merge-only.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic merge resolution")
+
+        for options in ({"full_history": True}, {"base": self.base}):
+            with self.subTest(options=options):
+                code, summary = self.scan(binary=GITLEAKS_BINARY, **options)
+                self.assertEqual(code, 1)
+                paths = {finding["file"] for finding in summary["findings"]}
+                self.assertIn("side.txt", paths)
+                self.assertIn("merge-only.txt", paths)
+                self.assertNotIn(side_value, json.dumps(summary))
+                self.assertNotIn(merge_value, json.dumps(summary))
+
+    def test_real_cli_distinct_values_on_one_line_remain_individually_blocking(
+        self,
+    ) -> None:
+        values = [
+            hashlib.sha256(label).hexdigest()
+            for label in (b"public-first", b"public-second", b"unreviewed-third")
+        ]
+        source = self.root / "checksums.json"
+        source.write_text(
+            json.dumps(
+                {
+                    "allocator-api2-0.2.21.tar.gz": values[0],
+                    "winapi-0.3.9.tar.gz": values[1],
+                    "api_key": values[2],
+                }
+            )
+            + "\n"
+        )
+        self.git("add", "checksums.json")
+        self.git("commit", "--quiet", "-m", "Synthetic same-line findings")
+        commit = self.git("rev-parse", "HEAD")
+        entries = [
+            {
+                "commit": commit,
+                "path": "checksums.json",
+                "rule_id": "generic-api-key",
+                "line": 1,
+                "value_sha256": hashlib.sha256(value.encode()).hexdigest(),
+                "reason": "Reviewed synthetic public digest in a temporary regression fixture.",
+                "evidence_urls": ["https://github.com/example/project/commit/" + commit],
+            }
+            for value in values[:2]
+        ]
+        registry = self.directory / "reviewed.json"
+        registry.write_text(json.dumps({"schema_version": 1, "findings": entries}))
+        with patch.object(scanner, "TRUSTED_REVIEWED_FINDINGS", registry):
+            code, summary = self.scan(base=self.base, binary=GITLEAKS_BINARY)
+        self.assertEqual(code, 1)
+        self.assertEqual(summary["reviewed_nonsecret_count"], 2)
+        self.assertEqual(summary["finding_count"], 1)
+        for value in values:
+            self.assertNotIn(value, json.dumps(summary))
 
     def verify_exact_admission(self, value: str) -> None:
         source = self.root / "inventory.json"
