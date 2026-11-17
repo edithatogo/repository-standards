@@ -99,6 +99,8 @@ def verify() -> None:
         "python_spoofed_sanitizer_bad.py",
         "rust_bad.rs",
         "rust_direct_env_bad.rs",
+        "rust_raw_identifier_bad.rs",
+        "rust_raw_log_macro_bad.rs",
         "rust_indirect_env_bad.rs",
         "typescript_bad.ts",
         "typescript_spoofed_sanitizer_bad.ts",
@@ -107,6 +109,8 @@ def verify() -> None:
         "python_good.py",
         "rust_good.rs",
         "rust_macro_literals_good.rs",
+        "rust_env_alias_literals_good.rs",
+        "rust_unrelated_env_good.rs",
         "typescript_good.ts",
     }
     if not (required | clean).issubset(scanned):
@@ -115,6 +119,19 @@ def verify() -> None:
         raise RuntimeError(
             "Opengrep rule regression: unexpected coverage on synthetic fixtures"
         )
+    required_lines = {
+        ("rust_raw_identifier_bad.rs", 2),
+        ("rust_raw_identifier_bad.rs", 3),
+        ("rust_raw_identifier_bad.rs", 4),
+        ("rust_raw_log_macro_bad.rs", 2),
+        ("rust_raw_log_macro_bad.rs", 3),
+    }
+    try:
+        hit_lines = {(Path(item["path"]).name, item["start"]["line"]) for item in hits}
+    except (KeyError, TypeError, ValueError):
+        raise RuntimeError("Opengrep fixture report invalid") from None
+    if not required_lines.issubset(hit_lines):
+        raise RuntimeError("Opengrep did not detect every Rust representation control")
     verify_tracked_source_scanner()
 
 

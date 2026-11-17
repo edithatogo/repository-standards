@@ -69,21 +69,28 @@ rules:
           - pattern: eprintln!(...)
           - pattern: std::println!(...)
           - pattern: std::eprintln!(...)
+          - pattern: r#println!(...)
+          - pattern: r#eprintln!(...)
+          - pattern: std::r#println!(...)
+          - pattern: std::r#eprintln!(...)
       - pattern-regex: >-
           (?x)
           (?(DEFINE)
             (?<line> //[^\r\n]* )
             (?<block> /\* (?: (?&block) | (?! /\* | \*/ ) [\s\S] )* \*/ )
             (?<gap> (?:\s+|(?&line)|(?&block))* )
+            (?<typeargs> < (?: [^<>] | (?&typeargs) )* > )
           )
           (?:
             r(?<hashes>\#*)"(?s:.*?)"\k<hashes>
             | "(?:\\.|[^"\\])*"
+            | '(?:\\u\{[0-9A-Fa-f_]+\}|\\x[0-9A-Fa-f]{2}|\\.|[^'\\])'
             | (?&line)
             | (?&block)
           )(*SKIP)(*F)
           |
-          \bstd(?&gap)::(?&gap)env(?&gap)::(?&gap)var(?:_os)?(?&gap)\(
+          \bstd(?&gap)::(?&gap)(?:r\#)?env(?&gap)::(?&gap)(?:r\#)?var(?:_os)?
+          (?&gap)(?:::(?&gap)(?&typeargs)(?&gap))?(?:\)(?&gap))*\(
   - id: offline-rust-env-log-taint
     languages: [rust]
     severity: ERROR
@@ -99,6 +106,10 @@ rules:
           - pattern: eprintln!(...)
           - pattern: std::println!(...)
           - pattern: std::eprintln!(...)
+          - pattern: r#println!(...)
+          - pattern: r#eprintln!(...)
+          - pattern: std::r#println!(...)
+          - pattern: std::r#eprintln!(...)
   - id: offline-rust-env-http
     languages: [rust]
     severity: ERROR

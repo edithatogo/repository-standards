@@ -444,6 +444,37 @@ installed its Rust grammar 0.24.2. It parsed the affected faer file and rejected
 synthetic malformed input and an LFS pointer; this is a local feasibility probe,
 not a pinned scanner dependency or proof that Opengrep analyzed the same syntax.
 
+### Rust rule-boundary follow-up
+
+The same chat and checkout own a bounded follow-up based on
+`4fb29296743fc4ca8610ae30ff0aef7891b9f76e`. Allowed paths additionally include
+`security/offline-ai/.opengrep/rules.yaml`, the Rust SAST fixtures, the fixture
+verifier, this track and the subsequent runtime-policy pin. Native scope: none.
+The next operation is to cover reproduced direct-log bypasses involving Rust
+raw identifiers and logging-macro spellings without changing existing controls.
+A proposed rule for `use std::env` was not retained: independent review showed
+it falsely flagged valid code where an unrelated local module shadowed the
+import. Imported and function aliases and macro-definition expansions remain
+reproduced gaps; this change is not complete Rust dataflow coverage.
+
+The corrected direct rule detects raw identifiers, raw logging macro names,
+generic calls, parenthesized function items and a quote character before the
+source. Line-specific real-Opengrep controls and the existing clean/comment
+controls passed; all new Rust fixtures compiled with Rust 1.99.1. A separate
+local feasibility test ran Semgrep core 1.185.0 against all 745 tracked Rust
+files with the same rule file and no reported errors or findings, and it passed
+the bounded Rust positive/negative controls. It also accepted 11 of 51 invalid
+Rust mutation inputs, so its parse status alone is insufficient. Its native
+binary, dynamic libraries, syntax gate, licensing and image scan are not
+qualified; it has not replaced Opengrep in the image.
+
+Hosted run `44045133378` on policy head `4fb2929` and Innovate `74a4d069`
+passed image controls, immutable policy export, network denial, secret history,
+SAST fixtures and the wrapper tests, then failed the actual Opengrep consumer
+scan. The hash-verified image artifact `14311941384` contains 484 advisory
+matches, including 14 critical and 150 high, plus one scanner-ignored critical
+match; its vulnerability and release qualification flags remain false.
+
 ### Unreviewed Gitleaks dependency candidate
 
 The same chat and checkout own the bounded source-build candidate follow-up
@@ -464,6 +495,15 @@ versions, including rardecode 2.4.6, x/crypto 0.59.0, x/sys 0.50.0 and x/text
 the complete module cache; it is not build evidence. The candidate's 12 focused
 source-build tests passed. The full closure, Linux binary controls and image
 scan remain required before this can replace the current upstream binary.
+
+Two independent hosted candidate builds completed with identical binary and
+module metadata hashes; their clean/canary controls passed. A fresh OSV query
+returned no version matches for the 65 compiled Go modules, Gitleaks itself or
+Go 1.27.4, while the older-Go positive control returned 48 matches. A separate
+query of all 202 downloaded modules found seven with version-level advisories;
+none appeared in the compiled module list. Their disposition and the complete
+licence/source obligations remain review work. No rebuilt binary was installed
+in the tested image.
 
 ## Hosted canary scanner correction — 17 November 2026
 
