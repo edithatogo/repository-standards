@@ -7,6 +7,7 @@ import hashlib
 import io
 import json
 import os
+import shlex
 import shutil
 import stat
 import subprocess
@@ -52,14 +53,18 @@ class RepositoryCase(unittest.TestCase):
         )
         return result.stdout.decode().strip()
 
-    def fake_binary(self, report: object, code: int = 0) -> str:
+    def fake_binary(self, report: object, code: int = 0, *, noisy: bool = False) -> str:
         path = self.directory / "fake-gitleaks"
-        path.write_text(
-            "#!/usr/bin/env python3\n"
-            "import json, pathlib, sys\n"
+        noise = (
             "print('PRIVATE_SCANNER_STDOUT')\n"
             "print('PRIVATE_SCANNER_STDERR', file=sys.stderr)\n"
-            "target = pathlib.Path(sys.argv[sys.argv.index('--report-path') + 1])\n"
+            if noisy else ""
+        )
+        path.write_text(
+            f"#!{sys.executable}\n"
+            "import json, pathlib, sys\n"
+            + noise
+            + "target = pathlib.Path(sys.argv[sys.argv.index('--report-path') + 1])\n"
             f"target.write_text({json.dumps(json.dumps(report))})\n"
             f"sys.exit({code})\n",
             encoding="utf-8",
@@ -130,6 +135,14 @@ class SecretOutputTests(RepositoryCase):
             scanner.ScanError, "scanner_failed_without_findings"
         ):
             self.scan(binary=self.fake_binary([], 1))
+
+    def test_scanner_diagnostics_never_become_clean_or_leak(self) -> None:
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            with self.assertRaisesRegex(scanner.ScanError, "scanner_diagnostic_failed"):
+                self.scan(binary=self.fake_binary([], noisy=True))
+        self.assertEqual(stdout.getvalue(), "")
+        self.assertEqual(stderr.getvalue(), "")
 
     def test_missing_scanner_is_an_error(self) -> None:
         with self.assertRaisesRegex(scanner.ScanError, "scanner_unavailable"):
@@ -294,6 +307,28 @@ class ReviewedFindingTests(RepositoryCase):
         self.assertEqual(summary["detected_finding_count"], 2)
         self.assertNotIn("UNREVIEWED", json.dumps(summary))
 
+    def test_distinct_values_at_one_coordinate_are_reviewed_individually(self) -> None:
+        second_value = "SECOND-PUBLIC-OBJECT"
+        second_entry = {
+            **self.admission,
+            "value_sha256": hashlib.sha256(second_value.encode()).hexdigest(),
+        }
+        self.write_registry([self.admission, second_entry])
+        second_finding = {**self.finding, "Secret": second_value}
+        extra_finding = {**self.finding, "Secret": "UNREVIEWED-THIRD-VALUE"}
+        code, summary = self.scan(
+            binary=self.fake_binary([self.finding, second_finding, extra_finding], 1)
+        )
+        self.assertEqual(code, 1)
+        self.assertEqual(summary["reviewed_nonsecret_count"], 2)
+        self.assertEqual(summary["finding_count"], 1)
+        self.assertNotIn(second_value, json.dumps(summary))
+        self.assertNotIn("UNREVIEWED-THIRD-VALUE", json.dumps(summary))
+
+        code, summary = self.scan(binary=self.fake_binary([self.finding, second_finding], 1))
+        self.assertEqual((code, summary["status"]), (0, "reviewed_nonsecret"))
+        self.assertEqual(summary["reviewed_nonsecret_count"], 2)
+
     def test_scanner_failure_is_not_admitted(self) -> None:
         with self.assertRaisesRegex(scanner.ScanError, "scanner_failed"):
             self.scan(binary=self.fake_binary([self.finding], 2))
@@ -310,6 +345,11 @@ class ReviewedFindingTests(RepositoryCase):
     def test_registry_is_revalidated_for_every_scan(self) -> None:
         self.scan(binary=self.fake_binary([self.finding], 1))
         self.registry.write_text("not JSON", encoding="utf-8")
+        with self.assertRaisesRegex(scanner.ScanError, "invalid_reviewed_findings"):
+            self.scan(binary=self.fake_binary([]))
+
+    def test_oversized_registry_fails_closed(self) -> None:
+        self.registry.write_bytes(b" " * (scanner.MAX_REVIEW_REGISTRY_BYTES + 1))
         with self.assertRaisesRegex(scanner.ScanError, "invalid_reviewed_findings"):
             self.scan(binary=self.fake_binary([]))
 
@@ -498,9 +538,17 @@ class GitleaksIntegrationTests(RepositoryCase):
 
     def test_offline_mount_scans_history_across_owner_boundary(self) -> None:
         root = self.root.resolve()
+        clean_environment = scanner.clean_environment
         with (
             patch.object(scanner, "OFFLINE_CONSUMER_MOUNT", root),
-            patch.dict(os.environ, {"GIT_TEST_ASSUME_DIFFERENT_OWNER": "true"}),
+            patch.object(
+                scanner,
+                "clean_environment",
+                side_effect=lambda **kwargs: {
+                    **clean_environment(**kwargs),
+                    "GIT_TEST_ASSUME_DIFFERENT_OWNER": "true",
+                },
+            ),
         ):
             with self.assertRaisesRegex(scanner.ScanError, "git_validation_failed"):
                 scanner.scan(root, full_history=True, binary=GITLEAKS_BINARY)
@@ -513,6 +561,277 @@ class GitleaksIntegrationTests(RepositoryCase):
         self.assertEqual(code, 0)
         self.assertEqual(summary["status"], "clean")
 
+    def test_inherited_graft_cannot_hide_deleted_history(self) -> None:
+        value = self.synthetic_secret()
+        source = self.root / "historical-secret.txt"
+        source.write_text(value + "\n")
+        self.git("add", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic historical finding")
+        self.git("rm", "--quiet", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Remove synthetic finding")
+        graft = self.directory / "untrusted-graft"
+        graft.write_text(self.git("rev-parse", "HEAD") + "\n")
+
+        with patch.dict(os.environ, {"GIT_GRAFT_FILE": str(graft)}):
+            for options in ({"full_history": True}, {"base": self.base}):
+                with self.subTest(options=options):
+                    code, summary = self.scan(binary=GITLEAKS_BINARY, **options)
+                    self.assertEqual(code, 1)
+                    self.assertIn(
+                        "historical-secret.txt", {item["file"] for item in summary["findings"]}
+                    )
+                    self.assertNotIn(value, json.dumps(summary))
+
+    def test_repository_graft_cannot_hide_deleted_history(self) -> None:
+        value = self.synthetic_secret()
+        source = self.root / "historical-secret.txt"
+        source.write_text(value + "\n")
+        self.git("add", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic historical finding")
+        self.git("rm", "--quiet", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Remove synthetic finding")
+        (self.root / ".git" / "info" / "grafts").write_text(
+            self.git("rev-parse", "HEAD") + "\n"
+        )
+
+        for options in ({"full_history": True}, {"base": self.base}):
+            with self.subTest(options=options):
+                code, summary = self.scan(binary=GITLEAKS_BINARY, **options)
+                self.assertEqual(code, 1)
+                self.assertIn(
+                    "historical-secret.txt", {item["file"] for item in summary["findings"]}
+                )
+                self.assertNotIn(value, json.dumps(summary))
+
+    def test_replacement_refs_cannot_hide_deleted_history(self) -> None:
+        value = self.synthetic_secret()
+        source = self.root / "historical-secret.txt"
+        source.write_text(value + "\n")
+        self.git("add", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic historical finding")
+        self.git("rm", "--quiet", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Remove synthetic finding")
+        self.git("replace", "--graft", self.git("rev-parse", "HEAD"))
+
+        for options in ({"full_history": True}, {"base": self.base}):
+            with self.subTest(options=options):
+                code, summary = self.scan(binary=GITLEAKS_BINARY, **options)
+                self.assertEqual(code, 1)
+                self.assertIn(
+                    "historical-secret.txt", {item["file"] for item in summary["findings"]}
+                )
+                self.assertNotIn(value, json.dumps(summary))
+
+    def test_inherited_shallow_file_cannot_hide_deleted_history(self) -> None:
+        value = self.synthetic_secret()
+        source = self.root / "historical-secret.txt"
+        source.write_text(value + "\n")
+        self.git("add", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic historical finding")
+        self.git("rm", "--quiet", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Remove synthetic finding")
+        shallow = self.directory / "untrusted-shallow"
+        shallow.write_text(self.git("rev-parse", "HEAD") + "\n")
+
+        with patch.dict(os.environ, {"GIT_SHALLOW_FILE": str(shallow)}):
+            for options in ({"full_history": True}, {"base": self.base}):
+                with self.subTest(options=options):
+                    code, summary = self.scan(binary=GITLEAKS_BINARY, **options)
+                    self.assertEqual(code, 1)
+                    self.assertIn(
+                        "historical-secret.txt", {item["file"] for item in summary["findings"]}
+                    )
+                    self.assertNotIn(value, json.dumps(summary))
+
+    def test_range_scan_rejects_an_actual_shallow_boundary(self) -> None:
+        (self.root / "later.txt").write_text("synthetic change\n")
+        self.git("add", "later.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic later commit")
+        (self.root / ".git" / "shallow").write_text(self.git("rev-parse", "HEAD") + "\n")
+        with self.assertRaisesRegex(scanner.ScanError, "range_requires_complete_clone"):
+            self.scan(base=self.base, binary=GITLEAKS_BINARY)
+
+    def test_binary_git_attributes_cannot_hide_text_history(self) -> None:
+        value = self.synthetic_secret()
+        (self.root / ".gitattributes").write_text("*.txt -diff\n")
+        self.git("add", ".gitattributes")
+        self.git("commit", "--quiet", "-m", "Synthetic binary attribute")
+        source = self.root / "historical-secret.txt"
+        source.write_text(value + "\n")
+        self.git("add", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic historical finding")
+        self.git("rm", "--quiet", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Remove synthetic finding")
+
+        for options in ({"full_history": True}, {"base": self.base}):
+            with self.subTest(options=options):
+                code, summary = self.scan(binary=GITLEAKS_BINARY, **options)
+                self.assertEqual(code, 1)
+                self.assertIn(
+                    "historical-secret.txt", {item["file"] for item in summary["findings"]}
+                )
+                self.assertNotIn(value, json.dumps(summary))
+
+    def test_info_attributes_cannot_hide_text_history(self) -> None:
+        value = self.synthetic_secret()
+        source = self.root / "historical-secret.txt"
+        source.write_text(value + "\n")
+        self.git("add", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic historical finding")
+        self.git("rm", "--quiet", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Remove synthetic finding")
+        (self.root / ".git" / "info" / "attributes").write_text("*.txt -diff\n")
+
+        for options in ({"full_history": True}, {"base": self.base}):
+            with self.subTest(options=options):
+                code, summary = self.scan(binary=GITLEAKS_BINARY, **options)
+                self.assertEqual(code, 1)
+                self.assertIn(
+                    "historical-secret.txt", {item["file"] for item in summary["findings"]}
+                )
+                self.assertNotIn(value, json.dumps(summary))
+
+    def test_info_attributes_cannot_hide_staged_text(self) -> None:
+        value = self.synthetic_secret()
+        (self.root / "staged-secret.txt").write_text(value + "\n")
+        self.git("add", "staged-secret.txt")
+        (self.root / ".git" / "info" / "attributes").write_text("*.txt -diff\n")
+        with self.assertRaisesRegex(scanner.ScanError, "staged_binary_diff_unscannable"):
+            self.scan(staged=True, binary=GITLEAKS_BINARY)
+
+    def test_staged_binary_diff_fails_closed(self) -> None:
+        (self.root / "binary.bin").write_bytes(b"\x00synthetic-binary\n")
+        self.git("add", "binary.bin")
+        with self.assertRaisesRegex(scanner.ScanError, "staged_binary_diff_unscannable"):
+            self.scan(staged=True, binary=GITLEAKS_BINARY)
+
+    def test_staged_custom_textconv_is_not_executed_or_trusted(self) -> None:
+        (self.root / ".gitattributes").write_text("*.txt diff=fixture\n")
+        (self.root / "staged-secret.txt").write_text(self.synthetic_secret() + "\n")
+        self.git("add", ".gitattributes", "staged-secret.txt")
+        marker = self.directory / "textconv-executed"
+        converter = self.directory / "textconv.sh"
+        converter.write_text(
+            "#!/bin/sh\nprintf invoked > " + shlex.quote(str(marker))
+            + "\nprintf 'redacted fixture\\n'\n"
+        )
+        converter.chmod(0o700)
+        self.git("config", "diff.fixture.textconv", str(converter))
+        self.git("diff", "--staged")
+        self.assertTrue(marker.exists(), "Fixture must demonstrate textconv executes")
+        marker.unlink()
+        with self.assertRaisesRegex(scanner.ScanError, "staged_custom_diff_unscannable"):
+            self.scan(staged=True, binary=GITLEAKS_BINARY)
+        self.assertFalse(marker.exists())
+
+    def test_partial_clone_with_missing_blobs_fails_closed(self) -> None:
+        (self.root / "later.txt").write_text(self.synthetic_secret() + "\n")
+        self.git("add", "later.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic historical finding")
+        self.git("config", "uploadpack.allowFilter", "true")
+        partial = self.directory / "partial"
+        subprocess.run(
+            ["git", "clone", "--quiet", "--filter=blob:none", "--no-checkout",
+             self.root.as_uri(), str(partial)],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        subprocess.run(
+            ["git", "-C", str(partial), "remote", "set-url", "origin",
+             (self.directory / "unavailable-origin").as_uri()],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+
+        def missing_objects() -> bytes:
+            return subprocess.run(
+                ["git", "-C", str(partial), "rev-list", "--objects", "--all",
+                 "--missing=print"],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                env={**os.environ, "GIT_NO_LAZY_FETCH": "1"},
+            ).stdout
+
+        self.assertTrue(any(line.startswith(b"?") for line in missing_objects().splitlines()))
+        for options in ({"full_history": True}, {"base": self.base}):
+            with self.subTest(options=options):
+                with self.assertRaisesRegex(scanner.ScanError, "git_history_preflight_failed"):
+                    scanner.scan(partial, config_path=self.config, binary=GITLEAKS_BINARY, **options)
+        self.assertTrue(any(line.startswith(b"?") for line in missing_objects().splitlines()))
+
+    def test_staged_scan_does_not_execute_repository_fsmonitor(self) -> None:
+        (self.root / "staged.txt").write_text("synthetic text\n")
+        self.git("add", "staged.txt")
+        marker = self.directory / "fsmonitor-executed"
+        helper = self.directory / "fsmonitor.sh"
+        helper.write_text("#!/bin/sh\nprintf invoked > " + shlex.quote(str(marker)) + "\n")
+        helper.chmod(0o700)
+        self.git("config", "core.fsmonitor", str(helper))
+        self.git("diff", "--staged")
+        self.assertTrue(marker.exists(), "Fixture must demonstrate the Git hook executes")
+        marker.unlink()
+
+        code, summary = self.scan(staged=True, binary=GITLEAKS_BINARY)
+        self.assertEqual((code, summary["status"]), (0, "clean"))
+        self.assertFalse(marker.exists())
+
+    def test_full_history_scans_root_even_when_local_config_hides_it(self) -> None:
+        value = self.synthetic_secret()
+        (self.root / "README.md").write_text(value + "\n")
+        self.git("add", "README.md")
+        self.git("commit", "--quiet", "--amend", "--no-edit")
+        self.git("config", "log.showRoot", "false")
+        self.assertNotIn(value, self.git("log", "-p", "--all"))
+        code, summary = self.scan(full_history=True, binary=GITLEAKS_BINARY)
+        self.assertEqual(code, 1)
+        self.assertIn("README.md", {item["file"] for item in summary["findings"]})
+        self.assertNotIn(value, json.dumps(summary))
+
+    def test_local_pretty_format_cannot_hide_history_findings(self) -> None:
+        value = self.synthetic_secret()
+        (self.root / "historical-secret.txt").write_text(value + "\n")
+        self.git("add", "historical-secret.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic historical finding")
+        self.git("config", "format.pretty", "oneline")
+        self.assertFalse(self.git("log", "-1").startswith("commit "))
+        code, summary = self.scan(base=self.base, binary=GITLEAKS_BINARY)
+        self.assertEqual(code, 1)
+        self.assertIn("historical-secret.txt", {item["file"] for item in summary["findings"]})
+        self.assertNotIn(value, json.dumps(summary))
+
+    def test_history_scan_does_not_execute_repository_signature_verifier(self) -> None:
+        value = self.synthetic_secret()
+        (self.root / "signed-secret.txt").write_text(value + "\n")
+        self.git("add", "signed-secret.txt")
+        signer = self.directory / "synthetic-signer.sh"
+        signer.write_text(
+            "#!/bin/sh\ncat >/dev/null\n"
+            "printf '[GNUPG:] SIG_CREATED D 1 10 00 0 ABCDEF\\n' >&2\n"
+            "printf '%s\\n' '-----BEGIN PGP SIGNATURE-----' 'fixture' '-----END PGP SIGNATURE-----'\n"
+        )
+        signer.chmod(0o700)
+        self.git("-c", "gpg.program=" + str(signer), "-c", "commit.gpgsign=true", "commit", "--quiet", "-m", "Synthetic signed commit")
+        marker = self.directory / "verifier-executed"
+        verifier = self.directory / "synthetic-verifier.sh"
+        verifier.write_text("#!/bin/sh\nprintf invoked > " + shlex.quote(str(marker)) + "\nexit 1\n")
+        verifier.chmod(0o700)
+        self.git("config", "log.showSignature", "true")
+        self.git("config", "gpg.program", str(verifier))
+        self.git("log", "-1", "--format=%H")
+        self.assertTrue(marker.exists(), "Fixture must demonstrate signature verification executes")
+        marker.unlink()
+
+        for options in ({"full_history": True}, {"base": self.base}):
+            with self.subTest(options=options):
+                code, summary = self.scan(binary=GITLEAKS_BINARY, **options)
+                self.assertEqual(code, 1)
+                self.assertIn("signed-secret.txt", {item["file"] for item in summary["findings"]})
+                self.assertFalse(marker.exists())
+                self.assertNotIn(value, json.dumps(summary))
+
     def test_real_cli_exact_admission_and_extra_secret_resistance(self) -> None:
         self.verify_exact_admission(
             hashlib.sha1(b"public-object-regression-fixture").hexdigest()
@@ -522,6 +841,123 @@ class GitleaksIntegrationTests(RepositoryCase):
         self.verify_exact_admission(
             hashlib.sha256(b"public-object-regression-fixture").hexdigest()
         )
+
+    def test_merge_only_and_removed_side_branch_secrets_are_both_scanned(self) -> None:
+        original_branch = self.git("branch", "--show-current")
+        side_value = "ghp_" + hashlib.sha256(b"fictional-side-canary").hexdigest()[:36]
+        merge_value = "ghp_" + hashlib.sha256(b"fictional-merge-canary").hexdigest()[:36]
+        self.git("checkout", "--quiet", "-b", "side")
+        (self.root / "side.txt").write_text(side_value + "\n")
+        self.git("add", "side.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic side commit")
+        self.git("checkout", "--quiet", original_branch)
+        (self.root / "main.txt").write_text("main branch\n")
+        self.git("add", "main.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic main commit")
+        self.git("merge", "--quiet", "--no-ff", "--no-commit", "side")
+        self.git("rm", "--force", "--quiet", "side.txt")
+        (self.root / "merge-only.txt").write_text(merge_value + "\n")
+        self.git("add", "merge-only.txt")
+        self.git("commit", "--quiet", "-m", "Synthetic merge resolution")
+
+        for options in ({"full_history": True}, {"base": self.base}):
+            with self.subTest(options=options):
+                code, summary = self.scan(binary=GITLEAKS_BINARY, **options)
+                self.assertEqual(code, 1)
+                paths = {finding["file"] for finding in summary["findings"]}
+                self.assertIn("side.txt", paths)
+                self.assertIn("merge-only.txt", paths)
+                self.assertNotIn(side_value, json.dumps(summary))
+                self.assertNotIn(merge_value, json.dumps(summary))
+                clean_environment = scanner.clean_environment
+                with (
+                    patch.object(scanner, "OFFLINE_CONSUMER_MOUNT", self.root.resolve()),
+                    patch.object(
+                        scanner,
+                        "clean_environment",
+                        side_effect=lambda **kwargs: {
+                            **clean_environment(**kwargs),
+                            "GIT_TEST_ASSUME_DIFFERENT_OWNER": "true",
+                        },
+                    ),
+                ):
+                    offline_code, offline_summary = self.scan(
+                        binary=GITLEAKS_BINARY, offline_container=True, **options
+                    )
+                self.assertEqual(offline_code, 1)
+                offline_paths = {finding["file"] for finding in offline_summary["findings"]}
+                self.assertIn("side.txt", offline_paths)
+                self.assertIn("merge-only.txt", offline_paths)
+                self.assertNotIn(side_value, json.dumps(offline_summary))
+                self.assertNotIn(merge_value, json.dumps(offline_summary))
+
+    def test_real_cli_distinct_values_on_one_line_remain_individually_blocking(
+        self,
+    ) -> None:
+        values = [
+            hashlib.sha256(label).hexdigest()
+            for label in (b"public-first", b"public-second", b"unreviewed-third")
+        ]
+        source = self.root / "checksums.json"
+        source.write_text(
+            json.dumps(
+                {
+                    "allocator-api2-0.2.21.tar.gz": values[0],
+                    "winapi-0.3.9.tar.gz": values[1],
+                    "api_key": values[2],
+                }
+            )
+            + "\n"
+        )
+        self.git("add", "checksums.json")
+        self.git("commit", "--quiet", "-m", "Synthetic same-line findings")
+        commit = self.git("rev-parse", "HEAD")
+        entries = [
+            {
+                "commit": commit,
+                "path": "checksums.json",
+                "rule_id": "generic-api-key",
+                "line": 1,
+                "value_sha256": hashlib.sha256(value.encode()).hexdigest(),
+                "reason": "Reviewed synthetic public digest in a temporary regression fixture.",
+                "evidence_urls": ["https://github.com/example/project/commit/" + commit],
+            }
+            for value in values[:2]
+        ]
+        registry = self.directory / "reviewed.json"
+        registry.write_text(json.dumps({"schema_version": 1, "findings": entries}))
+        with patch.object(scanner, "TRUSTED_REVIEWED_FINDINGS", registry):
+            code, summary = self.scan(base=self.base, binary=GITLEAKS_BINARY)
+        self.assertEqual(code, 1)
+        self.assertEqual(summary["reviewed_nonsecret_count"], 2)
+        self.assertEqual(summary["finding_count"], 1)
+        for value in values:
+            self.assertNotIn(value, json.dumps(summary))
+
+    def test_same_reviewed_value_in_two_contexts_remains_blocking(self) -> None:
+        value = hashlib.sha256(b"synthetic-public-digest").hexdigest()
+        source = self.root / "checksums.json"
+        source.write_text(json.dumps({"allocator-api2.tar.gz": value, "api_key": value}) + "\n")
+        self.git("add", "checksums.json")
+        self.git("commit", "--quiet", "-m", "Synthetic duplicate contexts")
+        commit = self.git("rev-parse", "HEAD")
+        entry = {
+            "commit": commit,
+            "path": "checksums.json",
+            "rule_id": "generic-api-key",
+            "line": 1,
+            "value_sha256": hashlib.sha256(value.encode()).hexdigest(),
+            "reason": "Synthetic public digest reviewed in one temporary fixture context.",
+            "evidence_urls": ["https://github.com/example/project/commit/" + commit],
+        }
+        registry = self.directory / "reviewed.json"
+        registry.write_text(json.dumps({"schema_version": 1, "findings": [entry]}))
+        with patch.object(scanner, "TRUSTED_REVIEWED_FINDINGS", registry):
+            code, summary = self.scan(base=self.base, binary=GITLEAKS_BINARY)
+        self.assertEqual(code, 1)
+        self.assertEqual(summary["finding_count"], 2)
+        self.assertEqual(summary["reviewed_nonsecret_count"], 0)
+        self.assertNotIn(value, json.dumps(summary))
 
     def verify_exact_admission(self, value: str) -> None:
         source = self.root / "inventory.json"

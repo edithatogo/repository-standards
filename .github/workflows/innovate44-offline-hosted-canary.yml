@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/repository-standards
-          ref: b623faeb6e4588fba5882c0e711080a73408f939
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           persist-credentials: false
           path: candidate-policy
@@ -40,9 +40,12 @@ jobs:
           path: consumer
       - name: Verify the selected commits and base
         shell: bash
+        env:
+          POLICY_HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
-          test "$(git -C candidate-policy rev-parse HEAD)" = b623faeb6e4588fba5882c0e711080a73408f939
+          [[ "$POLICY_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -C candidate-policy rev-parse HEAD)" = "$POLICY_HEAD"
           test "$(git -C consumer rev-parse HEAD)" = fab4343b009e933ada4ed6460b20c336d1e5beed
           git -C consumer merge-base --is-ancestor cc2e4da4af9c848043b31f1191c9d96212048276 HEAD
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
@@ -95,7 +98,12 @@ jobs:
             -e PROMPTFOO_DISABLE_REMOTE_GENERATION=true -e PROMPTFOO_DISABLE_REDTEAM_REMOTE_GENERATION=true \
             -e PROMPTFOO_DISABLE_SHARING=1 -e PROMPTFOO_SELF_HOSTED=1 \
             -e PYTHONDONTWRITEBYTECODE=1 -e PYTHONSAFEPATH=1 -e PYTEST_ADDOPTS=-p\ no:cacheprovider \
-            "$CANDIDATE_IMAGE" /policy/security/offline-ai/run.sh
+            "$CANDIDATE_IMAGE" -c '
+              set -euo pipefail
+              python -I -c "import errno,socket; s=socket.socket(socket.AF_INET,socket.SOCK_STREAM); s.settimeout(2); code=s.connect_ex((\"192.0.2.1\",443)); s.close(); assert code in (errno.ENETUNREACH,errno.EHOSTUNREACH), \"outbound probe was not denied\""
+              echo "Outbound IPv4 probe denied"
+              exec /policy/security/offline-ai/run.sh
+            '
       - name: Inventory the tested image
         if: always() && steps.prepare.outcome == 'success'
         shell: bash

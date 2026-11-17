@@ -401,3 +401,54 @@ A managed-worktree request for the verified shared checkout and base did not
 return and was cancelled; readback showed no attached artifact or additional
 Git worktree. This lane reuses its existing isolated clone and does not claim an
 app-managed worktree. The merged privacy branch remains preserved separately.
+
+## Hosted canary scanner correction — 17 November 2026
+
+The same chat and isolated checkout own the follow-up to hosted run
+`44014472493`; the bounded allowed paths now also include
+`scripts/secrets_scan.py`, `tests/test_secrets_scan.py`,
+`privacy/reviewed-findings.json`, `privacy/reviewed-findings.md`, and the
+single runtime-policy pin in `.github/workflows/reusable-ai-sec-pipeline.yml`.
+The branch still starts from `b623faeb6e4588fba5882c0e711080a73408f939`;
+existing provider, image-advisory and central rollout owners retain their work.
+
+That hosted Ubuntu run passed eight image controls and failed the actual consumer
+at Gitleaks history. Its retained fresh all-layer image report had 485
+package/advisory matches, including 14 critical and 141 high, and one additional
+scanner-ignored critical match. The image remains unreviewed and unqualified;
+no waiver, image export, consumer promotion or release qualification follows.
+Preparation accessed the network. The scanner container used `--network none`.
+
+The scanner correction preserves offline safe-directory isolation and integrates
+the already merged shared privacy registry and merge-history handling. Fifteen
+additional exact Innovate matches are public file or log SHA-256 digests, each
+independently recomputed from the corresponding immutable commit and recorded by
+complete finding identity. Distinct values and duplicate contexts remain
+blocking unless independently and unambiguously reviewed. Git environment,
+replacement and graft settings, shallow and incomplete clones, binary diff
+attributes, repository fsmonitor and signature hooks have regression coverage.
+The wrapper checks the selected Git producer before Gitleaks, refuses staged
+binary or custom-driver diffs and fails on private scanner diagnostics. Its
+separate checks assume the checkout, refs and index remain stable while scanning.
+
+With the checkout-local Python 3.15.2 and Gitleaks 8.30.1,
+`PYTHONPATH=scripts .venv/bin/python -m unittest tests.test_secrets_scan -v`
+passed 57 tests, including the real-tool negative fixtures. The initial fake
+scanner fixtures used an inherited `python3` pointing to Python 3.11 despite the
+3.15.2 test runner. The fixture now explicitly uses the runner's interpreter;
+all 57 tests passed again with `.venv/bin` first in `PATH`. `actionlint` passed
+on the hosted workflow. The staged Gitleaks and Presidio guard with the
+checkout-local `privacy-guard/venv` Python 3.15.2 selected and scanned all six
+changed files with no blocking findings or skips. An initial run with the lean
+`.venv` failed its Presidio step because that environment lacks the privacy
+dependencies; it is not a successful privacy check. The full-history Innovate
+remote-ref clone scan returned
+15 reviewed nonsecret findings and zero blocking findings with the strengthened
+Git history options. It took about 10 minutes on the local multi-core host;
+the scanner's per-process timeout is raised from 10 to 25 minutes for the
+four-CPU hosted container, within the existing 30-minute offline control limit.
+This run preceded the final private-diagnostic check, so the exact immutable
+candidate still needs a fresh hosted Ubuntu run. The canary adds an outbound IPv4
+denial probe inside the consumer container; the probe has not yet been observed
+on the hosted runner. Vulnerability disposition and the separate scientific
+release gate remain open regardless of a canary result.
