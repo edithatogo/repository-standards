@@ -102,7 +102,7 @@ jobs:
               set -euo pipefail
               python -I -c "import errno,socket; s=socket.socket(socket.AF_INET,socket.SOCK_STREAM); s.settimeout(2); code=s.connect_ex((\"192.0.2.1\",443)); s.close(); assert code in (errno.ENETUNREACH,errno.EHOSTUNREACH), \"outbound probe was not denied\""
               echo "Outbound IPv4 probe denied"
-              exec /policy/security/offline-ai/run.sh
+              exec bash /policy/security/offline-ai/run.sh
             '
       - name: Inventory the tested image
         if: always() && steps.prepare.outcome == 'success'

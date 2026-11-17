@@ -10,17 +10,19 @@ No matched values, source snippets, or exception details are reported.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import logging
 import os
 import re
 import subprocess
+import tempfile
 from bisect import bisect_right
 from collections import Counter
 from collections.abc import Iterator, Sequence
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 MAX_FILE_BYTES = 10 * 1024 * 1024
@@ -29,6 +31,11 @@ CHUNK_OVERLAP = 256
 MAX_REPORTED_FINDINGS = 1000
 MAX_REPORTED_SKIPS = 100
 SHA_PATTERN = re.compile(r"[0-9a-fA-F]{40}(?:[0-9a-fA-F]{24})?\Z")
+TRUSTED_PRIVACY_REVIEWS = (
+    Path(__file__).resolve().parents[1] / "privacy" / "reviewed-privacy-findings.json"
+)
+MAX_PRIVACY_REVIEW_BYTES = 64 * 1024
+PrivacyFindingIdentity = tuple[str, str, str, int, int, int, str, str]
 DATA_PARTS = frozenset({"data", "datasets", "fixtures", "exports", "records"})
 CONTEXT = {
     "AU_TFN": re.compile(
@@ -53,6 +60,87 @@ LIMITATIONS = [
 
 class ScanError(Exception):
     """A failure described by a fixed, non-sensitive diagnostic code."""
+
+
+def load_privacy_reviews() -> set[PrivacyFindingIdentity]:
+    """Load exact, trusted blob-span reviews; never read a consumer override."""
+    def unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ScanError("invalid_privacy_reviews")
+            result[key] = value
+        return result
+
+    try:
+        if TRUSTED_PRIVACY_REVIEWS.is_symlink():
+            raise ScanError("invalid_privacy_reviews")
+        with TRUSTED_PRIVACY_REVIEWS.open("rb") as source:
+            raw = source.read(MAX_PRIVACY_REVIEW_BYTES + 1)
+        if len(raw) > MAX_PRIVACY_REVIEW_BYTES:
+            raise ScanError("invalid_privacy_reviews")
+        registry = json.loads(raw, object_pairs_hook=unique_object)
+    except (OSError, UnicodeError, ValueError) as error:
+        raise ScanError("invalid_privacy_reviews") from error
+    if (
+        not isinstance(registry, dict)
+        or set(registry) != {"schema_version", "findings"}
+        or type(registry["schema_version"]) is not int
+        or registry["schema_version"] != 1
+        or not isinstance(registry["findings"], list)
+    ):
+        raise ScanError("invalid_privacy_reviews")
+    reviewed: set[PrivacyFindingIdentity] = set()
+    for entry in registry["findings"]:
+        if not isinstance(entry, dict) or set(entry) != {
+            "blob", "path", "entity", "line", "start", "end", "value_sha256",
+            "profile", "reason", "evidence_urls",
+        }:
+            raise ScanError("invalid_privacy_reviews")
+        blob, path, entity = entry["blob"], entry["path"], entry["entity"]
+        line, start, end = entry["line"], entry["start"], entry["end"]
+        digest, profile = entry["value_sha256"], entry["profile"]
+        reason, urls = entry["reason"], entry["evidence_urls"]
+        if (
+            not isinstance(blob, str)
+            or not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", blob)
+            or set(blob) == {"0"}
+            or not isinstance(path, str)
+            or not path
+            or len(path) > 1024
+            or str(PurePosixPath(path)) != path
+            or PurePosixPath(path).is_absolute()
+            or ".." in PurePosixPath(path).parts
+            or any(ord(char) < 32 or char in "\\*?[]" for char in path)
+            or re.match(r"^[a-zA-Z]:", path)
+            or not isinstance(entity, str)
+            or entity not in {"PHONE_NUMBER", "EMAIL_ADDRESS", *CONTEXT}
+            or type(line) is not int
+            or line < 1
+            or type(start) is not int
+            or type(end) is not int
+            or not 0 <= start < end <= MAX_FILE_BYTES
+            or not isinstance(digest, str)
+            or not re.fullmatch(r"[0-9a-f]{64}", digest)
+            or profile != "repository"
+            or not isinstance(reason, str)
+            or not 20 <= len(reason.strip()) <= 2048
+            or not isinstance(urls, list)
+            or not 1 <= len(urls) <= 8
+            or any(
+                not isinstance(url, str)
+                or len(url) > 1024
+                or not url.startswith(("https://github.com/", "https://api.github.com/"))
+                or any(ord(char) < 32 for char in url)
+                for url in urls
+            )
+        ):
+            raise ScanError("invalid_privacy_reviews")
+        identity = (blob, path, entity, line, start, end, digest, profile)
+        if identity in reviewed:
+            raise ScanError("invalid_privacy_reviews")
+        reviewed.add(identity)
+    return reviewed
 
 
 class SafeArgumentParser(argparse.ArgumentParser):
@@ -123,14 +211,20 @@ def git_command(root: Path, *args: str) -> list[str]:
 
 
 def git(root: Path, *args: str, input_data: bytes | None = None) -> bytes:
-    result = subprocess.run(
-        git_command(root, *args),
-        input=input_data,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        env=git_environment(),
-        check=False,
-    )
+    # Large cat-file batches can deadlock when the caller fills an input pipe
+    # while Git fills its output pipe. The input contains only Git object IDs.
+    with tempfile.TemporaryFile() if input_data is not None else nullcontext() as source:
+        if input_data is not None:
+            source.write(input_data)
+            source.seek(0)
+        result = subprocess.run(
+            git_command(root, *args),
+            stdin=source,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            env=git_environment(),
+            check=False,
+        )
     if result.returncode:
         raise ScanError("git_read_failed")
     return result.stdout
@@ -313,7 +407,13 @@ def severity(
 
 
 def analyze_text(
-    text: str, path: str, recognizers: Sequence[Any], profile: str
+    text: str,
+    path: str,
+    recognizers: Sequence[Any],
+    profile: str,
+    *,
+    blob_oid: str | None = None,
+    reviewed: set[PrivacyFindingIdentity] | frozenset[PrivacyFindingIdentity] = frozenset(),
 ) -> list[dict[str, Any]]:
     seen: set[tuple[str, int, int]] = set()
     counts: Counter[tuple[int, str, str]] = Counter()
@@ -343,6 +443,13 @@ def analyze_text(
                     level = severity(
                         match.entity_type, text, start, end, sensitive, profile
                     )
+                    if level == "blocking" and blob_oid is not None:
+                        digest = hashlib.sha256(text[start:end].encode("utf-8")).hexdigest()
+                        identity = (
+                            blob_oid, path, match.entity_type, line, start, end, digest, profile
+                        )
+                        if identity in reviewed:
+                            level = "reviewed_nonidentifier"
                     counts[(line, match.entity_type, level)] += 1
             if offset + CHUNK_SIZE >= len(text):
                 break
@@ -371,6 +478,7 @@ def scan_repository(
         raise ScanError("conflicting_scan_scopes")
     if profile not in {"repository", "sensitive"}:
         raise ScanError("invalid_profile")
+    reviewed = load_privacy_reviews()
     if recognizers is None:
         recognizers = build_recognizers()
     blobs = selected_blobs(root, base, head, staged)
@@ -406,10 +514,22 @@ def scan_repository(
             except UnicodeDecodeError:
                 skipped.append({"path": blob.path, "reason": "non_utf8_or_binary"})
                 continue
-            findings.extend(analyze_text(text, blob.path, recognizers, profile))
+            findings.extend(
+                analyze_text(
+                    text,
+                    blob.path,
+                    recognizers,
+                    profile,
+                    blob_oid=None if staged else blob.oid,
+                    reviewed=reviewed,
+                )
+            )
             scanned += 1
     blocked = sum(f["count"] for f in findings if f["severity"] == "blocking")
     advisory = sum(f["count"] for f in findings if f["severity"] == "advisory")
+    reviewed_count = sum(
+        f["count"] for f in findings if f["severity"] == "reviewed_nonidentifier"
+    )
     status = (
         "blocking_findings"
         if blocked
@@ -417,6 +537,8 @@ def scan_repository(
         if skipped
         else "advisory_findings"
         if advisory
+        else "reviewed_nonidentifiers"
+        if reviewed_count
         else "no_supported_identifiers_detected"
     )
     return {
@@ -429,6 +551,7 @@ def scan_repository(
         "files_scanned": scanned,
         "blocking_findings": blocked,
         "advisory_findings": advisory,
+        "reviewed_nonidentifier_count": reviewed_count,
         "findings": findings[:MAX_REPORTED_FINDINGS],
         "findings_omitted": max(0, len(findings) - MAX_REPORTED_FINDINGS),
         "skipped": skipped[:MAX_REPORTED_SKIPS],

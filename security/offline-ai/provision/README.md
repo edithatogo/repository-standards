@@ -148,14 +148,15 @@ committed Python and npm lock bytes, original resolver inputs and
 Those observations are historical evidence; this patch does not relabel them as
 3.15.2 execution results or resolve new dependency versions.
 
-The shared privacy wheel builder keeps its existing 3.15.1 default. Offline
-preparation explicitly selects `--python-version 3.15.2`, verifies the actual
-interpreter matches that selection and rebuilds the same checksum-pinned sources.
+The shared privacy wheel builder requires Python 3.15.2 and verifies the actual
+interpreter before rebuilding the same checksum-pinned sources. Offline
+preparation invokes it with an isolated environment created from that interpreter.
 Both Presidio wheels use the distinct local version `2.2.366+python315.2` and
 `Requires-Python: ==3.15.2`; their scanner code and pinned dependency adjustments
-are unchanged. PyYAML is rebuilt under the selected interpreter. The source
-catalog binds the changed builder bytes, and the new vendor lock and manifest
-record the resulting wheel hashes. The model source catalog remains unchanged.
+are unchanged. The upstream MIT notice is verified in each built wheel. PyYAML
+is rebuilt under the selected interpreter. The source catalog binds the builder,
+notice and lock bytes, and the new vendor lock and manifest record the resulting
+wheel hashes. The model source catalog remains unchanged.
 
 The existing CPython 3.15 wheel tags permit the same ABI target, but successful
 installation, `uv pip check` and actual model/Promptfoo execution on the newly

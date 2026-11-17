@@ -32,6 +32,7 @@ PIN = re.compile(r"([A-Za-z0-9][A-Za-z0-9_.-]*)==([A-Za-z0-9][A-Za-z0-9.+!-]*)\Z
 ALLOWED_HOSTS = {"github.com", "files.pythonhosted.org", "download-r2.pytorch.org"}
 POLICY_INPUTS = {
     "privacy/requirements.lock", "privacy/build-requirements.lock",
+    "privacy/licenses/presidio-MIT.txt",
     "scripts/build_privacy_wheels.py", "scripts/install_gitleaks.py",
     "security/offline-ai/provision/requirements.extra.lock",
     "security/offline-ai/provision/promptfoo/package.json",
@@ -295,7 +296,7 @@ def python_wheels(vendor, work, catalog):
     run(["uv", "pip", "install", "--python", python, "--require-hashes", "--only-binary=:all:",
          "--default-index", "https://pypi.org/simple", "-r", str(ROOT / "privacy/build-requirements.lock")])
     built_directory = work / "built-wheels"
-    run([python, "-I", str(ROOT / "scripts/build_privacy_wheels.py"), "--python-version", "3.15.2",
+    run([python, "-I", str(ROOT / "scripts/build_privacy_wheels.py"),
          "--destination", str(built_directory)])
     pins = merge_locks(ROOT / "privacy/requirements.lock", HERE / "requirements.extra.lock")
     for name, source in catalog["python_roots"].items():

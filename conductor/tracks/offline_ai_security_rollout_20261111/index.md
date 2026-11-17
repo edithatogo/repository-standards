@@ -452,3 +452,44 @@ candidate still needs a fresh hosted Ubuntu run. The canary adds an outbound IPv
 denial probe inside the consumer container; the probe has not yet been observed
 on the hosted runner. Vulnerability disposition and the separate scientific
 release gate remain open regardless of a canary result.
+
+### Shared privacy and Python patch reconciliation
+
+The same chat and checkout own a follow-up against candidate head `c646606`.
+The older offline base still uses Python 3.15.1 in its local privacy action and
+behavioral workflow, and its self-scan pins an older Python 3.12 action. Passing
+those runs is not current Python 3.15.2 evidence. The bounded source scope now
+also covers the privacy action/workflows, privacy locks, installer, notice,
+review registry and docs, privacy wheel builder and tests, and the offline
+vendor preparer, source hash catalog and focused vendor tests. Reconcile the
+already merged shared privacy source at `c82b2658f6874127d05f825dbe9ed4747f146efd`
+with the offline-specific builder and its integrity bindings. Preserve the
+offline-only behavior and meaningful tests, and run the exact new source in a
+fresh hosted build before drawing conclusions. The already-running `c646606`
+canary remains a separate immutable evidence run.
+
+The reconciled privacy source and recognizer reviews are taken from that merged
+commit. The offline preparer now invokes its Python-3.15.2-only builder without
+the retired version-selection flag, and its catalog binds the exact builder,
+locks and upstream MIT notice. `tests.test_privacy_wheel_build`,
+`tests.test_offline_vendor_preparation` and `tests.test_privacy_scan` passed 55
+tests with the selected Python 3.15.2 privacy environment. A real macOS arm64
+source build produced both Presidio compatibility wheels and PyYAML; the builder
+verified the MIT notice inside each Presidio wheel. This local build is not a
+Linux scanner image or a hosted consumer result. The real staged Gitleaks and
+Presidio guard selected and scanned all 21 follow-up files with no blocking
+findings or skips.
+
+Hosted run `44020563460` on `c646606` built the image and passed its controls.
+The new in-container outbound IPv4 probe reported denial. The consumer then
+failed with exit 126 because `run.sh` is not executable and the canary invoked it
+directly; the consumer scan did not start. The follow-up invokes the tracked
+script through Bash. The retained value-free artifact `14300594394` has verified
+SHA-256 `6a38fa6958219e80f43b6571fde075ec1ef7442c8a464b48ab8840e496d4ee45`.
+Its all-layer Grype receipt records 485 matches, including 14 critical and 141
+high, plus one ignored match; the report hash matches the receipt. Image review
+and release qualification remain false. These observations neither approve the
+image nor substitute for the next exact-source consumer run. A subsequent local
+full-history scan with the final scanner and diagnostic handling again returned
+15 reviewed nonsecret findings and zero blocking findings; its value-free receipt
+is retained outside Git.
