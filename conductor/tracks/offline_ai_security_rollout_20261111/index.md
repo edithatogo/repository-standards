@@ -493,3 +493,47 @@ image nor substitute for the next exact-source consumer run. A subsequent local
 full-history scan with the final scanner and diagnostic handling again returned
 15 reviewed nonsecret findings and zero blocking findings; its value-free receipt
 is retained outside Git.
+
+### Consumer policy snapshot continuation
+
+The same chat and checkout own a follow-up from `cdf01f8`, limited to the
+hosted canary, this track, a consumer-policy export helper, the shared snapshot
+helper and focused tests, plus the separate source-pin update. Hosted run
+`44022146249` passed the outbound network probe and Gitleaks history but failed
+`sast-fixtures`.
+Its value-free artifact `14302450484` has verified SHA-256
+`ada1da776de05c2617acb221e2bdd7b2f21e2847e83fae50dceef9399d9ebe8a`;
+its Grype report matches the receipt and again records 485 matches, including
+14 critical and 141 high, plus one ignored match. Image review remains pending.
+
+The image qualification's archived policy has no Git metadata; the consumer
+instead mounted a Git worktree whose `.git` file names a host-only path.
+On synthetic fixtures, the digest-verified Opengrep 2.0.0 macOS binary scanned
+all 11 controls from the archived policy and found all seven bad fixtures. The
+same policy with an unavailable host Git pointer returned an error and scanned
+zero files. This local reproduction supports using the same committed, symlink-
+rejecting Git archive snapshot for the consumer, but does not prove the Linux
+container result. The new exporter checks the policy SHA and clean checkout,
+refuses an existing destination and reuses the image qualifier's archive and
+link checks. The archive is compared byte-for-byte with the committed Git tree,
+permissions are made readable to the unprivileged container, and the qualifier
+is loaded from committed source instead of ignored bytecode. The exporter and
+existing image-qualification suite passed 20 focused tests, including hostile
+Git attributes, inherited environment, fsmonitor, bytecode and umask checks.
+With a synthetic Git checkout, the actual exporter and digest-verified Opengrep
+2.0.0 scanned all 11 controls
+from the exported snapshot, found all seven bad fixtures and found no good
+fixtures. `actionlint` passed on the canary. The actual hosted consumer must
+still be rerun.
+
+The current Gitleaks rebuild candidate artifact `14302060049` has verified
+SHA-256 `134925e0caaae74271472c727be7ded00e52b915c23aa924fa3c780749da8589`.
+Its receipt reports a Go 1.27.4 build, verified module closure and a passing
+synthetic fixture, while review, image and release qualification remain false.
+An OSV querybatch of 65 compiled module versions and the candidate standard
+library returned version-level advisory IDs for four packages: `rardecode/v2`,
+`x/crypto`, `x/sys` and `x/text`. A known-vulnerable Go 1.24.11 standard-library
+positive control returned matches. The value-free local receipt has SHA-256
+`6e7e1f2dbfa928928c1c6bd015357a2da1efa67ecb4c70b0fc1cda37e453ddaa`.
+These matches do not establish reachability, and the query did not cover Debian
+or other image layers. The candidate is not an approved substitute for review.

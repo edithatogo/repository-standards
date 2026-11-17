@@ -73,11 +73,23 @@ jobs:
           bash -n "$POLICY_ROOT/security/offline-ai/provision/qualify_hosted.sh"
           bash "$POLICY_ROOT/security/offline-ai/provision/qualify_hosted.sh" \
             "$POLICY_ROOT" "$RUNNER_TEMP/offline-runtime"
+      - name: Export the immutable consumer policy
+        id: consumer_policy
+        shell: bash
+        env:
+          POLICY_ROOT: ${{ steps.policy.outputs.path }}
+          POLICY_SHA: ${{ steps.policy.outputs.sha }}
+        run: |
+          set -euo pipefail
+          destination="$RUNNER_TEMP/innovate44-consumer-policy"
+          python -I "$POLICY_ROOT/security/offline-ai/provision/export_consumer_policy.py" \
+            --commit "$POLICY_SHA" --destination "$destination"
+          echo "path=$destination" >> "$GITHUB_OUTPUT"
       - name: Run the Innovate consumer canary without container networking
         id: consumer
         shell: bash
         env:
-          POLICY_ROOT: ${{ steps.policy.outputs.path }}
+          CONSUMER_POLICY: ${{ steps.consumer_policy.outputs.path }}
           CANDIDATE_IMAGE: ${{ steps.prepare.outputs.image }}
         run: |
           set -euo pipefail
@@ -87,7 +99,7 @@ jobs:
             --pids-limit 256 --memory 8g --cpus 4 --user 65534:65534 \
             --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 \
             --mount "type=bind,src=$GITHUB_WORKSPACE/consumer,dst=/work,readonly" \
-            --mount "type=bind,src=$POLICY_ROOT,dst=/policy,readonly" \
+            --mount "type=bind,src=$CONSUMER_POLICY,dst=/policy,readonly" \
             -e ENFORCE_AI=false -e EVENT_NAME=pull_request \
             -e BASE_SHA=cc2e4da4af9c848043b31f1191c9d96212048276 -e HOME=/tmp \
             -e SECURITY_ASSET_MANIFEST=/opt/offline-ai/manifest.json -e GLINER_MODEL_DIR=/opt/models/gliner-pii \

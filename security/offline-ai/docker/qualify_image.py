@@ -10,7 +10,7 @@ import argparse
 from contextlib import contextmanager
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
@@ -21,6 +21,7 @@ import uuid
 
 POLICY = Path(__file__).resolve().parents[3]
 IMAGE_PATTERN = re.compile(r"localhost/offline-ai-security@sha256:[0-9a-f]{64}\Z")
+MAX_POLICY_BYTES = 64 * 1024 * 1024
 OFFLINE_ENV = {
     "HOME": "/tmp", "PYTHONPATH": "/policy/security/offline-ai", "PYTHONSAFEPATH": "1",
     "SECURITY_ASSET_MANIFEST": "/opt/offline-ai/manifest.json",
@@ -118,27 +119,100 @@ def preflight(args):
 
 
 @contextmanager
-def policy_snapshot(commit):
+def policy_snapshot(commit, *, env=None):
     """Export committed files once; ignored files and later edits cannot enter."""
     with tempfile.TemporaryDirectory(prefix="offline-policy-") as temporary:
         snapshot = Path(temporary) / "policy"
         snapshot.mkdir(mode=0o755)
         try:
+            inventory_result = subprocess.run(
+                ["git", "--no-replace-objects", "-C", str(POLICY), "ls-tree",
+                 "-r", "-z", "--full-tree", commit],
+                stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                timeout=30, check=False, env=env,
+            )
+            if inventory_result.returncode:
+                raise QualificationError("policy-snapshot")
+            inventory = {}
+            for entry in inventory_result.stdout.split(b"\0"):
+                if not entry:
+                    continue
+                header, raw_name = entry.split(b"\t", 1)
+                mode, kind, object_id = header.split(b" ")
+                name = raw_name.decode("utf-8")
+                path = PurePosixPath(name)
+                if (
+                    mode not in (b"100644", b"100755")
+                    or kind != b"blob"
+                    or not re.fullmatch(rb"[0-9a-f]{40}", object_id)
+                    or not name
+                    or path.is_absolute()
+                    or str(path) != name
+                    or ".." in path.parts
+                    or name in inventory
+                ):
+                    raise QualificationError("policy-snapshot")
+                inventory[name] = (mode, object_id.decode("ascii"))
+            object_ids = sorted({item[1] for item in inventory.values()})
+            blobs = {}
+            with tempfile.TemporaryFile() as objects:
+                result = subprocess.run(
+                    ["git", "--no-replace-objects", "-C", str(POLICY), "cat-file", "--batch"],
+                    input="".join(item + "\n" for item in object_ids).encode("ascii"),
+                    stdout=objects, stderr=subprocess.DEVNULL, timeout=30, check=False, env=env,
+                )
+                if result.returncode or objects.tell() > MAX_POLICY_BYTES:
+                    raise QualificationError("policy-snapshot")
+                objects.seek(0)
+                for object_id in object_ids:
+                    header = objects.readline(128).split()
+                    if len(header) != 3 or header[:2] != [object_id.encode("ascii"), b"blob"]:
+                        raise QualificationError("policy-snapshot")
+                    size = int(header[2])
+                    if size < 0 or size > MAX_POLICY_BYTES:
+                        raise QualificationError("policy-snapshot")
+                    blob = objects.read(size)
+                    if len(blob) != size or objects.read(1) != b"\n":
+                        raise QualificationError("policy-snapshot")
+                    blobs[object_id] = blob
+                if objects.read(1):
+                    raise QualificationError("policy-snapshot")
             with tempfile.TemporaryFile() as stream:
                 result = subprocess.run(
-                    ["git", "--no-replace-objects", "-C", str(POLICY),
+                    ["git", "--no-replace-objects", "-c", "tar.umask=0000", "-C", str(POLICY),
                      "archive", "--format=tar", commit],
                     stdin=subprocess.DEVNULL, stdout=stream, stderr=subprocess.DEVNULL,
-                    timeout=30, check=False,
+                    timeout=30, check=False, env=env,
                 )
                 if result.returncode:
                     raise QualificationError("policy-snapshot")
                 stream.seek(0)
                 with tarfile.open(fileobj=stream) as archive:
-                    if any(member.issym() or member.islnk() for member in archive.getmembers()):
+                    observed = set()
+                    for member in archive.getmembers():
+                        if member.isdir():
+                            continue
+                        if not member.isfile() or member.name not in inventory or member.name in observed:
+                            raise QualificationError("policy-snapshot")
+                        source = archive.extractfile(member)
+                        if source is None:
+                            raise QualificationError("policy-snapshot")
+                        expected = blobs[inventory[member.name][1]]
+                        if member.size != len(expected) or source.read() != expected:
+                            raise QualificationError("policy-snapshot")
+                        observed.add(member.name)
+                    if observed != set(inventory):
                         raise QualificationError("policy-snapshot")
                     archive.extractall(snapshot, filter="data")
-        except (OSError, tarfile.TarError, subprocess.TimeoutExpired):
+            # The container runs as UID 65534, independent of the host umask.
+            os.chmod(snapshot, 0o755)
+            for path in snapshot.rglob("*"):
+                if path.is_dir():
+                    os.chmod(path, 0o755)
+                else:
+                    mode = inventory[path.relative_to(snapshot).as_posix()][0]
+                    os.chmod(path, 0o755 if mode == b"100755" else 0o644)
+        except (OSError, ValueError, UnicodeError, tarfile.TarError, subprocess.TimeoutExpired):
             raise QualificationError("policy-snapshot") from None
         yield snapshot
 
