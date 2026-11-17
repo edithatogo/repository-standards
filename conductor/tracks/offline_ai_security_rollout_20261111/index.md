@@ -362,3 +362,42 @@ its remaining socket and HTTP issues stay explicit. Any rebuilt Gitleaks module
 candidate must be fully reviewed before use. The approved isolated host must
 qualify and review its own actual image and manifest. Central #126 and consumer
 #9 remain draft; no runner was registered and no consumer pin changed.
+
+## Innovate hosted Ubuntu canary — 17 November 2026
+
+At the user's direction, chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns
+this bounded candidate in `/Volumes/PortableSSD/GitHub/repository-standards-innovate44`,
+branch `codex/innovate44-offline-hosted`, based on
+`b623faeb6e4588fba5882c0e711080a73408f939`. Allowed source paths are the
+Innovate hosted canary workflow and this track record. Native/authentication
+scope: none; checkout tokens are not persisted or passed into the scanner.
+Existing offline rollout and image-advisory branches retain their owners and
+are not modified. The next operation is a single hosted, evidence-only consumer
+canary against Innovate head `fab4343b009e933ada4ed6460b20c336d1e5beed` and base
+`cc2e4da4af9c848043b31f1191c9d96212048276`, using the existing candidate's
+immutable policy selection, online verified preparation and offline image
+controls, followed by the actual consumer scan with container networking denied.
+
+The canary is not a replacement for Innovate's queued offline-security gate and
+cannot establish image, vulnerability-review, release or consumer qualification
+by itself. It retains the image-control, SBOM and all-layer Grype receipts without
+exporting the image or vendor bundle. Prior hosted evidence reported 473
+package/advisory matches and one scanner-ignored match; a fresh image and report
+must be reviewed rather than reusing those findings as an acceptance decision.
+The scientific release gate and central PRs #126 and #147 remain open.
+
+Local Python 3.15.2 actionlint and boundary assertions passed; the latter also
+rejected removal of network denial, a writable consumer mount and disabled pip
+offline mode. The staged real Presidio/Gitleaks guard scanned both changed files
+without findings or skips. The documented full policy suite ran 316 tests on
+macOS arm64 and failed with five failures, 26 errors and 24 capability skips;
+it is not a pass. One focused SBOM fixture reproduced a failure because the
+unchanged collector requires Linux x64 at preflight. The same collector sources
+and tests are byte-identical to the earlier hosted Linux policy job for `b623faeb`,
+which passed; the new head still needs its own hosted Linux checks. No container,
+model or consumer execution is claimed from this local run.
+
+A managed-worktree request for the verified shared checkout and base did not
+return and was cancelled; readback showed no attached artifact or additional
+Git worktree. This lane reuses its existing isolated clone and does not claim an
+app-managed worktree. The merged privacy branch remains preserved separately.
