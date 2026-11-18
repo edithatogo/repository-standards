@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import os
 from pathlib import Path
 import stat
 import subprocess
@@ -60,6 +61,9 @@ def scan(root: Path, binary: Path, rustfmt: Path, env: dict[str, str]) -> int:
 def main() -> int:
     try:
         lock = load_lock()
+        if any(not os.statvfs(path).f_flag & os.ST_RDONLY
+               for path in (ASSETS, RUSTFMT.parent.parent)):
+            raise ValueError("Hosted SAST mounts are writable")
         verify_bundle(ASSETS, lock)
         if not stat.S_ISREG(RUSTFMT.lstat().st_mode):
             raise ValueError("Rustfmt identity")

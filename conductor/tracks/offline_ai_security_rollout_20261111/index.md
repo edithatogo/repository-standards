@@ -908,3 +908,16 @@ Bash syntax and Git diff checks passed. The hosted job mounts the exact
 Semgrep bundle and Rustfmt read-only and retains a separate asset inventory.
 The whole-image SPDX and all-layer Grype scans continue against the runtime
 image's actual digest.
+
+### Reduce the hosted runtime package inventory, 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet at
+`d4e0091c167ca2ebd607e2105ac2ad370673747e` in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44` for draft PR #152.
+Scope is the Debian package catalog, preparer, base Dockerfile, SAST mount
+verification, focused tests and runtime policy pin. The pinned Debian starting status shows `mount` is
+neither essential nor protected and has no installed reverse dependency.
+The offline controls inspect the mount table through the kernel and do not
+invoke `mount` or `umount`. Purge the package using ordinary dpkg dependency
+checks before flattening the real filesystem, then verify the complete
+installed package list, scanner controls and all-layer findings.

@@ -42,6 +42,7 @@ RUN --network=none --mount=type=bind,source=os,target=/opt/offline-os,readonly \
     && ! printf '%s\n' "$linked" | grep -Ei 'libcurl|not found' \
     && packages="$(dpkg-query -W -f='${Package}\n')" \
     && ! printf '%s\n' "$packages" | grep -E '^(git|libcurl[^[:space:]]*)$' \
+    && ! command -v mount && ! command -v umount \
     && test ! -e /usr/local/bin/npm \
     && test ! -e /usr/local/bin/npx \
     && test ! -e /usr/local/lib/node_modules

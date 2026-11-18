@@ -65,6 +65,9 @@ def read_catalog(path):
     for name, version in baseline.items():
         if not NAME.fullmatch(name) or not VERSION.fullmatch(version):
             raise PreparationError("catalog")
+    purge = data.get("purge", [])
+    if purge != [] and (purge != ["mount"] or "mount" not in baseline):
+        raise PreparationError("catalog")
     names, filenames, total = set(), set(), 0
     for package in packages:
         name, version = package.get("name", ""), package.get("version", "")
@@ -158,7 +161,9 @@ def verify_packages(directory, catalog):
 def installed_versions(catalog):
     expected = dict(catalog["required_base"])
     expected.update({p["name"]: p["version"] for p in catalog["packages"]})
-    raw = command(["dpkg-query", "--show", "--showformat=" + QUERY, *sorted(expected)],
+    for name in catalog.get("purge", []):
+        del expected[name]
+    raw = command(["dpkg-query", "--show", "--showformat=" + QUERY],
                   capture=True)
     actual = {}
     for line in raw.decode().splitlines():
@@ -231,6 +236,10 @@ def main(argv=None):
             paths = verify_packages(directory, catalog)
             record["last_stage"] = "offline-install"
             command(["dpkg", "--install", *paths])
+            if purge := catalog.get("purge"):
+                record["last_stage"] = "offline-purge"
+                command(["dpkg", "--purge", *purge])
+                record["purged_packages"] = purge
             record["last_stage"] = "installed-versions"
             record["installed_versions"] = installed_versions(catalog)
             record["status"] = "installed"

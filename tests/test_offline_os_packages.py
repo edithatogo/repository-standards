@@ -89,9 +89,16 @@ class OSPackageTests(unittest.TestCase):
             if self.install_error:
                 raise subprocess.CalledProcessError(1, args, output=PRIVATE, stderr=PRIVATE)
             return b""
+        if args[:2] == ["dpkg", "--purge"]:
+            self.assertEqual(args[2:], self.catalog.get("purge"))
+            self.assertFalse(capture)
+            return b""
         if args[0] == "dpkg-query":
             versions = dict(self.catalog["required_base"])
             versions.update({p["name"]: p["version"] for p in self.catalog["packages"]})
+            if not getattr(self, "purge_incomplete", False):
+                for name in self.catalog.get("purge", []):
+                    del versions[name]
             if self.installed_error:
                 versions["git"] = "9.9-1"
             return "".join(f"{name}\t{version}\tamd64\tii \n"
@@ -144,6 +151,20 @@ class OSPackageTests(unittest.TestCase):
         status, receipt = self.invoke(install=True)
         self.assertEqual((status, receipt["last_stage"]), (2, "base-status"))
         self.assertEqual(self.calls, [])
+
+    def test_purge_requires_the_complete_resulting_package_inventory(self):
+        self.catalog["required_base"]["mount"] = "1.0-1"
+        self.catalog["purge"] = ["mount"]
+        (self.source / MODULE.CATALOG).write_text(json.dumps(self.catalog))
+        status, receipt = self.invoke(install=True)
+        self.assertEqual((status, receipt["status"]), (0, "installed"))
+        self.assertEqual(receipt["purged_packages"], ["mount"])
+        self.assertNotIn("mount", receipt["installed_versions"])
+        self.assertIn(["dpkg", "--purge", "mount"], self.calls)
+        (self.root / "receipt.json").unlink()
+        self.purge_incomplete = True
+        status, receipt = self.invoke(install=True)
+        self.assertEqual((status, receipt["last_stage"]), (2, "installed-versions"))
 
     def test_tampered_package_cannot_reach_dpkg_install(self):
         package = self.catalog["packages"][0]
