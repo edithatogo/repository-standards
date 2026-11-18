@@ -1,4 +1,4 @@
-name: Updated Semgrep library probe
+name: Hosted SAST integration diagnostic
 
 on:
   workflow_dispatch:
@@ -7,18 +7,14 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  diagnose:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          persist-credentials: false
-          path: inputs
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
           repository: edithatogo/repository-standards
-          ref: 8b9b3c2d62e79af4b2592ae7b1e630ef895e0be3
+          ref: 4971ca1f3a72f55099259c029d3cf9f31b03b5df
           persist-credentials: false
           path: policy
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -26,7 +22,6 @@ jobs:
           repository: edithatogo/innovate
           ref: 12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2
           persist-credentials: false
-          fetch-depth: 0
           path: consumer
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
@@ -35,63 +30,56 @@ jobs:
         with:
           toolchain: '1.100.0'
           components: rustfmt
-      - name: Stage the verified native payloads
+      - name: Prepare exact SAST inputs
         shell: bash
         run: |
           set -euo pipefail
           umask 022
-          [[ "$(git -C policy rev-parse HEAD)" = 8b9b3c2d62e79af4b2592ae7b1e630ef895e0be3 ]]
-          [[ "$(git -C consumer rev-parse HEAD)" = 12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2 ]]
+          trial="$RUNNER_TEMP/sast-diagnostic"
+          mkdir -p "$trial/context"
           if ! command -v bsdtar >/dev/null; then
             sudo apt-get -qq update
             sudo apt-get -qq install -y --no-install-recommends libarchive-tools
           fi
-          trial="$RUNNER_TEMP/semgrep-updated-libraries"
-          python -I -B policy/security/offline-ai/provision/probe_semgrep_rust.py --prepare "$trial"
-          python -I -B inputs/security/offline-ai/provision/stage_semgrep_library_probe.py "$trial/libs" "$(command -v bsdtar)"
-          cat > "$trial/semgrep-with-verified-libraries" <<'WRAPPER'
-          #!/bin/sh
-          LD_LIBRARY_PATH=/candidate/libs
-          export LD_LIBRARY_PATH
-          exec /candidate/semgrep-core "$@"
-          WRAPPER
-          chmod 0755 "$trial/semgrep-with-verified-libraries"
-          mkdir "$RUNNER_TEMP/trial-runtime"
-          cat > "$RUNNER_TEMP/trial-runtime/Dockerfile" <<'DOCKERFILE'
+          python -I -B policy/security/offline-ai/provision/hosted_sast_assets.py "$trial/bundle" "$(command -v bsdtar)" >/dev/null
+          cd "$trial/context"
+          curl -fsSL --proto '=https' --max-time 120 https://github.com/opengrep/opengrep/releases/download/v2.0.0/opengrep_linux_x86 -o opengrep
+          echo '37e93f4da5fd04a18c5c1febbdd12f7e98dfccd4d0c9cf2593bcb25eeb462da0  opengrep' | sha256sum --check
+          curl -fsSL --proto '=https' --max-time 30 https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.28.2.tgz -o esbuild.tgz
+          python -I -c 'import base64,hashlib,pathlib; assert base64.b64encode(hashlib.sha512(pathlib.Path("esbuild.tgz").read_bytes()).digest()).decode() == "4xTZr1FUmSoQW4XIWmit3tzQrUTZM+N3P0XV8xROKYF50XfI7xeO90+1bZvNwxIufQ9hDQVRJH5YhgPVF8A/HQ=="'
+          tar -xOzf esbuild.tgz package/bin/esbuild > esbuild
+          chmod 0755 opengrep esbuild
+          cat > Dockerfile <<'DOCKERFILE'
           FROM docker.io/library/python@sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85
-          RUN apt-get update && apt-get install -y --no-install-recommends git \
-              && rm -rf /var/lib/apt/lists/*
+          RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+          COPY opengrep /usr/local/bin/opengrep
+          COPY esbuild /opt/promptfoo/node_modules/@esbuild/linux-x64/bin/esbuild
           DOCKERFILE
-          docker build --platform linux/amd64 --tag localhost/semgrep-library-probe:trial "$RUNNER_TEMP/trial-runtime"
-      - name: Check scanner coverage and Rust syntax with networking disabled
+          docker build --platform linux/amd64 --tag localhost/innovate-sast-diagnostic:trial .
+      - name: Identify the first failing SAST check offline
         shell: bash
         run: |
           set -euo pipefail
-          trial="$RUNNER_TEMP/semgrep-updated-libraries"
+          trial="$RUNNER_TEMP/sast-diagnostic"
           rustfmt="$(rustup which --toolchain 1.100.0 rustfmt)"
           rust_toolchain="${rustfmt%/bin/rustfmt}"
-          [[ "$("$rust_toolchain/bin/rustc" --version)" = 'rustc 1.100.0 '* ]]
-          docker image inspect --format '{{.Id}}' localhost/semgrep-library-probe:trial
-          docker run --rm --pull=never --entrypoint=/bin/bash \
-            --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+          docker run --rm --pull=never --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
             --pids-limit 256 --memory 8g --cpus 4 --user 65534:65534 \
-            --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 \
+            --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 --entrypoint=/bin/bash \
             --mount "type=bind,src=$GITHUB_WORKSPACE/consumer,dst=/work,readonly" \
             --mount "type=bind,src=$GITHUB_WORKSPACE/policy,dst=/policy,readonly" \
-            --mount "type=bind,src=$trial,dst=/candidate,readonly" \
+            --mount "type=bind,src=$trial/bundle,dst=/hosted-sast,readonly" \
             --mount "type=bind,src=$rust_toolchain,dst=/rust-toolchain,readonly" \
-            -e HOME=/tmp -e TMPDIR=/tmp localhost/semgrep-library-probe:trial -euc '
-              dependencies="$(LD_LIBRARY_PATH=/candidate/libs LD_TRACE_LOADED_OBJECTS=1 /candidate/semgrep-core)"
-              printf "%s\n" "$dependencies"
-              ! grep -Fq -- "not found" <<< "$dependencies"
-              for library in libm.so.6 libresolv.so.2 libcurl.so.4 libgcc_s.so.1 libstdc++.so.6 libssl.so.3 libcrypto.so.3 liblzma.so.5; do
-                if grep -Fq -- "$library => " <<< "$dependencies"; then
-                  grep -Fq -- "$library => /candidate/libs/$library " <<< "$dependencies"
-                fi
-              done
-              for library in libcurl.so.4 libssl.so.3 libcrypto.so.3; do
-                grep -Fq -- "$library => /candidate/libs/$library " <<< "$dependencies"
-              done
-              exec /usr/local/bin/python -I -B /policy/security/offline-ai/provision/probe_semgrep_rust.py \
-                --probe /candidate/semgrep-with-verified-libraries /rust-toolchain/bin/rustfmt /work
+            -e HOME=/tmp -e TMPDIR=/tmp localhost/innovate-sast-diagnostic:trial -euc '
+              receipt="$(mktemp)"
+              if python -I -B /policy/security/offline-ai/scripts/scan_hosted_sast.py "$receipt" >/dev/null 2>&1; then
+                echo "Hosted SAST passed"
+              else
+                IFS= read -r status < "$receipt" || status=unknown
+                case "$status" in
+                  asset-verification|runtime-linkage|parent-index|opengrep-coverage|opengrep-parser|opengrep-errors|opengrep-findings|rust-fixtures|rust-syntax|semgrep-coverage|semgrep-findings)
+                    printf "Hosted SAST stopped at %s\n" "$status" ;;
+                esac
+                exit 2
+              fi
             '
