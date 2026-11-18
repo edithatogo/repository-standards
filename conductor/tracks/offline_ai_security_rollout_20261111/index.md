@@ -696,3 +696,29 @@ syntax/name checks and the existing offline Zizmor mode passed. The staged
 Gitleaks/Presidio guard scanned all eight selected files without blocking
 findings or skipped files. These local checks do not establish Linux image,
 consumer SAST, advisory, licence or release acceptance.
+
+Hosted consumer run `44237141011` tested policy head
+`dcd6852ffebab75d23944a85292b7476590fb0a3`, exported source policy
+`f0f5fb74fcb849352841fcf60eaa8466fc138ded` and Innovate
+`e2a3ce65f330252c9ad74b182a19a0e8cdb19418`. Candidate image construction,
+the eight image controls, policy export and network-denial execution passed.
+The actual consumer failed at Opengrep, so the run failed and the lane is not
+qualified. The separately passing image-controls run `44237141169` used the
+default vendor path and is not evidence for the rebuilt Gitleaks candidate.
+
+Artifact `14398112646` has verified archive SHA-256
+`aad2a22404a2df5ad53475d32020892e4088fa6b2d8278556ea4bbfa97ab4199`.
+Its asset-manifest, SBOM and vulnerability-receipt hashes were independently
+checked. The image digest is
+`sha256:7f8b4b4c09d6adae9e75b60a79f0ca8afc0b90d63e2d0dd833fb84478def6b12`;
+the manifest binds the candidate Gitleaks binary to SHA-256
+`be39829e02d116295fc8babe39cf60b25964d45c1c801869105022dfd4577ebe`.
+The all-layer Grype report retains 451 matches, including 11 critical and
+129 high, plus one scanner-ignored match. None of the report's matches names
+the Gitleaks binary location; the previous report had 33 there, including
+three critical and 21 high. The two report database hashes differ, so their
+aggregate count difference is not by itself an attribution or vulnerability
+disposition. The remaining critical matches name Debian curl, glibc and SQLite
+packages. Preparation, scanner and review receipts explicitly keep image,
+vulnerability, consumer and release qualification false. Source, licence and
+advisory review of the candidate and complete consumer parsing remain open.
