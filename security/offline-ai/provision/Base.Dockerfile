@@ -10,9 +10,12 @@ RUN --network=none --mount=type=bind,source=git,target=/opt/git-source,readonly 
     && mkdir /tmp/git-source \
     && tar --extract --xz --file=/opt/git-source/git.tar.xz \
       --directory=/tmp/git-source --strip-components=1 --no-same-owner \
+    && rustc --version | grep -E '^rustc 1\.100\.0 ' \
+    && cargo --version | grep -E '^cargo 1\.100\.0 ' \
     && make -C /tmp/git-source -j2 prefix=/usr/local DESTDIR=/git-runtime \
       NO_CURL=YesPlease NO_OPENSSL=YesPlease NO_EXPAT=YesPlease \
       NO_GETTEXT=YesPlease NO_PERL=YesPlease NO_TCLTK=YesPlease \
+      CARGO_ARGS='--release --locked --offline' \
       CFLAGS='-O2 -fstack-protector-strong -D_FORTIFY_SOURCE=3 -fPIE -Wformat -Werror=format-security' \
       LDFLAGS='-Wl,-z,relro,-z,now -pie' INSTALL_STRIP=-s install \
     && test "$(/git-runtime/usr/local/bin/git --version)" = "git version $GIT_VERSION" \

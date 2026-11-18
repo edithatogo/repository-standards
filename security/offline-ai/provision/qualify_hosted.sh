@@ -120,7 +120,7 @@ with open(sys.argv[1], encoding="utf-8") as stream:
 if data.get("schema_version") != 1 or data.get("architecture") != "linux/amd64":
     raise SystemExit(2)
 for name, repository in (("python", "python"), ("node", "node"),
-                         ("registry", "registry"), ("git_builder", "buildpack-deps")):
+                         ("registry", "registry"), ("git_builder", "rust")):
     ref = data[name]["reference"]
     if not re.fullmatch(r"docker\.io/library/" + repository + r"@sha256:[0-9a-f]{64}", ref):
         raise SystemExit(2)

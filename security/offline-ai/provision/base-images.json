@@ -17,7 +17,7 @@
     "source": "https://hub.docker.com/v2/repositories/library/registry/tags/3"
   },
   "git_builder": {
-    "reference": "docker.io/library/buildpack-deps@sha256:0bcdd861dae13860b1e82e6d5357521e2e618fbd589590d8b2ce316dbacc6712",
-    "source": "https://hub.docker.com/v2/repositories/library/buildpack-deps/tags/trixie"
+    "reference": "docker.io/library/rust@sha256:ebc54bef33ec8f9a5cd05799366010f35efbb73b354fb4f2cb086ec6b9460ef5",
+    "source": "https://hub.docker.com/v2/repositories/library/rust/tags/1.100.0-trixie"
   }
 }

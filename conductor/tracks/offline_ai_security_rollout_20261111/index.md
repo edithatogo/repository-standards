@@ -817,3 +817,9 @@ The Rust trial used Rustfmt from Rust 1.100.0 and local Semgrep core
 The syntax check rejected six malformed controls. The 14 OS package, 19
 container and eight scanner wrapper tests passed on Python 3.15.2.
 Shell syntax, actionlint, Zizmor and diff checks passed.
+
+Hosted image run `44303265564` failed at Git's default Cargo build because
+the C build image did not contain Cargo. The signed source archive's
+`Cargo.lock` lists only the bundled Git core crate. Use the digest-pinned
+official Rust 1.100.0 Debian 13 build image and explicitly build that crate
+with `--release --locked --offline`. This retains Git's default Rust code.
