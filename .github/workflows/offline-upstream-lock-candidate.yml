@@ -1,80 +1,74 @@
-name: Offline upstream lock candidate
+name: Tree-sitter provenance probe
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/offline-upstream-lock-candidate.yml
-      - security/offline-ai/provision/**
-      - privacy/requirements.lock
   workflow_dispatch:
 
 permissions:
   contents: read
 
-concurrency:
-  group: offline-lock-candidate-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  resolve:
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+  compare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 12
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
-        with:
-          python-version: '3.15.2'
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-        with:
-          node-version: '24.22.1'
-      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e
-        with:
-          version: '0.13.8'
-          enable-cache: false
-      - name: Resolve public metadata into an unreviewed candidate
+      - name: Verify the published wheel and pinned tree-sitter source
+        shell: bash
         run: |
-          python security/offline-ai/provision/resolve_candidate.py \
-            --destination "$RUNNER_TEMP/offline-lock-candidate"
-      - name: Preserve public lock candidate
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: offline-upstream-lock-candidate
-          path: ${{ runner.temp }}/offline-lock-candidate
-          if-no-files-found: error
-          retention-days: 7
-
-  gitleaks-candidate:
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    env:
-      PYTHONDONTWRITEBYTECODE: "1"
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          persist-credentials: false
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
-        with:
-          python-version: '3.15.2'
-      - name: Build an unreviewed Gitleaks dependency candidate
+          set -euo pipefail
+          workspace="$RUNNER_TEMP/tree-sitter-provenance"
+          mkdir -p "$workspace/source" "$workspace/compiler"
+          curl --fail --silent --show-error --location --proto '=https' --max-time 90 \
+            'https://files.pythonhosted.org/packages/f2/13/0d4dc8d124794105f300082c46e3d8ad45eac7af63113b57a5966629b5a3/semgrep-1.185.0-cp310.cp311.cp312.cp313.cp314.py310.py311.py312.py313.py314-none-manylinux_2_34_x86_64.whl' \
+            -o "$workspace/semgrep.whl"
+          curl --fail --silent --show-error --location --proto '=https' --max-time 60 \
+            'https://github.com/tree-sitter/tree-sitter/archive/refs/tags/v0.26.3.tar.gz' \
+            -o "$workspace/tree-sitter.tar.gz"
+          cd "$workspace"
+          sha256sum -c <<'HASHES'
+          0eb6aaadad5b957af96d1300487e10af1dc8016e8ef53072effb48cd4906c02b  semgrep.whl
+          7f4a7cf0a2cd217444063fe2a4d800bc9d21ed609badc2ac20c0841d67166550  tree-sitter.tar.gz
+          HASHES
+          unzip -p semgrep.whl 'semgrep-1.185.0.data/purelib/semgrep/bin/libs/libtree-sitter.so.0.26' > shipped.so
+          test -s shipped.so
+          tar -xzf tree-sitter.tar.gz --strip-components=1 -C source
+          cat > compiler/Dockerfile <<'DOCKERFILE'
+          FROM docker.io/library/almalinux@sha256:26342666bbc10e84acdc9dda31fd2d6bb7fd9bfc88ad523278b178ae5ce5794a
+          RUN printf '%s\n' \
+              '[source-baseos]' \
+              'name=AlmaLinux 9.8 BaseOS' \
+              'baseurl=https://vault.almalinux.org/9.8/BaseOS/x86_64/os/' \
+              'gpgcheck=1' 'repo_gpgcheck=1' \
+              'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9' \
+              '[source-appstream]' \
+              'name=AlmaLinux 9.8 AppStream' \
+              'baseurl=https://vault.almalinux.org/9.8/AppStream/x86_64/os/' \
+              'gpgcheck=1' 'repo_gpgcheck=1' \
+              'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9' \
+              > /etc/yum.repos.d/exact-source.repo \
+            && dnf -y --disablerepo='*' --enablerepo='source-*' \
+              install gcc-11.5.0-14.el9.alma.1 make \
+            && dnf clean all
+          DOCKERFILE
+          docker build --platform linux/amd64 --tag localhost/tree-sitter-provenance:probe compiler
+      - name: Build tree-sitter without network access and compare ELF sections
+        shell: bash
         run: |
-          python -I security/offline-ai/provision/gitleaks_candidate.py \
-            --destination "$RUNNER_TEMP/offline-gitleaks-candidate"
-      - name: Preserve public Gitleaks candidate metadata
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: offline-gitleaks-candidate
-          path: |
-            ${{ runner.temp }}/offline-gitleaks-candidate/candidate-receipt.json
-            ${{ runner.temp }}/offline-gitleaks-candidate/go.mod
-            ${{ runner.temp }}/offline-gitleaks-candidate/go.sum
-            ${{ runner.temp }}/offline-gitleaks-candidate/modules.json
-            ${{ runner.temp }}/offline-gitleaks-candidate/module-closure.json
-            ${{ runner.temp }}/offline-gitleaks-candidate/gitleaks-LICENSE.txt
-          if-no-files-found: warn
-          retention-days: 7
+          set -euo pipefail
+          workspace="$RUNNER_TEMP/tree-sitter-provenance"
+          cd "$workspace"
+          docker run --rm --pull=never --network none --cap-drop ALL \
+            --security-opt no-new-privileges --read-only --tmpfs /tmp \
+            --user "$(id -u):$(id -g)" --cpus 2 \
+            --mount "type=bind,src=$workspace/source,dst=/source" \
+            localhost/tree-sitter-provenance:probe \
+              bash -euc 'gcc --version | head -n 1; make --no-print-directory -s -j2 -C /source libtree-sitter.so'
+          readelf -n shipped.so source/libtree-sitter.so | sed -n '/^File:/p; /Build ID:/p'
+          for section in text rodata; do
+            objcopy --dump-section ".$section=shipped.$section" shipped.so
+            objcopy --dump-section ".$section=rebuilt.$section" source/libtree-sitter.so
+            sha256sum "shipped.$section" "rebuilt.$section"
+            cmp "shipped.$section" "rebuilt.$section"
+          done
+          id() { readelf -n "$1" | sed -n 's/.*Build ID: //p'; }
+          test "$(id shipped.so)" = 1af4135835d9a1eaa40da0892167e5773173b0a2
+          test "$(id shipped.so)" = "$(id source/libtree-sitter.so)"
