@@ -1,0 +1,109 @@
+{
+  "catalog_sha256": "e17b1486c84fb019c011f7450da00c477d4fb9e76312a26c8cb1fcbf443ed825",
+  "catalog_signing_key": "BF18AC2876178908D6E71267D36CB86CB86B3716",
+  "packages": [
+    {
+      "libraries": [
+        {
+          "name": "libm.so.6",
+          "path": "./usr/lib64/libm.so.6",
+          "sha256": "c8933ed54328b293c8b005fe44161d1c73c09f96abc6d781a6c31230368d1120",
+          "size_bytes": 913048
+        },
+        {
+          "name": "libresolv.so.2",
+          "path": "./usr/lib64/libresolv.so.2",
+          "sha256": "957135933e177a8dee54035988061a90d94a2c81371a1299528e212198535d4c",
+          "size_bytes": 70520
+        }
+      ],
+      "package": "glibc",
+      "sha256": "6d0951f0e84df8f716f3f0736be376209a5c0cf9053aaa19e56a30b9b2e96401",
+      "size_bytes": 2057688,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/glibc-2.34-290.el9_9.x86_64.rpm",
+      "version": "0:2.34-290.el9_9"
+    },
+    {
+      "libraries": [
+        {
+          "name": "libcurl.so.4",
+          "path": "./usr/lib64/libcurl.so.4.7.0",
+          "sha256": "cb7fdd4fa03bec8819b51b79f203be43fb61c3a6779a0ac112f1840b98134e97",
+          "size_bytes": 517032
+        }
+      ],
+      "package": "libcurl-minimal",
+      "sha256": "d12cbbe2211615a2ed3009d9bd4c7664fc9c7e49f86227308d1249fc839f6b13",
+      "size_bytes": 229948,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/libcurl-minimal-7.76.1-43.el9.x86_64.rpm",
+      "version": "0:7.76.1-43.el9"
+    },
+    {
+      "libraries": [
+        {
+          "name": "libgcc_s.so.1",
+          "path": "./lib64/libgcc_s-11-20240719.so.1",
+          "sha256": "1e8c2338bae2f3f2b0ed30020c46ff3cfdfdfa571baa8a2c0fe54e25bbd4c855",
+          "size_bytes": 116416
+        }
+      ],
+      "package": "libgcc",
+      "sha256": "1248acf03287807e448174d8753b7b8a9b2cc46f40f237281c91f20fa2339386",
+      "size_bytes": 83809,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/libgcc-11.5.0-17.el9_9.alma.1.x86_64.rpm",
+      "version": "0:11.5.0-17.el9_9.alma.1"
+    },
+    {
+      "libraries": [
+        {
+          "name": "libstdc++.so.6",
+          "path": "./usr/lib64/libstdc++.so.6.0.29",
+          "sha256": "d6f10a8982fd1387d01c40712537c61ea8cb78045353681eaa5524bf8a632a40",
+          "size_bytes": 2314352
+        }
+      ],
+      "package": "libstdc++",
+      "sha256": "204dea020caa78db9c8a6a39ccb0d7f105f33dc0f7931b7a06ed91ae6096d98c",
+      "size_bytes": 753684,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/libstdc++-11.5.0-17.el9_9.alma.1.x86_64.rpm",
+      "version": "0:11.5.0-17.el9_9.alma.1"
+    },
+    {
+      "libraries": [
+        {
+          "name": "libssl.so.3",
+          "path": "./usr/lib64/libssl.so.3.5.9",
+          "sha256": "e7bf391a3b0751011ab1ab4a15de42384cb2f3711efe54d034a64cdd1d1d903f",
+          "size_bytes": 1048208
+        },
+        {
+          "name": "libcrypto.so.3",
+          "path": "./usr/lib64/libcrypto.so.3.5.9",
+          "sha256": "3afbc6ffd08997c437965ff678c49aaf47478a831d1839ee45215747ecba4bfb",
+          "size_bytes": 6167344
+        }
+      ],
+      "package": "openssl-libs",
+      "sha256": "eb84165f8d20afa3aa122c630725c0059ff4a2bc6aa0be599ff5be45d7218d1a",
+      "size_bytes": 2422848,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/openssl-libs-3.5.9-1.el9_9.x86_64.rpm",
+      "version": "1:3.5.9-1.el9_9"
+    },
+    {
+      "libraries": [
+        {
+          "name": "liblzma.so.5",
+          "path": "./usr/lib64/liblzma.so.5.2.5",
+          "sha256": "13b79722dcc38a2993f520519f4abc2666e00931f58825415aceca8ee016ed23",
+          "size_bytes": 177576
+        }
+      ],
+      "package": "xz-libs",
+      "sha256": "ae121db95242bdb889ea6a6d1e8fef3f0f512b280d4d3f23d7695159ef857a3c",
+      "size_bytes": 93047,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/xz-libs-5.2.5-8.el9_9.1.x86_64.rpm",
+      "version": "0:5.2.5-8.el9_9.1"
+    }
+  ],
+  "schema_version": 1
+}

@@ -1,4 +1,4 @@
-name: Tree-sitter provenance probe
+name: Updated Semgrep library probe
 
 on:
   workflow_dispatch:
@@ -7,68 +7,77 @@ permissions:
   contents: read
 
 jobs:
-  compare:
+  probe:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
-      - name: Verify the published wheel and pinned tree-sitter source
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          path: inputs
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: edithatogo/repository-standards
+          ref: 8b9b3c2d62e79af4b2592ae7b1e630ef895e0be3
+          persist-credentials: false
+          path: policy
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: edithatogo/innovate
+          ref: 12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2
+          persist-credentials: false
+          fetch-depth: 0
+          path: consumer
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.15.2'
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: '1.100.0'
+          components: rustfmt
+      - name: Stage the verified native payloads
         shell: bash
         run: |
           set -euo pipefail
-          workspace="$RUNNER_TEMP/tree-sitter-provenance"
-          mkdir -p "$workspace/source" "$workspace/compiler"
-          curl --fail --silent --show-error --location --proto '=https' --max-time 90 \
-            'https://files.pythonhosted.org/packages/f2/13/0d4dc8d124794105f300082c46e3d8ad45eac7af63113b57a5966629b5a3/semgrep-1.185.0-cp310.cp311.cp312.cp313.cp314.py310.py311.py312.py313.py314-none-manylinux_2_34_x86_64.whl' \
-            -o "$workspace/semgrep.whl"
-          curl --fail --silent --show-error --location --proto '=https' --max-time 60 \
-            'https://github.com/tree-sitter/tree-sitter/archive/refs/tags/v0.26.3.tar.gz' \
-            -o "$workspace/tree-sitter.tar.gz"
-          cd "$workspace"
-          sha256sum -c <<'HASHES'
-          0eb6aaadad5b957af96d1300487e10af1dc8016e8ef53072effb48cd4906c02b  semgrep.whl
-          7f4a7cf0a2cd217444063fe2a4d800bc9d21ed609badc2ac20c0841d67166550  tree-sitter.tar.gz
-          HASHES
-          unzip -p semgrep.whl 'semgrep-1.185.0.data/purelib/semgrep/bin/libs/libtree-sitter.so.0.26' > shipped.so
-          test -s shipped.so
-          tar -xzf tree-sitter.tar.gz --strip-components=1 -C source
-          cat > compiler/Dockerfile <<'DOCKERFILE'
-          FROM docker.io/library/almalinux@sha256:26342666bbc10e84acdc9dda31fd2d6bb7fd9bfc88ad523278b178ae5ce5794a
-          RUN printf '%s\n' \
-              '[source-baseos]' \
-              'name=AlmaLinux 9.8 BaseOS' \
-              'baseurl=https://vault.almalinux.org/9.8/BaseOS/x86_64/os/' \
-              'gpgcheck=1' 'repo_gpgcheck=1' \
-              'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9' \
-              '[source-appstream]' \
-              'name=AlmaLinux 9.8 AppStream' \
-              'baseurl=https://vault.almalinux.org/9.8/AppStream/x86_64/os/' \
-              'gpgcheck=1' 'repo_gpgcheck=1' \
-              'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9' \
-              > /etc/yum.repos.d/exact-source.repo \
-            && dnf -y --disablerepo='*' --enablerepo='source-*' \
-              install gcc-11.5.0-14.el9.alma.1 make \
-            && dnf clean all
+          umask 022
+          [[ "$(git -C policy rev-parse HEAD)" = 8b9b3c2d62e79af4b2592ae7b1e630ef895e0be3 ]]
+          [[ "$(git -C consumer rev-parse HEAD)" = 12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2 ]]
+          if ! command -v bsdtar >/dev/null; then
+            sudo apt-get -qq update
+            sudo apt-get -qq install -y --no-install-recommends libarchive-tools
+          fi
+          trial="$RUNNER_TEMP/semgrep-updated-libraries"
+          python -I -B policy/security/offline-ai/provision/probe_semgrep_rust.py --prepare "$trial"
+          python -I -B inputs/security/offline-ai/provision/stage_semgrep_library_probe.py "$trial/libs" "$(command -v bsdtar)"
+          mkdir "$RUNNER_TEMP/trial-runtime"
+          cat > "$RUNNER_TEMP/trial-runtime/Dockerfile" <<'DOCKERFILE'
+          FROM docker.io/library/python@sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85
+          RUN apt-get update && apt-get install -y --no-install-recommends git \
+              && rm -rf /var/lib/apt/lists/*
           DOCKERFILE
-          docker build --platform linux/amd64 --tag localhost/tree-sitter-provenance:probe compiler
-      - name: Build tree-sitter without network access and compare ELF sections
+          docker build --platform linux/amd64 --tag localhost/semgrep-library-probe:trial "$RUNNER_TEMP/trial-runtime"
+      - name: Check scanner coverage and Rust syntax with networking disabled
         shell: bash
         run: |
           set -euo pipefail
-          workspace="$RUNNER_TEMP/tree-sitter-provenance"
-          cd "$workspace"
-          docker run --rm --pull=never --network none --cap-drop ALL \
-            --security-opt no-new-privileges --read-only --tmpfs /tmp \
-            --user "$(id -u):$(id -g)" --cpus 2 \
-            --mount "type=bind,src=$workspace/source,dst=/source" \
-            localhost/tree-sitter-provenance:probe \
-              bash -euc 'gcc --version | head -n 1; make --no-print-directory -s -j2 -C /source libtree-sitter.so'
-          readelf -n shipped.so source/libtree-sitter.so | sed -n '/^File:/p; /Build ID:/p'
-          for section in text rodata; do
-            objcopy --dump-section ".$section=shipped.$section" shipped.so
-            objcopy --dump-section ".$section=rebuilt.$section" source/libtree-sitter.so
-            sha256sum "shipped.$section" "rebuilt.$section"
-            cmp "shipped.$section" "rebuilt.$section"
-          done
-          id() { readelf -n "$1" | sed -n 's/.*Build ID: //p'; }
-          test "$(id shipped.so)" = 1af4135835d9a1eaa40da0892167e5773173b0a2
-          test "$(id shipped.so)" = "$(id source/libtree-sitter.so)"
+          trial="$RUNNER_TEMP/semgrep-updated-libraries"
+          rustfmt="$(rustup which --toolchain 1.100.0 rustfmt)"
+          rust_toolchain="${rustfmt%/bin/rustfmt}"
+          [[ "$("$rust_toolchain/bin/rustc" --version)" = 'rustc 1.100.0 '* ]]
+          docker image inspect --format '{{.Id}}' localhost/semgrep-library-probe:trial
+          docker run --rm --pull=never --entrypoint=/bin/bash \
+            --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --pids-limit 256 --memory 8g --cpus 4 --user 65534:65534 \
+            --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/consumer,dst=/work,readonly" \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/policy,dst=/policy,readonly" \
+            --mount "type=bind,src=$trial,dst=/candidate,readonly" \
+            --mount "type=bind,src=$rust_toolchain,dst=/rust-toolchain,readonly" \
+            -e HOME=/tmp -e TMPDIR=/tmp localhost/semgrep-library-probe:trial -euc '
+              dependencies="$(LD_TRACE_LOADED_OBJECTS=1 /candidate/semgrep-core)"
+              for library in libm.so.6 libresolv.so.2 libcurl.so.4 libgcc_s.so.1 libstdc++.so.6 libssl.so.3 libcrypto.so.3 liblzma.so.5; do
+                grep -F -- "=> /candidate/libs/$library " <<< "$dependencies"
+              done
+              exec /usr/local/bin/python -I -B /policy/security/offline-ai/provision/probe_semgrep_rust.py \
+                --probe /candidate/semgrep-core /rust-toolchain/bin/rustfmt /work
+            '
