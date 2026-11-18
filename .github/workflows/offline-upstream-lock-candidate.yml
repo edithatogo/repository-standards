@@ -75,8 +75,15 @@ jobs:
             --mount "type=bind,src=$rust_toolchain,dst=/rust-toolchain,readonly" \
             -e HOME=/tmp -e TMPDIR=/tmp localhost/semgrep-library-probe:trial -euc '
               dependencies="$(LD_TRACE_LOADED_OBJECTS=1 /candidate/semgrep-core)"
+              printf "%s\n" "$dependencies"
+              ! grep -Fq -- "not found" <<< "$dependencies"
               for library in libm.so.6 libresolv.so.2 libcurl.so.4 libgcc_s.so.1 libstdc++.so.6 libssl.so.3 libcrypto.so.3 liblzma.so.5; do
-                grep -F -- "=> /candidate/libs/$library " <<< "$dependencies"
+                if grep -Fq -- "$library => " <<< "$dependencies"; then
+                  grep -Fq -- "$library => /candidate/libs/$library " <<< "$dependencies"
+                fi
+              done
+              for library in libcurl.so.4 libssl.so.3 libcrypto.so.3; do
+                grep -Fq -- "$library => /candidate/libs/$library " <<< "$dependencies"
               done
               exec /usr/local/bin/python -I -B /policy/security/offline-ai/provision/probe_semgrep_rust.py \
                 --probe /candidate/semgrep-core /rust-toolchain/bin/rustfmt /work
