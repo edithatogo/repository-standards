@@ -239,17 +239,99 @@ def run(command, *, cwd=None, timeout=1800):
         raise PreparationError("preparation-command")
 
 
-def binaries(vendor, work, catalog):
+def stage_gitleaks_candidate(binary, target, payloads, receipt, lock):
+    """Stage only the exact frozen, unreviewed binary in a local evidence image."""
+    names = {"go.mod", "go.sum", "modules.json", "module-closure.json", "gitleaks-LICENSE.txt"}
+    expected = lock.get("metadata_sha256") if isinstance(lock, dict) else None
+    build = receipt.get("build") if isinstance(receipt, dict) else None
+    source = receipt.get("source") if isinstance(receipt, dict) else None
+    binary_record = lock.get("binary") if isinstance(lock, dict) else None
+    if (lock.get("schema_version") != 1 or lock.get("kind") != "unreviewed-gitleaks-image-candidate"
+            or lock.get("reviewed") is not False or not isinstance(expected, dict)
+            or set(expected) != names or set(payloads) != names
+            or any(not isinstance(value, bytes) or hashlib.sha256(value).hexdigest() != expected[name]
+                   for name, value in payloads.items())
+            or not isinstance(source, dict) or source.get("commit") != lock.get("source_commit")
+            or receipt.get("catalog_sha256") != lock.get("catalog_sha256")
+            or receipt.get("module_closure_verified") is not True
+            or receipt.get("fixture") != {"status": "passed", "kind": "existing-clean-and-canary-git"}
+            or receipt.get("status") != "candidate_complete" or receipt.get("last_stage") != "complete"
+            or receipt.get("reviewed") is not False or receipt.get("image_qualified") is not False
+            or not isinstance(binary_record, dict) or not isinstance(build, dict)
+            or build.get("binary_sha256") != binary_record.get("sha256")):
+        raise PreparationError("gitleaks-candidate-identity")
+    info = binary.lstat()
+    if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
+            or type(binary_record.get("size_bytes")) is not int
+            or info.st_size != binary_record["size_bytes"]
+            or not HASH.fullmatch(binary_record.get("sha256", ""))
+            or digest(binary) != binary_record["sha256"]
+            or target.name != "gitleaks" or target.parent.name != "bin"
+            or target.parent.is_symlink() or not target.parent.is_dir()
+            or target.exists() or target.is_symlink()):
+        raise PreparationError("gitleaks-candidate-binary")
+    created = False
+    try:
+        with binary.open("rb") as source_stream, target.open("xb") as output:
+            created = True
+            shutil.copyfileobj(source_stream, output)
+        target.chmod(0o755)
+        if target.stat().st_size != binary_record["size_bytes"] or digest(target) != binary_record["sha256"]:
+            raise PreparationError("gitleaks-candidate-copy")
+    except BaseException:
+        if created:
+            target.unlink(missing_ok=True)
+        raise
+
+
+def load_gitleaks_image_candidate():
+    """Load the frozen source-build identity without treating it as reviewed."""
+    path = HERE / "gitleaks-image-candidate.json"
+    if path.is_symlink() or not path.is_file():
+        raise PreparationError("gitleaks-candidate-lock")
+    lock = read_json(path)
+    names = {"go.mod", "go.sum", "modules.json", "module-closure.json", "gitleaks-LICENSE.txt"}
+    binary, metadata, artifact = lock.get("binary"), lock.get("metadata_sha256"), lock.get("artifact")
+    if (lock.get("schema_version") != 1 or lock.get("kind") != "unreviewed-gitleaks-image-candidate"
+            or lock.get("reviewed") is not False or not re.fullmatch(r"[0-9a-f]{40}", lock.get("source_commit", ""))
+            or not HASH.fullmatch(lock.get("catalog_sha256", ""))
+            or lock["catalog_sha256"] != digest(HERE / "gitleaks-build-sources.json")
+            or not isinstance(binary, dict) or not HASH.fullmatch(binary.get("sha256", ""))
+            or type(binary.get("size_bytes")) is not int or not 0 < binary["size_bytes"] <= 128 * 1024 * 1024
+            or not isinstance(metadata, dict) or set(metadata) != names
+            or any(not isinstance(value, str) or not HASH.fullmatch(value) for value in metadata.values())
+            or not isinstance(artifact, dict) or not HASH.fullmatch(artifact.get("archive_sha256", ""))
+            or not re.fullmatch(r"[0-9a-f]{40}", artifact.get("policy_commit", ""))
+            or type(artifact.get("id")) is not int or type(artifact.get("run_id")) is not int):
+        raise PreparationError("gitleaks-candidate-lock")
+    return lock
+
+
+def binaries(vendor, work, catalog, *, candidate_lock=None):
     (vendor / "bin").mkdir(mode=0o755)
-    archive = work / "gitleaks.tar.gz"
-    download(catalog["downloads"]["gitleaks"], archive)
-    spec = importlib.util.spec_from_file_location(
-        "pinned_gitleaks_installer", ROOT / "scripts/install_gitleaks.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    payload = module.extract_verified(archive.read_bytes(), "linux_x64.tar.gz",
-                                      catalog["downloads"]["gitleaks"]["sha256"])
-    (vendor / "bin/gitleaks").write_bytes(payload)
+    if candidate_lock is None:
+        archive = work / "gitleaks.tar.gz"
+        download(catalog["downloads"]["gitleaks"], archive)
+        spec = importlib.util.spec_from_file_location(
+            "pinned_gitleaks_installer", ROOT / "scripts/install_gitleaks.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        payload = module.extract_verified(archive.read_bytes(), "linux_x64.tar.gz",
+                                          catalog["downloads"]["gitleaks"]["sha256"])
+        (vendor / "bin/gitleaks").write_bytes(payload)
+    else:
+        spec = importlib.util.spec_from_file_location("gitleaks_candidate", HERE / "gitleaks_candidate.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        target = vendor / "bin/gitleaks"
+        try:
+            module.candidate(work / "gitleaks-evidence", local_binary=lambda binary, payloads, receipt:
+                             stage_gitleaks_candidate(binary, target, payloads, receipt, candidate_lock))
+            if not target.is_file() or target.is_symlink():
+                raise PreparationError("gitleaks-candidate-missing")
+        except BaseException:
+            target.unlink(missing_ok=True)
+            raise
     download(catalog["downloads"]["opengrep"], vendor / "bin/opengrep")
     for path in (vendor / "bin").iterdir():
         path.chmod(0o755)
@@ -379,7 +461,7 @@ def finalize(vendor, receipt, catalog):
     receipt["manifest_sha256"] = digest(manifest)
 
 
-def prepare(destination, receipt_path):
+def prepare(destination, receipt_path, *, gitleaks_candidate_evidence_only=False):
     if (sys.version_info[:3] != (3, 15, 2) or platform.system() != "Linux"
             or platform.machine() != "x86_64"):
         raise PreparationError("runtime")
@@ -387,17 +469,26 @@ def prepare(destination, receipt_path):
         if path.exists() or path.is_symlink() or not path.parent.is_dir():
             raise PreparationError("destination")
     catalog = load_catalog()
+    candidate_lock = load_gitleaks_image_candidate() if gitleaks_candidate_evidence_only else None
     receipt = {"schema_version": 1, "kind": "offline-vendor-preparation", "status": "failed",
                "sources_catalog_sha256": digest(HERE / "sources.json"),
-               "policy_inputs": catalog["policy_inputs"], "upstream_sources": catalog["downloads"],
+               "policy_inputs": catalog["policy_inputs"], "upstream_sources": dict(catalog["downloads"]),
                "stages": {stage: "not-run" for stage in STAGES}, "image_qualified": False,
                "runner_registered": False}
+    if candidate_lock is not None:
+        receipt["upstream_sources"]["gitleaks"] = {
+            "kind": "unreviewed-source-build-evidence-only",
+            "source_commit": candidate_lock["source_commit"],
+            "binary_sha256": candidate_lock["binary"]["sha256"],
+            "candidate_lock_sha256": digest(HERE / "gitleaks-image-candidate.json"),
+            "artifact": candidate_lock["artifact"],
+        }
     destination.mkdir(mode=0o755)
     current = "binaries"
     try:
         with tempfile.TemporaryDirectory(prefix="offline-vendor-build-") as temporary:
             work = Path(temporary)
-            binaries(destination, work, catalog)
+            binaries(destination, work, catalog, candidate_lock=candidate_lock)
             receipt["stages"][current] = "passed"
             current = "python"
             runtime = python_wheels(destination, work, catalog)
@@ -431,9 +522,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--destination", required=True, type=Path)
     parser.add_argument("--receipt", required=True, type=Path)
+    parser.add_argument("--gitleaks-candidate-evidence-only", action="store_true")
     args = parser.parse_args()
     try:
-        prepare(args.destination.absolute(), args.receipt.absolute())
+        prepare(args.destination.absolute(), args.receipt.absolute(),
+                gitleaks_candidate_evidence_only=args.gitleaks_candidate_evidence_only)
     except (Exception, KeyboardInterrupt):
         print(ERROR, file=sys.stderr)
         return 2

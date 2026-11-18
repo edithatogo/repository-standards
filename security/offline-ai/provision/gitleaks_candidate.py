@@ -338,7 +338,7 @@ def emit_public_metadata(destination, *, complete):
           "total_bytes": sum(map(len, payloads.values()))})
 
 
-def candidate(destination):
+def candidate(destination, *, local_binary=None):
     require(not destination.exists() and not destination.is_symlink(), "preflight")
     destination.mkdir(mode=0o700, parents=True)
     receipt = {"schema_version": 1, "kind": "unreviewed-gitleaks-build-candidate",
@@ -456,6 +456,10 @@ def candidate(destination):
                                 for name, payload in payloads.items()]
             receipt["status"] = "candidate_complete"
             receipt["last_stage"] = "complete"
+            # The optional sink is used only by the evidence-only image build.
+            # The binary is never included in public candidate metadata.
+            if local_binary is not None:
+                local_binary(binary, payloads, receipt)
             save()
         return receipt
     except (Exception, KeyboardInterrupt):

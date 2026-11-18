@@ -3,9 +3,16 @@
 # This command never registers a runner or grants production qualification.
 set -euo pipefail
 umask 022
-if [[ "$#" != 2 ]]; then
-  echo "Usage: qualify_hosted.sh CLEAN_POLICY_CHECKOUT NEW_DESTINATION" >&2
+if [[ "$#" != 2 && "$#" != 3 ]]; then
+  echo "Usage: qualify_hosted.sh CLEAN_POLICY_CHECKOUT NEW_DESTINATION [--gitleaks-candidate-evidence-only]" >&2
   exit 2
+fi
+candidate_args=()
+candidate_enabled=false
+if [[ "$#" = 3 ]]; then
+  [[ "$3" = --gitleaks-candidate-evidence-only ]] || exit 2
+  candidate_args+=("$3")
+  candidate_enabled=true
 fi
 policy_root="$(cd -- "$1" && pwd)"
 destination="$(python -I -c 'import pathlib,sys; print(pathlib.Path(sys.argv[1]).absolute())' "$2")"
@@ -31,15 +38,16 @@ finish() {
       stage=registry-cleanup
     fi
   fi
-  python -I - "$evidence/hosted-execution.json" "$stage" "$status" "$policy_sha" <<'PY'
+  python -I - "$evidence/hosted-execution.json" "$stage" "$status" "$policy_sha" "$candidate_enabled" <<'PY'
 import json, os, pathlib, sys
-path, stage, status, policy = sys.argv[1:]
+path, stage, status, policy, candidate = sys.argv[1:]
 record = {
     "schema_version": 1,
     "kind": "offline-image-hosted-execution",
     "status": "passed" if status == "0" else "failed",
     "last_stage": stage,
     "policy_commit": policy,
+    "gitleaks_candidate_evidence_only": candidate == "true",
     "preparation_network_access": True,
     "scanner_network_access": False,
     "runner_registration_qualified": False,
@@ -73,7 +81,7 @@ python -I "$policy_root/security/offline-ai/provision/prepare_os_packages.py" \
 stage=upstream-preparation
 # Missing committed locks fail here; candidate-lock generation is a separate job.
 PYTHONDONTWRITEBYTECODE=1 python "$policy_root/security/offline-ai/provision/prepare_vendor.py" \
-  --destination "$destination/context/vendor" --receipt "$evidence/preparation.json"
+  --destination "$destination/context/vendor" --receipt "$evidence/preparation.json" "${candidate_args[@]}"
 PYTHONPATH="$policy_root/security/offline-ai" PYTHONSAFEPATH=1 \
   python -m security.verify_vendor "$destination/context/vendor"
 cp "$destination/context/vendor/manifest.json" "$evidence/asset-manifest.json"

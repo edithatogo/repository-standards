@@ -660,3 +660,39 @@ report retains 484 matches, including 14 critical and 150 high, plus one
 scanner-ignored critical match. Vulnerability review and release qualification
 remain false. Separate image-controls run `44051618055` passed its controls; it
 does not qualify the vulnerable image or the consumer SAST result.
+
+### Gitleaks image-candidate continuation — 18 November 2026
+
+The same integrator owns this clean isolated checkout at base
+`a32c1331f606dc620df9a3be4e45e96bc85bf2ea`. The bounded candidate scope is
+the existing Gitleaks source builder, vendor preparation and focused tests,
+the hosted qualification script and canary workflow, its provisioning README,
+a hash-bound candidate lock, and this track. The runtime-policy pin may be updated only after the
+source commit. Native scope is limited to the existing draft PR and its hosted
+evidence runs; no consumer pin or required check is changed.
+
+The retained all-layer report's three fixed critical Go matches and 19 high
+standard-library matches identify `/usr/local/bin/gitleaks`. The independent
+squashed SBOM also inventories the same package names and versions; that
+name/version correlation alone does not establish exploitability. The earlier
+source-build artifact `14316722318` is bound to commit `a32c1331` and its
+GitHub archive SHA-256 is
+`8b248e17ddc259d233e6d1b1c8496554af2edc1581996707632e26d20544dde0`.
+Its 65 compiled module versions and Go 1.27.4 had no matches in the earlier
+bounded OSV query; the 202-module downloaded closure and licence obligations
+still require review. The next operation is an explicitly evidence-only build
+using the frozen closure and binary hashes, followed by the existing real
+image, offline-control and vulnerability collectors. The normal reusable lane
+continues to use its current pinned source until the candidate is qualified.
+
+The evidence-only option now verifies the rebuilt binary's exact size and
+SHA-256 and the five frozen source/module metadata hashes before staging it in
+the local candidate image. The default vendor path still selects the pinned
+upstream binary. A negative control exposed a partial candidate binary left
+after a later builder failure; the candidate path now removes it and the
+regression passes. On repo-local Python 3.15.2, 56 focused builder, vendor,
+export and image-qualification tests passed. Shell syntax, actionlint, Ruff
+syntax/name checks and the existing offline Zizmor mode passed. The staged
+Gitleaks/Presidio guard scanned all eight selected files without blocking
+findings or skipped files. These local checks do not establish Linux image,
+consumer SAST, advisory, licence or release acceptance.

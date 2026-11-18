@@ -217,3 +217,13 @@ Candidate success is not approval. Review the complete source/toolchain/module
 identities and commit the exact lock bytes before connecting a strict reviewed
 build to vendor preparation. No candidate output is automatically promoted, and
 all image, release and runner qualification flags remain false.
+
+The Innovate hosted canary can explicitly select
+`--gitleaks-candidate-evidence-only`. Before staging the local binary, it
+requires the build, fixture, complete module-closure metadata and binary bytes
+to match `gitleaks-image-candidate.json`. The canary keeps the binary in its
+temporary vendor tree and locally built image; it uploads only the existing
+value-free receipts and inventories. The normal preparation path still uses the
+pinned upstream release. This evidence-only option does not approve the
+candidate, authorize its distribution, or establish a passing image or SAST
+scan.
