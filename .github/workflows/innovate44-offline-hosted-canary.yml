@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/innovate
-          ref: ecaccce231a1aa53b46418df52bd2cf3cc4e8d85
+          ref: 12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2
           fetch-depth: 0
           persist-credentials: false
           path: consumer
@@ -46,7 +46,7 @@ jobs:
           set -euo pipefail
           [[ "$POLICY_HEAD" =~ ^[0-9a-f]{40}$ ]]
           test "$(git -C candidate-policy rev-parse HEAD)" = "$POLICY_HEAD"
-          test "$(git -C consumer rev-parse HEAD)" = ecaccce231a1aa53b46418df52bd2cf3cc4e8d85
+          test "$(git -C consumer rev-parse HEAD)" = 12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2
           git -C consumer merge-base --is-ancestor cc2e4da4af9c848043b31f1191c9d96212048276 HEAD
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
@@ -116,6 +116,29 @@ jobs:
               echo "Outbound IPv4 probe denied"
               exec bash /policy/security/offline-ai/run.sh
             '
+      - name: Test alternate Rust scanner coverage
+        if: always() && steps.prepare.outcome == 'success' && steps.consumer_policy.outcome == 'success'
+        shell: bash
+        env:
+          CONSUMER_POLICY: ${{ steps.consumer_policy.outputs.path }}
+          CANDIDATE_IMAGE: ${{ steps.prepare.outputs.image }}
+        run: |
+          set -euo pipefail
+          umask 022
+          [[ "$CANDIDATE_IMAGE" =~ ^localhost/offline-ai-security@sha256:[0-9a-f]{64}$ ]]
+          trial="$RUNNER_TEMP/semgrep-rust-trial"
+          probe=/policy/security/offline-ai/provision/probe_semgrep_rust.py
+          python -I "$CONSUMER_POLICY/security/offline-ai/provision/probe_semgrep_rust.py" --prepare "$trial"
+          docker run --rm --pull=never --entrypoint=/usr/local/bin/python \
+            --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --pids-limit 256 --memory 8g --cpus 4 --user 65534:65534 \
+            --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/consumer,dst=/work,readonly" \
+            --mount "type=bind,src=$CONSUMER_POLICY,dst=/policy,readonly" \
+            --mount "type=bind,src=$trial,dst=/candidate,readonly" \
+            -e HOME=/tmp -e TMPDIR=/tmp "$CANDIDATE_IMAGE" \
+            -I -B "$probe" --probe /candidate/semgrep-core /work \
+            > "$RUNNER_TEMP/offline-runtime/evidence/semgrep-rust-probe.json"
       - name: Inventory the tested image
         if: always() && steps.prepare.outcome == 'success'
         shell: bash

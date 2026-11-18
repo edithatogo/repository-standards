@@ -755,3 +755,29 @@ back before installation. Catalog SHA-256 is
 All 14 OS package tests and 19 offline container control tests passed on
 Python 3.15.2. The hosted canary must still install the closure with
 networking disabled and verify the final package database.
+
+### Alternate Rust scanner trial, 18 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this trial on
+`codex/innovate44-offline-hosted` in the existing shared-policy checkout.
+The starting head is `7565d57f27711f51fe23918227171e67e1f3bf60`.
+Scope is the standalone trial helper, the existing Rust fixture expectations,
+the hosted canary, this record and the subsequent runtime-policy pin.
+The separate evidence step targets Innovate PR #684 head
+`12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2`. The existing consumer
+Opengrep check and full image vulnerability collection retain their gates.
+
+The macOS standalone Semgrep core 1.185.0 passed every required Rust rule
+fixture, including the line-specific controls. It reported all 747 tracked
+Rust sources with zero errors and findings. Independent Rustfmt checks with
+the declared vendor editions accepted the previously rejected sources.
+The Linux wheel is pinned by size and SHA-256. Its native dependency bundle
+still requires advisory and licence review before production use. The next
+operation is an isolated Linux x64 trial using the same fixtures, tracked
+paths and read-only mounts, with network access disabled during scanning.
+
+The trial helper verified the actual Linux wheel and all 27 native files,
+and its local scan reproduced all nine Rust fixtures and 747 source reports
+on Python 3.15.2. All eight existing scan-wrapper tests, actionlint and diff
+checks passed. The Linux trial retains a value-free result with its source
+head. The normal Opengrep and image results remain separate promotion gates.
