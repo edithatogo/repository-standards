@@ -172,6 +172,14 @@ def scan(root: Path, rules: Path, executable: str = "/usr/local/bin/opengrep", *
          offline_container: bool = True) -> ScanOutcome:
     """Require complete scan reporting, zero findings and zero parser errors."""
     paths, submodules = tracked_sources(root, offline_container=offline_container)
+    return scan_paths(root, rules, paths, submodules, executable, esbuild=esbuild,
+                      offline_container=offline_container)
+
+
+def scan_paths(root: Path, rules: Path, paths: list[str], submodules: int,
+               executable: str = "/usr/local/bin/opengrep", *, esbuild: str = ESBUILD,
+               offline_container: bool = True) -> ScanOutcome:
+    """Scan a partition of the already validated parent Git index."""
     scanned: set[str] = set()
     findings = errors = failures = 0
     env = secrets_scan.clean_environment(offline_container=offline_container)

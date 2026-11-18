@@ -879,3 +879,32 @@ run on macOS reported the same five failures and 26 errors at the starting
 commit and with the patch. The affected tests exercise SBOM and vulnerability
 evidence code that requires Linux amd64. Actionlint passed with the existing
 `ai-security-offline` runner label configured.
+
+### Integrate the verified scanners in the hosted consumer lane, 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet at
+`3bb521b0c24a8d79d1fa84478253e919e98c091b` in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44`. Scope is the
+hosted consumer workflow, its locked scanner assets and SAST runner, focused
+tests, the runtime policy pin, and this record. Native scope is draft PR #152.
+PR #684 head `12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2` supplies the test consumer.
+
+The EPEL 9 libunwind RPM signature, payload and executable sections verified
+against the shipped library. Hosted run `44394142641` reproduced Tree-sitter
+0.26.3 with the same build ID, executable and read-only data. Hosted run
+`44396381026` loaded the eight signed AlmaLinux updates and passed nine
+Rust rules fixtures, six malformed syntax controls and all 747 Rust sources.
+Hosted run `44393030180` reproduced the report-safe Gitleaks build and passed
+both mode-0600 fixtures. Use those assets in the full hosted consumer run.
+Keep the parent Git index as the common inventory, run Opengrep on its existing
+non-Rust languages and Semgrep plus Rustfmt on every Rust file, and fail on
+any findings, parser error or coverage gap. Keep image vulnerability review
+separate from the workflow's runtime results.
+
+On Python 3.15.2, nine SAST wrapper tests and 19 Gitleaks candidate tests passed.
+Reassembly from the independently verified wheel and signed RPM bytes matched
+all 27 locked files. Verification rejected a modified library. Actionlint,
+Bash syntax and Git diff checks passed. The hosted job mounts the exact
+Semgrep bundle and Rustfmt read-only and retains a separate asset inventory.
+The whole-image SPDX and all-layer Grype scans continue against the runtime
+image's actual digest.

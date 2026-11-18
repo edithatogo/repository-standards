@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
+hosted_sast=false
+if [[ "$#" = 1 && "$1" = --hosted-sast ]]; then
+  hosted_sast=true
+elif [[ "$#" != 0 ]]; then
+  exit 2
+fi
 cd /work
 # The readonly workspace is owned by the checkout runner, not by the sandbox UID.
 git config --global --add safe.directory /work
@@ -16,7 +22,12 @@ quiet gitleaks-fixtures python /policy/security/offline-ai/scripts/verify_gitlea
 quiet gitleaks-history python -I /policy/security/offline-ai/scripts/scan_gitleaks.py
 quiet sast-fixtures python /policy/security/offline-ai/scripts/verify_sast_fixtures.py
 quiet pytest python -m pytest -q -p no:cacheprovider /policy/security/offline-ai/tests/test_scan_opengrep.py
-quiet opengrep python -I /policy/security/offline-ai/scripts/scan_opengrep.py
+if [[ "$hosted_sast" = true ]]; then
+  quiet hosted-sast python -I /policy/security/offline-ai/scripts/scan_hosted_sast.py
+  echo "Hosted Semgrep and Opengrep SAST passed"
+else
+  quiet opengrep python -I /policy/security/offline-ai/scripts/scan_opengrep.py
+fi
 quiet pytest python -m pytest -q -p no:cacheprovider \
   /policy/security/offline-ai/tests/test_detect_ai.py \
   /policy/security/offline-ai/tests/test_agent_boundary.py \

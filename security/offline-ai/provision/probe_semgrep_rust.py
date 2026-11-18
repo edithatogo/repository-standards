@@ -178,19 +178,37 @@ def verify_syntax(rustfmt: Path, root: Path, sources: list[str], environment: di
         return hashlib.file_digest(binary, "sha256").hexdigest()
 
 
-def probe(binary: Path, rustfmt: Path, consumer: Path) -> dict[str, int | str]:
-    environment = scan_opengrep.secrets_scan.clean_environment(offline_container=True)
-    for key in tuple(environment):
-        if key.startswith(("SEMGREP_", "OPENGREP_")):
-            environment.pop(key)
-    environment["SEMGREP_SEND_METRICS"] = "off"
-
+def verify_rust_fixtures(binary: Path, environment: dict[str, str]) -> int:
     fixture_names = RUST_FINDINGS | RUST_CLEAN
     fixtures = [str(FIXTURES / name) for name in sorted(fixture_names)]
     findings = scan(binary, FIXTURES, fixtures, environment)
     hit_lines = {(Path(item["path"]).name, item["start"]["line"]) for item in findings}
     if {name for name, _ in hit_lines} != RUST_FINDINGS or not RUST_FINDING_LINES <= hit_lines:
         raise ValueError("Rust fixture parity")
+    # Explicit targets must still detect a rule hit when a checkout supplies
+    # ignore files or an inline suppression comment.
+    with tempfile.TemporaryDirectory(prefix="semgrep-rust-ignores-") as temporary:
+        root = Path(temporary).resolve()
+        target = root / ".rs"
+        fixture = (FIXTURES / "rust_bad.rs").read_text(encoding="utf-8")
+        target.write_text(
+            "\n".join(line + " // nosemgrep" for line in fixture.splitlines()) + "\n",
+            encoding="utf-8",
+        )
+        for name in (".gitignore", ".semgrepignore"):
+            (root / name).write_text(".rs\n", encoding="utf-8")
+        if not scan(binary, root, [str(target)], environment):
+            raise ValueError("Rust fixture suppression")
+    return len(fixtures)
+
+
+def probe(binary: Path, rustfmt: Path, consumer: Path) -> dict[str, int | str]:
+    environment = scan_opengrep.secrets_scan.clean_environment(offline_container=True)
+    for key in tuple(environment):
+        if key.startswith(("SEMGREP_", "OPENGREP_")):
+            environment.pop(key)
+    environment["SEMGREP_SEND_METRICS"] = "off"
+    fixtures = verify_rust_fixtures(binary, environment)
 
     tracked, _ = scan_opengrep.tracked_sources(consumer, offline_container=True)
     rust = [path for path in tracked if path.lower().endswith(".rs")]
@@ -198,7 +216,7 @@ def probe(binary: Path, rustfmt: Path, consumer: Path) -> dict[str, int | str]:
     if scan(binary, consumer, rust, environment):
         raise ValueError("Rust consumer findings")
     return {
-        "status": "passed", "semgrep": VERSION, "rust_fixtures": len(fixtures), "rust_sources": len(rust),
+        "status": "passed", "semgrep": VERSION, "rust_fixtures": fixtures, "rust_sources": len(rust),
         "rust_syntax": "passed", "malformed_controls": len(MALFORMED_RUST), "rustfmt_sha256": rustfmt_sha256,
     }
 

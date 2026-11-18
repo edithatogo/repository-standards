@@ -55,7 +55,7 @@ jobs:
         run: |
           bash -n "$POLICY_ROOT/security/offline-ai/provision/qualify_hosted.sh"
           bash "$POLICY_ROOT/security/offline-ai/provision/qualify_hosted.sh" \
-            "$POLICY_ROOT" "$RUNNER_TEMP/offline-runtime"
+            "$POLICY_ROOT" "$RUNNER_TEMP/offline-runtime" --gitleaks-candidate-evidence-only
       - name: Inventory the tested image
         env:
           POLICY_ROOT: ${{ steps.policy.outputs.path }}

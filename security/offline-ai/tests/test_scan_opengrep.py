@@ -12,6 +12,7 @@ from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import scan_opengrep as scanner  # noqa: E402
+import scan_hosted_sast as hosted  # noqa: E402
 
 
 class TrackedSourceScanTests(unittest.TestCase):
@@ -112,6 +113,28 @@ class TrackedSourceScanTests(unittest.TestCase):
         groups = list(scanner.batches(paths))
         self.assertGreater(len(groups), 1)
         self.assertEqual([path for group in groups for path in group], paths)
+
+    def test_hosted_engines_receive_disjoint_complete_index_partitions(self):
+        rust = str(self.root / "code.rs")
+        python = str(self.root / "private.py")
+        binary = Path("/hosted-sast/semgrep-core")
+        rustfmt = Path("/rust-toolchain/bin/rustfmt")
+        environment = {"LD_LIBRARY_PATH": "/hosted-sast/libs"}
+        clean = scanner.ScanOutcome(1, 1, 0, 0, 0, 0, 0)
+        with mock.patch.object(scanner, "scan_paths", return_value=clean) as non_rust, \
+                mock.patch.object(hosted.semgrep, "verify_rust_fixtures") as fixtures, \
+                mock.patch.object(hosted.semgrep, "verify_syntax") as syntax, \
+                mock.patch.object(hosted.semgrep, "scan", return_value=[]) as scan:
+            self.assertEqual(hosted.scan(self.root, binary, rustfmt, environment), 0)
+            non_rust.assert_called_once_with(self.root, scanner.RULES, [python], 0)
+            fixtures.assert_called_once_with(binary, environment)
+            syntax.assert_called_once_with(rustfmt, self.root, [rust], {})
+            scan.assert_called_once_with(binary, self.root, [rust], environment)
+            scan.return_value = [{}]
+            self.assertEqual(hosted.scan(self.root, binary, rustfmt, environment), 2)
+            scan.return_value = []
+            non_rust.return_value = scanner.ScanOutcome(1, 0, 0, 0, 0, 0, 0)
+            self.assertEqual(hosted.scan(self.root, binary, rustfmt, environment), 2)
 
 
 if __name__ == "__main__":
