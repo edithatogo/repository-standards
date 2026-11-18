@@ -49,6 +49,13 @@ jobs:
           trial="$RUNNER_TEMP/semgrep-updated-libraries"
           python -I -B policy/security/offline-ai/provision/probe_semgrep_rust.py --prepare "$trial"
           python -I -B inputs/security/offline-ai/provision/stage_semgrep_library_probe.py "$trial/libs" "$(command -v bsdtar)"
+          cat > "$trial/semgrep-with-verified-libraries" <<'WRAPPER'
+          #!/bin/sh
+          LD_LIBRARY_PATH=/candidate/libs
+          export LD_LIBRARY_PATH
+          exec /candidate/semgrep-core "$@"
+          WRAPPER
+          chmod 0755 "$trial/semgrep-with-verified-libraries"
           mkdir "$RUNNER_TEMP/trial-runtime"
           cat > "$RUNNER_TEMP/trial-runtime/Dockerfile" <<'DOCKERFILE'
           FROM docker.io/library/python@sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85
@@ -74,7 +81,7 @@ jobs:
             --mount "type=bind,src=$trial,dst=/candidate,readonly" \
             --mount "type=bind,src=$rust_toolchain,dst=/rust-toolchain,readonly" \
             -e HOME=/tmp -e TMPDIR=/tmp localhost/semgrep-library-probe:trial -euc '
-              dependencies="$(LD_TRACE_LOADED_OBJECTS=1 /candidate/semgrep-core)"
+              dependencies="$(LD_LIBRARY_PATH=/candidate/libs LD_TRACE_LOADED_OBJECTS=1 /candidate/semgrep-core)"
               printf "%s\n" "$dependencies"
               ! grep -Fq -- "not found" <<< "$dependencies"
               for library in libm.so.6 libresolv.so.2 libcurl.so.4 libgcc_s.so.1 libstdc++.so.6 libssl.so.3 libcrypto.so.3 liblzma.so.5; do
@@ -86,5 +93,5 @@ jobs:
                 grep -Fq -- "$library => /candidate/libs/$library " <<< "$dependencies"
               done
               exec /usr/local/bin/python -I -B /policy/security/offline-ai/provision/probe_semgrep_rust.py \
-                --probe /candidate/semgrep-core /rust-toolchain/bin/rustfmt /work
+                --probe /candidate/semgrep-with-verified-libraries /rust-toolchain/bin/rustfmt /work
             '
