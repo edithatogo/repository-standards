@@ -722,3 +722,36 @@ disposition. The remaining critical matches name Debian curl, glibc and SQLite
 packages. Preparation, scanner and review receipts explicitly keep image,
 vulnerability, consumer and release qualification false. Source, licence and
 advisory review of the candidate and complete consumer parsing remain open.
+
+### Debian 13 hosted image candidate, 18 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the offline image candidate
+in `/Volumes/PortableSSD/GitHub/repository-standards-innovate44` on
+`codex/innovate44-offline-hosted`, based on
+`8e303d11a81ce821ffb37893030ee0d91d07b93f`. Scope is the Python base and
+Debian package locks, the provisioner's distro check and focused test,
+the provisioning README, this record, the hosted canary's Innovate ref,
+and the subsequent runtime-policy source pin. Native scope is the existing
+draft PR #152 and its hosted evidence runs. The next operation is to build
+the pinned Debian 13 candidate and run the same image, network, SAST and
+all-layer vulnerability controls on Innovate PR #684 head
+`ecaccce231a1aa53b46418df52bd2cf3cc4e8d85`.
+
+The official Linux amd64 Python 3.15.2 slim Trixie image digest is
+`sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85`.
+The verified base dpkg status contains 88 installed packages and has SHA-256
+`75b63974c853f59abf2575cbcb5d0ff8075b2c8fa9151318c0ec7a98dafbe7e2`.
+The image contains Debian-fixed glibc and SQLite versions for three critical
+matches in the Bookworm image. Debian still lists the candidate curl version
+as affected by CVE-2026-19931. The candidate cannot be approved before the
+full hosted scan, dependency review and actual consumer controls complete.
+
+The three Debian package indexes were verified against signed InRelease
+metadata using the official base's Debian archive keyring. The catalog
+selects 33 complete runtime archives totaling 23,792,168 bytes. The exact
+archive sizes, hashes and Debian control fields were independently read
+back before installation. Catalog SHA-256 is
+`911778e03cd76fe91c5d7290b246a5a7f9482e78bb5b4fee373443bf1a0af43a`.
+All 14 OS package tests and 19 offline container control tests passed on
+Python 3.15.2. The hosted canary must still install the closure with
+networking disabled and verify the final package database.
