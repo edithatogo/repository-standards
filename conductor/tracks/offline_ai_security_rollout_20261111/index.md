@@ -921,3 +921,10 @@ The offline controls inspect the mount table through the kernel and do not
 invoke `mount` or `umount`. Purge the package using ordinary dpkg dependency
 checks before flattening the real filesystem, then verify the complete
 installed package list, scanner controls and all-layer findings.
+
+Hosted runs 44419567878 and 44420629222 built the images, prepared the locked
+assets, denied container egress and collected the native inventories and
+advisory reports. Both consumer commands stopped at hosted SAST. Add a private
+stage receipt and allowlist only the fixed stage names for failure output.
+The diagnostic records which check failed while leaving raw scanner streams
+and all source-derived output behind the existing quiet boundary.

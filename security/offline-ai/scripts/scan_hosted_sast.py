@@ -39,27 +39,49 @@ def verify_linkage(binary: Path, lock: dict, env: dict[str, str]) -> None:
         raise ValueError("Hosted SAST linkage")
 
 
-def scan(root: Path, binary: Path, rustfmt: Path, env: dict[str, str]) -> int:
+def scan(root: Path, binary: Path, rustfmt: Path, env: dict[str, str],
+         *, mark=lambda _stage: None) -> int:
+    mark("parent-index")
     paths, submodules = scan_opengrep.tracked_sources(root, offline_container=True)
     rust = [name for name in paths if name.lower().endswith(".rs")]
     non_rust = [name for name in paths if not name.lower().endswith(".rs")]
+    mark("opengrep-coverage")
     opengrep = scan_opengrep.scan_paths(root, scan_opengrep.RULES, non_rust, submodules)
+    mark("rust-fixtures")
     semgrep.verify_rust_fixtures(binary, env)
     rust_findings = 0
     if rust:
+        mark("rust-syntax")
         syntax_env = {key: value for key, value in env.items() if key != "LD_LIBRARY_PATH"}
         semgrep.verify_syntax(rustfmt, root, rust, syntax_env)
+        mark("semgrep-coverage")
         rust_findings = len(semgrep.scan(binary, root, rust, env))
     print(f"Hosted SAST parent-index sources {len(paths)}. "
           f"Opengrep scanned {opengrep.scanned}/{len(non_rust)}, findings {opengrep.findings}, "
           f"scanner errors {opengrep.errors}, parser failures {opengrep.parse_failures}. "
           f"Semgrep scanned {len(rust)}/{len(rust)}, findings {rust_findings}. "
           f"Uninitialized submodules outside scope {submodules}.")
-    return 2 if opengrep.status or rust_findings else 0
+    if opengrep.status:
+        if opengrep.parse_failures:
+            mark("opengrep-parser")
+        elif opengrep.errors or opengrep.failures:
+            mark("opengrep-errors")
+        else:
+            mark("opengrep-findings" if opengrep.findings else "opengrep-coverage")
+        return 2
+    if rust_findings:
+        mark("semgrep-findings")
+        return 2
+    mark("passed")
+    return 0
 
 
-def main() -> int:
+def main(receipt: Path) -> int:
+    def mark(value):
+        receipt.write_text(value + "\n", encoding="ascii")
+
     try:
+        mark("asset-verification")
         lock = load_lock()
         if any(not os.statvfs(path).f_flag & os.ST_RDONLY
                for path in (ASSETS, RUSTFMT.parent.parent)):
@@ -77,10 +99,11 @@ def main() -> int:
         env["SEMGREP_SEND_METRICS"] = "off"
         env["LD_LIBRARY_PATH"] = str(ASSETS / "libs")
         binary = ASSETS / semgrep.CORE
+        mark("runtime-linkage")
         verify_linkage(binary, lock, env)
         # Scope the signed AlmaLinux libraries to Semgrep. Rustfmt uses the
         # runner image's normal linkage, as do the Git and Opengrep commands.
-        return scan(scan_opengrep.ROOT, binary, RUSTFMT, env)
+        return scan(scan_opengrep.ROOT, binary, RUSTFMT, env, mark=mark)
     except (scan_opengrep.ScanError, scan_opengrep.secrets_scan.ScanError,
             OSError, ValueError, TypeError, KeyError, RuntimeError, subprocess.SubprocessError):
         print("Hosted SAST failed closed", file=sys.stderr)
@@ -88,4 +111,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    if len(sys.argv) != 2:
+        raise SystemExit(2)
+    raise SystemExit(main(Path(sys.argv[1])))

@@ -23,7 +23,15 @@ quiet gitleaks-history python -I /policy/security/offline-ai/scripts/scan_gitlea
 quiet sast-fixtures python /policy/security/offline-ai/scripts/verify_sast_fixtures.py
 quiet pytest python -m pytest -q -p no:cacheprovider /policy/security/offline-ai/tests/test_scan_opengrep.py
 if [[ "$hosted_sast" = true ]]; then
-  quiet hosted-sast python -I /policy/security/offline-ai/scripts/scan_hosted_sast.py
+  sast_receipt="$(mktemp /tmp/hosted-sast.XXXXXXXX)"
+  if ! quiet hosted-sast python -I /policy/security/offline-ai/scripts/scan_hosted_sast.py "$sast_receipt"; then
+    IFS= read -r sast_stage < "$sast_receipt" || sast_stage=unknown
+    case "$sast_stage" in
+      asset-verification|runtime-linkage|parent-index|opengrep-coverage|opengrep-parser|opengrep-errors|opengrep-findings|rust-fixtures|rust-syntax|semgrep-coverage|semgrep-findings)
+        printf 'Hosted SAST stopped at %s\n' "$sast_stage" >&2 ;;
+    esac
+    exit 2
+  fi
   echo "Hosted Semgrep and Opengrep SAST passed"
 else
   quiet opengrep python -I /policy/security/offline-ai/scripts/scan_opengrep.py
