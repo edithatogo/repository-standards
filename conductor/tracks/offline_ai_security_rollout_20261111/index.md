@@ -819,7 +819,11 @@ container and eight scanner wrapper tests passed on Python 3.15.2.
 Shell syntax, actionlint, Zizmor and diff checks passed.
 
 Hosted image run `44303265564` failed at Git's default Cargo build because
-the C build image did not contain Cargo. The signed source archive's
-`Cargo.lock` lists only the bundled Git core crate. Use the digest-pinned
-official Rust 1.100.0 Debian 13 build image and explicitly build that crate
-with `--release --locked --offline`. This retains Git's default Rust code.
+the C build image did not contain Cargo. The digest-pinned official Rust
+1.100.0 Debian 13 build image retains Git's default Rust code.
+
+Hosted image run `44304345875` then reached Cargo and failed because
+the signed archive omits `Cargo.lock`. The lock examined earlier came
+from the local compile. A fresh extraction generated the same single-crate
+lock offline with Cargo 1.100.0. Verify its SHA-256 before the hosted build
+runs with `--release --locked --offline`.

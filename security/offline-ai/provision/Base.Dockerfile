@@ -5,6 +5,7 @@ FROM ${NODE_IMAGE} AS node
 FROM ${GIT_BUILD_IMAGE} AS git-build
 ARG GIT_VERSION
 ARG GIT_ARCHIVE_SHA256
+ARG GIT_CARGO_LOCK_SHA256
 RUN --network=none --mount=type=bind,source=git,target=/opt/git-source,readonly \
     printf '%s  /opt/git-source/git.tar.xz\n' "$GIT_ARCHIVE_SHA256" | sha256sum --check \
     && mkdir /tmp/git-source \
@@ -12,6 +13,8 @@ RUN --network=none --mount=type=bind,source=git,target=/opt/git-source,readonly 
       --directory=/tmp/git-source --strip-components=1 --no-same-owner \
     && rustc --version | grep -E '^rustc 1\.100\.0 ' \
     && cargo --version | grep -E '^cargo 1\.100\.0 ' \
+    && (cd /tmp/git-source && cargo generate-lockfile --offline) \
+    && printf '%s  /tmp/git-source/Cargo.lock\n' "$GIT_CARGO_LOCK_SHA256" | sha256sum --check \
     && make -C /tmp/git-source -j2 prefix=/usr/local DESTDIR=/git-runtime \
       NO_CURL=YesPlease NO_OPENSSL=YesPlease NO_EXPAT=YesPlease \
       NO_GETTEXT=YesPlease NO_PERL=YesPlease NO_TCLTK=YesPlease \

@@ -5,5 +5,6 @@
   "signing_fingerprint": "E1F036B1FEE7221FC778ECEFB0B5E88696AFE6CB",
   "url": "https://www.kernel.org/pub/software/scm/git/git-2.56.1.tar.xz",
   "size_bytes": 8494608,
-  "sha256": "f0b0bf89264b9bd2e1c640363e7529643989da76281600473c50745cd34a607f"
+  "sha256": "f0b0bf89264b9bd2e1c640363e7529643989da76281600473c50745cd34a607f",
+  "cargo_lock_sha256": "a65229eff534ef41f49334df65fe0f0660e33d5ba16db0a5aeb09a0d7fe1449b"
 }

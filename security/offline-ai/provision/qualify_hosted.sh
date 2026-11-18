@@ -84,16 +84,18 @@ mapfile -t git_source < <(python -I - "$git_lock" <<'PY'
 import json, re, sys
 with open(sys.argv[1], encoding="utf-8") as stream:
     lock = json.load(stream)
-version, url, size, digest = (lock[k] for k in ("version", "url", "size_bytes", "sha256"))
+version, url, size, digest, cargo_lock = (
+    lock[k] for k in ("version", "url", "size_bytes", "sha256", "cargo_lock_sha256")
+)
 if (lock["schema_version"] != 1 or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version)
         or url != f"https://www.kernel.org/pub/software/scm/git/git-{version}.tar.xz"
         or type(size) is not int or not 0 < size <= 32 * 1024 * 1024
-        or not re.fullmatch(r"[0-9a-f]{64}", digest)):
+        or not all(re.fullmatch(r"[0-9a-f]{64}", value) for value in (digest, cargo_lock))):
     raise SystemExit(2)
-print(version, url, size, digest, sep="\n")
+print(version, url, size, digest, cargo_lock, sep="\n")
 PY
 )
-[[ "${#git_source[@]}" = 4 ]] || exit 2
+[[ "${#git_source[@]}" = 5 ]] || exit 2
 mkdir "$destination/base-context/git"
 git_archive="$destination/base-context/git/git.tar.xz"
 curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
@@ -158,6 +160,7 @@ docker build --network none --pull=false \
   --build-arg "PYTHON_IMAGE=$python_image" --build-arg "NODE_IMAGE=$node_image" \
   --build-arg "GIT_BUILD_IMAGE=${images[3]}" --build-arg "GIT_VERSION=${git_source[0]}" \
   --build-arg "GIT_ARCHIVE_SHA256=${git_source[3]}" \
+  --build-arg "GIT_CARGO_LOCK_SHA256=${git_source[4]}" \
   --file "$policy_root/security/offline-ai/provision/Base.Dockerfile" \
   --tag localhost/offline-ai-base:candidate "$destination/base-context"
 docker push localhost/offline-ai-base:candidate
