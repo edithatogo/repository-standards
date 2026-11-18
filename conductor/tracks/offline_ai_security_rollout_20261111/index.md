@@ -928,3 +928,17 @@ advisory reports. Both consumer commands stopped at hosted SAST. Add a private
 stage receipt and allowlist only the fixed stage names for failure output.
 The diagnostic records which check failed while leaving raw scanner streams
 and all source-derived output behind the existing quiet boundary.
+
+The same Grype database verified the package removal in run `44420629222`.
+The tested image digests were `e51c3458c0f8` before removal and
+`24e330f51010` after removal. The reduced inventory lacks `mount` and the
+high count fell from 81 to 77. Critical findings were zero on both images
+and ignored matches were zero. The remaining high findings have no fixed
+Debian 13 package in the report.
+
+Targeted run `44423558250` scanned all 174 non-Rust files and reported nine
+Python findings and zero scanner or parser errors. The actual exit code
+indicates findings. The Innovate diagnostic-output repair at `60bfa505cf4543c236c73822ec881492ef335616`
+keeps the full file receipts and limits the console output of the four
+active commands. Rescan this exact PR #684 head. The two hash-bound JOSS
+source-evidence files keep their attested bytes and remain in scope.

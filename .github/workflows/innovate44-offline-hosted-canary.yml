@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/innovate
-          ref: 12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2
+          ref: 60bfa505cf4543c236c73822ec881492ef335616
           fetch-depth: 0
           persist-credentials: false
           path: consumer
@@ -46,7 +46,7 @@ jobs:
           set -euo pipefail
           [[ "$POLICY_HEAD" =~ ^[0-9a-f]{40}$ ]]
           test "$(git -C candidate-policy rev-parse HEAD)" = "$POLICY_HEAD"
-          test "$(git -C consumer rev-parse HEAD)" = 12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2
+          test "$(git -C consumer rev-parse HEAD)" = 60bfa505cf4543c236c73822ec881492ef335616
           git -C consumer merge-base --is-ancestor cc2e4da4af9c848043b31f1191c9d96212048276 HEAD
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:

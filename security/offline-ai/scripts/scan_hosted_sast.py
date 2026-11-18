@@ -64,7 +64,7 @@ def scan(root: Path, binary: Path, rustfmt: Path, env: dict[str, str],
     if opengrep.status:
         if opengrep.parse_failures:
             mark("opengrep-parser")
-        elif opengrep.errors or opengrep.failures:
+        elif opengrep.errors or (opengrep.failures and not opengrep.findings):
             mark("opengrep-errors")
         else:
             mark("opengrep-findings" if opengrep.findings else "opengrep-coverage")
