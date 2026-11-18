@@ -61,6 +61,58 @@ jobs:
         run: |
           set -euo pipefail
           trial="$RUNNER_TEMP/sast-diagnostic"
+          cat > "$trial/opengrep-report.py" <<'PYTHON'
+          import collections
+          import hashlib
+          import json
+          import subprocess
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, "/policy/security/offline-ai/scripts")
+          import scan_opengrep as scanner
+
+          kinds = {"ParseError", "PartialParsing", "PatternParseError", "InvalidRuleSchemaError",
+                   "Timeout", "MatchFound", "MatchingError", "FatalError", "InterfileTimeout",
+                   "OtherParseError", "SyntaxError"}
+          rules = {"offline-python-raw-to-egress", "offline-ts-raw-to-egress"}
+          run = subprocess.run
+
+          def observed(command, **arguments):
+              result = run(command, **arguments)
+              if command[0] == "/usr/local/bin/opengrep" and "--error" in command:
+                  stream = arguments["stdout"]
+                  position = stream.tell()
+                  if position > scanner.MAX_REPORT_BYTES:
+                      return result
+                  try:
+                      stream.seek(0)
+                      payload = json.load(stream)
+                      counts = collections.Counter()
+                      for error in payload.get("errors", []):
+                          kind = error.get("type")
+                          counts[kind if isinstance(kind, str) and kind in kinds else "other"] += 1
+                      print("Opengrep report status", result.returncode, "errors", dict(counts),
+                            "findings", len(payload.get("results", [])), flush=True)
+                      for hit in payload.get("results", [])[:20]:
+                          filename = Path(hit["path"])
+                          rule = hit["check_id"].rsplit(".", 1)[-1]
+                          if rule in rules and filename.is_relative_to("/work"):
+                              relative = filename.relative_to("/work").as_posix()
+                              print("Finding", rule, hashlib.sha256(relative.encode()).hexdigest(),
+                                    hit["start"]["line"], flush=True)
+                  except (ValueError, TypeError, KeyError, AttributeError):
+                      print("Unrecognized Opengrep output schema", flush=True)
+                  finally:
+                      stream.seek(position)
+              return result
+
+          scanner.subprocess.run = observed
+          paths, submodules = scanner.tracked_sources(scanner.ROOT, offline_container=True)
+          non_rust = [name for name in paths if not name.lower().endswith(".rs")]
+          outcome = scanner.scan_paths(scanner.ROOT, scanner.RULES, non_rust, submodules)
+          print("Opengrep outcome", outcome)
+          raise SystemExit(outcome.status)
+          PYTHON
           rustfmt="$(rustup which --toolchain 1.100.0 rustfmt)"
           rust_toolchain="${rustfmt%/bin/rustfmt}"
           docker run --rm --pull=never --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
@@ -69,17 +121,7 @@ jobs:
             --mount "type=bind,src=$GITHUB_WORKSPACE/consumer,dst=/work,readonly" \
             --mount "type=bind,src=$GITHUB_WORKSPACE/policy,dst=/policy,readonly" \
             --mount "type=bind,src=$trial/bundle,dst=/hosted-sast,readonly" \
+            --mount "type=bind,src=$trial/opengrep-report.py,dst=/opengrep-report.py,readonly" \
             --mount "type=bind,src=$rust_toolchain,dst=/rust-toolchain,readonly" \
-            -e HOME=/tmp -e TMPDIR=/tmp localhost/innovate-sast-diagnostic:trial -euc '
-              receipt="$(mktemp)"
-              if python -I -B /policy/security/offline-ai/scripts/scan_hosted_sast.py "$receipt" >/dev/null 2>&1; then
-                echo "Hosted SAST passed"
-              else
-                IFS= read -r status < "$receipt" || status=unknown
-                case "$status" in
-                  asset-verification|runtime-linkage|parent-index|opengrep-coverage|opengrep-parser|opengrep-errors|opengrep-findings|rust-fixtures|rust-syntax|semgrep-coverage|semgrep-findings)
-                    printf "Hosted SAST stopped at %s\n" "$status" ;;
-                esac
-                exit 2
-              fi
-            '
+            -e HOME=/tmp -e TMPDIR=/tmp localhost/innovate-sast-diagnostic:trial \
+            -euc 'cd /work; exec python -I -B /opengrep-report.py'
