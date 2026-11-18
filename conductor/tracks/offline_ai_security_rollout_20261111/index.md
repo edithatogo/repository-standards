@@ -827,3 +827,55 @@ the signed archive omits `Cargo.lock`. The lock examined earlier came
 from the local compile. A fresh extraction generated the same single-crate
 lock offline with Cargo 1.100.0. Verify its SHA-256 before the hosted build
 runs with `--release --locked --offline`.
+
+### Gitleaks report permissions and scanner provenance, 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44` on
+`codex/innovate44-offline-hosted` at `018ecdcc4157ad268839737bae43185a2c71876a`.
+The scope is the Gitleaks build catalog, report-permissions patch, candidate
+builder and staging checks, their focused tests and documentation, this record,
+and the runtime policy pin. Native scope is draft PR #152 and its checks.
+Innovate PR #684 head `12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2` supplies the
+consumer for the offline run.
+
+The Go 1.27.4 cross-build reproduced the original hosted Linux amd64 binary
+`be39829e02d116295fc8babe39cf60b25964d45c1c801869105022dfd4577ebe` and all 606
+downloaded archive, module and version metadata hashes for 202 modules.
+The binary links 65 modules. The 19 November OSV review returned zero advisories
+for those modules and the Go standard library. Seven downloaded-only modules
+have matches. The embedded go-re2 v1.9.0 payloads match its release tree, whose
+recipe identifies RE2 2024-07-02, Abseil 20240722.0 and WASI SDK 25. The query
+for the Gitleaks release source returned CVE-2026-124039. The offline wrapper
+already pre-creates its report at mode `0600` in a private directory.
+
+Apply the two-call-site report-permissions change from the open upstream
+[Gitleaks PR #2312](https://github.com/gitleaks/gitleaks/pull/2312) to the
+verified 8.30.1 source archive. Verify the patch bytes and the original and
+patched source bytes. Exercise new and pre-existing reports alongside the
+existing clean and secret detection fixtures before staging the new binary.
+
+The patched Darwin arm64 binary passed the clean and secret detection fixtures
+and both report permissions cases. The isolated cross-build produced a
+22,868,092-byte Linux amd64 binary with SHA-256
+`7feb4384b376745ebe1e466bd0115acc18cfb74d30ad265c2539529602210e41`.
+The lock requires this hash and the original dependency metadata before the
+hosted run can stage the binary. The patch is sourced from an open, unsigned
+proposal and independently reviewed against the pinned release bytes.
+
+The Semgrep 1.185.0 Linux wheel has SHA-256
+`0eb6aaadad5b957af96d1300487e10af1dc8016e8ef53072effb48cd4906c02b`.
+The PyPI attestation identifies the publisher. For 24 of the 26 bundled
+libraries, the GNU build IDs and allocated code and data sections match RPMs
+from the AlmaLinux 9 and 9.8 BaseOS catalogs. The comparison verified the signing
+key and the catalog, metadata and RPM hash chain. Those libraries differ in
+their dynamic linkage metadata. The matched packages include
+`libcurl-minimal-7.76.1-40.el9_8.8` and `openssl-libs-3.5.8-2.el9_8`.
+`libtree-sitter.so.0.26` and `libunwind.so.8` remain untraced. This leaves the
+wheel's native library provenance incomplete for image promotion.
+
+The 19 focused Gitleaks tests passed on Python 3.15.2. A 173-test offline suite
+run on macOS reported the same five failures and 26 errors at the starting
+commit and with the patch. The affected tests exercise SBOM and vulnerability
+evidence code that requires Linux amd64. Actionlint passed with the existing
+`ai-security-offline` runner label configured.

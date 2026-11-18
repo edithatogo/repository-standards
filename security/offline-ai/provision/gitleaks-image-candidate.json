@@ -2,16 +2,16 @@
   "schema_version": 1,
   "kind": "unreviewed-gitleaks-image-candidate",
   "reviewed": false,
-  "artifact": {
-    "id": 14316722318,
-    "run_id": 44057193540,
-    "policy_commit": "a32c1331f606dc620df9a3be4e45e96bc85bf2ea",
-    "archive_sha256": "8b248e17ddc259d233e6d1b1c8496554af2edc1581996707632e26d20544dde0"
+  "dependency_artifact": {
+    "id": 14428301011,
+    "run_id": 44305195035,
+    "policy_commit": "018ecdcc4157ad268839737bae43185a2c71876a",
+    "archive_sha256": "120425bbc13e8aafb5be50ffe0bdbc96ab680e6095c597a166623e0effde7b7e"
   },
   "source_commit": "83d9cd684c87d95d656c1458ef04895a7f1cbd8e",
-  "catalog_sha256": "d0596b0fc83c629121e1b16f6f729304d1de7da246a79a4e1e93e664b68f0ca9",
+  "catalog_sha256": "9300ec330e0c5c4a82066660febe9be91fe37bfe104b88bd049433ebfc4ae08a",
   "binary": {
-    "sha256": "be39829e02d116295fc8babe39cf60b25964d45c1c801869105022dfd4577ebe",
+    "sha256": "7feb4384b376745ebe1e466bd0115acc18cfb74d30ad265c2539529602210e41",
     "size_bytes": 22868092
   },
   "metadata_sha256": {

@@ -45,6 +45,8 @@ class GitleaksImageCandidateTests(unittest.TestCase):
             "catalog_sha256": "b" * 64,
             "module_closure_verified": True,
             "fixture": {"status": "passed", "kind": "existing-clean-and-canary-git"},
+            "report_permissions": {"status": "passed", "mode": "0600",
+                                   "paths": ["new", "existing"]},
             "build": {"binary_sha256": sha(self.binary.read_bytes())},
             "status": "candidate_complete",
             "last_stage": "complete",
@@ -71,7 +73,8 @@ class GitleaksImageCandidateTests(unittest.TestCase):
             payloads[name] += b"tampered"
             variations.append((self.lock, self.receipt, payloads))
         for field, value in (("catalog_sha256", "0" * 64), ("module_closure_verified", False),
-                             ("fixture", {"status": "failed"}), ("reviewed", True)):
+                             ("fixture", {"status": "failed"}), ("report_permissions", None),
+                             ("reviewed", True)):
             receipt = copy.deepcopy(self.receipt)
             receipt[field] = value
             variations.append((self.lock, receipt, self.payloads))

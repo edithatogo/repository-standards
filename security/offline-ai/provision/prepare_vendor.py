@@ -255,6 +255,8 @@ def stage_gitleaks_candidate(binary, target, payloads, receipt, lock):
             or receipt.get("catalog_sha256") != lock.get("catalog_sha256")
             or receipt.get("module_closure_verified") is not True
             or receipt.get("fixture") != {"status": "passed", "kind": "existing-clean-and-canary-git"}
+            or receipt.get("report_permissions") != {"status": "passed", "mode": "0600",
+                                                      "paths": ["new", "existing"]}
             or receipt.get("status") != "candidate_complete" or receipt.get("last_stage") != "complete"
             or receipt.get("reviewed") is not False or receipt.get("image_qualified") is not False
             or not isinstance(binary_record, dict) or not isinstance(build, dict)
@@ -291,7 +293,9 @@ def load_gitleaks_image_candidate():
         raise PreparationError("gitleaks-candidate-lock")
     lock = read_json(path)
     names = {"go.mod", "go.sum", "modules.json", "module-closure.json", "gitleaks-LICENSE.txt"}
-    binary, metadata, artifact = lock.get("binary"), lock.get("metadata_sha256"), lock.get("artifact")
+    binary = lock.get("binary")
+    metadata = lock.get("metadata_sha256")
+    artifact = lock.get("dependency_artifact")
     if (lock.get("schema_version") != 1 or lock.get("kind") != "unreviewed-gitleaks-image-candidate"
             or lock.get("reviewed") is not False or not re.fullmatch(r"[0-9a-f]{40}", lock.get("source_commit", ""))
             or not HASH.fullmatch(lock.get("catalog_sha256", ""))
@@ -481,7 +485,7 @@ def prepare(destination, receipt_path, *, gitleaks_candidate_evidence_only=False
             "source_commit": candidate_lock["source_commit"],
             "binary_sha256": candidate_lock["binary"]["sha256"],
             "candidate_lock_sha256": digest(HERE / "gitleaks-image-candidate.json"),
-            "artifact": candidate_lock["artifact"],
+            "dependency_artifact": candidate_lock["dependency_artifact"],
         }
     destination.mkdir(mode=0o755)
     current = "binaries"

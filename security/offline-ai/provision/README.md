@@ -204,11 +204,13 @@ Continue with the existing offline Docker build and `docker/qualify_image.py`. S
 
 The existing upstream candidate workflow has a separate bounded Gitleaks job.
 It starts from the exact upstream 8.30.1 source and a checksum-pinned Go 1.27.4
-toolchain. It resolves the smallest allowed dependency update, verifies the
-complete module closure, disables dependency lookup for the read-only build,
-and runs the existing clean/canary fixture. Scanner code and rules are unchanged.
+toolchain. The catalog binds the report-permissions patch for CVE-2026-124039
+and both versions of the patched Go file. The builder verifies the complete
+module closure and disables dependency lookup during compilation. It runs the
+existing clean and secret detection fixtures and checks that both new and
+pre-existing reports have owner-only permissions. The detection rules are unchanged.
 
-The output contains only the fixed public metadata paths: `go.mod`, `go.sum`,
+The output contains the fixed public metadata files `go.mod`, `go.sum`,
 `modules.json`, `module-closure.json`, `gitleaks-LICENSE.txt` and
 `candidate-receipt.json`. The built binary stays temporary. Bounded
 `OFFLINE_GITLEAKS_CANDIDATE` JSON envelopes provide indexed, hash-bound recovery
@@ -221,8 +223,10 @@ all image, release and runner qualification flags remain false.
 
 The Innovate hosted canary can explicitly select
 `--gitleaks-candidate-evidence-only`. Before staging the local binary, it
-requires the build, fixture, complete module-closure metadata and binary bytes
-to match `gitleaks-image-candidate.json`. The canary keeps the binary in its
+requires the scan and report fixtures to pass and the catalog, module-closure
+metadata and binary bytes to match `gitleaks-image-candidate.json`. The dependency
+artifact records the unchanged module closure. The binary hash binds the
+patched cross-build. The canary keeps the binary in its
 temporary vendor tree and locally built image; it uploads only the existing
 value-free receipts and inventories. The normal preparation path still uses the
 pinned upstream release. This evidence-only option does not approve the

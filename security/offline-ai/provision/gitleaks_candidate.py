@@ -23,6 +23,7 @@ import urllib.request
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
+REPORT_PATCH = HERE / "gitleaks-report-permissions.patch"
 OUTPUTS = ("candidate-receipt.json", "go.mod", "go.sum", "modules.json",
            "module-closure.json", "gitleaks-LICENSE.txt")
 MARKER = "OFFLINE_GITLEAKS_CANDIDATE "
@@ -205,13 +206,24 @@ def environment(work, *, offline=False):
     }
 
 
-def run(command, *, cwd, env, stage, timeout=600):
+def run(command, *, cwd, env, stage, timeout=600, umask=-1):
     completed = subprocess.run(command, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                               check=False, timeout=timeout)
+                               check=False, timeout=timeout, umask=umask)
     require(completed.returncode == 0 and len(completed.stdout) <= 8 * 1024 * 1024
             and len(completed.stderr) <= 1024 * 1024, stage)
     return completed.stdout
+
+
+def apply_report_permissions(source, patch, env):
+    target = source / "cmd/root.go"
+    require(hashlib.sha256(regular(target)).hexdigest() == patch["before_sha256"], "inputs")
+    require(hashlib.sha256(regular(REPORT_PATCH)).hexdigest() == patch["sha256"], "inputs")
+    # The catalog pins both file versions, so the patch needs no context lines.
+    run(["git", "apply", "--unidiff-zero", "--whitespace=error-all",
+         "--include=cmd/root.go", str(REPORT_PATCH)],
+        cwd=source, env=env, stage="inputs", timeout=30)
+    require(hashlib.sha256(regular(target)).hexdigest() == patch["after_sha256"], "inputs")
 
 
 def objects(payload):
@@ -311,6 +323,21 @@ def fixture(work, binary, env):
         os.environ.update(original)
 
 
+def check_report_permissions(work, binary, env):
+    clean = work / "clean-scan"
+    clean.mkdir()
+    (clean / "example.txt").write_text("Public test input only.\n", encoding="utf-8")
+    new_report, existing_report = work / "new-report.json", work / "existing-report.json"
+    existing_report.write_text("[]\n", encoding="utf-8")
+    existing_report.chmod(0o644)
+    for report in (new_report, existing_report):
+        run([str(binary), "dir", str(clean), "--redact=100", "--report-format", "json",
+             "--report-path", str(report)],
+            cwd=work, env=env, stage="fixture", timeout=60, umask=0o022)
+        require(stat.S_IMODE(report.lstat().st_mode) == 0o600
+                and json.loads(regular(report)) in ([], None), "fixture")
+
+
 def emit_public_metadata(destination, *, complete):
     names = OUTPUTS if complete else ("candidate-receipt.json",)
     require({p.name for p in destination.iterdir()} == set(names), "metadata")
@@ -367,6 +394,7 @@ def candidate(destination, *, local_binary=None):
             receipt["input_sha256"] = {
                 str(path.relative_to(ROOT)): hashlib.sha256(regular(path)).hexdigest()
                 for path in (Path(__file__).resolve(), HERE / "gitleaks-build-sources.json",
+                             REPORT_PATCH,
                              ROOT / "security/offline-ai/scripts/verify_gitleaks.py",
                              ROOT / "security/offline-ai/.gitleaks.toml")}
             receipt["last_stage"] = "archives"
@@ -389,6 +417,9 @@ def candidate(destination, *, local_binary=None):
             require(len(license_bytes) == catalog["source"]["license"]["size_bytes"]
                     and hashlib.sha256(license_bytes).hexdigest()
                     == catalog["source"]["license"]["sha256"], "archives")
+            report_patch = catalog["report_permissions_patch"]
+            apply_report_permissions(source, report_patch, env)
+            receipt["report_permissions_patch"] = report_patch
             receipt["last_stage"] = "toolchain"
             go = str(toolchain / "bin/go")
             actual = run([go, "version"], cwd=source, env=env, stage="toolchain", timeout=30)
@@ -443,6 +474,9 @@ def candidate(destination, *, local_binary=None):
             receipt["last_stage"] = "fixture"
             fixture(work, binary, offline)
             receipt["fixture"] = {"status": "passed", "kind": "existing-clean-and-canary-git"}
+            check_report_permissions(work, binary, offline)
+            receipt["report_permissions"] = {"status": "passed", "mode": "0600",
+                                             "paths": ["new", "existing"]}
             receipt["last_stage"] = "metadata"
             payloads = {"go.mod": expected, "go.sum": go_sum, "modules.json": json_bytes(modules),
                         "module-closure.json": json_bytes(closure),

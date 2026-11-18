@@ -27,6 +27,14 @@
     },
     "provenance_url": "https://api.github.com/repos/gitleaks/gitleaks/git/trees/83d9cd684c87d95d656c1458ef04895a7f1cbd8e?recursive=1"
   },
+  "report_permissions_patch": {
+    "advisory": "https://github.com/advisories/GHSA-w4h6-9gpx-7gm5",
+    "proposal": "https://github.com/gitleaks/gitleaks/pull/2312",
+    "proposal_commit": "2009273e0029f91aeda4732552ae5489634d0749",
+    "sha256": "d23d7ed4157327bc6850ee4abbf94ebfe4d2977224bfc01642a43ca96c0e0d0a",
+    "before_sha256": "275516f78724a075530898e6354e096f2b33ef78de8856f9a5f1b68b9552d994",
+    "after_sha256": "2db6ab7a117ae11ea3a4a046be4664ef37e4e7af5780a6cf92348451736d4f88"
+  },
   "toolchain": {
     "version": "go1.27.4",
     "url": "https://go.dev/dl/go1.27.4.linux-amd64.tar.gz",
