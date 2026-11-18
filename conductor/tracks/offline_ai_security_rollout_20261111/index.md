@@ -781,3 +781,39 @@ and its local scan reproduced all nine Rust fixtures and 747 source reports
 on Python 3.15.2. All eight existing scan-wrapper tests, actionlint and diff
 checks passed. The Linux trial retains a value-free result with its source
 head. The normal Opengrep and image results remain separate promotion gates.
+
+### Runtime dependency and Rust syntax qualification, 18 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this draft update in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44`, branch
+`codex/innovate44-offline-hosted` at
+`5a19460ed556500e2791af3179ace797a6ef4dc9`. The affected paths are the
+runtime base, its Debian and Git locks, the hosted provisioner and canary,
+the Rust scanner trial helper, their focused tests and this record. Native
+scope is PR #152 and its runs. Innovate head `12c58c52` remains the test
+consumer. The next operation is to run the existing hosted controls with
+the reduced dependency closure and the independent Rust syntax check.
+
+The prior all-layer report lists eight critical and 23 high matches in
+`libcurl3t64-gnutls`. Debian 13 has a signed update for the one other high
+match marked fixed, CVE-2026-85091 in zlib. Build Git 2.56.1 without HTTP
+transport and restrict the additional Debian packages to the two native
+runtime libraries and the fixed zlib archive. Assemble the runtime from
+the updated filesystem so the original zlib bytes do not enter its layers.
+Retain the full all-layer report and compare it with the prior result.
+
+GitHub verifies the signed upstream Git tag for commit
+`03b41523c576f26ad34085378717a0c1b287470f`. The release archive signature
+also verifies against the same signing subkey
+`E1F036B1FEE7221FC778ECEFB0B5E88696AFE6CB`. The current OSV query for
+that commit returned zero advisory IDs. The Linux image and its runtime
+dependencies still require exact hosted verification.
+
+The fixed zlib archive matched the size and SHA-256 in the signed Debian
+security index. The source-built macOS Git reported 2.56.1, passed local
+init, commit, history and index checks and showed no curl linkage.
+The Rust trial used Rustfmt from Rust 1.100.0 and local Semgrep core
+1.185.0. It passed the nine rule fixtures and all 747 tracked files.
+The syntax check rejected six malformed controls. The 14 OS package, 19
+container and eight scanner wrapper tests passed on Python 3.15.2.
+Shell syntax, actionlint, Zizmor and diff checks passed.

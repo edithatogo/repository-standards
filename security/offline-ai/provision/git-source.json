@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "version": "2.56.1",
+  "source_commit": "03b41523c576f26ad34085378717a0c1b287470f",
+  "signing_fingerprint": "E1F036B1FEE7221FC778ECEFB0B5E88696AFE6CB",
+  "url": "https://www.kernel.org/pub/software/scm/git/git-2.56.1.tar.xz",
+  "size_bytes": 8494608,
+  "sha256": "f0b0bf89264b9bd2e1c640363e7529643989da76281600473c50745cd34a607f"
+}

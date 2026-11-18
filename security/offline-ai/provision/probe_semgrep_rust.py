@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
+from functools import cache
 import hashlib
 import json
 from pathlib import Path
@@ -11,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 import urllib.request
 from zipfile import ZipFile
 
@@ -31,6 +34,14 @@ CORE = "semgrep-core"
 CORE_BYTES = 266890296
 LIBRARY = re.compile(r"libs/lib[A-Za-z0-9_+-]+\.so(?:\.[0-9]+)+")
 LIBRARY_COUNT = 26
+MALFORMED_RUST = (
+    b"fn broken( { }",
+    b"pub struct Broken { value: }",
+    b"fn broken() { let value = ; }",
+    b"fn broken() { let value: u32 = (10; }",
+    b"enum Broken { Option{value: } }",
+    b'fn broken() { let value = "unfinished; }',
+)
 
 
 def prepare(destination: Path) -> None:
@@ -104,7 +115,70 @@ def scan(binary: Path, root: Path, paths: list[str], environment: dict[str, str]
     return matches
 
 
-def probe(binary: Path, consumer: Path) -> dict[str, int | str]:
+def verify_syntax(rustfmt: Path, root: Path, sources: list[str], environment: dict[str, str]) -> str:
+    """Use Rustfmt's compiler parser independently of the rule scanner."""
+    @cache
+    def manifest(directory: Path) -> dict:
+        path = directory / "Cargo.toml"
+        if path.is_symlink():
+            raise ValueError("Linked Cargo manifest")
+        if not path.exists():
+            return {}
+        return tomllib.loads(path.read_text(encoding="utf-8"))
+
+    def edition_for(path: Path) -> str:
+        for parent in path.parents:
+            if not parent.is_relative_to(root):
+                break
+            package = manifest(parent).get("package")
+            if package is None:
+                continue
+            edition = package.get("edition", "2015")
+            if edition == {"workspace": True}:
+                if "workspace" in package:
+                    workspace = (parent / package["workspace"]).resolve(strict=True)
+                    if not workspace.is_relative_to(root):
+                        raise ValueError("External Cargo workspace")
+                    edition = manifest(workspace)["workspace"]["package"]["edition"]
+                else:
+                    for directory in (parent, *parent.parents):
+                        if not directory.is_relative_to(root):
+                            break
+                        workspace = manifest(directory).get("workspace")
+                        if workspace is not None:
+                            edition = workspace["package"]["edition"]
+                            break
+            if edition not in ("2015", "2018", "2021", "2024"):
+                raise ValueError("Unsupported Cargo edition")
+            return edition
+        # Standalone checked-in examples use the current edition.
+        return "2024"
+
+    with tempfile.TemporaryDirectory() as directory:
+        def valid(data: bytes, edition: str) -> bool:
+            return subprocess.run(
+                [str(rustfmt), "--edition", edition, "--emit", "stdout"],
+                input=data, cwd=directory, env=environment, stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL, timeout=60, check=False,
+            ).returncode == 0
+
+        def file_valid(name: str) -> bool:
+            path = Path(name)
+            return valid(path.read_bytes(), edition_for(path))
+
+        if not valid(b"fn sample(x: u32) -> u32 { x + 1 }", "2024"):
+            raise ValueError("Rust syntax positive control")
+        if any(valid(data, "2024") for data in MALFORMED_RUST):
+            raise ValueError("Rust syntax negative controls")
+        with ThreadPoolExecutor(max_workers=4) as workers:
+            outcomes = list(workers.map(file_valid, sources))
+        if not all(outcomes):
+            raise ValueError("Rust source syntax")
+    with rustfmt.open("rb") as binary:
+        return hashlib.file_digest(binary, "sha256").hexdigest()
+
+
+def probe(binary: Path, rustfmt: Path, consumer: Path) -> dict[str, int | str]:
     environment = scan_opengrep.secrets_scan.clean_environment(offline_container=True)
     for key in tuple(environment):
         if key.startswith(("SEMGREP_", "OPENGREP_")):
@@ -120,23 +194,27 @@ def probe(binary: Path, consumer: Path) -> dict[str, int | str]:
 
     tracked, _ = scan_opengrep.tracked_sources(consumer, offline_container=True)
     rust = [path for path in tracked if path.lower().endswith(".rs")]
+    rustfmt_sha256 = verify_syntax(rustfmt, consumer, rust, environment)
     if scan(binary, consumer, rust, environment):
         raise ValueError("Rust consumer findings")
-    return {"status": "passed", "semgrep": VERSION, "rust_fixtures": len(fixtures), "rust_sources": len(rust)}
+    return {
+        "status": "passed", "semgrep": VERSION, "rust_fixtures": len(fixtures), "rust_sources": len(rust),
+        "rust_syntax": "passed", "malformed_controls": len(MALFORMED_RUST), "rustfmt_sha256": rustfmt_sha256,
+    }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--prepare", type=Path)
-    mode.add_argument("--probe", nargs=2, type=Path, metavar=("BINARY", "CONSUMER"))
+    mode.add_argument("--probe", nargs=3, type=Path, metavar=("BINARY", "RUSTFMT", "CONSUMER"))
     args = parser.parse_args()
     try:
         if args.prepare:
             prepare(args.prepare)
         else:
-            binary, consumer = (value.resolve(strict=True) for value in args.probe)
-            print(json.dumps(probe(binary, consumer), sort_keys=True))
+            binary, rustfmt, consumer = (value.resolve(strict=True) for value in args.probe)
+            print(json.dumps(probe(binary, rustfmt, consumer), sort_keys=True))
     except (OSError, KeyError, ValueError, TypeError, RuntimeError, subprocess.SubprocessError, scan_opengrep.ScanError,
             scan_opengrep.secrets_scan.ScanError):
         print('{"status":"failed"}')

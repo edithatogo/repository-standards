@@ -78,6 +78,30 @@ stage=os-package-preparation
 python -I "$policy_root/security/offline-ai/provision/prepare_os_packages.py" \
   --destination "$destination/base-context/os" --receipt "$evidence/os-packages.json"
 
+stage=git-source-preparation
+git_lock="$policy_root/security/offline-ai/provision/git-source.json"
+mapfile -t git_source < <(python -I - "$git_lock" <<'PY'
+import json, re, sys
+with open(sys.argv[1], encoding="utf-8") as stream:
+    lock = json.load(stream)
+version, url, size, digest = (lock[k] for k in ("version", "url", "size_bytes", "sha256"))
+if (lock["schema_version"] != 1 or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version)
+        or url != f"https://www.kernel.org/pub/software/scm/git/git-{version}.tar.xz"
+        or type(size) is not int or not 0 < size <= 32 * 1024 * 1024
+        or not re.fullmatch(r"[0-9a-f]{64}", digest)):
+    raise SystemExit(2)
+print(version, url, size, digest, sep="\n")
+PY
+)
+[[ "${#git_source[@]}" = 4 ]] || exit 2
+mkdir "$destination/base-context/git"
+git_archive="$destination/base-context/git/git.tar.xz"
+curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+  --max-time 120 --max-filesize "${git_source[2]}" "${git_source[1]}" -o "$git_archive"
+[[ "$(wc -c < "$git_archive" | tr -d '[:space:]')" = "${git_source[2]}" ]]
+printf '%s  %s\n' "${git_source[3]}" "$git_archive" | sha256sum --check
+cp "$git_lock" "$evidence/git-source.json"
+
 stage=upstream-preparation
 # Missing committed locks fail here; candidate-lock generation is a separate job.
 PYTHONDONTWRITEBYTECODE=1 python "$policy_root/security/offline-ai/provision/prepare_vendor.py" \
@@ -95,18 +119,19 @@ with open(sys.argv[1], encoding="utf-8") as stream:
     data = json.load(stream)
 if data.get("schema_version") != 1 or data.get("architecture") != "linux/amd64":
     raise SystemExit(2)
-for name in ("python", "node", "registry"):
+for name, repository in (("python", "python"), ("node", "node"),
+                         ("registry", "registry"), ("git_builder", "buildpack-deps")):
     ref = data[name]["reference"]
-    if not re.fullmatch("docker.io/library/" + name + r"@sha256:[0-9a-f]{64}", ref):
+    if not re.fullmatch(r"docker\.io/library/" + repository + r"@sha256:[0-9a-f]{64}", ref):
         raise SystemExit(2)
     print(ref)
 PY
 )
-[[ "${#images[@]}" = 3 ]] || exit 2
+[[ "${#images[@]}" = 4 ]] || exit 2
 python_image="${images[0]}"
 node_image="${images[1]}"
 registry_image="${images[2]}"
-for image in "$python_image" "$node_image" "$registry_image"; do
+for image in "${images[@]}"; do
   docker pull --platform linux/amd64 "$image"
   [[ "$(docker image inspect "$image" --format '{{.Os}}/{{.Architecture}}')" = linux/amd64 ]] || exit 2
 done
@@ -131,12 +156,19 @@ done
 stage=offline-base-build
 docker build --network none --pull=false \
   --build-arg "PYTHON_IMAGE=$python_image" --build-arg "NODE_IMAGE=$node_image" \
+  --build-arg "GIT_BUILD_IMAGE=${images[3]}" --build-arg "GIT_VERSION=${git_source[0]}" \
+  --build-arg "GIT_ARCHIVE_SHA256=${git_source[3]}" \
   --file "$policy_root/security/offline-ai/provision/Base.Dockerfile" \
   --tag localhost/offline-ai-base:candidate "$destination/base-context"
 docker push localhost/offline-ai-base:candidate
 base_image="$(docker image inspect localhost/offline-ai-base:candidate --format '{{index .RepoDigests 0}}')"
 [[ "$base_image" =~ ^localhost/offline-ai-base@sha256:[0-9a-f]{64}$ ]] || exit 2
+[[ "$(docker image inspect "$base_image" --format '{{len .RootFS.Layers}}')" = 1 ]] || exit 2
 printf '%s\n' "$base_image" > "$evidence/base-image.txt"
+docker run --rm --pull=never --network none --read-only --cap-drop ALL \
+  --security-opt no-new-privileges --pids-limit 32 --user 65534:65534 "$base_image" \
+  sh -eu -c 'git --version; sha256sum /usr/local/bin/git; dpkg-query -W zlib1g' \
+  > "$evidence/git-runtime.txt"
 
 stage=offline-image-build
 git --no-replace-objects -C "$policy_root" archive "$policy_sha" security/offline-ai \

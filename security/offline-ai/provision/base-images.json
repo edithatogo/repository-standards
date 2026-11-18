@@ -15,5 +15,9 @@
   "registry": {
     "reference": "docker.io/library/registry@sha256:52b489ad8e6f40d1a676702e3ce398ec796ce38f08fbb786e1f324baa12d84b8",
     "source": "https://hub.docker.com/v2/repositories/library/registry/tags/3"
+  },
+  "git_builder": {
+    "reference": "docker.io/library/buildpack-deps@sha256:0bcdd861dae13860b1e82e6d5357521e2e618fbd589590d8b2ce316dbacc6712",
+    "source": "https://hub.docker.com/v2/repositories/library/buildpack-deps/tags/trixie"
   }
 }

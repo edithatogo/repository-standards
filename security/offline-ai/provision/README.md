@@ -10,14 +10,15 @@ control plane.
 `base-images.json` fixes the Linux amd64 Docker Official Images by digest. Its
 source URLs record the metadata used to select those immutable manifests.
 `Base.Dockerfile` combines the Python 3.15.2 slim Debian 13 image with Node 24
-and the Git and native runtime dependencies. Online preparation downloads only
-the 33 Debian packages pinned by exact URL, version, size and SHA256 in
-`os-packages.json`. The offline base build mounts those verified packages
-read-only, checks the exact base dpkg database, installs without apt or network
-access, and verifies installed versions and `dpkg --audit`. Debian's installed
-package database and notices are preserved; downloaded package archives are not
-baked into an image layer. Global npm/npx are omitted because the scanner uses
-the separate reviewed Promptfoo installation.
+and a source-built Git. The build verifies the pinned Git release archive and
+compiles it offline without its HTTP transport. It preserves Git's licence.
+Online preparation downloads the three Debian packages pinned by URL, version,
+size and SHA-256 in `os-packages.json`, including the fixed zlib package.
+The offline base build checks the exact starting dpkg database, installs the
+verified packages and checks the resulting versions and `dpkg --audit`.
+It copies the updated filesystem, including Debian's installed package database
+and notices, into a fresh runtime layer. Global npm and npx are omitted because
+the scanner uses the separate reviewed Promptfoo installation.
 
 The scanner/model preparer separately verifies source hashes, committed
 dependency locks and their complete supplied-asset inventory. The new image must

@@ -25,7 +25,7 @@ ERROR = "Offline OS package preparation failed"
 HASH = re.compile(r"[0-9a-f]{64}\Z")
 NAME = re.compile(r"[a-z0-9][a-z0-9+.-]*\Z")
 VERSION = re.compile(r"[0-9][A-Za-z0-9.+:~\-]*\Z")
-ROOTS = {"git", "libatomic1", "libgomp1", "libstdc++6", "libgcc-s1"}
+ROOTS = {"libatomic1", "libgomp1", "libstdc++6", "libgcc-s1"}
 QUERY = "${Package}\t${Version}\t${Architecture}\t${db:Status-Abbrev}\n"
 
 

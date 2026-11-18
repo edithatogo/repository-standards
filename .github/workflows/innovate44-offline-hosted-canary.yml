@@ -54,6 +54,10 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: "24.22.1"
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: "1.100.0"
+          components: rustfmt
       - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e
         with:
           version: "0.13.8"
@@ -128,6 +132,10 @@ jobs:
           [[ "$CANDIDATE_IMAGE" =~ ^localhost/offline-ai-security@sha256:[0-9a-f]{64}$ ]]
           trial="$RUNNER_TEMP/semgrep-rust-trial"
           probe=/policy/security/offline-ai/provision/probe_semgrep_rust.py
+          rustfmt="$(rustup which --toolchain 1.100.0 rustfmt)"
+          [[ "$rustfmt" = */1.100.0-x86_64-unknown-linux-gnu/bin/rustfmt ]]
+          rust_toolchain="${rustfmt%/bin/rustfmt}"
+          [[ "$("$rust_toolchain/bin/rustc" --version)" = 'rustc 1.100.0 '* ]]
           python -I "$CONSUMER_POLICY/security/offline-ai/provision/probe_semgrep_rust.py" --prepare "$trial"
           docker run --rm --pull=never --entrypoint=/usr/local/bin/python \
             --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
@@ -136,8 +144,9 @@ jobs:
             --mount "type=bind,src=$GITHUB_WORKSPACE/consumer,dst=/work,readonly" \
             --mount "type=bind,src=$CONSUMER_POLICY,dst=/policy,readonly" \
             --mount "type=bind,src=$trial,dst=/candidate,readonly" \
+            --mount "type=bind,src=$rust_toolchain,dst=/rust-toolchain,readonly" \
             -e HOME=/tmp -e TMPDIR=/tmp "$CANDIDATE_IMAGE" \
-            -I -B "$probe" --probe /candidate/semgrep-core /work \
+            -I -B "$probe" --probe /candidate/semgrep-core /rust-toolchain/bin/rustfmt /work \
             > "$RUNNER_TEMP/offline-runtime/evidence/semgrep-rust-probe.json"
       - name: Inventory the tested image
         if: always() && steps.prepare.outcome == 'success'

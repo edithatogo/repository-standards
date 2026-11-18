@@ -245,7 +245,8 @@ class OSPackageTests(unittest.TestCase):
         self.assertEqual(catalog["base_image"], bases["python"]["reference"])
         self.assertTrue(bases["python"]["source"].endswith("/3.15.2-slim-trixie"))
         names = {p["name"] for p in catalog["packages"]}
-        self.assertFalse(any("imagemagick" in n or n.endswith("-dev") for n in names))
+        self.assertEqual(names, {"libatomic1", "libgomp1", "zlib1g"})
+        self.assertNotIn("zlib1g", catalog["required_base"])
 
     def test_catalog_rejects_the_retired_base_distribution(self):
         self.catalog["distribution"] = "bookworm"
