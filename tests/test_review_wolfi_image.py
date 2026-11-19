@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = spec_from_file_location("wolfi_review", ROOT / "security/offline-ai/provision/review_wolfi_image.py")
@@ -94,3 +95,11 @@ class WolfiReviewTests(unittest.TestCase):
         contents.write_bytes(contents.read_bytes() + b" ")
         with self.assertRaises(ValueError):
             REVIEW.review_image(IMAGE, self.evidence)
+
+    def test_installed_image_must_match_the_reviewed_image_id(self):
+        self.write_scan([])
+        with patch.object(REVIEW.subprocess, "check_output", return_value=IMAGE_ID + "\n"):
+            REVIEW.verify_image_identity(IMAGE, self.evidence)
+        with patch.object(REVIEW.subprocess, "check_output", return_value="sha256:" + "c" * 64):
+            with self.assertRaisesRegex(ValueError, "different installed image"):
+                REVIEW.verify_image_identity(IMAGE, self.evidence)

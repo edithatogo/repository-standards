@@ -146,6 +146,15 @@ host network isolation, vulnerability review and applicable application/language
 qualification remain separate gates before the consumer pin is changed and its
 PR is merged.
 
+The reusable workflow verifies the locally installed scanner before a self-hosted
+job scans the consumer. Set `SECURITY_IMAGE_DIGEST` to its reviewed digest and
+`SECURITY_IMAGE_EVIDENCE` to the absolute qualification directory containing
+`vulnerability/receipt.json` and `vulnerability/grype.json`. The review checks
+the installed Docker image ID, the complete scan and the installed backport bytes.
+A caller can scope job scheduling with `runner_label` and require the scanner's
+model and mock-provider checks with `verify_scanner_model`. The `enforce_ai`
+input also requires the consumer's application adapter.
+
 ## Source acquisition and lock review
 
 This directory separates online acquisition of pinned public assets from offline image construction and real qualification. Preparation never registers a runner or declares an image qualified.

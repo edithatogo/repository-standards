@@ -61,7 +61,7 @@ else
 fi
 quiet node-tests node --test /policy/security/offline-ai/clients/node/dlp-client.test.mjs
 ai=false
-if [[ "${ENFORCE_AI:-false}" == true ]]; then
+if [[ "${ENFORCE_AI:-false}" == true || "${VERIFY_SCANNER_MODEL:-false}" == true ]]; then
   ai=true
 elif bash /policy/security/offline-ai/scripts/detect_ai.sh; then
   ai=true

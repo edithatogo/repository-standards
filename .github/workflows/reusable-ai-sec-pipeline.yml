@@ -10,11 +10,19 @@ on:
         type: boolean
         required: false
         default: false
+      runner_label:
+        type: string
+        required: false
+        default: ai-security-offline
+      verify_scanner_model:
+        type: boolean
+        required: false
+        default: false
 permissions:
   contents: read
 jobs:
   offline-security:
-    runs-on: ${{ inputs.github_hosted && 'ubuntu-24.04' || fromJSON('["self-hosted","linux","x64","ai-security-offline"]') }}
+    runs-on: ${{ inputs.github_hosted && 'ubuntu-24.04' || fromJSON(format('["self-hosted","linux","x64",{0}]', toJSON(inputs.runner_label))) }}
     timeout-minutes: 45
     env:
       PYTHONDONTWRITEBYTECODE: "1"
@@ -57,22 +65,32 @@ jobs:
           command -v docker
           test -n "${SECURITY_IMAGE_DIGEST:-}" || { echo 'Runner must preconfigure SECURITY_IMAGE_DIGEST (sha256:...)'; exit 2; }
           [[ "$SECURITY_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]] || exit 2
-          docker image inspect "localhost/offline-ai-security@${SECURITY_IMAGE_DIGEST}" >/dev/null
+          image="localhost/offline-ai-security@${SECURITY_IMAGE_DIGEST}"
+          docker image inspect "$image" >/dev/null
+          [[ "${SECURITY_IMAGE_EVIDENCE:-}" = /* ]] || { echo 'Runner must preconfigure an absolute SECURITY_IMAGE_EVIDENCE directory'; exit 2; }
+          python -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
+          review="$(mktemp -d "$RUNNER_TEMP/offline-image-review.XXXXXXXX")"
+          mkdir "$review/vulnerability"
+          install -m 600 "$SECURITY_IMAGE_EVIDENCE/vulnerability/receipt.json" "$review/vulnerability/"
+          install -m 600 "$SECURITY_IMAGE_EVIDENCE/vulnerability/grype.json" "$review/vulnerability/"
+          python -I "$GITHUB_WORKSPACE/policy/security/offline-ai/provision/review_wolfi_image.py" "$image" "$review"
+          echo 'Installed scanner image passed the all-layer vulnerability and backport review'
       - name: Run 4 layers in a network-disabled container
         if: "!inputs.github_hosted"
         shell: bash
         env:
           ENFORCE_AI: ${{ inputs.enforce_ai }}
+          VERIFY_SCANNER_MODEL: ${{ inputs.verify_scanner_model }}
           EVENT_NAME: ${{ github.event_name }}
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
         run: |
           set -euo pipefail
           docker run --rm --pull=never --entrypoint=bash --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
             --pids-limit 256 --memory 8g --cpus 4 --user 65534:65534 \
-            --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 \
+            --tmpfs /tmp:rw,noexec,nosuid,size=512m,mode=1777 \
             --mount type=bind,src="$GITHUB_WORKSPACE/consumer",dst=/work,readonly \
             --mount type=bind,src="$GITHUB_WORKSPACE/policy",dst=/policy,readonly \
-            -e ENFORCE_AI -e EVENT_NAME -e BASE_SHA -e HOME=/tmp \
+            -e ENFORCE_AI -e VERIFY_SCANNER_MODEL -e EVENT_NAME -e BASE_SHA -e HOME=/tmp \
             -e SECURITY_ASSET_MANIFEST=/opt/offline-ai/manifest.json -e GLINER_MODEL_DIR=/opt/models/gliner-pii \
             -e HF_HUB_OFFLINE=1 -e TRANSFORMERS_OFFLINE=1 -e HF_DATASETS_OFFLINE=1 \
             -e HF_HOME=/opt/models -e XDG_CACHE_HOME=/tmp/cache -e TMPDIR=/tmp \

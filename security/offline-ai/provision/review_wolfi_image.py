@@ -15,6 +15,18 @@ GLIBC = Path(__file__).with_name("glibc-backports.json")
 IMAGE = re.compile(r"localhost/offline-ai-security@sha256:[0-9a-f]{64}\Z")
 
 
+def verify_image_identity(image: str, evidence: Path) -> None:
+    receipt = json.loads((evidence / "vulnerability" / "receipt.json").read_bytes())
+    image_id = subprocess.check_output(
+        ["docker", "image", "inspect", "--format", "{{.Id}}", image],
+        timeout=45,
+        stderr=subprocess.DEVNULL,
+        text=True,
+    ).strip()
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", image_id) or receipt["image_id"] != image_id:
+        raise ValueError("The scan receipt belongs to a different installed image")
+
+
 def verify_image_backports(image: str) -> dict:
     catalog = json.loads(CPYTHON.read_bytes())
     runner = [
@@ -122,6 +134,7 @@ def main() -> int:
         if not IMAGE.fullmatch(image):
             raise ValueError("Invalid image identity")
         evidence = Path(location)
+        verify_image_identity(image, evidence)
         review = review_image(image, evidence, backports=verify_image_backports(image))
         with (evidence / "wolfi-image-disposition.json").open("x", encoding="utf-8") as stream:
             json.dump(review, stream, indent=2, sort_keys=True)
