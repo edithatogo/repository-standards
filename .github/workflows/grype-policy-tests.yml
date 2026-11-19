@@ -73,7 +73,7 @@ jobs:
           sbom: vulnerable.cdx.json
           mode: ${{ matrix.mode }}
           source-sha: ${{ github.sha }}
-          output-directory: ${{ runner.temp }}/grype-control
+          output-directory: .grype-control
           artifact-name: grype-control-${{ matrix.mode }}
       - name: Require real detection and the expected policy outcome
         if: ${{ always() }}
@@ -84,7 +84,7 @@ jobs:
           python - <<'PY'
           import json, os
           from pathlib import Path
-          policy = json.loads((Path(os.environ['RUNNER_TEMP']) / 'grype-control/policy.json').read_text())
+          policy = json.loads((Path(os.environ['GITHUB_WORKSPACE']) / '.grype-control/policy.json').read_text())
           enforced = os.environ['EXPECTED_MODE'] == 'enforce'
           assert policy['outcome'] == ('blocked' if enforced else 'findings'), policy['outcome']
           assert policy['blocking_matches'] > 0

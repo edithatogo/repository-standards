@@ -77,5 +77,6 @@ runs:
       with:
         name: ${{ inputs.artifact-name }}
         path: ${{ steps.scan.outputs.evidence-directory }}
+        include-hidden-files: true
         if-no-files-found: error
         retention-days: 90
