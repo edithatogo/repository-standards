@@ -960,3 +960,9 @@ scope is draft PR #152. Verify Innovate PR #684 at
 the existing scanner inventory and fixtures and the network-denied
 consumer run. The consumer's 143 local JOSS and registry checks passed.
 Image vulnerability review remains pending.
+
+Run `44477127721` validated the image and denied container egress. Consumer
+SAST still failed at the identical two JOSS stdout calls after the path
+projection. Innovate now projects the process result to stage pass or fail.
+Run the full canary against `3db2c5ace5ebfad31561c2c2096c082f8f76692f`,
+including the release evidence verifier added since the first JOSS fix.
