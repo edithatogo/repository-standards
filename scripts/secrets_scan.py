@@ -30,10 +30,9 @@ TRUSTED_CONFIG = Path(__file__).resolve().parents[1] / "privacy" / "gitleaks.tom
 TRUSTED_REVIEWED_FINDINGS = (
     Path(__file__).resolve().parents[1] / "privacy" / "reviewed-findings.json"
 )
-MAX_REVIEW_REGISTRY_BYTES = 64 * 1024
+MAX_REVIEW_REGISTRY_BYTES = 128 * 1024
 PRIVATE_MATCH_PROCESSING = os.name == "posix"
-OFFLINE_CONSUMER_MOUNT = Path("/work")
-FindingIdentity = tuple[str, str, str, int]
+FindingIdentity = tuple[str, str, str, int, str]
 
 
 class ScanError(Exception):
@@ -54,7 +53,7 @@ def unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return result
 
 
-def load_reviewed_findings() -> dict[FindingIdentity, str]:
+def load_reviewed_findings() -> set[FindingIdentity]:
     """Read only the pinned tooling registry, afresh for every scan."""
     try:
         if TRUSTED_REVIEWED_FINDINGS.is_symlink():
@@ -76,7 +75,7 @@ def load_reviewed_findings() -> dict[FindingIdentity, str]:
         or not isinstance(registry["findings"], list)
     ):
         raise ScanError("invalid_reviewed_findings")
-    reviewed: dict[FindingIdentity, str] = {}
+    reviewed: set[FindingIdentity] = set()
     for entry in registry["findings"]:
         if not isinstance(entry, dict) or set(entry) != {
             "commit",
@@ -129,15 +128,15 @@ def load_reviewed_findings() -> dict[FindingIdentity, str]:
             )
         ):
             raise ScanError("invalid_reviewed_findings")
-        identity = (commit, path, rule, line)
+        identity = (commit, path, rule, line, digest)
         if identity in reviewed:
             raise ScanError("invalid_reviewed_findings")
-        reviewed[identity] = digest
+        reviewed.add(identity)
     return reviewed
 
 
 def is_reviewed_nonsecret(
-    finding: Any, reviewed: dict[FindingIdentity, str], *, enabled: bool
+    finding: Any, reviewed: set[FindingIdentity], *, enabled: bool
 ) -> bool:
     """Match raw scanner fields exactly; never normalize a finding into admission."""
     if not enabled or not isinstance(finding, dict):
@@ -155,13 +154,11 @@ def is_reviewed_nonsecret(
         or line < 1
     ):
         return False
-    expected = reviewed.get((commit, path, rule, line))
-    if expected is None:
-        return False
     try:
-        return hashlib.sha256(value.encode("utf-8")).hexdigest() == expected
+        digest = hashlib.sha256(value.encode("utf-8")).hexdigest()
     except UnicodeError:
         return False
+    return (commit, path, rule, line, digest) in reviewed
 
 
 def clean_environment(
@@ -376,7 +373,10 @@ def scan(
             == "true"
         ):
             raise ScanError("full_history_requires_complete_clone")
-        scan_args = ["--log-opts=--all --full-history --no-ext-diff --no-textconv"]
+        scan_args = [
+            "--log-opts=--all --full-history --diff-merges=first-parent "
+            "--no-ext-diff --no-textconv"
+        ]
     else:
         tip = resolve_revision(
             root, head, allow_head=True, offline_container=offline_container
@@ -384,7 +384,8 @@ def scan(
         start = resolve_revision(root, base, offline_container=offline_container)
         # A..B visits every submitted commit, including subsequently deleted leaks.
         scan_args = [
-            f"--log-opts=--full-history --no-ext-diff --no-textconv {start}..{tip}"
+            f"--log-opts=--full-history --diff-merges=first-parent "
+            f"--no-ext-diff --no-textconv {start}..{tip}"
         ]
 
     with tempfile.TemporaryDirectory(prefix="secrets-scan-") as directory:

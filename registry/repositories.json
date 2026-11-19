@@ -4667,16 +4667,16 @@
       "sole_developer": true,
       "mandatory_human_approvals": 0,
       "renovate": {
-        "current": "repository_config_detected",
+        "current": "hosted_app_verified",
         "target": "hosted_app_plus_inherited_config",
         "canonical_preset": "github>edithatogo/renovate-config",
         "dependabot_detected": false,
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "not_applicable_no_executable_coverage",
-        "warranted": false,
-        "target": "not_applicable_until_executable_tests_exist"
+        "current": "active_oidc_upload_verified",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
       },
       "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-latex/issues/8",
       "policy_version": 1,
@@ -4685,7 +4685,7 @@
       "maintenance_tier": "review_required",
       "release_maturity": "review_required",
       "canonical_status": "review_required",
-      "supply_chain_profile": "none",
+      "supply_chain_profile": "published",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
       "exceptions": []
@@ -4736,9 +4736,12 @@
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "not_applicable_no_executable_coverage",
-        "warranted": false,
-        "target": "not_applicable_until_executable_tests_exist"
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage",
+        "evidence_revision": "402dec742a80278cd239554b929092e75724c1e6",
+        "receiving_main_qualified": true,
+        "assessment": "docs/typesetting-unimelb-typst-assessment.md"
       },
       "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-typst/issues/5",
       "policy_version": 1,
@@ -4747,7 +4750,7 @@
       "maintenance_tier": "review_required",
       "release_maturity": "review_required",
       "canonical_status": "review_required",
-      "supply_chain_profile": "none",
+      "supply_chain_profile": "published",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
       "exceptions": []

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Measure repository-estate conformance and reconcile a bounded central issue."""
 
-from __future__ import annotations
-
 import argparse
 import base64
 import json
@@ -26,6 +24,7 @@ END = "<!-- estate-conformance:end -->"
 ACTION_REF = re.compile(r"(?m)^\s*uses:\s*([^#\s]+)")
 FULL_SHA = re.compile(r"@[0-9a-f]{40}$", re.I)
 SCHEDULE = re.compile(r"(?m)^\s*schedule\s*:")
+WORKFLOW_PATH = re.compile(r"^\.github/workflows/[^/]+\.ya?ml$", re.I)
 
 
 class GitHub:
@@ -202,11 +201,7 @@ def audit_one(
     branch = entry["default_branch"]
     tree = client.tree(repository, branch)
     paths = {item["path"] for item in tree if item.get("type") == "blob"}
-    workflow_paths = sorted(
-        path
-        for path in paths
-        if re.match(r"^\.github/workflows/[^/]+\.ya?ml$", path, re.I)
-    )
+    workflow_paths = sorted(path for path in paths if WORKFLOW_PATH.match(path))
     workflow_texts = [
         client.text(repository, path, branch) for path in workflow_paths
     ]
@@ -598,7 +593,9 @@ def main() -> int:
     parser.add_argument("--issue-number", type=int)
     parser.add_argument("--workers", type=int, default=4)
     args = parser.parse_args()
-    audit_token = os.environ.get("ESTATE_AUDIT_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    estate_token = os.environ.pop("ESTATE_AUDIT_TOKEN", None)
+    github_token = os.environ.pop("GITHUB_TOKEN", None)
+    audit_token = estate_token or github_token
     if not audit_token:
         print("ESTATE_AUDIT_TOKEN or GITHUB_TOKEN is required", file=sys.stderr)
         return 2
@@ -640,7 +637,7 @@ def main() -> int:
     )
     issue_url = None
     scan_failures = sum(bool(row.get("scan_error")) for row in rows)
-    issue_token = os.environ.get("ISSUE_TOKEN")
+    issue_token = os.environ.pop("ISSUE_TOKEN", None)
     if not scan_failures and args.issue_repository and args.issue_number and issue_token:
         issue_url = reconcile_issue(
             GitHub(issue_token),

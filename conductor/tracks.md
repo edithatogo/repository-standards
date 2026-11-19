@@ -32,3 +32,11 @@ for exact-head evidence, superseded PRs and open gates.
   [Track](tracks/privacy_secrets_rollout_20261110/index.md)
   Shared pinned Presidio/Gitleaks tooling; inventory complete, implementation in
   progress, consumer deployment and execution pending. Public evidence is aggregate-only.
+
+## Community and repository bootstrap (15 November 2026)
+
+- [~] **Inherited community guidance, bounded validation and starter setup**
+  [Track](tracks/community_bootstrap_20261115/index.md).
+  Source prepared across central standards, public defaults and seven starters;
+  final qualification and integration remain in progress. Whole-estate rollout
+  and existing F01/F03 gates are separate.
