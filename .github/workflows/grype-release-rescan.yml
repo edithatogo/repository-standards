@@ -1,0 +1,51 @@
+name: Rescan immutable released SBOM
+
+on:
+  workflow_call:
+    inputs:
+      sbom-asset:
+        description: Exact JSON SBOM asset filename in the latest published stable release
+        type: string
+        required: true
+      artifact-name:
+        description: Unique evidence name within the caller workflow
+        type: string
+        default: grype-released-sbom
+      severity-cutoff:
+        description: Report threshold; released-asset monitoring remains advisory
+        type: string
+        default: critical
+
+permissions:
+  contents: read
+
+jobs:
+  rescan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Download and verify the immutable release asset
+        id: download
+        uses: edithatogo/repository-standards/.github/actions/download-release-sbom@610f76cb8267b45cadf18310a973233e293960ab
+        with:
+          sbom-asset: ${{ inputs.sbom-asset }}
+          output-directory: ${{ runner.temp }}/released-sbom
+      - name: Scan the released dependency inventory with the current database
+        uses: edithatogo/repository-standards/.github/actions/grype-scan@bc76f1fbe0fa87a1371eadc06b08f54b48c623f7
+        with:
+          sbom: ${{ steps.download.outputs.sbom }}
+          source-sha: ${{ steps.download.outputs.source-sha }}
+          source-role: observed-release-tag
+          mode: advisory
+          severity-cutoff: ${{ inputs.severity-cutoff }}
+          output-directory: ${{ runner.temp }}/grype-released
+          artifact-name: ${{ inputs.artifact-name }}
+      - name: Preserve immutable release selection evidence
+        if: ${{ always() && steps.download.outputs.evidence-directory != '' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ inputs.artifact-name }}-input
+          path: ${{ steps.download.outputs.evidence-directory }}
+          retention-days: 90
+          if-no-files-found: error
+

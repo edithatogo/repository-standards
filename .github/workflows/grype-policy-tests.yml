@@ -1,0 +1,93 @@
+name: Grype policy controls
+
+on:
+  pull_request:
+    paths:
+      - .github/actions/grype-scan/**
+      - .github/actions/cargo-lock-sbom/**
+      - .github/actions/download-release-sbom/**
+      - .github/workflows/grype-*.yml
+      - scripts/grype_scan.py
+      - scripts/cargo_lock_sbom.py
+      - scripts/released_sbom.py
+      - tests/test_grype_scan.py
+      - tests/test_cargo_lock_sbom.py
+      - tests/test_released_sbom.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: grype-policy-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  behavior:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.15.2'
+      - name: Run vulnerability policy and inventory negative controls
+        env:
+          PYTHONPATH: scripts
+        run: |
+          python -m unittest discover -s tests -p test_grype_scan.py -v
+          python -m unittest discover -s tests -p test_cargo_lock_sbom.py -v
+          python -m unittest discover -s tests -p test_released_sbom.py -v
+  real-scanner:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [advisory, enforce]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.15.2'
+      - name: Prepare public known-vulnerable dependency control
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          Path('vulnerable.cdx.json').write_text(json.dumps({
+              'bomFormat': 'CycloneDX', 'specVersion': '1.6', 'version': 1,
+              'components': [{'type': 'library', 'name': 'log4j-core', 'version': '2.14.1',
+                              'purl': 'pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1'}]
+          }))
+          PY
+      - name: Exercise actual pinned Grype and current database
+        id: canary
+        continue-on-error: true # Expected only for the enforced vulnerable fixture; verified below.
+        uses: ./.github/actions/grype-scan
+        with:
+          sbom: vulnerable.cdx.json
+          mode: ${{ matrix.mode }}
+          source-sha: ${{ github.sha }}
+          output-directory: .grype-control
+          artifact-name: grype-control-${{ matrix.mode }}
+      - name: Require real detection and the expected policy outcome
+        if: ${{ always() }}
+        env:
+          EXPECTED_MODE: ${{ matrix.mode }}
+          CANARY_STEP_OUTCOME: ${{ steps.canary.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          policy = json.loads((Path(os.environ['GITHUB_WORKSPACE']) / '.grype-control/policy.json').read_text())
+          enforced = os.environ['EXPECTED_MODE'] == 'enforce'
+          assert policy['outcome'] == ('blocked' if enforced else 'findings'), policy['outcome']
+          assert policy['blocking_matches'] > 0
+          assert policy['identified_packages'] == 1
+          assert os.environ['CANARY_STEP_OUTCOME'] == ('failure' if enforced else 'success')
+          PY
