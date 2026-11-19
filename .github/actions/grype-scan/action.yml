@@ -10,6 +10,9 @@ inputs:
   platform:
     description: Expected image platform (linux/amd64 or linux/arm64)
     default: ''
+  go-main-module:
+    description: Exact caller Go module allowed to remain explicitly unmatchable when binary build metadata reports UNKNOWN
+    default: github.com/${{ github.repository }}
   mode:
     description: advisory reports findings; enforce blocks the severity threshold; operational errors always fail
     default: advisory
@@ -52,6 +55,7 @@ runs:
         SCAN_SBOM: ${{ inputs.sbom }}
         SCAN_IMAGE: ${{ inputs.image }}
         SCAN_PLATFORM: ${{ inputs.platform }}
+        SCAN_GO_MAIN: ${{ inputs.go-main-module }}
         SCAN_MODE: ${{ inputs.mode }}
         SCAN_CUTOFF: ${{ inputs.severity-cutoff }}
         SCAN_SOURCE: ${{ inputs.source-sha }}
@@ -65,7 +69,7 @@ runs:
         [[ -z "$SCAN_SBOM" ]] || target+=(--sbom "$SCAN_SBOM")
         [[ -z "$SCAN_IMAGE" ]] || target+=(--image "$SCAN_IMAGE")
         python3 "$SCANNER_ACTION_PATH/../../../scripts/grype_scan.py" "${target[@]}" \
-          --platform "$SCAN_PLATFORM" --mode "$SCAN_MODE" --severity-cutoff "$SCAN_CUTOFF" \
+          --platform "$SCAN_PLATFORM" --go-main-module "$SCAN_GO_MAIN" --mode "$SCAN_MODE" --severity-cutoff "$SCAN_CUTOFF" \
           --source-sha "$SCAN_SOURCE" --source-role "$SCAN_SOURCE_ROLE" --output-directory "$SCAN_OUTPUT"
     - name: Preserve Grype evidence even when policy fails
       if: ${{ always() && inputs.upload-artifact == 'true' && steps.scan.outputs.evidence-directory != '' }}

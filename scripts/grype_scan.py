@@ -86,7 +86,22 @@ def resolved_version(value: object, ecosystem: str = "") -> bool:
     return True
 
 
-def inventory_count(document: dict) -> int:
+def go_main_identity(package: dict, format_name: str) -> str:
+    if format_name == "cyclonedx":
+        properties = {p.get("name"): p.get("value") for p in package.get("properties", [])}
+        found_by = properties.get("syft:package:foundBy")
+        metadata_type = properties.get("syft:package:metadataType")
+        main_module = properties.get("syft:metadata:mainModule")
+    else:
+        found_by = package.get("foundBy")
+        metadata_type = package.get("metadataType")
+        main_module = package.get("metadata", {}).get("mainModule")
+    if found_by == "go-module-binary-cataloger" and metadata_type == "go-module-buildinfo-entry":
+        return main_module if isinstance(main_module, str) else ""
+    return ""
+
+
+def inventory_summary(document: dict, go_main_module: str = "") -> dict:
     """Require versioned, purl-identifiable packages; reject version requirements."""
     if not isinstance(document, dict):
         raise ValueError("SBOM must be a JSON object")
@@ -100,19 +115,21 @@ def inventory_count(document: dict) -> int:
             pending.extend(component.get("components", []))
             if component.get("type") in ("file", "data"):
                 continue
-            packages.append((component.get("name"), component.get("version"), component.get("purl")))
+            packages.append((component.get("name"), component.get("version"), component.get("purl"),
+                             go_main_identity(component, "cyclonedx")))
     elif str(document.get("spdxVersion", "")).startswith("SPDX-"):
         packages = []
         for package in document.get("packages", []):
             purls = [ref.get("referenceLocator") for ref in package.get("externalRefs", [])
                      if ref.get("referenceType") == "purl"]
-            packages.append((package.get("name"), package.get("versionInfo"), purls[0] if purls else None))
+            packages.append((package.get("name"), package.get("versionInfo"), purls[0] if purls else None, ""))
     elif isinstance(document.get("schema"), dict) and "artifacts" in document:
-        packages = [(p.get("name"), p.get("version"), p.get("purl")) for p in document["artifacts"]]
+        packages = [(p.get("name"), p.get("version"), p.get("purl"), go_main_identity(p, "syft")) for p in document["artifacts"]]
     else:
         raise ValueError("expected CycloneDX, SPDX or Syft JSON, not generic package metadata")
     count = 0
-    for name, version, purl in packages:
+    unmatchable = []
+    for name, version, purl, main_module in packages:
         # Unidentified local/workspace components remain inventoried; they do not
         # satisfy the requirement for at least one matchable dependency.
         if not purl:
@@ -122,17 +139,27 @@ def inventory_count(document: dict) -> int:
         if not isinstance(purl, str) or not purl.startswith("pkg:"):
             raise ValueError("inventory contains an invalid purl")
         ecosystem = purl[4:].split("/", 1)[0]
+        identity = purl.split("?", 1)[0].split("#", 1)[0]
+        if (ecosystem == "golang" and go_main_module and main_module == name == go_main_module
+                and isinstance(version, str) and version.lower() == "unknown" and "@" not in identity):
+            unmatchable.append({"name": name, "version": version,
+                               "reason": "explicitly marked caller Go main module has no release version; source/digest identity is retained separately"})
+            continue
         if not name or not resolved_version(version, ecosystem):
             raise ValueError("inventory contains invalid package identities or unresolved versions")
-        identity = purl.split("?", 1)[0].split("#", 1)[0]
         if "@" not in identity or not resolved_version(unquote(identity.rsplit("@", 1)[1]), ecosystem):
             raise ValueError("purl must identify a resolved package version")
-        if unquote(identity.rsplit("@", 1)[1]) != version:
+        canonical_version = version.removeprefix("go") if ecosystem == "golang" and name == "stdlib" else version
+        if unquote(identity.rsplit("@", 1)[1]) != canonical_version:
             raise ValueError("package version and purl version disagree")
         count += 1
     if count == 0:
         raise ValueError("SBOM has no versioned package identities; metadata or byte inventories are insufficient")
-    return count
+    return {"identified_packages": count, "unmatchable_components": unmatchable}
+
+
+def inventory_count(document: dict, go_main_module: str = "") -> int:
+    return inventory_summary(document, go_main_module)["identified_packages"]
 
 
 def validate_database(status: dict, now: dt.datetime | None = None) -> float:
@@ -221,7 +248,7 @@ def scan(args: argparse.Namespace, output: Path, evidence: dict) -> None:
             raise ValueError("SBOM input must be an existing regular file")
         shutil.copyfile(input_path, source)
         evidence["input"] = {"kind": "sbom", "sha256": sha256(source), "original_filename": input_path.name}
-        evidence["identified_packages"] = inventory_count(json.loads(source.read_text(encoding="utf-8")))
+        evidence.update(inventory_summary(json.loads(source.read_text(encoding="utf-8")), args.go_main_module))
     else:
         evidence["input"] = {"kind": "image", "reference": image_reference(args.image), "platform": args.platform}
 
@@ -256,7 +283,7 @@ def scan(args: argparse.Namespace, output: Path, evidence: dict) -> None:
                 actual = metadata.get("os", "") + "/" + metadata.get("architecture", "")
                 if actual != "/".join(args.platform.split("/")[:2]):
                     raise ValueError("catalogued image platform differs from requested platform")
-            evidence["identified_packages"] = inventory_count(document)
+            evidence.update(inventory_summary(document, args.go_main_module))
             evidence["input"]["sbom_sha256"] = sha256(source)
         checked([str(grype), "db", "update", "--config", str(grype_config)], output / "db-update.log", environment, directory)
         checked([str(grype), "db", "status", "-o", "json", "--config", str(grype_config)], output / "db-status.json", environment, directory)
@@ -283,6 +310,7 @@ def main() -> int:
     target.add_argument("--sbom")
     target.add_argument("--image")
     parser.add_argument("--platform", default="")
+    parser.add_argument("--go-main-module", default="github.com/" + os.environ["GITHUB_REPOSITORY"] if os.environ.get("GITHUB_REPOSITORY") else "")
     parser.add_argument("--mode", choices=("advisory", "enforce"), default="advisory")
     parser.add_argument("--severity-cutoff", choices=SEVERITIES[1:], default="critical")
     parser.add_argument("--source-sha", required=True)

@@ -29,6 +29,7 @@ Python 3.11 or newer. Existing repository Python choices remain unchanged.
 | `sbom` | Resolved CycloneDX, SPDX or Syft JSON; mutually exclusive with `image`. |
 | `image` | Registry reference at a platform manifest `@sha256:…` digest. A multiarchitecture index must be expanded by the caller and every published architecture scanned. |
 | `platform` | Expected `linux/amd64` or `linux/arm64`, optionally with variant. |
+| `go-main-module` | Exact caller module (defaults to `github.com/` plus the caller repository). An explicitly marked UNKNOWN binary main module remains in the raw SBOM and an unmatchable-component receipt; it does not count as dependency coverage. |
 | `mode` | `advisory` (default) or `enforce`. |
 | `severity-cutoff` | `critical` by default; other supported severity thresholds are explicit. |
 | `source-sha` | Exact Git commit associated with the scan; does not establish provenance by itself. |
@@ -63,6 +64,10 @@ A metadata-only project document or a one-package byte inventory is insufficient
 The shared scanner requires versioned package identifiers and rejects dependency
 ranges. This is a minimum validity control, not proof of dependency completeness.
 Each consumer remains responsible for documenting what the inventory includes.
+Exact Debian backport and RPM snapshot version separators are accepted. Go's
+`go1.x` standard-library version is compared with its normalized purl version.
+Unknown third-party dependency versions are not accepted by the main-module
+exception, and an unversioned main module alone cannot satisfy inventory coverage.
 
 The companion `.github/actions/cargo-lock-sbom` action accepts `lockfile`,
 `output`, `name` and `source-sha`. It reads committed Cargo.lock bytes without

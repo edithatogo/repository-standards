@@ -61,6 +61,29 @@ class InventoryTests(unittest.TestCase):
             scan.inventory_count({"artifacts": [], "schema": {"version": "16.0.0"}})
         self.assertEqual(scan.inventory_count({"artifacts": bom()["components"], "schema": {"version": "16.0.0"}}), 1)
 
+    def test_go_stdlib_normalization_and_explicit_caller_main_boundary(self):
+        stdlib = {"type": "library", "name": "stdlib", "version": "go1.26.5", "purl": "pkg:golang/stdlib@1.26.5"}
+        main = {"type": "library", "name": "github.com/example/tool", "version": "UNKNOWN", "purl": "pkg:golang/github.com/example/tool",
+                "properties": [{"name": "syft:package:foundBy", "value": "go-module-binary-cataloger"},
+                               {"name": "syft:package:metadataType", "value": "go-module-buildinfo-entry"},
+                               {"name": "syft:metadata:mainModule", "value": "github.com/example/tool"}]}
+        value = {"bomFormat": "CycloneDX", "components": [stdlib, main]}
+        result = scan.inventory_summary(value, "github.com/example/tool")
+        self.assertEqual(result["identified_packages"], 1)
+        self.assertEqual(result["unmatchable_components"][0]["name"], "github.com/example/tool")
+        with self.assertRaises(ValueError):
+            scan.inventory_summary(value, "github.com/someone/else")
+        main["properties"] = []
+        with self.assertRaises(ValueError):
+            scan.inventory_summary(value, "github.com/example/tool")
+
+    def test_unknown_main_alone_does_not_establish_dependency_coverage(self):
+        value = {"artifacts": [{"name": "github.com/example/tool", "version": "UNKNOWN", "purl": "pkg:golang/github.com/example/tool",
+                                "foundBy": "go-module-binary-cataloger", "metadataType": "go-module-buildinfo-entry",
+                                "metadata": {"mainModule": "github.com/example/tool"}}], "schema": {"version": "16.0.0"}}
+        with self.assertRaises(ValueError):
+            scan.inventory_summary(value, "github.com/example/tool")
+
 
 class PolicyTests(unittest.TestCase):
     def test_clean_and_nonblocking_severity(self):
