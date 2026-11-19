@@ -116,6 +116,9 @@ Wolfi's 3.15.2 build and four official standard-library patches. The offline
 image build verifies each patch, original file and resulting file by hash.
 The image review checks the packaged executable and fixed files again in the
 exact scanner image. Verified findings remain visible in the Grype evidence.
+The [glibc catalog](glibc-backports.json) traces the release-branch fixes to the
+source revision named by the APK build recipe and embedded SBOM. The review
+checks the installed library and SBOM bytes on every hosted run.
 
 The registry listens on loopback only and is removed after the run. To provision
 the eventual runner, execute the preparation/build/qualification command above

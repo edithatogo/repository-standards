@@ -1051,3 +1051,10 @@ base-image CPython build and verification, disposition receipt, focused tests,
 and immutable pin for draft PRs #152 and #684. Keep Grype's raw matches and
 package metadata. The installed-file check covers the six CPython findings.
 The installed glibc package still needs a verified backport record.
+
+The Wolfi APK's embedded recipe and SPDX inventory identify glibc source
+`625054f30f0e7a961519f045f2364aa3ca6c1c6b`. Git ancestry confirmed both
+release-branch security commits. The review compares the installed shared
+library and SPDX file to that package. No package downgrade is needed.
+The CPython input and output file inventory matched all six fixes in the
+local exact-APK check. The hosted lane repeats both package verifications.

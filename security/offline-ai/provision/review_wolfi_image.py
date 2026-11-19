@@ -11,15 +11,18 @@ import sys
 
 CATALOG = Path(__file__).with_name("wolfi-image-review.json")
 CPYTHON = Path(__file__).with_name("cpython-backports.json")
+GLIBC = Path(__file__).with_name("glibc-backports.json")
 IMAGE = re.compile(r"localhost/offline-ai-security@sha256:[0-9a-f]{64}\Z")
 
 
 def verify_image_backports(image: str) -> dict:
     catalog = json.loads(CPYTHON.read_bytes())
+    runner = [
+        "docker", "run", "--rm", "--pull=never", "--network", "none", "--read-only",
+        "--cap-drop", "ALL", "--security-opt", "no-new-privileges", "--user", "65534:65534",
+    ]
     contents = subprocess.check_output(
-        [
-            "docker", "run", "--rm", "--pull=never", "--network", "none", "--read-only",
-            "--cap-drop", "ALL", "--security-opt", "no-new-privileges", "--user", "65534:65534",
+        runner + [
             "--mount", f"type=bind,src={CPYTHON.parent.resolve()},dst=/review,readonly",
             "--entrypoint", "python", image, "-I", "-B", "/review/cpython_backports.py",
             "/review/cpython-backports.json",
@@ -29,7 +32,17 @@ def verify_image_backports(image: str) -> dict:
     )
     if json.loads(contents) != sorted(catalog["findings"]):
         raise ValueError("CPython backport verification is incomplete")
-    return catalog
+    glibc = json.loads(GLIBC.read_bytes())
+    checksums = subprocess.check_output(
+        runner + ["--entrypoint", "sha256sum", image, "--", *glibc["files"]],
+        timeout=45,
+        stderr=subprocess.DEVNULL,
+        text=True,
+    )
+    expected = "".join(f"{digest}  {name}\n" for name, digest in glibc["files"].items())
+    if checksums != expected:
+        raise ValueError("The glibc library or package SBOM differs from the reviewed bytes")
+    return {"python-3.15": catalog, glibc["package"]: glibc}
 
 
 def review_image(image: str, evidence: Path, *, backports: dict | None = None) -> dict:
@@ -75,11 +88,11 @@ def review_image(image: str, evidence: Path, *, backports: dict | None = None) -
         disposition = "unreviewed"
         if expected and all(expected[key] == identity[key] for key in ("package", "version", "severity")):
             disposition = expected["disposition"]
+        proof = (backports or {}).get(identity["package"])
         if (
-            backports is not None
-            and identity["package"] == "python-3.15"
-            and identity["version"] == backports["package_version"]
-            and identity["advisory"] in backports["findings"]
+            proof is not None
+            and identity["version"] == proof["package_version"]
+            and identity["advisory"] in proof["findings"]
             and disposition != "unreviewed"
         ):
             disposition = "verified_backport"
@@ -94,7 +107,11 @@ def review_image(image: str, evidence: Path, *, backports: dict | None = None) -
         "review_catalog_sha256": hashlib.sha256(review_bytes).hexdigest(),
         "database_sha256": receipt["database_sha256"],
         "ignored_matches": len(ignored),
-        "cpython_backport_catalog_sha256": hashlib.sha256(CPYTHON.read_bytes()).hexdigest() if backports else None,
+        "backport_catalog_sha256": {
+            name: hashlib.sha256(file.read_bytes()).hexdigest()
+            for name, file in (("python-3.15", CPYTHON), ("glibc-2.44", GLIBC))
+            if name in (backports or {})
+        },
         "findings": findings,
     }
 

@@ -78,12 +78,13 @@ class WolfiReviewTests(unittest.TestCase):
         }
         self.write_scan([match])
         self.assertEqual(REVIEW.review_image(IMAGE, self.evidence)["status"], "blocked")
-        reviewed = REVIEW.review_image(IMAGE, self.evidence, backports=catalog)
+        proof = {"python-3.15": catalog}
+        reviewed = REVIEW.review_image(IMAGE, self.evidence, backports=proof)
         self.assertEqual(reviewed["status"], "passed")
         self.assertEqual(reviewed["findings"][0]["disposition"], "verified_backport")
         match["artifact"]["version"] += "-different"
         self.write_scan([match])
-        self.assertEqual(REVIEW.review_image(IMAGE, self.evidence, backports=catalog)["status"], "blocked")
+        self.assertEqual(REVIEW.review_image(IMAGE, self.evidence, backports=proof)["status"], "blocked")
 
     def test_changed_report_or_image_is_rejected(self):
         self.write_scan([])

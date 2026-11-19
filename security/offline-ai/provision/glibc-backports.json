@@ -1,0 +1,17 @@
+{
+  "package": "glibc-2.44",
+  "package_version": "2.44-r23",
+  "apk_sha256": "3a4b822b3b48634ed249f339ff0b6fbd0199fbc3316b64ccde7965a8fc02fc07",
+  "recipe_sha256": "339ac8d498b1a62a303a40cff3f28536958325526c1fdbce80dbc6f7e4f6e143",
+  "source": "https://gitlab.com/gnutools/glibc.git",
+  "source_commit": "625054f30f0e7a961519f045f2364aa3ca6c1c6b",
+  "source_archive_sha256": "9219a66cdb2f3cc6c5bd7a730a2d3121fbdcff2842679d870ca0d7b4e3150e74",
+  "findings": {
+    "CVE-2026-100290": "fcfb867c58ab5dc402a072fe23534fa3b8ff2616",
+    "CVE-2026-115819": "063fdd4c7e034dfc1a0f14dbf3a9718a502033cf"
+  },
+  "files": {
+    "/usr/lib/libc.so.6": "fa53383f5889ebc862550631d138de41ad96a0a0601df75895c76135523711c5",
+    "/var/lib/db/sbom/glibc-2.44-2.44-r23.spdx.json": "9de4f67a6f273fb9d43ae4f985eae1038fc56ae9546d2eae93abd06efbfb0c51"
+  }
+}
