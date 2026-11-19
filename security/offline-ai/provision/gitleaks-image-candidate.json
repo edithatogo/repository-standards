@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "kind": "unreviewed-gitleaks-image-candidate",
+  "reviewed": false,
+  "dependency_artifact": {
+    "id": 14428301011,
+    "run_id": 44305195035,
+    "policy_commit": "018ecdcc4157ad268839737bae43185a2c71876a",
+    "archive_sha256": "120425bbc13e8aafb5be50ffe0bdbc96ab680e6095c597a166623e0effde7b7e"
+  },
+  "source_commit": "83d9cd684c87d95d656c1458ef04895a7f1cbd8e",
+  "catalog_sha256": "9300ec330e0c5c4a82066660febe9be91fe37bfe104b88bd049433ebfc4ae08a",
+  "binary": {
+    "sha256": "7feb4384b376745ebe1e466bd0115acc18cfb74d30ad265c2539529602210e41",
+    "size_bytes": 22868092
+  },
+  "metadata_sha256": {
+    "go.mod": "167e23799fa540a2725facadb4fd8e9d4b71072523e32a910a7ce822f772b7dc",
+    "go.sum": "c8a7acc7d366d2d4bf25927ab29fd19254ebb5196aee10b8e07f08b1ca8f0587",
+    "modules.json": "71ebfe9715d31489297f30560ddcf2c6a21892249e493b424b498d2db9d807b6",
+    "module-closure.json": "ccd258e7888ab13b925a2719ba6a86160e340788fea719fa9041702af0174554",
+    "gitleaks-LICENSE.txt": "e3884b252b3bfc045e55be43a34d1e80da070bc6f804ac95bf4660e97d62ebc6"
+  }
+}

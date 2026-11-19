@@ -21,7 +21,7 @@ from collections import Counter
 from pathlib import Path, PurePosixPath
 from typing import Any
 
-TIMEOUT_SECONDS = 600
+TIMEOUT_SECONDS = 1500
 MAX_REPORT_BYTES = 64 * 1024 * 1024
 MAX_SUMMARY_FINDINGS = 100
 REVISION = re.compile(r"(?:[0-9a-fA-F]{40}|[0-9a-fA-F]{64})\Z")
@@ -30,10 +30,10 @@ TRUSTED_CONFIG = Path(__file__).resolve().parents[1] / "privacy" / "gitleaks.tom
 TRUSTED_REVIEWED_FINDINGS = (
     Path(__file__).resolve().parents[1] / "privacy" / "reviewed-findings.json"
 )
-MAX_REVIEW_REGISTRY_BYTES = 64 * 1024
+MAX_REVIEW_REGISTRY_BYTES = 128 * 1024
 PRIVATE_MATCH_PROCESSING = os.name == "posix"
 OFFLINE_CONSUMER_MOUNT = Path("/work")
-FindingIdentity = tuple[str, str, str, int]
+FindingIdentity = tuple[str, str, str, int, str]
 
 
 class ScanError(Exception):
@@ -54,7 +54,7 @@ def unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return result
 
 
-def load_reviewed_findings() -> dict[FindingIdentity, str]:
+def load_reviewed_findings() -> set[FindingIdentity]:
     """Read only the pinned tooling registry, afresh for every scan."""
     try:
         if TRUSTED_REVIEWED_FINDINGS.is_symlink():
@@ -76,7 +76,7 @@ def load_reviewed_findings() -> dict[FindingIdentity, str]:
         or not isinstance(registry["findings"], list)
     ):
         raise ScanError("invalid_reviewed_findings")
-    reviewed: dict[FindingIdentity, str] = {}
+    reviewed: set[FindingIdentity] = set()
     for entry in registry["findings"]:
         if not isinstance(entry, dict) or set(entry) != {
             "commit",
@@ -129,19 +129,17 @@ def load_reviewed_findings() -> dict[FindingIdentity, str]:
             )
         ):
             raise ScanError("invalid_reviewed_findings")
-        identity = (commit, path, rule, line)
+        identity = (commit, path, rule, line, digest)
         if identity in reviewed:
             raise ScanError("invalid_reviewed_findings")
-        reviewed[identity] = digest
+        reviewed.add(identity)
     return reviewed
 
 
-def is_reviewed_nonsecret(
-    finding: Any, reviewed: dict[FindingIdentity, str], *, enabled: bool
-) -> bool:
-    """Match raw scanner fields exactly; never normalize a finding into admission."""
+def finding_identity(finding: Any, *, enabled: bool) -> FindingIdentity | None:
+    """Build an exact identity without normalizing scanner fields."""
     if not enabled or not isinstance(finding, dict):
-        return False
+        return None
     commit, path, rule, line, value = (
         finding.get("Commit"),
         finding.get("File"),
@@ -154,14 +152,12 @@ def is_reviewed_nonsecret(
         or type(line) is not int
         or line < 1
     ):
-        return False
-    expected = reviewed.get((commit, path, rule, line))
-    if expected is None:
-        return False
+        return None
     try:
-        return hashlib.sha256(value.encode("utf-8")).hexdigest() == expected
+        digest = hashlib.sha256(value.encode("utf-8")).hexdigest()
     except UnicodeError:
-        return False
+        return None
+    return (commit, path, rule, line, digest)
 
 
 def clean_environment(
@@ -171,14 +167,9 @@ def clean_environment(
 ) -> dict[str, str]:
     env = dict(os.environ)
     for key in tuple(env):
-        if key.startswith("GIT_CONFIG_") or key in {
+        if key.startswith("GIT_") or key in {
             "GITLEAKS_CONFIG",
             "GITLEAKS_CONFIG_TOML",
-            "GIT_DIR",
-            "GIT_WORK_TREE",
-            "GIT_INDEX_FILE",
-            "GIT_OBJECT_DIRECTORY",
-            "GIT_ALTERNATE_OBJECT_DIRECTORIES",
             "GH_TOKEN",
             "GITHUB_TOKEN",
         }:
@@ -186,27 +177,30 @@ def clean_environment(
     env.update(
         GIT_CONFIG_NOSYSTEM="1",
         GIT_CONFIG_GLOBAL=os.devnull,
-        GIT_CONFIG_COUNT="2",
-        GIT_CONFIG_KEY_0="core.hooksPath",
-        GIT_CONFIG_VALUE_0=os.devnull,
-        GIT_CONFIG_KEY_1="diff.external",
-        GIT_CONFIG_VALUE_1="",
         GIT_TERMINAL_PROMPT="0",
         GIT_PAGER="cat",
         GIT_OPTIONAL_LOCKS="0",
+        GIT_NO_REPLACE_OBJECTS="1",
+        GIT_NO_LAZY_FETCH="1",
+        GIT_GRAFT_FILE=os.devnull,
     )
+    configuration = [
+        ("core.hooksPath", os.devnull),
+        ("diff.external", ""),
+        ("core.fsmonitor", "false"),
+        ("advice.graftFileDeprecated", "false"),
+        ("color.ui", "never"),
+        ("color.diff", "never"),
+        ("log.showSignature", "false"),
+    ]
     if offline_container:
-        env.update(
-            GIT_CONFIG_COUNT="3",
-            GIT_CONFIG_KEY_2="safe.directory",
-            GIT_CONFIG_VALUE_2=str(OFFLINE_CONSUMER_MOUNT),
-        )
+        configuration.append(("safe.directory", str(OFFLINE_CONSUMER_MOUNT)))
         if private_view is not None:
-            env.update(
-                GIT_CONFIG_COUNT="4",
-                GIT_CONFIG_KEY_3="safe.directory",
-                GIT_CONFIG_VALUE_3=str(private_view),
-            )
+            configuration.append(("safe.directory", str(private_view)))
+    env["GIT_CONFIG_COUNT"] = str(len(configuration))
+    for index, (key, value) in enumerate(configuration):
+        env[f"GIT_CONFIG_KEY_{index}"] = key
+        env[f"GIT_CONFIG_VALUE_{index}"] = value
     return env
 
 
@@ -236,6 +230,121 @@ def git_output(
         return result.stdout.decode("utf-8").removesuffix("\n").removesuffix("\r")
     except UnicodeError as error:
         raise ScanError("git_validation_failed") from error
+
+
+def verify_git_producer(
+    view: Path, *, staged: bool, log_options: list[str], env: dict[str, str]
+) -> None:
+    """Fail closed if Gitleaks' Git producer cannot deliver the selected diff."""
+    if staged:
+        verify_staged_attributes(view, env=env)
+    producer = (
+        ["diff", "-U0", "--no-ext-diff", "--no-textconv", "--staged", "."]
+        if staged
+        else ["log", "-p", "-U0", *log_options]
+    )
+    try:
+        with tempfile.TemporaryFile() as errors:
+            result = subprocess.run(
+                ["git", "-C", str(view), *producer],
+                stdout=subprocess.DEVNULL,
+                stderr=errors,
+                env=env,
+                check=False,
+                timeout=TIMEOUT_SECONDS,
+            )
+            if result.returncode != 0 or errors.tell() != 0:
+                raise ScanError(
+                    "git_diff_preflight_failed" if staged else "git_history_preflight_failed"
+                )
+        if staged:
+            # Gitleaks' staged Git command cannot force text diffs. Refuse binary
+            # diffs (including text concealed by Git attributes) rather than
+            # reporting them clean. Filenames and diff contents stay private.
+            with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
+                result = subprocess.run(
+                    [
+                        "git", "-C", str(view), "diff", "--staged", "--no-ext-diff",
+                        "--no-textconv", "--numstat", "-z", ".",
+                    ],
+                    stdout=output,
+                    stderr=errors,
+                    env=env,
+                    check=False,
+                    timeout=TIMEOUT_SECONDS,
+                )
+                if (
+                    result.returncode != 0
+                    or errors.tell() != 0
+                    or output.tell() > MAX_REPORT_BYTES
+                ):
+                    raise ScanError("git_diff_preflight_failed")
+                output.seek(0)
+                if any(
+                    record.startswith(b"-\t-\t")
+                    for record in output.read().split(b"\0")
+                ):
+                    raise ScanError("staged_binary_diff_unscannable")
+    except (OSError, subprocess.SubprocessError) as error:
+        raise ScanError(
+            "git_diff_preflight_failed" if staged else "git_history_preflight_failed"
+        ) from error
+
+
+def verify_staged_attributes(view: Path, *, env: dict[str, str]) -> None:
+    """Reject custom staged diff drivers before Gitleaks can invoke one."""
+    try:
+        with tempfile.TemporaryFile() as paths, tempfile.TemporaryFile() as errors:
+            result = subprocess.run(
+                [
+                    "git", "-C", str(view), "diff", "--staged", "--name-only", "-z",
+                    "--no-renames", "--no-ext-diff", "--no-textconv", ".",
+                ],
+                stdout=paths,
+                stderr=errors,
+                env=env,
+                check=False,
+                timeout=TIMEOUT_SECONDS,
+            )
+            if (
+                result.returncode != 0
+                or errors.tell() != 0
+                or paths.tell() > MAX_REPORT_BYTES
+            ):
+                raise ScanError("git_diff_preflight_failed")
+            for cached in (False, True):
+                paths.seek(0)
+                with tempfile.TemporaryFile() as attributes, tempfile.TemporaryFile() as errors:
+                    result = subprocess.run(
+                        [
+                            "git", "-C", str(view), "check-attr",
+                            *(["--cached"] if cached else []), "-z", "--stdin", "diff",
+                        ],
+                        stdin=paths,
+                        stdout=attributes,
+                        stderr=errors,
+                        env=env,
+                        check=False,
+                        timeout=TIMEOUT_SECONDS,
+                    )
+                    if (
+                        result.returncode != 0
+                        or errors.tell() != 0
+                        or attributes.tell() > MAX_REPORT_BYTES
+                    ):
+                        raise ScanError("git_diff_preflight_failed")
+                    attributes.seek(0)
+                    raw = attributes.read()
+                    fields = raw[:-1].split(b"\0") if raw.endswith(b"\0") else []
+                    if (raw and not fields) or len(fields) % 3:
+                        raise ScanError("git_diff_preflight_failed")
+                    for index in range(0, len(fields), 3):
+                        if fields[index + 1] != b"diff":
+                            raise ScanError("git_diff_preflight_failed")
+                        if fields[index + 2] not in {b"set", b"unset", b"unspecified"}:
+                            raise ScanError("staged_custom_diff_unscannable")
+    except (OSError, subprocess.SubprocessError) as error:
+        raise ScanError("git_diff_preflight_failed") from error
 
 
 def resolve_revision(
@@ -352,6 +461,22 @@ def scan(
     ):
         raise ScanError("invalid_repository")
 
+    if not staged:
+        shallow = git_output(
+            root,
+            "rev-parse",
+            "--is-shallow-repository",
+            offline_container=offline_container,
+        )
+        if shallow not in {"true", "false"}:
+            raise ScanError("git_validation_failed")
+        if shallow == "true":
+            raise ScanError(
+                "full_history_requires_complete_clone"
+                if full_history or base is None
+                else "range_requires_complete_clone"
+            )
+
     mode = (
         "staged"
         if staged
@@ -359,6 +484,7 @@ def scan(
         if full_history or base is None
         else "commit_range"
     )
+    log_options: list[str] = []
     if staged:
         # Explicitly select staged diff mode rather than the working copy.
         scan_args = ["--pre-commit", "--staged"]
@@ -366,26 +492,24 @@ def scan(
         resolve_revision(
             root, head, allow_head=True, offline_container=offline_container
         )
-        if (
-            git_output(
-                root,
-                "rev-parse",
-                "--is-shallow-repository",
-                offline_container=offline_container,
-            )
-            == "true"
-        ):
-            raise ScanError("full_history_requires_complete_clone")
-        scan_args = ["--log-opts=--all --full-history --no-ext-diff --no-textconv"]
+        log_options = [
+            "--all", "--full-history", "--diff-merges=first-parent", "--root",
+            "--format=medium", "--text", "--no-color", "--no-show-signature",
+            "--no-ext-diff", "--no-textconv",
+        ]
     else:
         tip = resolve_revision(
             root, head, allow_head=True, offline_container=offline_container
         )
         start = resolve_revision(root, base, offline_container=offline_container)
         # A..B visits every submitted commit, including subsequently deleted leaks.
-        scan_args = [
-            f"--log-opts=--full-history --no-ext-diff --no-textconv {start}..{tip}"
+        log_options = [
+            "--full-history", "--diff-merges=first-parent", "--root",
+            "--format=medium", "--text", "--no-color", "--no-show-signature",
+            "--no-ext-diff", "--no-textconv", f"{start}..{tip}",
         ]
+    if not staged:
+        scan_args = ["--log-opts=" + " ".join(log_options)]
 
     with tempfile.TemporaryDirectory(prefix="secrets-scan-") as directory:
         private_dir = Path(directory)
@@ -414,6 +538,12 @@ def scan(
             != Path(git_dir).resolve()
         ):
             raise ScanError("git_view_validation_failed")
+        environment = clean_environment(
+            offline_container=offline_container, private_view=view
+        )
+        verify_git_producer(
+            view, staged=staged, log_options=log_options, env=environment
+        )
         report = private_dir / "report.json"
         ignore = private_dir / "empty-ignore"
         for path in (report, ignore):
@@ -444,23 +574,26 @@ def scan(
             str(view),
         ]
         try:
-            result = subprocess.run(
-                command,
-                cwd=view,
-                env=clean_environment(
-                    offline_container=offline_container,
-                    private_view=view,
-                ),
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                check=False,
-                timeout=TIMEOUT_SECONDS + 30,
-                **({"umask": 0o077} if PRIVATE_MATCH_PROCESSING else {}),
-            )
+            # Gitleaks can return zero after its Git child fails. Keep both
+            # streams private and treat any scanner diagnostic as a failure.
+            with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
+                result = subprocess.run(
+                    command,
+                    cwd=view,
+                    env=environment,
+                    stdout=output,
+                    stderr=errors,
+                    check=False,
+                    timeout=TIMEOUT_SECONDS + 30,
+                    **({"umask": 0o077} if PRIVATE_MATCH_PROCESSING else {}),
+                )
+                has_diagnostics = output.tell() != 0 or errors.tell() != 0
         except (OSError, subprocess.SubprocessError) as error:
             raise ScanError("scanner_unavailable_or_timed_out") from error
         if result.returncode not in (0, 1):
             raise ScanError("scanner_failed")
+        if has_diagnostics:
+            raise ScanError("scanner_diagnostic_failed")
         try:
             attributes = report.lstat()
             if (
@@ -481,12 +614,15 @@ def scan(
             raise ScanError("invalid_scanner_report")
         if result.returncode == 1 and not findings:
             raise ScanError("scanner_failed_without_findings")
+        identities = [
+            finding_identity(finding, enabled=PRIVATE_MATCH_PROCESSING and not staged)
+            for finding in findings
+        ]
+        admitted_counts = Counter(identity for identity in identities if identity in reviewed)
         blocking = [
             finding
-            for finding in findings
-            if not is_reviewed_nonsecret(
-                finding, reviewed, enabled=PRIVATE_MATCH_PROCESSING and not staged
-            )
+            for finding, identity in zip(findings, identities, strict=True)
+            if identity not in reviewed or admitted_counts[identity] != 1
         ]
         summary = summarise(blocking, root)
         summary["detected_finding_count"] = len(findings)

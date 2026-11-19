@@ -25,7 +25,7 @@ ERROR = "Offline OS package preparation failed"
 HASH = re.compile(r"[0-9a-f]{64}\Z")
 NAME = re.compile(r"[a-z0-9][a-z0-9+.-]*\Z")
 VERSION = re.compile(r"[0-9][A-Za-z0-9.+:~\-]*\Z")
-ROOTS = {"git", "libatomic1", "libgomp1", "libstdc++6", "libgcc-s1"}
+ROOTS = {"libatomic1", "libgomp1", "libstdc++6", "libgcc-s1"}
 QUERY = "${Package}\t${Version}\t${Architecture}\t${db:Status-Abbrev}\n"
 
 
@@ -52,7 +52,7 @@ def digest(path):
 def read_catalog(path):
     digest(path)
     data = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique_object)
-    if (data.get("schema_version") != 1 or data.get("distribution") != "bookworm"
+    if (data.get("schema_version") != 1 or data.get("distribution") != "trixie"
             or data.get("architecture") != "amd64"
             or not re.fullmatch(r"docker.io/library/python@sha256:[0-9a-f]{64}",
                                 data.get("base_image", ""))
@@ -65,6 +65,9 @@ def read_catalog(path):
     for name, version in baseline.items():
         if not NAME.fullmatch(name) or not VERSION.fullmatch(version):
             raise PreparationError("catalog")
+    purge = data.get("purge", [])
+    if purge not in ([], ["mount"], ["libncursesw6", "mount"]) or any(name not in baseline for name in purge):
+        raise PreparationError("catalog")
     names, filenames, total = set(), set(), 0
     for package in packages:
         name, version = package.get("name", ""), package.get("version", "")
@@ -158,7 +161,9 @@ def verify_packages(directory, catalog):
 def installed_versions(catalog):
     expected = dict(catalog["required_base"])
     expected.update({p["name"]: p["version"] for p in catalog["packages"]})
-    raw = command(["dpkg-query", "--show", "--showformat=" + QUERY, *sorted(expected)],
+    for name in catalog.get("purge", []):
+        del expected[name]
+    raw = command(["dpkg-query", "--show", "--showformat=" + QUERY],
                   capture=True)
     actual = {}
     for line in raw.decode().splitlines():
@@ -231,6 +236,10 @@ def main(argv=None):
             paths = verify_packages(directory, catalog)
             record["last_stage"] = "offline-install"
             command(["dpkg", "--install", *paths])
+            if purge := catalog.get("purge"):
+                record["last_stage"] = "offline-purge"
+                command(["dpkg", "--purge", *purge])
+                record["purged_packages"] = purge
             record["last_stage"] = "installed-versions"
             record["installed_versions"] = installed_versions(catalog)
             record["status"] = "installed"

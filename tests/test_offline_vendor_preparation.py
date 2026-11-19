@@ -51,7 +51,7 @@ class VendorPreparationTests(unittest.TestCase):
                 load.assert_not_called()
         self.assertFalse((self.root / "vendor").exists())
 
-    def test_offline_wheel_builder_explicitly_selects_the_runtime_patch(self):
+    def test_offline_wheel_builder_uses_the_selected_isolated_runtime(self):
         vendor, work = self.root / "vendor", self.root / "work"
         vendor.mkdir()
         work.mkdir()
@@ -66,7 +66,10 @@ class VendorPreparationTests(unittest.TestCase):
         calls = [command for command in commands
                  if str(ROOT / "scripts/build_privacy_wheels.py") in command]
         self.assertEqual(len(calls), 1)
-        self.assertEqual(calls[0][calls[0].index("--python-version") + 1], "3.15.2")
+        self.assertEqual(calls[0][0], str(work / "builder/bin/python"))
+        self.assertIn(["uv", "venv", "--python", PREP.sys.executable,
+                       str(work / "builder")], commands)
+        self.assertNotIn("--python-version", calls[0])
 
     def test_missing_reviewed_input_fails_before_installation(self):
         catalog = PREP.read_json(HERE / "sources.json")

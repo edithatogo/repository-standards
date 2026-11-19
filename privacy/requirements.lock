@@ -1,4 +1,4 @@
-# Python 3.15.1 scanner runtime. The source-built wheels are bound by privacy/install.sh.
+# Python 3.15.2 scanner runtime. The source-built wheels are bound by privacy/install.sh.
 annotated-doc==0.0.6 \
     --hash=sha256:361ca0950cc7082f53fa69e9328409f40a62c61e57e0a47e1825a08078a58a53 \
     --hash=sha256:7969bb69912085b2285849c0dcac0b4b374fd180c13cf10a87f284ffcf347bbf

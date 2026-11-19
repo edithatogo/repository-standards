@@ -42,7 +42,7 @@ class OSPackageTests(unittest.TestCase):
                              "size_bytes": len(payload),
                              "sha256": hashlib.sha256(payload).hexdigest()})
         self.catalog = {
-            "schema_version": 1, "distribution": "bookworm", "architecture": "amd64",
+            "schema_version": 1, "distribution": "trixie", "architecture": "amd64",
             "base_image": "docker.io/library/python@sha256:" + "a" * 64,
             "base_status_sha256": hashlib.sha256(self.base_status.read_bytes()).hexdigest(),
             "required_base": {"libstdc++6": "1.0-1", "libgcc-s1": "1.0-1"},
@@ -89,9 +89,16 @@ class OSPackageTests(unittest.TestCase):
             if self.install_error:
                 raise subprocess.CalledProcessError(1, args, output=PRIVATE, stderr=PRIVATE)
             return b""
+        if args[:2] == ["dpkg", "--purge"]:
+            self.assertEqual(args[2:], self.catalog.get("purge"))
+            self.assertFalse(capture)
+            return b""
         if args[0] == "dpkg-query":
             versions = dict(self.catalog["required_base"])
             versions.update({p["name"]: p["version"] for p in self.catalog["packages"]})
+            if not getattr(self, "purge_incomplete", False):
+                for name in self.catalog.get("purge", []):
+                    del versions[name]
             if self.installed_error:
                 versions["git"] = "9.9-1"
             return "".join(f"{name}\t{version}\tamd64\tii \n"
@@ -144,6 +151,21 @@ class OSPackageTests(unittest.TestCase):
         status, receipt = self.invoke(install=True)
         self.assertEqual((status, receipt["last_stage"]), (2, "base-status"))
         self.assertEqual(self.calls, [])
+
+    def test_purge_requires_the_complete_resulting_package_inventory(self):
+        self.catalog["required_base"].update({"libncursesw6": "1.0-1", "mount": "1.0-1"})
+        self.catalog["purge"] = ["libncursesw6", "mount"]
+        (self.source / MODULE.CATALOG).write_text(json.dumps(self.catalog))
+        status, receipt = self.invoke(install=True)
+        self.assertEqual((status, receipt["status"]), (0, "installed"))
+        self.assertEqual(receipt["purged_packages"], ["libncursesw6", "mount"])
+        self.assertNotIn("mount", receipt["installed_versions"])
+        self.assertNotIn("libncursesw6", receipt["installed_versions"])
+        self.assertIn(["dpkg", "--purge", "libncursesw6", "mount"], self.calls)
+        (self.root / "receipt.json").unlink()
+        self.purge_incomplete = True
+        status, receipt = self.invoke(install=True)
+        self.assertEqual((status, receipt["last_stage"]), (2, "installed-versions"))
 
     def test_tampered_package_cannot_reach_dpkg_install(self):
         package = self.catalog["packages"][0]
@@ -243,9 +265,16 @@ class OSPackageTests(unittest.TestCase):
         catalog = MODULE.read_catalog(directory / MODULE.CATALOG)
         bases = json.loads((directory / "base-images.json").read_text())
         self.assertEqual(catalog["base_image"], bases["python"]["reference"])
-        self.assertIn("slim-bookworm", bases["python"]["source"])
+        self.assertTrue(bases["python"]["source"].endswith("/3.15.2-slim-trixie"))
         names = {p["name"] for p in catalog["packages"]}
-        self.assertFalse(any("imagemagick" in n or n.endswith("-dev") for n in names))
+        self.assertEqual(names, {"libatomic1", "libgomp1", "zlib1g"})
+        self.assertNotIn("zlib1g", catalog["required_base"])
+
+    def test_catalog_rejects_the_retired_base_distribution(self):
+        self.catalog["distribution"] = "bookworm"
+        self.write_catalog()
+        with self.assertRaises(MODULE.PreparationError):
+            MODULE.read_catalog(self.source / MODULE.CATALOG)
 
 
 if __name__ == "__main__":

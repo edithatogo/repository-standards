@@ -56,6 +56,9 @@ def make_bundle(tmp_path, *, vendor=False):
     ]}
     manifest = root / ("manifest.json" if vendor else "opt/offline-ai/manifest.json")
     manifest.write_text(json.dumps(payload))
+    for directory in root.rglob("*"):
+        if directory.is_dir() and not directory.is_symlink():
+            directory.chmod(0o755)
     return root, manifest, payload, local
 
 
@@ -270,17 +273,29 @@ def test_build_wrapper_runs_verified_bundle_before_docker(tmp_path, tamper):
     shutil.copytree(source / "security", destination / "security", ignore=shutil.ignore_patterns("__pycache__"))
     (destination / "docker").mkdir()
     shutil.copy2(source / "docker/build_offline.sh", destination / "docker/build_offline.sh")
-    tools = tmp_path / "tools"
-    tools.mkdir()
     calls = tmp_path / "docker-calls.jsonl"
-    docker = tools / "docker"
-    docker.write_text("#!" + sys.executable + "\nimport json, os, sys\n"
+    helper = tmp_path / "record_docker.py"
+    helper.write_text(
+        "import json, os, sys\n"
         "with open(os.environ['DOCKER_CALLS'], 'a') as stream: stream.write(json.dumps(sys.argv[1:]) + '\\n')\n"
-        "if sys.argv[1:3] == ['image', 'inspect']: print('localhost/offline-ai-security@sha256:' + 'c' * 64)\n")
-    docker.chmod(0o755)
-    environment = dict(os.environ,
-        PATH=str(tools) + os.pathsep + str(Path(sys.executable).parent) + os.pathsep + os.environ["PATH"],
-        BASE_IMAGE="localhost/synthetic-base@sha256:" + "a" * 64, DOCKER_CALLS=str(calls))
+        "if sys.argv[1:3] == ['image', 'inspect']: print('localhost/offline-ai-security@sha256:' + 'c' * 64)\n",
+        encoding="utf-8",
+    )
+    # The container's temporary mount need not allow direct execution of a stub.
+    # Bash invokes the mock through the installed interpreter.
+    shell_fixture = tmp_path / "docker.bash"
+    shell_fixture.write_text(
+        'docker() { "$FIXTURE_PYTHON" "$RECORD_DOCKER" "$@"; }\n', encoding="utf-8"
+    )
+    environment = dict(
+        os.environ,
+        BASH_ENV=str(shell_fixture),
+        FIXTURE_PYTHON=sys.executable,
+        RECORD_DOCKER=str(helper),
+        PATH=str(Path(sys.executable).parent) + os.pathsep + os.environ["PATH"],
+        BASE_IMAGE="localhost/synthetic-base@sha256:" + "a" * 64,
+        DOCKER_CALLS=str(calls),
+    )
     result = subprocess.run(["bash", "security/offline-ai/docker/build_offline.sh"],
         cwd=checkout, env=environment, capture_output=True, text=True, check=False)
     if tamper:

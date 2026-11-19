@@ -362,3 +362,699 @@ its remaining socket and HTTP issues stay explicit. Any rebuilt Gitleaks module
 candidate must be fully reviewed before use. The approved isolated host must
 qualify and review its own actual image and manifest. Central #126 and consumer
 #9 remain draft; no runner was registered and no consumer pin changed.
+
+## Innovate hosted Ubuntu canary — 17 November 2026
+
+At the user's direction, chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns
+this bounded candidate in `/Volumes/PortableSSD/GitHub/repository-standards-innovate44`,
+branch `codex/innovate44-offline-hosted`, based on
+`b623faeb6e4588fba5882c0e711080a73408f939`. Allowed source paths are the
+Innovate hosted canary workflow and this track record. Native/authentication
+scope: none; checkout tokens are not persisted or passed into the scanner.
+Existing offline rollout and image-advisory branches retain their owners and
+are not modified. The next operation is a single hosted, evidence-only consumer
+canary against Innovate head `fab4343b009e933ada4ed6460b20c336d1e5beed` and base
+`cc2e4da4af9c848043b31f1191c9d96212048276`, using the existing candidate's
+immutable policy selection, online verified preparation and offline image
+controls, followed by the actual consumer scan with container networking denied.
+
+The canary is not a replacement for Innovate's queued offline-security gate and
+cannot establish image, vulnerability-review, release or consumer qualification
+by itself. It retains the image-control, SBOM and all-layer Grype receipts without
+exporting the image or vendor bundle. Prior hosted evidence reported 473
+package/advisory matches and one scanner-ignored match; a fresh image and report
+must be reviewed rather than reusing those findings as an acceptance decision.
+The scientific release gate and central PRs #126 and #147 remain open.
+
+Local Python 3.15.2 actionlint and boundary assertions passed; the latter also
+rejected removal of network denial, a writable consumer mount and disabled pip
+offline mode. The staged real Presidio/Gitleaks guard scanned both changed files
+without findings or skips. The documented full policy suite ran 316 tests on
+macOS arm64 and failed with five failures, 26 errors and 24 capability skips;
+it is not a pass. One focused SBOM fixture reproduced a failure because the
+unchanged collector requires Linux x64 at preflight. The same collector sources
+and tests are byte-identical to the earlier hosted Linux policy job for `b623faeb`,
+which passed; the new head still needs its own hosted Linux checks. No container,
+model or consumer execution is claimed from this local run.
+
+A managed-worktree request for the verified shared checkout and base did not
+return and was cancelled; readback showed no attached artifact or additional
+Git worktree. This lane reuses its existing isolated clone and does not claim an
+app-managed worktree. The merged privacy branch remains preserved separately.
+
+### Tracked-source SAST coverage follow-up
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the bounded coverage
+correction in this checkout, based on `21fa8674305687671988a2cdb12b1846bbec1a67`.
+Allowed paths are `security/offline-ai/scripts/scan_opengrep.py`, its focused
+tests and fixture qualification, `security/offline-ai/run.sh`, the exact-hosted
+canary's consumer SHA, the required runtime-policy pin and this track. Native and
+authentication scope: none. The next operation is an explicit tracked-source
+inventory and fail-closed scanner result check, retaining the pinned rules and
+their positive and negative controls. Source discovery, parser coverage and
+finding review must each succeed; listing a path as scanned alone is not proof of
+complete parsing. An uninitialized Git submodule is outside the parent index's
+source inventory and is not represented as scanned. A materialized submodule must
+not be silently ignored. Image-vulnerability review and release qualification
+remain open.
+
+The current local probe on Innovate `74a4d0690636ca9f6e445b4d778b5e2f6488234d`
+enumerated and reported all 888 supported parent-index files, with one
+uninitialized submodule outside that scope. Opengrep returned seven findings,
+one partial-parse report and 46 per-file parser failures; this is a failing
+scan, not complete coverage. An independent review reproduced omitted tracked
+dotfiles and a false clean on an unresolved LFS pointer. The candidate includes
+those dotfiles, rejects LFS pointers and unreported files, and verifies parser
+status per target. It also independently compiles Python for syntax and uses the
+existing hash-inventoried esbuild binary to check JavaScript/TypeScript syntax;
+neither executes consumer code. Synthetic real-tool controls cover a clean
+Python/JSX/TypeScript set, an ignored tracked finding, bare dotfiles and eight
+invalid syntax cases. Eight focused wrapper tests passed on Python 3.15.2.
+These controls do not prove complete Rust parsing or authorize an exemption for
+the 46 failures. Hosted Linux validation remains necessary.
+
+Actionlint and shell/Python syntax checks passed. A 47-test shared-policy run
+passed 46 tests and failed one on macOS because the synthetic expected path used
+`/var` while the tested resolver returned `/private/var`. An exact rerun with a
+resolved temporary root passed; the initial run is not represented as an
+unqualified 47-test pass. The hosted Linux policy and scanner runs remain open.
+
+An isolated Python 3.15.2 experiment built tree-sitter 0.26.1 from source and
+installed its Rust grammar 0.24.2. It parsed the affected faer file and rejected
+synthetic malformed input and an LFS pointer; this is a local feasibility probe,
+not a pinned scanner dependency or proof that Opengrep analyzed the same syntax.
+
+### Rust rule-boundary follow-up
+
+The same chat and checkout own a bounded follow-up based on
+`4fb29296743fc4ca8610ae30ff0aef7891b9f76e`. Allowed paths additionally include
+`security/offline-ai/.opengrep/rules.yaml`, the Rust SAST fixtures, the fixture
+verifier, this track and the subsequent runtime-policy pin. Native scope: none.
+The next operation is to cover reproduced direct-log bypasses involving Rust
+raw identifiers and logging-macro spellings without changing existing controls.
+A proposed rule for `use std::env` was not retained: independent review showed
+it falsely flagged valid code where an unrelated local module shadowed the
+import. Imported and function aliases and macro-definition expansions remain
+reproduced gaps; this change is not complete Rust dataflow coverage.
+
+The corrected direct rule detects raw identifiers, raw logging macro names,
+generic calls, parenthesized function items and a quote character before the
+source. Line-specific real-Opengrep controls and the existing clean/comment
+controls passed; all new Rust fixtures compiled with Rust 1.99.1. A separate
+local feasibility test ran Semgrep core 1.185.0 against all 745 tracked Rust
+files with the same rule file and no reported errors or findings, and it passed
+the bounded Rust positive/negative controls. It also accepted 11 of 51 invalid
+Rust mutation inputs, so its parse status alone is insufficient. Its native
+binary, dynamic libraries, syntax gate, licensing and image scan are not
+qualified; it has not replaced Opengrep in the image.
+
+Hosted run `44045133378` on policy head `4fb2929` and Innovate `74a4d069`
+passed image controls, immutable policy export, network denial, secret history,
+SAST fixtures and the wrapper tests, then failed the actual Opengrep consumer
+scan. The hash-verified image artifact `14311941384` contains 484 advisory
+matches, including 14 critical and 150 high, plus one scanner-ignored critical
+match; its vulnerability and release qualification flags remain false.
+
+### Unreviewed Gitleaks dependency candidate
+
+The same chat and checkout own the bounded source-build candidate follow-up
+against `21fa8674305687671988a2cdb12b1846bbec1a67`. The allowed source paths
+also include `security/offline-ai/provision/gitleaks-build-sources.json`,
+`security/offline-ai/provision/gitleaks_candidate.py`, its focused tests and
+this track. This is candidate preparation only: it does not install or publish a
+binary, alter the image, approve advisory dispositions or qualify a release.
+The next operation is to resolve fixed candidate versions for the four modules
+identified by version-level advisory queries, retain exact checksums and run the
+existing isolated build and fixture workflow. The earlier candidate's build and
+fixtures passed, but its four module version matches require a new candidate and
+fresh whole-closure evidence.
+
+The local Go 1.27.4 resolution selected 203 modules and exactly the requested
+versions, including rardecode 2.4.6, x/crypto 0.59.0, x/sys 0.50.0 and x/text
+0.44.0. The initial offline cross-build probe failed because it had not populated
+the complete module cache; it is not build evidence. The candidate's 12 focused
+source-build tests passed. The full closure, Linux binary controls and image
+scan remain required before this can replace the current upstream binary.
+
+Two independent hosted candidate builds completed with identical binary and
+module metadata hashes; their clean/canary controls passed. A fresh OSV query
+returned no version matches for the 65 compiled Go modules, Gitleaks itself or
+Go 1.27.4, while the older-Go positive control returned 48 matches. A separate
+query of all 202 downloaded modules found seven with version-level advisories;
+none appeared in the compiled module list. Their disposition and the complete
+licence/source obligations remain review work. No rebuilt binary was installed
+in the tested image.
+
+## Hosted canary scanner correction — 17 November 2026
+
+The same chat and isolated checkout own the follow-up to hosted run
+`44014472493`; the bounded allowed paths now also include
+`scripts/secrets_scan.py`, `tests/test_secrets_scan.py`,
+`privacy/reviewed-findings.json`, `privacy/reviewed-findings.md`, and the
+single runtime-policy pin in `.github/workflows/reusable-ai-sec-pipeline.yml`.
+The branch still starts from `b623faeb6e4588fba5882c0e711080a73408f939`;
+existing provider, image-advisory and central rollout owners retain their work.
+
+That hosted Ubuntu run passed eight image controls and failed the actual consumer
+at Gitleaks history. Its retained fresh all-layer image report had 485
+package/advisory matches, including 14 critical and 141 high, and one additional
+scanner-ignored critical match. The image remains unreviewed and unqualified;
+no waiver, image export, consumer promotion or release qualification follows.
+Preparation accessed the network. The scanner container used `--network none`.
+
+The scanner correction preserves offline safe-directory isolation and integrates
+the already merged shared privacy registry and merge-history handling. Fifteen
+additional exact Innovate matches are public file or log SHA-256 digests, each
+independently recomputed from the corresponding immutable commit and recorded by
+complete finding identity. Distinct values and duplicate contexts remain
+blocking unless independently and unambiguously reviewed. Git environment,
+replacement and graft settings, shallow and incomplete clones, binary diff
+attributes, repository fsmonitor and signature hooks have regression coverage.
+The wrapper checks the selected Git producer before Gitleaks, refuses staged
+binary or custom-driver diffs and fails on private scanner diagnostics. Its
+separate checks assume the checkout, refs and index remain stable while scanning.
+
+With the checkout-local Python 3.15.2 and Gitleaks 8.30.1,
+`PYTHONPATH=scripts .venv/bin/python -m unittest tests.test_secrets_scan -v`
+passed 57 tests, including the real-tool negative fixtures. The initial fake
+scanner fixtures used an inherited `python3` pointing to Python 3.11 despite the
+3.15.2 test runner. The fixture now explicitly uses the runner's interpreter;
+all 57 tests passed again with `.venv/bin` first in `PATH`. `actionlint` passed
+on the hosted workflow. The staged Gitleaks and Presidio guard with the
+checkout-local `privacy-guard/venv` Python 3.15.2 selected and scanned all six
+changed files with no blocking findings or skips. An initial run with the lean
+`.venv` failed its Presidio step because that environment lacks the privacy
+dependencies; it is not a successful privacy check. The full-history Innovate
+remote-ref clone scan returned
+15 reviewed nonsecret findings and zero blocking findings with the strengthened
+Git history options. It took about 10 minutes on the local multi-core host;
+the scanner's per-process timeout is raised from 10 to 25 minutes for the
+four-CPU hosted container, within the existing 30-minute offline control limit.
+This run preceded the final private-diagnostic check, so the exact immutable
+candidate still needs a fresh hosted Ubuntu run. The canary adds an outbound IPv4
+denial probe inside the consumer container; the probe has not yet been observed
+on the hosted runner. Vulnerability disposition and the separate scientific
+release gate remain open regardless of a canary result.
+
+### Shared privacy and Python patch reconciliation
+
+The same chat and checkout own a follow-up against candidate head `c646606`.
+The older offline base still uses Python 3.15.1 in its local privacy action and
+behavioral workflow, and its self-scan pins an older Python 3.12 action. Passing
+those runs is not current Python 3.15.2 evidence. The bounded source scope now
+also covers the privacy action/workflows, privacy locks, installer, notice,
+review registry and docs, privacy wheel builder and tests, and the offline
+vendor preparer, source hash catalog and focused vendor tests. Reconcile the
+already merged shared privacy source at `c82b2658f6874127d05f825dbe9ed4747f146efd`
+with the offline-specific builder and its integrity bindings. Preserve the
+offline-only behavior and meaningful tests, and run the exact new source in a
+fresh hosted build before drawing conclusions. The already-running `c646606`
+canary remains a separate immutable evidence run.
+
+The reconciled privacy source and recognizer reviews are taken from that merged
+commit. The offline preparer now invokes its Python-3.15.2-only builder without
+the retired version-selection flag, and its catalog binds the exact builder,
+locks and upstream MIT notice. `tests.test_privacy_wheel_build`,
+`tests.test_offline_vendor_preparation` and `tests.test_privacy_scan` passed 55
+tests with the selected Python 3.15.2 privacy environment. A real macOS arm64
+source build produced both Presidio compatibility wheels and PyYAML; the builder
+verified the MIT notice inside each Presidio wheel. This local build is not a
+Linux scanner image or a hosted consumer result. The real staged Gitleaks and
+Presidio guard selected and scanned all 21 follow-up files with no blocking
+findings or skips.
+
+Hosted run `44020563460` on `c646606` built the image and passed its controls.
+The new in-container outbound IPv4 probe reported denial. The consumer then
+failed with exit 126 because `run.sh` is not executable and the canary invoked it
+directly; the consumer scan did not start. The follow-up invokes the tracked
+script through Bash. The retained value-free artifact `14300594394` has verified
+SHA-256 `6a38fa6958219e80f43b6571fde075ec1ef7442c8a464b48ab8840e496d4ee45`.
+Its all-layer Grype receipt records 485 matches, including 14 critical and 141
+high, plus one ignored match; the report hash matches the receipt. Image review
+and release qualification remain false. These observations neither approve the
+image nor substitute for the next exact-source consumer run. A subsequent local
+full-history scan with the final scanner and diagnostic handling again returned
+15 reviewed nonsecret findings and zero blocking findings; its value-free receipt
+is retained outside Git.
+
+### Consumer policy snapshot continuation
+
+The same chat and checkout own a follow-up from `cdf01f8`, limited to the
+hosted canary, this track, a consumer-policy export helper, the shared snapshot
+helper and focused tests, plus the separate source-pin update. Hosted run
+`44022146249` passed the outbound network probe and Gitleaks history but failed
+`sast-fixtures`.
+Its value-free artifact `14302450484` has verified SHA-256
+`ada1da776de05c2617acb221e2bdd7b2f21e2847e83fae50dceef9399d9ebe8a`;
+its Grype report matches the receipt and again records 485 matches, including
+14 critical and 141 high, plus one ignored match. Image review remains pending.
+
+The image qualification's archived policy has no Git metadata; the consumer
+instead mounted a Git worktree whose `.git` file names a host-only path.
+On synthetic fixtures, the digest-verified Opengrep 2.0.0 macOS binary scanned
+all 11 controls from the archived policy and found all seven bad fixtures. The
+same policy with an unavailable host Git pointer returned an error and scanned
+zero files. This local reproduction supports using the same committed, symlink-
+rejecting Git archive snapshot for the consumer, but does not prove the Linux
+container result. The new exporter checks the policy SHA and clean checkout,
+refuses an existing destination and reuses the image qualifier's archive and
+link checks. The archive is compared byte-for-byte with the committed Git tree,
+permissions are made readable to the unprivileged container, and the qualifier
+is loaded from committed source instead of ignored bytecode. The exporter and
+existing image-qualification suite passed 20 focused tests, including hostile
+Git attributes, inherited environment, fsmonitor, bytecode and umask checks.
+With a synthetic Git checkout, the actual exporter and digest-verified Opengrep
+2.0.0 scanned all 11 controls
+from the exported snapshot, found all seven bad fixtures and found no good
+fixtures. `actionlint` passed on the canary. The actual hosted consumer must
+still be rerun.
+
+The current Gitleaks rebuild candidate artifact `14302060049` has verified
+SHA-256 `134925e0caaae74271472c727be7ded00e52b915c23aa924fa3c780749da8589`.
+Its receipt reports a Go 1.27.4 build, verified module closure and a passing
+synthetic fixture, while review, image and release qualification remain false.
+An OSV querybatch of 65 compiled module versions and the candidate standard
+library returned version-level advisory IDs for four packages: `rardecode/v2`,
+`x/crypto`, `x/sys` and `x/text`. A known-vulnerable Go 1.24.11 standard-library
+positive control returned matches. The value-free local receipt has SHA-256
+`6e7e1f2dbfa928928c1c6bd015357a2da1efa67ecb4c70b0fc1cda37e453ddaa`.
+These matches do not establish reachability, and the query did not cover Debian
+or other image layers. The candidate is not an approved substitute for review.
+
+### Alert 44 exact-consumer follow-up
+
+The existing integrator in chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns
+this checkout `/Volumes/PortableSSD/GitHub/repository-standards-innovate44`,
+starting at `44fd2045ab6dc8cb359ff318dc3e0ebd68c4e20e`. The bounded scope is
+the hosted canary's immutable Innovate commit, this record, and the separate
+pin-only runtime-policy commit. The next operation is to rerun the hosted canary
+for Innovate head `e2a3ce65f330252c9ad74b182a19a0e8cdb19418` without weakening
+its scanner or image gates.
+
+On the preceding shared head, hosted run `44051618007` passed image controls,
+network denial, full-history secret scanning, SAST fixtures and scanner-wrapper
+tests; the actual consumer scan failed at Opengrep. Artifact `14315055546` has
+SHA-256 `461b6f5dc33e7db7cbe72f405d805fca39c8caa582d1803c5b722c068f3d30c5`.
+Its SBOM and vulnerability receipt evidence hashes were verified. The all-layer
+report retains 484 matches, including 14 critical and 150 high, plus one
+scanner-ignored critical match. Vulnerability review and release qualification
+remain false. Separate image-controls run `44051618055` passed its controls; it
+does not qualify the vulnerable image or the consumer SAST result.
+
+### Gitleaks image-candidate continuation — 18 November 2026
+
+The same integrator owns this clean isolated checkout at base
+`a32c1331f606dc620df9a3be4e45e96bc85bf2ea`. The bounded candidate scope is
+the existing Gitleaks source builder, vendor preparation and focused tests,
+the hosted qualification script and canary workflow, its provisioning README,
+a hash-bound candidate lock, and this track. The runtime-policy pin may be updated only after the
+source commit. Native scope is limited to the existing draft PR and its hosted
+evidence runs; no consumer pin or required check is changed.
+
+The retained all-layer report's three fixed critical Go matches and 19 high
+standard-library matches identify `/usr/local/bin/gitleaks`. The independent
+squashed SBOM also inventories the same package names and versions; that
+name/version correlation alone does not establish exploitability. The earlier
+source-build artifact `14316722318` is bound to commit `a32c1331` and its
+GitHub archive SHA-256 is
+`8b248e17ddc259d233e6d1b1c8496554af2edc1581996707632e26d20544dde0`.
+Its 65 compiled module versions and Go 1.27.4 had no matches in the earlier
+bounded OSV query; the 202-module downloaded closure and licence obligations
+still require review. The next operation is an explicitly evidence-only build
+using the frozen closure and binary hashes, followed by the existing real
+image, offline-control and vulnerability collectors. The normal reusable lane
+continues to use its current pinned source until the candidate is qualified.
+
+The evidence-only option now verifies the rebuilt binary's exact size and
+SHA-256 and the five frozen source/module metadata hashes before staging it in
+the local candidate image. The default vendor path still selects the pinned
+upstream binary. A negative control exposed a partial candidate binary left
+after a later builder failure; the candidate path now removes it and the
+regression passes. On repo-local Python 3.15.2, 56 focused builder, vendor,
+export and image-qualification tests passed. Shell syntax, actionlint, Ruff
+syntax/name checks and the existing offline Zizmor mode passed. The staged
+Gitleaks/Presidio guard scanned all eight selected files without blocking
+findings or skipped files. These local checks do not establish Linux image,
+consumer SAST, advisory, licence or release acceptance.
+
+Hosted consumer run `44237141011` tested policy head
+`dcd6852ffebab75d23944a85292b7476590fb0a3`, exported source policy
+`f0f5fb74fcb849352841fcf60eaa8466fc138ded` and Innovate
+`e2a3ce65f330252c9ad74b182a19a0e8cdb19418`. Candidate image construction,
+the eight image controls, policy export and network-denial execution passed.
+The actual consumer failed at Opengrep, so the run failed and the lane is not
+qualified. The separately passing image-controls run `44237141169` used the
+default vendor path and is not evidence for the rebuilt Gitleaks candidate.
+
+Artifact `14398112646` has verified archive SHA-256
+`aad2a22404a2df5ad53475d32020892e4088fa6b2d8278556ea4bbfa97ab4199`.
+Its asset-manifest, SBOM and vulnerability-receipt hashes were independently
+checked. The image digest is
+`sha256:7f8b4b4c09d6adae9e75b60a79f0ca8afc0b90d63e2d0dd833fb84478def6b12`;
+the manifest binds the candidate Gitleaks binary to SHA-256
+`be39829e02d116295fc8babe39cf60b25964d45c1c801869105022dfd4577ebe`.
+The all-layer Grype report retains 451 matches, including 11 critical and
+129 high, plus one scanner-ignored match. None of the report's matches names
+the Gitleaks binary location; the previous report had 33 there, including
+three critical and 21 high. The two report database hashes differ, so their
+aggregate count difference is not by itself an attribution or vulnerability
+disposition. The remaining critical matches name Debian curl, glibc and SQLite
+packages. Preparation, scanner and review receipts explicitly keep image,
+vulnerability, consumer and release qualification false. Source, licence and
+advisory review of the candidate and complete consumer parsing remain open.
+
+### Debian 13 hosted image candidate, 18 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the offline image candidate
+in `/Volumes/PortableSSD/GitHub/repository-standards-innovate44` on
+`codex/innovate44-offline-hosted`, based on
+`8e303d11a81ce821ffb37893030ee0d91d07b93f`. Scope is the Python base and
+Debian package locks, the provisioner's distro check and focused test,
+the provisioning README, this record, the hosted canary's Innovate ref,
+and the subsequent runtime-policy source pin. Native scope is the existing
+draft PR #152 and its hosted evidence runs. The next operation is to build
+the pinned Debian 13 candidate and run the same image, network, SAST and
+all-layer vulnerability controls on Innovate PR #684 head
+`ecaccce231a1aa53b46418df52bd2cf3cc4e8d85`.
+
+The official Linux amd64 Python 3.15.2 slim Trixie image digest is
+`sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85`.
+The verified base dpkg status contains 88 installed packages and has SHA-256
+`75b63974c853f59abf2575cbcb5d0ff8075b2c8fa9151318c0ec7a98dafbe7e2`.
+The image contains Debian-fixed glibc and SQLite versions for three critical
+matches in the Bookworm image. Debian still lists the candidate curl version
+as affected by CVE-2026-19931. The candidate cannot be approved before the
+full hosted scan, dependency review and actual consumer controls complete.
+
+The three Debian package indexes were verified against signed InRelease
+metadata using the official base's Debian archive keyring. The catalog
+selects 33 complete runtime archives totaling 23,792,168 bytes. The exact
+archive sizes, hashes and Debian control fields were independently read
+back before installation. Catalog SHA-256 is
+`911778e03cd76fe91c5d7290b246a5a7f9482e78bb5b4fee373443bf1a0af43a`.
+All 14 OS package tests and 19 offline container control tests passed on
+Python 3.15.2. The hosted canary must still install the closure with
+networking disabled and verify the final package database.
+
+### Alternate Rust scanner trial, 18 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this trial on
+`codex/innovate44-offline-hosted` in the existing shared-policy checkout.
+The starting head is `7565d57f27711f51fe23918227171e67e1f3bf60`.
+Scope is the standalone trial helper, the existing Rust fixture expectations,
+the hosted canary, this record and the subsequent runtime-policy pin.
+The separate evidence step targets Innovate PR #684 head
+`12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2`. The existing consumer
+Opengrep check and full image vulnerability collection retain their gates.
+
+The macOS standalone Semgrep core 1.185.0 passed every required Rust rule
+fixture, including the line-specific controls. It reported all 747 tracked
+Rust sources with zero errors and findings. Independent Rustfmt checks with
+the declared vendor editions accepted the previously rejected sources.
+The Linux wheel is pinned by size and SHA-256. Its native dependency bundle
+still requires advisory and licence review before production use. The next
+operation is an isolated Linux x64 trial using the same fixtures, tracked
+paths and read-only mounts, with network access disabled during scanning.
+
+The trial helper verified the actual Linux wheel and all 27 native files,
+and its local scan reproduced all nine Rust fixtures and 747 source reports
+on Python 3.15.2. All eight existing scan-wrapper tests, actionlint and diff
+checks passed. The Linux trial retains a value-free result with its source
+head. The normal Opengrep and image results remain separate promotion gates.
+
+### Runtime dependency and Rust syntax qualification, 18 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this draft update in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44`, branch
+`codex/innovate44-offline-hosted` at
+`5a19460ed556500e2791af3179ace797a6ef4dc9`. The affected paths are the
+runtime base, its Debian and Git locks, the hosted provisioner and canary,
+the Rust scanner trial helper, their focused tests and this record. Native
+scope is PR #152 and its runs. Innovate head `12c58c52` remains the test
+consumer. The next operation is to run the existing hosted controls with
+the reduced dependency closure and the independent Rust syntax check.
+
+The prior all-layer report lists eight critical and 23 high matches in
+`libcurl3t64-gnutls`. Debian 13 has a signed update for the one other high
+match marked fixed, CVE-2026-85091 in zlib. Build Git 2.56.1 without HTTP
+transport and restrict the additional Debian packages to the two native
+runtime libraries and the fixed zlib archive. Assemble the runtime from
+the updated filesystem so the original zlib bytes do not enter its layers.
+Retain the full all-layer report and compare it with the prior result.
+
+GitHub verifies the signed upstream Git tag for commit
+`03b41523c576f26ad34085378717a0c1b287470f`. The release archive signature
+also verifies against the same signing subkey
+`E1F036B1FEE7221FC778ECEFB0B5E88696AFE6CB`. The current OSV query for
+that commit returned zero advisory IDs. The Linux image and its runtime
+dependencies still require exact hosted verification.
+
+The fixed zlib archive matched the size and SHA-256 in the signed Debian
+security index. The source-built macOS Git reported 2.56.1, passed local
+init, commit, history and index checks and showed no curl linkage.
+The Rust trial used Rustfmt from Rust 1.100.0 and local Semgrep core
+1.185.0. It passed the nine rule fixtures and all 747 tracked files.
+The syntax check rejected six malformed controls. The 14 OS package, 19
+container and eight scanner wrapper tests passed on Python 3.15.2.
+Shell syntax, actionlint, Zizmor and diff checks passed.
+
+Hosted image run `44303265564` failed at Git's default Cargo build because
+the C build image did not contain Cargo. The digest-pinned official Rust
+1.100.0 Debian 13 build image retains Git's default Rust code.
+
+Hosted image run `44304345875` then reached Cargo and failed because
+the signed archive omits `Cargo.lock`. The lock examined earlier came
+from the local compile. A fresh extraction generated the same single-crate
+lock offline with Cargo 1.100.0. Verify its SHA-256 before the hosted build
+runs with `--release --locked --offline`.
+
+### Gitleaks report permissions and scanner provenance, 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44` on
+`codex/innovate44-offline-hosted` at `018ecdcc4157ad268839737bae43185a2c71876a`.
+The scope is the Gitleaks build catalog, report-permissions patch, candidate
+builder and staging checks, their focused tests and documentation, this record,
+and the runtime policy pin. Native scope is draft PR #152 and its checks.
+Innovate PR #684 head `12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2` supplies the
+consumer for the offline run.
+
+The Go 1.27.4 cross-build reproduced the original hosted Linux amd64 binary
+`be39829e02d116295fc8babe39cf60b25964d45c1c801869105022dfd4577ebe` and all 606
+downloaded archive, module and version metadata hashes for 202 modules.
+The binary links 65 modules. The 19 November OSV review returned zero advisories
+for those modules and the Go standard library. Seven downloaded-only modules
+have matches. The embedded go-re2 v1.9.0 payloads match its release tree, whose
+recipe identifies RE2 2024-07-02, Abseil 20240722.0 and WASI SDK 25. The query
+for the Gitleaks release source returned CVE-2026-124039. The offline wrapper
+already pre-creates its report at mode `0600` in a private directory.
+
+Apply the two-call-site report-permissions change from the open upstream
+[Gitleaks PR #2312](https://github.com/gitleaks/gitleaks/pull/2312) to the
+verified 8.30.1 source archive. Verify the patch bytes and the original and
+patched source bytes. Exercise new and pre-existing reports alongside the
+existing clean and secret detection fixtures before staging the new binary.
+
+The patched Darwin arm64 binary passed the clean and secret detection fixtures
+and both report permissions cases. The isolated cross-build produced a
+22,868,092-byte Linux amd64 binary with SHA-256
+`7feb4384b376745ebe1e466bd0115acc18cfb74d30ad265c2539529602210e41`.
+The lock requires this hash and the original dependency metadata before the
+hosted run can stage the binary. The patch is sourced from an open, unsigned
+proposal and independently reviewed against the pinned release bytes.
+
+The Semgrep 1.185.0 Linux wheel has SHA-256
+`0eb6aaadad5b957af96d1300487e10af1dc8016e8ef53072effb48cd4906c02b`.
+The PyPI attestation identifies the publisher. For 24 of the 26 bundled
+libraries, the GNU build IDs and allocated code and data sections match RPMs
+from the AlmaLinux 9 and 9.8 BaseOS catalogs. The comparison verified the signing
+key and the catalog, metadata and RPM hash chain. Those libraries differ in
+their dynamic linkage metadata. The matched packages include
+`libcurl-minimal-7.76.1-40.el9_8.8` and `openssl-libs-3.5.8-2.el9_8`.
+`libtree-sitter.so.0.26` and `libunwind.so.8` remain untraced. This leaves the
+wheel's native library provenance incomplete for image promotion.
+
+The 19 focused Gitleaks tests passed on Python 3.15.2. A 173-test offline suite
+run on macOS reported the same five failures and 26 errors at the starting
+commit and with the patch. The affected tests exercise SBOM and vulnerability
+evidence code that requires Linux amd64. Actionlint passed with the existing
+`ai-security-offline` runner label configured.
+
+### Integrate the verified scanners in the hosted consumer lane, 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet at
+`3bb521b0c24a8d79d1fa84478253e919e98c091b` in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44`. Scope is the
+hosted consumer workflow, its locked scanner assets and SAST runner, focused
+tests, the runtime policy pin, and this record. Native scope is draft PR #152.
+PR #684 head `12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2` supplies the test consumer.
+
+The EPEL 9 libunwind RPM signature, payload and executable sections verified
+against the shipped library. Hosted run `44394142641` reproduced Tree-sitter
+0.26.3 with the same build ID, executable and read-only data. Hosted run
+`44396381026` loaded the eight signed AlmaLinux updates and passed nine
+Rust rules fixtures, six malformed syntax controls and all 747 Rust sources.
+Hosted run `44393030180` reproduced the report-safe Gitleaks build and passed
+both mode-0600 fixtures. Use those assets in the full hosted consumer run.
+Keep the parent Git index as the common inventory, run Opengrep on its existing
+non-Rust languages and Semgrep plus Rustfmt on every Rust file, and fail on
+any findings, parser error or coverage gap. Keep image vulnerability review
+separate from the workflow's runtime results.
+
+On Python 3.15.2, nine SAST wrapper tests and 19 Gitleaks candidate tests passed.
+Reassembly from the independently verified wheel and signed RPM bytes matched
+all 27 locked files. Verification rejected a modified library. Actionlint,
+Bash syntax and Git diff checks passed. The hosted job mounts the exact
+Semgrep bundle and Rustfmt read-only and retains a separate asset inventory.
+The whole-image SPDX and all-layer Grype scans continue against the runtime
+image's actual digest.
+
+### Reduce the hosted runtime package inventory, 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet at
+`d4e0091c167ca2ebd607e2105ac2ad370673747e` in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44` for draft PR #152.
+Scope is the Debian package catalog, preparer, base Dockerfile, SAST mount
+verification, focused tests and runtime policy pin. The pinned Debian starting status shows `mount` is
+neither essential nor protected and has no installed reverse dependency.
+The offline controls inspect the mount table through the kernel and do not
+invoke `mount` or `umount`. Purge the package using ordinary dpkg dependency
+checks before flattening the real filesystem, then verify the complete
+installed package list, scanner controls and all-layer findings.
+
+Hosted runs 44419567878 and 44420629222 built the images, prepared the locked
+assets, denied container egress and collected the native inventories and
+advisory reports. Both consumer commands stopped at hosted SAST. Add a private
+stage receipt and allowlist only the fixed stage names for failure output.
+The diagnostic records which check failed while leaving raw scanner streams
+and all source-derived output behind the existing quiet boundary.
+
+The same Grype database verified the package removal in run `44420629222`.
+The tested image digests were `e51c3458c0f8` before removal and
+`24e330f51010` after removal. The reduced inventory lacks `mount` and the
+high count fell from 81 to 77. Critical findings were zero on both images
+and ignored matches were zero. The remaining high findings have no fixed
+Debian 13 package in the report.
+
+Targeted run `44423558250` scanned all 174 non-Rust files and reported nine
+Python findings and zero scanner or parser errors. The actual exit code
+indicates findings. The Innovate diagnostic-output repair at `60bfa505cf4543c236c73822ec881492ef335616`
+keeps the full file receipts and limits the console output of the four
+active commands. Rescan this exact PR #684 head. The two hash-bound JOSS
+source-evidence files keep their attested bytes and remain in scope.
+
+The first targeted rescan, `44424922110`, verified six active corrections
+and located the last active finding at the benchmark duplicate-path error.
+Retain the benchmark count summary and existing receipt on collision.
+The consumer revision `19603ac397a8e199eb5792559587fbf366f3df80` has the targeted error repair
+and a regression assertion on the collision path.
+
+### Verify the JOSS diagnostic correction, 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this canary update
+in `/Volumes/PortableSSD/GitHub/repository-standards-innovate44` from
+`25575c5c41d70acd01138acd1439cdde8d6b8616`. Scope is the immutable
+Innovate consumer target, this record and the runtime policy pin. Native
+scope is draft PR #152. Verify Innovate PR #684 at
+`74c959bcd249e9133dc1e366adb6d88fb54732a7` with the full hosted image,
+the existing scanner inventory and fixtures and the network-denied
+consumer run. The consumer's 143 local JOSS and registry checks passed.
+Image vulnerability review remains pending.
+
+Run `44477127721` validated the image and denied container egress. Consumer
+SAST still failed at the identical two JOSS stdout calls after the path
+projection. Innovate now projects the process result to stage pass or fail.
+Run the full canary against `3db2c5ace5ebfad31561c2c2096c082f8f76692f`,
+including the release evidence verifier added since the first JOSS fix.
+
+### Verify policy tests after the hosted scanners, 19 November 2026
+
+Run `44479258221` passed both hosted SAST engines and then failed the
+second policy pytest group. The current work packet adds value-free failure
+names, uses a private short test directory and preserves the Unix socket bind
+error if initialization fails. Scope in the same policy worktree is the
+policy runner, socket broker, focused tests, this record, consumer target and
+source pin. The 106 grouped tests passed locally on Python 3.15.2 with a short
+scratch directory. The hosted runtime must rerun those same checks on
+Innovate `2b0eac8e76b05d8e7cb71dd7f2ec53b4bb9aab19`.
+
+Run `44479738024` compared unmodified, digest-pinned Python 3.15.2 bases
+with the same Grype database. Bookworm reported three critical findings
+and 69 high. Trixie reported zero critical and 78 high before runtime
+remediation. Keep Trixie for the canary. Debian marks the login package
+protected. The current candidate still needs image vulnerability review.
+
+Run `44486965224` again passed hosted Semgrep and Opengrep. Its private
+test report identified `test_verify_assets.test_build_wrapper_runs_verified_bundle_before_docker`.
+The fixture now records the same Docker calls through the installed
+interpreter. It still checks the verified vendor before build and the
+immutable base and network-denied build arguments. The synthetic asset and
+socket permissions are now explicit. The same 106 tests pass locally with
+umask 077. The next hosted run repeats the full controls on Innovate
+`2b0eac8e76b05d8e7cb71dd7f2ec53b4bb9aab19`.
+
+### Remove unused wide-character ncurses from the runtime candidate
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this image correction
+in the existing hosted worktree from `b41977f72976d0bde3a59b80f43b4a6fc90c37c9`.
+Scope covers the base Dockerfile, package inventory and preparer, their
+focused tests, the provisioning documentation and the hosted policy pin.
+The registered native target is draft PR #152.
+
+Diagnostic run `44493115571` used the pinned Linux amd64 base and ordinary
+dpkg dry runs. Debian allowed removal of `libncursesw6`. Dependencies or
+distribution protections blocked removal of SQLite, the base ncurses packages,
+libtinfo, login and libuuid. Purge the wide-character library and remove the
+two unneeded Python curses extensions linked against it. The 15 package
+preparation tests and nine subtests passed locally. The hosted canary must
+recheck Innovate `abd1bc0d0f2da96bd965e3e6441dd1b23936e286` and collect the
+complete advisory report for the rebuilt image.
+
+### Qualify a signed Wolfi runtime candidate
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet from
+`6fe21a3c19a3d1bf923fb976c07d32227d8bbd11` in the hosted policy
+worktree for draft PR #152. Scope is the hosted base preparation, signed image
+and package inputs, the Innovate canary target and the immutable policy pin.
+
+Canary `44493770473` passed all eight runtime controls and the consumer
+checks. Its SPDX inventory excluded libncursesw6. All-layer Grype recorded
+76 high findings, zero critical and zero ignored. Diagnostic run
+`44497993455` installed the verified public Wolfi packages with no network
+and used the same database digest. Grype identified Wolfi, reporting zero
+high and critical findings and eight lower-severity matches. Cosign verified
+the vendor's signed index and the hosted runner confirmed its amd64
+manifest resolves to the same image. Exercise the complete scanner, offline
+controls and Innovate canary using these exact base and package bytes.
+
+### Connect the reviewed assets to Innovate's hosted job
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet from
+`6d828d79ad05b86c473a5044c46fcd873fee9b1e` in the hosted policy
+worktree. Scope is the opt-in reusable workflow, image review, reviewed
+Gitleaks selection, focused tests and immutable pin. Its native targets
+are draft PR #152 and the offline check on Innovate draft PR #684.
+
+Runs `44499639400` and `44499639220` passed all eight image controls.
+The consumer canary denied container egress and passed both SAST engines.
+Its exact image and advisory report are recorded in the Wolfi review.
+The rebuilt Gitleaks scanner has separate source, library and fixture evidence.
+Use its existing locked bytes in the hosted job and preserve the receipt-only
+mode for historical canaries. Review the image advisories on every hosted job
+and keep unresolved findings visible and blocking.
+
+### Verify CPython security backports on the hosted image
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in the hosted
+policy worktree from `8ad652f912d52b4e7e49b9bb0fa91c65084f189b`. Scope is the
+base-image CPython build and verification, disposition receipt, focused tests,
+and immutable pin for draft PRs #152 and #684. Keep Grype's raw matches and
+package metadata. The installed-file check covers the six CPython findings.
+The installed glibc package still needs a verified backport record.
+
+The Wolfi APK's embedded recipe and SPDX inventory identify glibc source
+`625054f30f0e7a961519f045f2364aa3ca6c1c6b`. Git ancestry confirmed both
+release-branch security commits. The review compares the installed shared
+library and SPDX file to that package. No package downgrade is needed.
+The CPython input and output file inventory matched all six fixes in the
+local exact-APK check. The hosted lane repeats both package verifications.

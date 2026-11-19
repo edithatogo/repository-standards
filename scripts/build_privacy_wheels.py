@@ -11,9 +11,17 @@ import tarfile
 import tempfile
 import urllib.request
 from pathlib import Path
+from zipfile import ZipFile
 
-PYTHON_VERSION = (3, 15, 1)
-SUPPORTED_PYTHON_VERSIONS = ((3, 15, 1), (3, 15, 2))
+PYTHON_VERSION = (3, 15, 2)
+# Presidio 2.2.366 release date; keep generated archive timestamps stable.
+SOURCE_DATE_EPOCH = 1793059200
+PRESIDIO_NOTICE = (
+    Path(__file__).resolve().parent.parent / "privacy/licenses/presidio-MIT.txt"
+)
+PRESIDIO_NOTICE_SHA256 = (
+    "f3e86ee59a49bcfb0d9a9547484d55224ea7b2d04f95b1947b4d18d17f6de535"
+)
 MAX_SOURCE_BYTES = 10 * 1024 * 1024
 SOURCES = {
     "presidio_analyzer-2.2.366": (
@@ -29,6 +37,10 @@ SOURCES = {
         "d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f",
     ),
 }
+PRESIDIO_CHANGES = (
+    ('version = "2.2.366"', 'version = "2.2.366+python315.2"'),
+    ('requires-python = ">=3.11,<3.15"', 'requires-python = "==3.15.2"'),
+)
 ANALYZER_CHANGES = (
     ('"numpy (>=1.19.0,<2.5.0)"', '"numpy (==2.5.4)"'),
     ('"preshed (<3.0.14)"', '"preshed (==3.0.15)"'),
@@ -51,34 +63,58 @@ def verified_source(name: str, directory: Path) -> Path:
     return source
 
 
-def patch_presidio(source: Path, python_version: tuple[int, int, int] = PYTHON_VERSION) -> None:
+def patch_presidio(source: Path) -> None:
     """Declare the exact compatibility build without changing scanner code."""
-    if python_version not in SUPPORTED_PYTHON_VERSIONS:
-        raise ValueError("Unsupported privacy wheel Python version")
-    major, minor, patch = python_version
-    runtime = f"{major}.{minor}.{patch}"
     project = source / "pyproject.toml"
     content = project.read_text(encoding="utf-8")
-    changes = (
-        ('version = "2.2.366"', f'version = "2.2.366+python{major}{minor}.{patch}"'),
-        ('requires-python = ">=3.11,<3.15"', f'requires-python = "=={runtime}"'),
-    )
+    changes = PRESIDIO_CHANGES
     if source.name.startswith("presidio_analyzer"):
         changes += ANALYZER_CHANGES
     for before, after in changes:
         if content.count(before) != 1:
             raise ValueError(f"Unexpected upstream metadata: {source.name}")
         content = content.replace(before, after, 1)
+    notice = PRESIDIO_NOTICE.read_bytes()
+    if hashlib.sha256(notice).hexdigest() != PRESIDIO_NOTICE_SHA256:
+        raise ValueError("Presidio MIT notice does not match the upstream release")
+    target = source / "LICENSE"
+    if target.is_symlink() or (target.exists() and target.read_bytes() != notice):
+        raise ValueError("Unexpected Presidio MIT notice in source")
+    target.write_bytes(notice)
     project.write_text(content, encoding="utf-8")
 
 
-def build(destination: Path, python_version: tuple[int, int, int] = PYTHON_VERSION) -> None:
+def verify_presidio_notice(wheel: Path) -> None:
+    """Require the exact upstream MIT notice in every rebuilt Presidio wheel."""
+    with ZipFile(wheel) as archive:
+        matches = [
+            name
+            for name in archive.namelist()
+            if name.endswith(".dist-info/licenses/LICENSE")
+        ]
+        if (
+            len(matches) != 1
+            or hashlib.sha256(archive.read(matches[0])).hexdigest()
+            != PRESIDIO_NOTICE_SHA256
+        ):
+            raise ValueError("Presidio wheel is missing the verified MIT notice")
+
+
+def build_environment() -> dict[str, str]:
+    """Keep wheel timestamps stable and omit variable native debug paths."""
+    env = os.environ.copy()
+    env["SOURCE_DATE_EPOCH"] = str(SOURCE_DATE_EPOCH)
+    if os.name != "nt":
+        env["CFLAGS"] = " ".join(
+            part for part in (env.get("CFLAGS", ""), "-g0") if part
+        )
+    return env
+
+
+def build(destination: Path) -> None:
     """Build in a temporary directory using the verified interpreter and toolset."""
-    if python_version not in SUPPORTED_PYTHON_VERSIONS:
-        raise ValueError("Unsupported privacy wheel Python version")
-    if sys.version_info[:3] != python_version:
-        runtime = ".".join(map(str, python_version))
-        raise RuntimeError(f"The privacy wheel build requires Python {runtime}")
+    if sys.version_info[:3] != PYTHON_VERSION:
+        raise RuntimeError("The privacy wheel build requires Python 3.15.2")
     uv = shutil.which("uv")
     if uv is None:
         raise RuntimeError("The privacy wheel build requires uv")
@@ -88,7 +124,7 @@ def build(destination: Path, python_version: tuple[int, int, int] = PYTHON_VERSI
         for name in SOURCES:
             source = verified_source(name, root)
             if name.startswith("presidio_"):
-                patch_presidio(source, python_version)
+                patch_presidio(source)
             subprocess.run(
                 [
                     uv,
@@ -104,15 +140,20 @@ def build(destination: Path, python_version: tuple[int, int, int] = PYTHON_VERSI
                     os.fspath(source),
                 ],
                 check=True,
+                env=build_environment(),
             )
+            if name.startswith("presidio_"):
+                prefix = name.removesuffix("-2.2.366")
+                matches = list(destination.glob(f"{prefix}-2.2.366+python315.2-*.whl"))
+                if len(matches) != 1:
+                    raise ValueError(f"Unexpected Presidio wheel inventory: {name}")
+                verify_presidio_notice(matches[0])
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--destination", required=True, type=Path)
-    parser.add_argument("--python-version", choices=("3.15.1", "3.15.2"), default="3.15.1")
-    args = parser.parse_args()
-    build(args.destination.resolve(), tuple(map(int, args.python_version.split("."))))
+    build(parser.parse_args().destination.resolve())
 
 
 if __name__ == "__main__":

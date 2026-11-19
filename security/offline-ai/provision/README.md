@@ -7,17 +7,19 @@ control plane.
 
 ## Inputs and trust
 
-`base-images.json` fixes the Linux amd64 Docker Official Images by digest. Its
-source URLs record the metadata used to select those immutable manifests.
-`Base.Dockerfile` combines the Python 3.15.2 slim image with Node 24 and the
-reviewed Git/native runtime closure. Online preparation downloads only the
-24 Debian packages pinned by exact URL, version, size and SHA256 in
-`os-packages.json`. The offline base build mounts those verified packages
-read-only, checks the exact base dpkg database, installs without apt or network
-access, and verifies installed versions and `dpkg --audit`. Debian's installed
-package database and notices are preserved; downloaded package archives are not
-baked into an image layer. Global npm/npx are omitted because the scanner uses
-the separate reviewed Promptfoo installation.
+`base-images.json` pins the Linux amd64 Wolfi, Node, Git builder and registry
+manifests. Its Wolfi entry also records the signed multi-architecture index
+and the verified publishing workflow. Online preparation checks the public
+package bytes against `wolfi-packages.sha256`. During the offline build, apk
+authenticates the vendor's signed index and verifies packages from the mounted
+local repository. The complete installed package inventory must match
+`wolfi-inventory.txt`. A separate virtual environment uses Python 3.15.2
+and the verified wheel inventory.
+
+The build verifies the pinned Git release archive and compiles it offline
+without HTTP transport. It preserves package metadata and licences in a fresh
+runtime layer. Node 24 runs the separate reviewed Promptfoo installation.
+The Debian catalog and its tests retain the earlier Trixie qualification.
 
 The scanner/model preparer separately verifies source hashes, committed
 dependency locks and their complete supplied-asset inventory. The new image must
@@ -33,7 +35,7 @@ the committed approved locks and rejects missing or changed input bytes.
 ## Execute
 
 Use a clean checkout of the exact policy commit on an isolated Linux x64 host
-with Docker, Python 3.15.2, Node 24.22.1, uv 0.13.8, `dpkg-deb` and sufficient
+with Docker, Python 3.15.2, Node 24.22.1, uv 0.13.8 and sufficient
 disk space.
 The local Docker daemon must enforce cgroup v2 memory, process and CPU limits.
 Port 80 on host loopback must be available for the temporary local registry.
@@ -98,6 +100,26 @@ pass its update, age and integrity checks. Successful collection records
 The hosted scan requires network access for the pinned tool and current advisory
 database, and does not change the network-denied scanner control execution.
 
+Innovate can select the GitHub-hosted Ubuntu path of
+`reusable-ai-sec-pipeline.yml` with `github_hosted: true`. It uses the immutable
+policy, verified scanner inputs, and a fresh image. Both SAST engines and the
+existing controls execute with the consumer and policy mounted read-only and
+container networking disabled. The job inventories the actual scanner image
+and records its dispositions in `wolfi-image-disposition.json`. The gate fails
+on unresolved, unreviewed or ignored findings. The complete Grype report
+remains in the evidence artifact. The [review catalog](wolfi-image-review.json)
+records the eight findings in the qualification run and scopes the conclusions
+to the observed package versions.
+
+The [CPython catalog](cpython-backports.json) pins two fixes already present in
+Wolfi's 3.15.2 build and four official standard-library patches. The offline
+image build verifies each patch, original file and resulting file by hash.
+The image review checks the packaged executable and fixed files again in the
+exact scanner image. Verified findings remain visible in the Grype evidence.
+The [glibc catalog](glibc-backports.json) traces the release-branch fixes to the
+source revision named by the APK build recipe and embedded SBOM. The review
+checks the installed library and SBOM bytes on every hosted run.
+
 The registry listens on loopback only and is removed after the run. To provision
 the eventual runner, execute the preparation/build/qualification command above
 on the approved Linux x64 host using the exact reviewed policy checkout and
@@ -148,14 +170,15 @@ committed Python and npm lock bytes, original resolver inputs and
 Those observations are historical evidence; this patch does not relabel them as
 3.15.2 execution results or resolve new dependency versions.
 
-The shared privacy wheel builder keeps its existing 3.15.1 default. Offline
-preparation explicitly selects `--python-version 3.15.2`, verifies the actual
-interpreter matches that selection and rebuilds the same checksum-pinned sources.
+The shared privacy wheel builder requires Python 3.15.2 and verifies the actual
+interpreter before rebuilding the same checksum-pinned sources. Offline
+preparation invokes it with an isolated environment created from that interpreter.
 Both Presidio wheels use the distinct local version `2.2.366+python315.2` and
 `Requires-Python: ==3.15.2`; their scanner code and pinned dependency adjustments
-are unchanged. PyYAML is rebuilt under the selected interpreter. The source
-catalog binds the changed builder bytes, and the new vendor lock and manifest
-record the resulting wheel hashes. The model source catalog remains unchanged.
+are unchanged. The upstream MIT notice is verified in each built wheel. PyYAML
+is rebuilt under the selected interpreter. The source catalog binds the builder,
+notice and lock bytes, and the new vendor lock and manifest record the resulting
+wheel hashes. The model source catalog remains unchanged.
 
 The existing CPython 3.15 wheel tags permit the same ABI target, but successful
 installation, `uv pip check` and actual model/Promptfoo execution on the newly
@@ -202,11 +225,13 @@ Continue with the existing offline Docker build and `docker/qualify_image.py`. S
 
 The existing upstream candidate workflow has a separate bounded Gitleaks job.
 It starts from the exact upstream 8.30.1 source and a checksum-pinned Go 1.27.4
-toolchain. It resolves the smallest allowed dependency update, verifies the
-complete module closure, disables dependency lookup for the read-only build,
-and runs the existing clean/canary fixture. Scanner code and rules are unchanged.
+toolchain. The catalog binds the report-permissions patch for CVE-2026-124039
+and both versions of the patched Go file. The builder verifies the complete
+module closure and disables dependency lookup during compilation. It runs the
+existing clean and secret detection fixtures and checks that both new and
+pre-existing reports have owner-only permissions. The detection rules are unchanged.
 
-The output contains only the fixed public metadata paths: `go.mod`, `go.sum`,
+The output contains the fixed public metadata files `go.mod`, `go.sum`,
 `modules.json`, `module-closure.json`, `gitleaks-LICENSE.txt` and
 `candidate-receipt.json`. The built binary stays temporary. Bounded
 `OFFLINE_GITLEAKS_CANDIDATE` JSON envelopes provide indexed, hash-bound recovery
@@ -216,3 +241,21 @@ Candidate success is not approval. Review the complete source/toolchain/module
 identities and commit the exact lock bytes before connecting a strict reviewed
 build to vendor preparation. No candidate output is automatically promoted, and
 all image, release and runner qualification flags remain false.
+
+The Innovate hosted canary can explicitly select
+`--gitleaks-candidate-evidence-only`. Before staging the local binary, it
+requires the scan and report fixtures to pass and the catalog, module-closure
+metadata and binary bytes to match `gitleaks-image-candidate.json`. The dependency
+artifact records the unchanged module closure. The binary hash binds the
+patched cross-build. The canary keeps the binary in its
+temporary vendor tree and locally built image; it uploads only the existing
+value-free receipts and inventories. The normal preparation path still uses the
+pinned upstream release. This evidence-only option does not approve the
+candidate, authorize its distribution, or establish a passing image or SAST
+scan.
+
+The hosted Innovate job selects `--gitleaks-reviewed-build`. The
+[review record](gitleaks-hosted-review.json) binds the existing candidate lock,
+source, binary, and observed execution and permission fixtures. Preparation
+still rebuilds the exact binary and runs all staging checks. The reviewed
+binary stays on the job host.

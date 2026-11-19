@@ -1,0 +1,224 @@
+{
+  "catalog_sha256": "e17b1486c84fb019c011f7450da00c477d4fb9e76312a26c8cb1fcbf443ed825",
+  "catalog_signing_key": "BF18AC2876178908D6E71267D36CB86CB86B3716",
+  "packages": [
+    {
+      "libraries": [
+        {
+          "name": "libm.so.6",
+          "path": "./usr/lib64/libm.so.6",
+          "sha256": "c8933ed54328b293c8b005fe44161d1c73c09f96abc6d781a6c31230368d1120",
+          "size_bytes": 913048
+        },
+        {
+          "name": "libresolv.so.2",
+          "path": "./usr/lib64/libresolv.so.2",
+          "sha256": "957135933e177a8dee54035988061a90d94a2c81371a1299528e212198535d4c",
+          "size_bytes": 70520
+        }
+      ],
+      "package": "glibc",
+      "sha256": "6d0951f0e84df8f716f3f0736be376209a5c0cf9053aaa19e56a30b9b2e96401",
+      "size_bytes": 2057688,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/glibc-2.34-290.el9_9.x86_64.rpm",
+      "version": "0:2.34-290.el9_9"
+    },
+    {
+      "libraries": [
+        {
+          "name": "libcurl.so.4",
+          "path": "./usr/lib64/libcurl.so.4.7.0",
+          "sha256": "cb7fdd4fa03bec8819b51b79f203be43fb61c3a6779a0ac112f1840b98134e97",
+          "size_bytes": 517032
+        }
+      ],
+      "package": "libcurl-minimal",
+      "sha256": "d12cbbe2211615a2ed3009d9bd4c7664fc9c7e49f86227308d1249fc839f6b13",
+      "size_bytes": 229948,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/libcurl-minimal-7.76.1-43.el9.x86_64.rpm",
+      "version": "0:7.76.1-43.el9"
+    },
+    {
+      "libraries": [
+        {
+          "name": "libgcc_s.so.1",
+          "path": "./lib64/libgcc_s-11-20240719.so.1",
+          "sha256": "1e8c2338bae2f3f2b0ed30020c46ff3cfdfdfa571baa8a2c0fe54e25bbd4c855",
+          "size_bytes": 116416
+        }
+      ],
+      "package": "libgcc",
+      "sha256": "1248acf03287807e448174d8753b7b8a9b2cc46f40f237281c91f20fa2339386",
+      "size_bytes": 83809,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/libgcc-11.5.0-17.el9_9.alma.1.x86_64.rpm",
+      "version": "0:11.5.0-17.el9_9.alma.1"
+    },
+    {
+      "libraries": [
+        {
+          "name": "libstdc++.so.6",
+          "path": "./usr/lib64/libstdc++.so.6.0.29",
+          "sha256": "d6f10a8982fd1387d01c40712537c61ea8cb78045353681eaa5524bf8a632a40",
+          "size_bytes": 2314352
+        }
+      ],
+      "package": "libstdc++",
+      "sha256": "204dea020caa78db9c8a6a39ccb0d7f105f33dc0f7931b7a06ed91ae6096d98c",
+      "size_bytes": 753684,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/libstdc++-11.5.0-17.el9_9.alma.1.x86_64.rpm",
+      "version": "0:11.5.0-17.el9_9.alma.1"
+    },
+    {
+      "libraries": [
+        {
+          "name": "libssl.so.3",
+          "path": "./usr/lib64/libssl.so.3.5.9",
+          "sha256": "e7bf391a3b0751011ab1ab4a15de42384cb2f3711efe54d034a64cdd1d1d903f",
+          "size_bytes": 1048208
+        },
+        {
+          "name": "libcrypto.so.3",
+          "path": "./usr/lib64/libcrypto.so.3.5.9",
+          "sha256": "3afbc6ffd08997c437965ff678c49aaf47478a831d1839ee45215747ecba4bfb",
+          "size_bytes": 6167344
+        }
+      ],
+      "package": "openssl-libs",
+      "sha256": "eb84165f8d20afa3aa122c630725c0059ff4a2bc6aa0be599ff5be45d7218d1a",
+      "size_bytes": 2422848,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/openssl-libs-3.5.9-1.el9_9.x86_64.rpm",
+      "version": "1:3.5.9-1.el9_9"
+    },
+    {
+      "libraries": [
+        {
+          "name": "liblzma.so.5",
+          "path": "./usr/lib64/liblzma.so.5.2.5",
+          "sha256": "13b79722dcc38a2993f520519f4abc2666e00931f58825415aceca8ee016ed23",
+          "size_bytes": 177576
+        }
+      ],
+      "package": "xz-libs",
+      "sha256": "ae121db95242bdb889ea6a6d1e8fef3f0f512b280d4d3f23d7695159ef857a3c",
+      "size_bytes": 93047,
+      "url": "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/Packages/xz-libs-5.2.5-8.el9_9.1.x86_64.rpm",
+      "version": "0:5.2.5-8.el9_9.1"
+    }
+  ],
+  "rustfmt_sha256": "6e2d5b048877b33b14d5da5670381516b7ec3ee22572b8aff933d090fe6cb664",
+  "schema_version": 1,
+  "semgrep": {
+    "assets": {
+      "libs/libbz2.so.1": {
+        "sha256": "bfbfcdf5306531d7b2a0167ce92a31d9aeac2c433376df9036e97e82852cbf70",
+        "size_bytes": 79568
+      },
+      "libs/libcom_err.so.2": {
+        "sha256": "380eaefae7b198294c6b0873476036e1834cb9abd3a56cea9648b36f06f53258",
+        "size_bytes": 26088
+      },
+      "libs/libcrypto.so.3": {
+        "sha256": "3afbc6ffd08997c437965ff678c49aaf47478a831d1839ee45215747ecba4bfb",
+        "size_bytes": 6167344
+      },
+      "libs/libcurl.so.4": {
+        "sha256": "cb7fdd4fa03bec8819b51b79f203be43fb61c3a6779a0ac112f1840b98134e97",
+        "size_bytes": 517032
+      },
+      "libs/libdw.so.1": {
+        "sha256": "0235527783235a19574bd039da593b70db4c04ae5abf29b2b810b8c64444f4d4",
+        "size_bytes": 706680
+      },
+      "libs/libelf.so.1": {
+        "sha256": "524b8218e0ea837fa429c623aa46b88144cb2b3e9e3da17806ddd5fb05e55a9b",
+        "size_bytes": 118720
+      },
+      "libs/libev.so.4": {
+        "sha256": "45d8ade6463eb2cf75810e01f86df23745dea47398d202c3e2d16e1948ef85cd",
+        "size_bytes": 77504
+      },
+      "libs/libgcc_s.so.1": {
+        "sha256": "1e8c2338bae2f3f2b0ed30020c46ff3cfdfdfa571baa8a2c0fe54e25bbd4c855",
+        "size_bytes": 116416
+      },
+      "libs/libgmp.so.10": {
+        "sha256": "a7154a5e29bc3ac9c1799996635cbb86fb75ba4f02cb08ce01457bc6c3957937",
+        "size_bytes": 704584
+      },
+      "libs/libgssapi_krb5.so.2": {
+        "sha256": "9274e5961d72284cd39377fc9f2007a33bda4ca890b1c2dc7d268efea6c96b29",
+        "size_bytes": 372368
+      },
+      "libs/libk5crypto.so.3": {
+        "sha256": "74db02ce6b688fb3a9528ccfa0fdc6002735bd105db93d3ab6b11f48c7ab113e",
+        "size_bytes": 107672
+      },
+      "libs/libkeyutils.so.1": {
+        "sha256": "338049f8e2686318fdeb35ed5eaa6f4609d3712bb6e25b4bd4af72ab3fcc9f89",
+        "size_bytes": 26968
+      },
+      "libs/libkrb5.so.3": {
+        "sha256": "9774b400ae75ac1fb5da3fe39c7f18621ab70596c31b1e6a76b93bdc58ecc048",
+        "size_bytes": 934528
+      },
+      "libs/libkrb5support.so.0": {
+        "sha256": "97a35fb97535bbaafeaed4265326244a1ff2ec72d1429b5c642e9e29201075f8",
+        "size_bytes": 74400
+      },
+      "libs/liblzma.so.5": {
+        "sha256": "13b79722dcc38a2993f520519f4abc2666e00931f58825415aceca8ee016ed23",
+        "size_bytes": 177576
+      },
+      "libs/libm.so.6": {
+        "sha256": "c8933ed54328b293c8b005fe44161d1c73c09f96abc6d781a6c31230368d1120",
+        "size_bytes": 913048
+      },
+      "libs/libnghttp2.so.14": {
+        "sha256": "97845cf43088276e2a902c0faa361abc7d67ae3c287a31a3d28c8f986ed478a8",
+        "size_bytes": 179632
+      },
+      "libs/libpcre2-8.so.0": {
+        "sha256": "52c60cabd23b6fcbb96666c101445938cbb372ff14a8338f635df81d97857ba1",
+        "size_bytes": 642536
+      },
+      "libs/libresolv.so.2": {
+        "sha256": "957135933e177a8dee54035988061a90d94a2c81371a1299528e212198535d4c",
+        "size_bytes": 70520
+      },
+      "libs/libselinux.so.1": {
+        "sha256": "1da7979dddc35e8408577e9349c046b1d6f696b877528a2ca8f033d433fdfd8c",
+        "size_bytes": 185704
+      },
+      "libs/libssl.so.3": {
+        "sha256": "e7bf391a3b0751011ab1ab4a15de42384cb2f3711efe54d034a64cdd1d1d903f",
+        "size_bytes": 1048208
+      },
+      "libs/libstdc++.so.6": {
+        "sha256": "d6f10a8982fd1387d01c40712537c61ea8cb78045353681eaa5524bf8a632a40",
+        "size_bytes": 2314352
+      },
+      "libs/libtree-sitter.so.0.26": {
+        "sha256": "9eae85a7bb175a174048370c29e085a7d9b38c928b8ea56785761b9465198544",
+        "size_bytes": 247472
+      },
+      "libs/libunwind.so.8": {
+        "sha256": "5c82cb252136b475bcb68f78ff61575538a36a43161b276df8a774f1899c4596",
+        "size_bytes": 67912
+      },
+      "libs/libz.so.1": {
+        "sha256": "18fed02c1fd62a46482150b38fb2ca93cd36d17c7a660dd79c8012251a5d941c",
+        "size_bytes": 109472
+      },
+      "libs/libzstd.so.1": {
+        "sha256": "75b4f41a07135b9ab5e94ee660f8efddd8037f7350e7c952a04c06d26f2a29dc",
+        "size_bytes": 764680
+      },
+      "semgrep-core": {
+        "sha256": "38fd08794fa488263b4a324f1b71eb6c0817f0ddaff372d46fe3629b3f78672d",
+        "size_bytes": 266890296
+      }
+    },
+    "version": "1.185.0",
+    "wheel_sha256": "0eb6aaadad5b957af96d1300487e10af1dc8016e8ef53072effb48cd4906c02b"
+  }
+}

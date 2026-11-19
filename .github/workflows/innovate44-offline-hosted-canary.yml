@@ -1,0 +1,177 @@
+# Evidence-only canary for the user-selected GitHub-hosted Ubuntu route.
+# This does not promote a consumer pin or qualify the image, release or runner.
+name: Innovate hosted offline consumer canary
+
+on:
+  pull_request:
+    branches: [fix/offline-image-advisories]
+    paths:
+      - .github/workflows/innovate44-offline-hosted-canary.yml
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-consumer-canary:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      UV_NO_CACHE: "1"
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      PROMPTFOO_DISABLE_TELEMETRY: "1"
+    steps:
+      - name: Check out the immutable candidate policy
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: edithatogo/repository-standards
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+          path: candidate-policy
+      - name: Check out the immutable Innovate candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: edithatogo/innovate
+          ref: fcda61d8a9cc1e78c381c5fcb091abd47bbc2e77
+          fetch-depth: 0
+          persist-credentials: false
+          path: consumer
+      - name: Verify the selected commits and base
+        shell: bash
+        env:
+          POLICY_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          [[ "$POLICY_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -C candidate-policy rev-parse HEAD)" = "$POLICY_HEAD"
+          test "$(git -C consumer rev-parse HEAD)" = fcda61d8a9cc1e78c381c5fcb091abd47bbc2e77
+          git -C consumer merge-base --is-ancestor cc2e4da4af9c848043b31f1191c9d96212048276 HEAD
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.15.2"
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "24.22.1"
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: "1.100.0"
+          components: rustfmt
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e
+        with:
+          version: "0.13.8"
+          enable-cache: false
+      - name: Select the immutable runtime policy
+        id: policy
+        shell: bash
+        run: |
+          python -I "$GITHUB_WORKSPACE/candidate-policy/security/offline-ai/provision/select_policy.py" \
+            "$GITHUB_WORKSPACE/candidate-policy" "$RUNNER_TEMP" "$GITHUB_OUTPUT"
+      - name: Build and exercise the candidate image
+        id: prepare
+        shell: bash
+        env:
+          POLICY_ROOT: ${{ steps.policy.outputs.path }}
+        run: |
+          bash -n "$POLICY_ROOT/security/offline-ai/provision/qualify_hosted.sh"
+          bash "$POLICY_ROOT/security/offline-ai/provision/qualify_hosted.sh" \
+            "$POLICY_ROOT" "$RUNNER_TEMP/offline-runtime" --gitleaks-candidate-evidence-only
+      - name: Export the immutable consumer policy
+        id: consumer_policy
+        shell: bash
+        env:
+          POLICY_ROOT: ${{ steps.policy.outputs.path }}
+          POLICY_SHA: ${{ steps.policy.outputs.sha }}
+        run: |
+          set -euo pipefail
+          destination="$RUNNER_TEMP/innovate44-consumer-policy"
+          python -I "$POLICY_ROOT/security/offline-ai/provision/export_consumer_policy.py" \
+            --commit "$POLICY_SHA" --destination "$destination"
+          echo "path=$destination" >> "$GITHUB_OUTPUT"
+      - name: Prepare the locked hosted SAST assets
+        id: sast_assets
+        shell: bash
+        env:
+          CONSUMER_POLICY: ${{ steps.consumer_policy.outputs.path }}
+        run: |
+          set -euo pipefail
+          umask 022
+          if ! command -v bsdtar >/dev/null; then
+            sudo apt-get -qq update
+            sudo apt-get -qq install -y --no-install-recommends libarchive-tools
+          fi
+          trial="$RUNNER_TEMP/hosted-sast"
+          rustfmt="$(rustup which --toolchain 1.100.0 rustfmt)"
+          [[ "$rustfmt" = */1.100.0-x86_64-unknown-linux-gnu/bin/rustfmt ]]
+          rust_toolchain="${rustfmt%/bin/rustfmt}"
+          [[ "$("$rust_toolchain/bin/rustc" --version)" = 'rustc 1.100.0 '* ]]
+          python -I -B "$CONSUMER_POLICY/security/offline-ai/provision/hosted_sast_assets.py" \
+            "$trial" "$(command -v bsdtar)" > "$RUNNER_TEMP/offline-runtime/evidence/hosted-sast-assets.json"
+          printf 'bundle=%s\nrust_toolchain=%s\n' "$trial" "$rust_toolchain" >> "$GITHUB_OUTPUT"
+      - name: Run the Innovate consumer canary without container networking
+        id: consumer
+        shell: bash
+        env:
+          CONSUMER_POLICY: ${{ steps.consumer_policy.outputs.path }}
+          CANDIDATE_IMAGE: ${{ steps.prepare.outputs.image }}
+          HOSTED_SAST: ${{ steps.sast_assets.outputs.bundle }}
+          RUST_TOOLCHAIN: ${{ steps.sast_assets.outputs.rust_toolchain }}
+        run: |
+          set -euo pipefail
+          [[ "$CANDIDATE_IMAGE" =~ ^localhost/offline-ai-security@sha256:[0-9a-f]{64}$ ]]
+          docker image inspect "$CANDIDATE_IMAGE" >/dev/null
+          docker run --rm --pull=never --entrypoint=bash --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --pids-limit 256 --memory 8g --cpus 4 --user 65534:65534 \
+            --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/consumer,dst=/work,readonly" \
+            --mount "type=bind,src=$CONSUMER_POLICY,dst=/policy,readonly" \
+            --mount "type=bind,src=$HOSTED_SAST,dst=/hosted-sast,readonly" \
+            --mount "type=bind,src=$RUST_TOOLCHAIN,dst=/rust-toolchain,readonly" \
+            -e ENFORCE_AI=false -e EVENT_NAME=pull_request \
+            -e BASE_SHA=cc2e4da4af9c848043b31f1191c9d96212048276 -e HOME=/tmp \
+            -e SECURITY_ASSET_MANIFEST=/opt/offline-ai/manifest.json -e GLINER_MODEL_DIR=/opt/models/gliner-pii \
+            -e HF_HUB_OFFLINE=1 -e TRANSFORMERS_OFFLINE=1 -e HF_DATASETS_OFFLINE=1 \
+            -e HF_HOME=/opt/models -e XDG_CACHE_HOME=/tmp/cache -e TMPDIR=/tmp \
+            -e HF_HUB_DISABLE_TELEMETRY=1 -e PIP_NO_INDEX=1 -e npm_config_offline=true \
+            -e PROMPTFOO_CONFIG_DIR=/tmp/promptfoo -e PROMPTFOO_DISABLE_TELEMETRY=1 -e PROMPTFOO_DISABLE_UPDATE=1 \
+            -e PROMPTFOO_DISABLE_REMOTE_GENERATION=true -e PROMPTFOO_DISABLE_REDTEAM_REMOTE_GENERATION=true \
+            -e PROMPTFOO_DISABLE_SHARING=1 -e PROMPTFOO_SELF_HOSTED=1 \
+            -e PYTHONDONTWRITEBYTECODE=1 -e PYTHONSAFEPATH=1 -e PYTEST_ADDOPTS=-p\ no:cacheprovider \
+            "$CANDIDATE_IMAGE" -c '
+              set -euo pipefail
+              python -I -c "import errno,socket; s=socket.socket(socket.AF_INET,socket.SOCK_STREAM); s.settimeout(2); code=s.connect_ex((\"192.0.2.1\",443)); s.close(); assert code in (errno.ENETUNREACH,errno.EHOSTUNREACH), \"outbound probe was not denied\""
+              echo "Outbound IPv4 probe denied"
+              exec bash /policy/security/offline-ai/run.sh --hosted-sast
+            '
+      - name: Inventory the tested image
+        if: always() && steps.prepare.outcome == 'success'
+        shell: bash
+        env:
+          POLICY_ROOT: ${{ steps.policy.outputs.path }}
+          CANDIDATE_IMAGE: ${{ steps.prepare.outputs.image }}
+        run: |
+          python -I "$POLICY_ROOT/security/offline-ai/provision/collect_sbom.py" \
+            "$CANDIDATE_IMAGE" "$RUNNER_TEMP/offline-runtime/evidence" "$RUNNER_TEMP/offline-syft"
+      - name: Collect image vulnerability evidence for review
+        if: always() && steps.prepare.outcome == 'success'
+        shell: bash
+        env:
+          POLICY_ROOT: ${{ steps.policy.outputs.path }}
+          CANDIDATE_IMAGE: ${{ steps.prepare.outputs.image }}
+        run: |
+          python -I "$POLICY_ROOT/security/offline-ai/provision/collect_vulnerabilities.py" \
+            "$CANDIDATE_IMAGE" "$RUNNER_TEMP/offline-runtime/evidence" "$RUNNER_TEMP/offline-grype"
+      - name: Retain value-free candidate evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: innovate44-hosted-offline-canary-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/offline-runtime/evidence/*.json
+            ${{ runner.temp }}/offline-runtime/evidence/*.txt
+            ${{ runner.temp }}/offline-runtime/evidence/requirements.lock
+            ${{ runner.temp }}/offline-runtime/evidence/sbom/
+            ${{ runner.temp }}/offline-runtime/evidence/vulnerability/
+          if-no-files-found: warn
+          retention-days: 14

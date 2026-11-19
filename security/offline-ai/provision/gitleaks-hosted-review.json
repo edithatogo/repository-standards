@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "scope": "local-hosted-offline-image",
+  "source_commit": "83d9cd684c87d95d656c1458ef04895a7f1cbd8e",
+  "candidate_lock_sha256": "42e48af701d1cfc9d33ea428def0f5746a9ae1dd38cb43a99767950079ddbb0d",
+  "binary_sha256": "7feb4384b376745ebe1e466bd0115acc18cfb74d30ad265c2539529602210e41",
+  "evidence": {
+    "build_and_report_permissions": "https://github.com/edithatogo/repository-standards/actions/runs/44393030180",
+    "isolated_image_and_consumer": "https://github.com/edithatogo/repository-standards/actions/runs/44499639220",
+    "source_review": "conductor/tracks/offline_ai_security_rollout_20261111/index.md"
+  }
+}

@@ -3,9 +3,20 @@
 # This command never registers a runner or grants production qualification.
 set -euo pipefail
 umask 022
-if [[ "$#" != 2 ]]; then
-  echo "Usage: qualify_hosted.sh CLEAN_POLICY_CHECKOUT NEW_DESTINATION" >&2
+if [[ "$#" != 2 && "$#" != 3 ]]; then
+  echo "Usage: qualify_hosted.sh CLEAN_POLICY_CHECKOUT NEW_DESTINATION [GITLEAKS_BUILD_OPTION]" >&2
   exit 2
+fi
+candidate_args=()
+candidate_enabled=false
+reviewed_build=false
+if [[ "$#" = 3 ]]; then
+  case "$3" in
+    --gitleaks-candidate-evidence-only) candidate_enabled=true ;;
+    --gitleaks-reviewed-build) reviewed_build=true ;;
+    *) exit 2 ;;
+  esac
+  candidate_args+=("$3")
 fi
 policy_root="$(cd -- "$1" && pwd)"
 destination="$(python -I -c 'import pathlib,sys; print(pathlib.Path(sys.argv[1]).absolute())' "$2")"
@@ -31,15 +42,17 @@ finish() {
       stage=registry-cleanup
     fi
   fi
-  python -I - "$evidence/hosted-execution.json" "$stage" "$status" "$policy_sha" <<'PY'
+  python -I - "$evidence/hosted-execution.json" "$stage" "$status" "$policy_sha" "$candidate_enabled" "$reviewed_build" <<'PY'
 import json, os, pathlib, sys
-path, stage, status, policy = sys.argv[1:]
+path, stage, status, policy, candidate, reviewed = sys.argv[1:]
 record = {
     "schema_version": 1,
     "kind": "offline-image-hosted-execution",
     "status": "passed" if status == "0" else "failed",
     "last_stage": stage,
     "policy_commit": policy,
+    "gitleaks_candidate_evidence_only": candidate == "true",
+    "gitleaks_reviewed_build": reviewed == "true",
     "preparation_network_access": True,
     "scanner_network_access": False,
     "runner_registration_qualified": False,
@@ -65,15 +78,74 @@ unset DOCKER_CONTEXT
 [[ "$(docker info --format '{{.OSType}}')" = linux ]] || exit 2
 docker version --format '{{json .}}' > "$evidence/docker-version.json"
 
-# Acquire only the reviewed Debian runtime closure before the offline build.
+# The vendor index authenticates the exact APKs during the network-denied installation.
 stage=os-package-preparation
-python -I "$policy_root/security/offline-ai/provision/prepare_os_packages.py" \
-  --destination "$destination/base-context/os" --receipt "$evidence/os-packages.json"
+provision="$policy_root/security/offline-ai/provision"
+apk_root="$destination/base-context/os"
+apk_repository=https://apk.cgr.dev/chainguard/x86_64
+mkdir -p "$apk_root/x86_64"
+while read -r digest member; do
+  [[ "$digest" =~ ^[0-9a-f]{64}$ && "$member" =~ ^\./[a-zA-Z0-9][a-zA-Z0-9.+_-]+\.apk$ ]] || exit 2
+  curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+    --max-time 90 --max-filesize 67108864 "$apk_repository/${member#./}" \
+    --output "$apk_root/x86_64/${member#./}"
+done < "$provision/wolfi-packages.sha256"
+(cd "$apk_root/x86_64" && sha256sum --check "$provision/wolfi-packages.sha256")
+curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+  --max-time 90 --max-filesize 33554432 "$apk_repository/APKINDEX.tar.gz" \
+  --output "$apk_root/x86_64/APKINDEX.tar.gz"
+(cd "$apk_root/x86_64" && sha256sum APKINDEX.tar.gz) > "$evidence/wolfi-index.txt"
+cp "$provision/wolfi-inventory.txt" "$apk_root/inventory.txt"
+cp "$provision/wolfi-packages.sha256" "$evidence/wolfi-package-hashes.txt"
+mkdir "$apk_root/cpython"
+cp "$provision/cpython_backports.py" "$provision/cpython-backports.json" "$apk_root/cpython/"
+python -I - "$provision/cpython-backports.json" > "$apk_root/cpython/patches.txt" <<'PY'
+import json, re, sys
+from pathlib import Path
+catalog = json.loads(Path(sys.argv[1]).read_bytes())
+for fix in catalog["findings"].values():
+    if "patch_sha256" in fix:
+        commit, digest = fix["commit"], fix["patch_sha256"]
+        if not re.fullmatch(r"[a-f0-9]{40}", commit) or not re.fullmatch(r"[a-f0-9]{64}", digest):
+            raise SystemExit(2)
+        print(commit)
+PY
+while read -r commit; do
+  curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+    --max-time 90 --max-filesize 1048576 "https://github.com/python/cpython/commit/$commit.patch" \
+    --output "$apk_root/cpython/$commit.patch"
+done < "$apk_root/cpython/patches.txt"
+
+stage=git-source-preparation
+git_lock="$policy_root/security/offline-ai/provision/git-source.json"
+mapfile -t git_source < <(python -I - "$git_lock" <<'PY'
+import json, re, sys
+with open(sys.argv[1], encoding="utf-8") as stream:
+    lock = json.load(stream)
+version, url, size, digest, cargo_lock = (
+    lock[k] for k in ("version", "url", "size_bytes", "sha256", "cargo_lock_sha256")
+)
+if (lock["schema_version"] != 1 or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version)
+        or url != f"https://www.kernel.org/pub/software/scm/git/git-{version}.tar.xz"
+        or type(size) is not int or not 0 < size <= 32 * 1024 * 1024
+        or not all(re.fullmatch(r"[0-9a-f]{64}", value) for value in (digest, cargo_lock))):
+    raise SystemExit(2)
+print(version, url, size, digest, cargo_lock, sep="\n")
+PY
+)
+[[ "${#git_source[@]}" = 5 ]] || exit 2
+mkdir "$destination/base-context/git"
+git_archive="$destination/base-context/git/git.tar.xz"
+curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+  --max-time 120 --max-filesize "${git_source[2]}" "${git_source[1]}" -o "$git_archive"
+[[ "$(wc -c < "$git_archive" | tr -d '[:space:]')" = "${git_source[2]}" ]]
+printf '%s  %s\n' "${git_source[3]}" "$git_archive" | sha256sum --check
+cp "$git_lock" "$evidence/git-source.json"
 
 stage=upstream-preparation
 # Missing committed locks fail here; candidate-lock generation is a separate job.
 PYTHONDONTWRITEBYTECODE=1 python "$policy_root/security/offline-ai/provision/prepare_vendor.py" \
-  --destination "$destination/context/vendor" --receipt "$evidence/preparation.json"
+  --destination "$destination/context/vendor" --receipt "$evidence/preparation.json" "${candidate_args[@]}"
 PYTHONPATH="$policy_root/security/offline-ai" PYTHONSAFEPATH=1 \
   python -m security.verify_vendor "$destination/context/vendor"
 cp "$destination/context/vendor/manifest.json" "$evidence/asset-manifest.json"
@@ -87,18 +159,23 @@ with open(sys.argv[1], encoding="utf-8") as stream:
     data = json.load(stream)
 if data.get("schema_version") != 1 or data.get("architecture") != "linux/amd64":
     raise SystemExit(2)
-for name in ("python", "node", "registry"):
+wolfi = data["wolfi"]["reference"]
+if not re.fullmatch(r"cgr\.dev/chainguard/wolfi-base@sha256:[0-9a-f]{64}", wolfi):
+    raise SystemExit(2)
+print(wolfi)
+for name, repository in (("node", "node"),
+                         ("registry", "registry"), ("git_builder", "rust")):
     ref = data[name]["reference"]
-    if not re.fullmatch("docker.io/library/" + name + r"@sha256:[0-9a-f]{64}", ref):
+    if not re.fullmatch(r"docker\.io/library/" + repository + r"@sha256:[0-9a-f]{64}", ref):
         raise SystemExit(2)
     print(ref)
 PY
 )
-[[ "${#images[@]}" = 3 ]] || exit 2
-python_image="${images[0]}"
+[[ "${#images[@]}" = 4 ]] || exit 2
+wolfi_image="${images[0]}"
 node_image="${images[1]}"
 registry_image="${images[2]}"
-for image in "$python_image" "$node_image" "$registry_image"; do
+for image in "${images[@]}"; do
   docker pull --platform linux/amd64 "$image"
   [[ "$(docker image inspect "$image" --format '{{.Os}}/{{.Architecture}}')" = linux/amd64 ]] || exit 2
 done
@@ -122,13 +199,24 @@ done
 
 stage=offline-base-build
 docker build --network none --pull=false \
-  --build-arg "PYTHON_IMAGE=$python_image" --build-arg "NODE_IMAGE=$node_image" \
+  --build-arg "WOLFI_IMAGE=$wolfi_image" --build-arg "NODE_IMAGE=$node_image" \
+  --build-arg "GIT_BUILD_IMAGE=${images[3]}" --build-arg "GIT_VERSION=${git_source[0]}" \
+  --build-arg "GIT_ARCHIVE_SHA256=${git_source[3]}" \
+  --build-arg "GIT_CARGO_LOCK_SHA256=${git_source[4]}" \
   --file "$policy_root/security/offline-ai/provision/Base.Dockerfile" \
   --tag localhost/offline-ai-base:candidate "$destination/base-context"
 docker push localhost/offline-ai-base:candidate
 base_image="$(docker image inspect localhost/offline-ai-base:candidate --format '{{index .RepoDigests 0}}')"
 [[ "$base_image" =~ ^localhost/offline-ai-base@sha256:[0-9a-f]{64}$ ]] || exit 2
+[[ "$(docker image inspect "$base_image" --format '{{len .RootFS.Layers}}')" = 1 ]] || exit 2
 printf '%s\n' "$base_image" > "$evidence/base-image.txt"
+docker run --rm --pull=never --network none --read-only --cap-drop ALL \
+  --security-opt no-new-privileges --pids-limit 32 --user 65534:65534 "$base_image" \
+  sh -eu -c 'git --version; sha256sum /usr/local/bin/git; apk --repositories-file /dev/null info -v zlib' \
+  > "$evidence/git-runtime.txt"
+docker run --rm --pull=never --network none --read-only --cap-drop ALL \
+  --security-opt no-new-privileges --pids-limit 32 --user 65534:65534 "$base_image" \
+  sh -eu -c 'apk --repositories-file /dev/null info -v | LC_ALL=C sort' > "$evidence/wolfi-runtime-packages.txt"
 
 stage=offline-image-build
 git --no-replace-objects -C "$policy_root" archive "$policy_sha" security/offline-ai \
