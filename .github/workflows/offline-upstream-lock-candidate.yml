@@ -42,7 +42,7 @@ jobs:
           # Let apk select the signed dependency closure, then verify the root versions.
           packages=(
             python-3.15-3.15.2_git20261113-r0 py3.15-pip-26.2.2-r3
-            bash-5.3-r9 coreutils-9.9-r1 findutils-4.11.0-r6 grep-3.12-r9
+            bash-5.3-r14 coreutils-9.12-r8 findutils-4.11.0-r6 grep-3.12-r12
             libgcc-16.2.0-r5 libstdc++-16.2.0-r5 libatomic-16.2.0-r5 libgomp-16.2.0-r5
           )
           docker run --rm --pull=never -v "$work/context/apks:/apks" "$WOLFI_AMD64" \
