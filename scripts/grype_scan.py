@@ -50,15 +50,40 @@ def prepare_directory(output: Path) -> None:
 
 
 def image_reference(value: str) -> str:
-    if not re.fullmatch(r"[a-z0-9][a-z0-9.-]*(?::[0-9]+)?(?:/[a-z0-9_./-]+)+@sha256:[0-9a-f]{64}", value):
-        raise ValueError("image must be a registry reference at an immutable sha256 digest, without scheme or credentials")
+    error = "image must be a registry reference at an immutable sha256 digest, without scheme or credentials"
+    # Parse bounded segments rather than a nested repetition over untrusted input.
+    if len(value) > 1024 or value.count("@") != 1:
+        raise ValueError(error)
+    repository, digest = value.split("@")
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", digest):
+        raise ValueError(error)
+    segments = repository.split("/")
+    if len(segments) < 2:
+        raise ValueError(error)
+    host, separator, port = segments[0].partition(":")
+    if not re.fullmatch(r"[a-z0-9][a-z0-9.-]{0,252}", host):
+        raise ValueError(error)
+    if separator and (not port.isascii() or not port.isdigit() or not 1 <= int(port) <= 65535):
+        raise ValueError(error)
+    if any(not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,127}", segment) for segment in segments[1:]):
+        raise ValueError(error)
     return value
 
 
-def resolved_version(value: object) -> bool:
-    return isinstance(value, str) and bool(value.strip()) and value.lower() not in {
+def resolved_version(value: object, ecosystem: str = "") -> bool:
+    if not isinstance(value, str) or not value.strip() or value.lower() in {
         "noassertion", "unknown", "none", "latest"
-    } and not re.search(r"[\s~^<>=*|,\[\]()]", value)
+    } or re.search(r"[\s<>=*|,\[\]()]", value):
+        return False
+    # Debian's pre-release/backport separator and RPM's snapshot separators are
+    # parts of exact installed versions. Leading semver ~ and ^ are ranges.
+    if value.startswith(("~", "^")):
+        return False
+    if "~" in value and ecosystem not in ("deb", "rpm"):
+        return False
+    if "^" in value and ecosystem != "rpm":
+        return False
+    return True
 
 
 def inventory_count(document: dict) -> int:
@@ -94,10 +119,13 @@ def inventory_count(document: dict) -> int:
             if version and not resolved_version(version):
                 raise ValueError("inventory contains unresolved package versions")
             continue
-        if not name or not resolved_version(version) or not isinstance(purl, str) or not purl.startswith("pkg:"):
+        if not isinstance(purl, str) or not purl.startswith("pkg:"):
+            raise ValueError("inventory contains an invalid purl")
+        ecosystem = purl[4:].split("/", 1)[0]
+        if not name or not resolved_version(version, ecosystem):
             raise ValueError("inventory contains invalid package identities or unresolved versions")
         identity = purl.split("?", 1)[0].split("#", 1)[0]
-        if "@" not in identity or not resolved_version(unquote(identity.rsplit("@", 1)[1])):
+        if "@" not in identity or not resolved_version(unquote(identity.rsplit("@", 1)[1]), ecosystem):
             raise ValueError("purl must identify a resolved package version")
         if unquote(identity.rsplit("@", 1)[1]) != version:
             raise ValueError("package version and purl version disagree")

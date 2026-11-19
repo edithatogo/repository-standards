@@ -38,6 +38,17 @@ class InventoryTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             scan.inventory_count(value)
 
+    def test_exact_distro_versions_allow_their_snapshot_separators(self):
+        for ecosystem, version in (("deb", "20250419~deb12u2"), ("deb", "3.0.22-1~deb12u2"),
+                                   ("rpm", "1.0^20261001git"), ("rpm", "1.0~rc1")):
+            value = bom()
+            value["components"][0].update(version=version, purl=f"pkg:{ecosystem}/example@{version}")
+            with self.subTest(ecosystem=ecosystem, version=version):
+                self.assertEqual(scan.inventory_count(value), 1)
+        for ecosystem in ("cargo", "npm", "pypi", "maven"):
+            with self.subTest(ecosystem=ecosystem):
+                self.assertFalse(scan.resolved_version("1.0~2.0", ecosystem))
+
     def test_spdx_byte_inventory_is_not_dependency_inventory(self):
         value = {"spdxVersion": "SPDX-2.3", "packages": [{"name": "archive.zip", "versionInfo": "1.0"}]}
         with self.assertRaises(ValueError):
@@ -97,6 +108,12 @@ class BoundaryTests(unittest.TestCase):
                       {"built": "2026-11-19T00:00:00Z", "valid": False}, {}):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 scan.validate_database(value, now)
+
+    def test_image_reference_rejects_adversarial_length_and_segments(self):
+        for ref in ("0/" + "-/" * 10000, "ghcr.io//tool@sha256:" + "a" * 64,
+                    "ghcr.io/../tool@sha256:" + "a" * 64, "ghcr.io:wrong/tool@sha256:" + "a" * 64):
+            with self.subTest(length=len(ref)), self.assertRaises(ValueError):
+                scan.image_reference(ref)
 
     def test_existing_evidence_cannot_be_reused(self):
         with tempfile.TemporaryDirectory() as temp:
