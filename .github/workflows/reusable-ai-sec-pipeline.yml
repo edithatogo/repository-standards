@@ -124,7 +124,10 @@ jobs:
             workflow_dispatch) test -z "$BASE_SHA" ;;
           esac
           uv venv "$GITHUB_WORKSPACE/.venv-offline" --python 3.15.2
-          "$GITHUB_WORKSPACE/.venv-offline/bin/python" -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
+          repo_python="$GITHUB_WORKSPACE/.venv-offline/bin/python"
+          "$repo_python" -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
+          "$repo_python" -I -m ensurepip
+          "$repo_python" -I -m pip --version
           printf '%s\n' "$GITHUB_WORKSPACE/.venv-offline/bin" >> "$GITHUB_PATH"
           printf 'sha=%s\n' "$(git -C policy rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - name: Build and exercise the candidate image
