@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Download and verify the immutable release asset
         id: download
-        uses: edithatogo/repository-standards/.github/actions/download-release-sbom@72e1f236fc538b259a2a6096c75c69e9dc88a037
+        uses: edithatogo/repository-standards/.github/actions/download-release-sbom@610f76cb8267b45cadf18310a973233e293960ab
         with:
           sbom-asset: ${{ inputs.sbom-asset }}
           output-directory: ${{ runner.temp }}/released-sbom
