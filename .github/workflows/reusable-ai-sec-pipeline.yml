@@ -53,7 +53,7 @@ jobs:
         with:
           repository: edithatogo/repository-standards
           # Immutable snapshot containing the offline scanner rules and replay controls.
-          ref: 16af47cba29ee5fbb2b50580556a2198185566e4
+          ref: af14e8ce4a2c127edc6d1700ea942069ee648ea7
           persist-credentials: false
           submodules: false
           path: policy
