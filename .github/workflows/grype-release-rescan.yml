@@ -26,12 +26,12 @@ jobs:
     steps:
       - name: Download and verify the immutable release asset
         id: download
-        uses: edithatogo/repository-standards/.github/actions/download-release-sbom@bf6bb998414f275296dd174d459504a0c45582b5
+        uses: edithatogo/repository-standards/.github/actions/download-release-sbom@bc76f1fbe0fa87a1371eadc06b08f54b48c623f7
         with:
           sbom-asset: ${{ inputs.sbom-asset }}
           output-directory: ${{ runner.temp }}/released-sbom
       - name: Scan the released dependency inventory with the current database
-        uses: edithatogo/repository-standards/.github/actions/grype-scan@bf6bb998414f275296dd174d459504a0c45582b5
+        uses: edithatogo/repository-standards/.github/actions/grype-scan@bc76f1fbe0fa87a1371eadc06b08f54b48c623f7
         with:
           sbom: ${{ steps.download.outputs.sbom }}
           source-sha: ${{ steps.download.outputs.source-sha }}
@@ -48,3 +48,4 @@ jobs:
           path: ${{ steps.download.outputs.evidence-directory }}
           retention-days: 90
           if-no-files-found: error
+
