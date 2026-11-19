@@ -17,7 +17,7 @@ jobs:
           set -euo pipefail
           base=docker.io/library/python@sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85
           docker pull --platform linux/amd64 "$base"
-          docker run --rm --pull=never --network none "$base" bash -s <<'BASH'
+          docker run --rm -i --pull=never --network none "$base" bash -s <<'BASH'
           set -euo pipefail
           python --version
           dpkg-query -W -f='${binary:Package} ${Version} essential=${Essential} protected=${Protected}\n' \
