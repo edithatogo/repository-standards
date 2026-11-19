@@ -111,6 +111,12 @@ remains in the evidence artifact. The [review catalog](wolfi-image-review.json)
 records the eight findings in the qualification run and scopes the conclusions
 to the observed package versions.
 
+The [CPython catalog](cpython-backports.json) pins two fixes already present in
+Wolfi's 3.15.2 build and four official standard-library patches. The offline
+image build verifies each patch, original file and resulting file by hash.
+The image review checks the packaged executable and fixed files again in the
+exact scanner image. Verified findings remain visible in the Grype evidence.
+
 The registry listens on loopback only and is removed after the run. To provision
 the eventual runner, execute the preparation/build/qualification command above
 on the approved Linux x64 host using the exact reviewed policy checkout and

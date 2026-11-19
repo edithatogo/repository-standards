@@ -1042,3 +1042,12 @@ The rebuilt Gitleaks scanner has separate source, library and fixture evidence.
 Use its existing locked bytes in the hosted job and preserve the receipt-only
 mode for historical canaries. Review the image advisories on every hosted job
 and keep unresolved findings visible and blocking.
+
+### Verify CPython security backports on the hosted image
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in the hosted
+policy worktree from `8ad652f912d52b4e7e49b9bb0fa91c65084f189b`. Scope is the
+base-image CPython build and verification, disposition receipt, focused tests,
+and immutable pin for draft PRs #152 and #684. Keep Grype's raw matches and
+package metadata. The installed-file check covers the six CPython findings.
+The installed glibc package still needs a verified backport record.

@@ -1,0 +1,53 @@
+{
+  "findings": {
+    "CVE-2026-103995": {
+      "commit": "5b9e3d044764cf59329fb8147177f54a88d1fb49",
+      "files": {
+        "http/client.py": "a7cbea0d057eb87747c590e88cbf8a24e2e35ca3bc26b99b69f21c91a0f1c857"
+      },
+      "input_sha256": "928d81dc92794ce21d938111aed2aea7627c85c13bd3aa336c3de88f12a15fac",
+      "patch_sha256": "53ecc6818a010f6e660e65ef2efab1efe3d6ef3c0e7036232f2a633075612d52"
+    },
+    "CVE-2026-115559": {
+      "commit": "2f0e294d85c905691e360586ebd1d1f7e7a1f5df",
+      "files": {
+        "imaplib.py": "18b47ca17656420e36eeaddcfb172751a6b88478d5761a7b4d733c590a274de9"
+      },
+      "input_sha256": "ebb09bab21dbabf7414aca19d8334aea67fa1c21b1cefa83149ad3ae14957570",
+      "patch_sha256": "6f56cfddf9a3a163650ba600fd9a4afe59aed6b4a5c9e552d1877b5f8ff910da"
+    },
+    "CVE-2026-115791": {
+      "commit": "673607ef5362c62144fb7c3a78cf6d66dffd5bfb",
+      "files": {
+        "gzip.py": "6a9f2ca536b1db70a773427952aee435a35fe8a8f4703facabe256918750e1c8",
+        "runpy.py": "bfcf7eb5de9f967588cfce5bef26242ae583c55e0ec2d25408581ff80f990a03",
+        "tarfile.py": "f5bcac71ef3ffff786a92fabe16dfd93b9ef9497a39d2843ebecb99179fdaa26",
+        "zipfile/__init__.py": "0671de70ec631c62982ab2180fe5e3d620d1d4d382a0649e573fa95b7b055065"
+      }
+    },
+    "CVE-2026-124249": {
+      "commit": "4e9d037f1cfc8e29efcb1f67bc668e06ff2b6643",
+      "files": {
+        "http/cookiejar.py": "5ae7275b6e59082e6284e298e96ace5344f17d808d43ea72fa270ac22a35b27a"
+      }
+    },
+    "CVE-2026-16052": {
+      "commit": "27026842f6774c167295f4b59972589f12ec5987",
+      "files": {
+        "http/cookies.py": "bcb82cbcf4002a53d00796de80ff4deadf323990e386e57b8f789db886b05588"
+      },
+      "input_sha256": "e4eab3206b471fd94b04cfbdd99057c0a55a49cc6acb5e3b8cf5370a36cbb3e8",
+      "patch_sha256": "aee651efa981ca23141f9914858d56b4e9a8dea0a655824a0c30aa92593aabb3"
+    },
+    "CVE-2026-19552": {
+      "commit": "8dde46eaa6baf5f027a7234845b20d50b509624e",
+      "files": {
+        "ssl.py": "5ac78b5a6023502f4e70b801b6b26c90b63356f5869cfca877807d35605312d3"
+      },
+      "input_sha256": "6dcd56245fa34f62a2ce95f4250e30b18ac95c5aa680087412549d06ce8ff674",
+      "patch_sha256": "6d1dc9e573dee42b88cba82d5185264572c5e228c034332c8233d2a2cb83db78"
+    }
+  },
+  "package_version": "3.15.2_git20261113-r0",
+  "source_commit": "64b5cfdf7548a21741398ce0826728818327aea7"
+}

@@ -97,6 +97,24 @@ curl --fail --silent --show-error --location --proto '=https' --proto-redir '=ht
 (cd "$apk_root/x86_64" && sha256sum APKINDEX.tar.gz) > "$evidence/wolfi-index.txt"
 cp "$provision/wolfi-inventory.txt" "$apk_root/inventory.txt"
 cp "$provision/wolfi-packages.sha256" "$evidence/wolfi-package-hashes.txt"
+mkdir "$apk_root/cpython"
+cp "$provision/cpython_backports.py" "$provision/cpython-backports.json" "$apk_root/cpython/"
+python -I - "$provision/cpython-backports.json" > "$apk_root/cpython/patches.txt" <<'PY'
+import json, re, sys
+from pathlib import Path
+catalog = json.loads(Path(sys.argv[1]).read_bytes())
+for fix in catalog["findings"].values():
+    if "patch_sha256" in fix:
+        commit, digest = fix["commit"], fix["patch_sha256"]
+        if not re.fullmatch(r"[a-f0-9]{40}", commit) or not re.fullmatch(r"[a-f0-9]{64}", digest):
+            raise SystemExit(2)
+        print(commit)
+PY
+while read -r commit; do
+  curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+    --max-time 90 --max-filesize 1048576 "https://github.com/python/cpython/commit/$commit.patch" \
+    --output "$apk_root/cpython/$commit.patch"
+done < "$apk_root/cpython/patches.txt"
 
 stage=git-source-preparation
 git_lock="$policy_root/security/offline-ai/provision/git-source.json"

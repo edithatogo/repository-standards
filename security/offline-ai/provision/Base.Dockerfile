@@ -38,6 +38,8 @@ RUN --network=none --mount=type=bind,source=os,target=/opt/offline-os,readonly \
     && apk --repositories-file /dev/null info -v | LC_ALL=C sort > /tmp/wolfi-inventory \
     && cmp /tmp/wolfi-inventory /opt/offline-os/inventory.txt \
     && rm /tmp/wolfi-inventory \
+    && python3.15 -I -B /opt/offline-os/cpython/cpython_backports.py \
+      /opt/offline-os/cpython/cpython-backports.json --patches /opt/offline-os/cpython \
     && python3.15 -I -m venv /opt/offline-venv \
     && /opt/offline-venv/bin/python -I -c 'import ssl, sys, zlib; assert sys.version_info[:3] == (3, 15, 2)' \
     && /opt/offline-venv/bin/python -I -m pip --version \

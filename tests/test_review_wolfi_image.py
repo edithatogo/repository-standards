@@ -70,6 +70,21 @@ class WolfiReviewTests(unittest.TestCase):
         self.write_scan([], ignored=[{}])
         self.assertEqual(REVIEW.review_image(IMAGE, self.evidence)["status"], "blocked")
 
+    def test_only_verified_exact_package_findings_are_resolved(self):
+        catalog = json.loads(REVIEW.CPYTHON.read_bytes())
+        match = {
+            "vulnerability": {"id": "CVE-2026-103995", "severity": "Low"},
+            "artifact": {"name": "python-3.15", "version": catalog["package_version"]},
+        }
+        self.write_scan([match])
+        self.assertEqual(REVIEW.review_image(IMAGE, self.evidence)["status"], "blocked")
+        reviewed = REVIEW.review_image(IMAGE, self.evidence, backports=catalog)
+        self.assertEqual(reviewed["status"], "passed")
+        self.assertEqual(reviewed["findings"][0]["disposition"], "verified_backport")
+        match["artifact"]["version"] += "-different"
+        self.write_scan([match])
+        self.assertEqual(REVIEW.review_image(IMAGE, self.evidence, backports=catalog)["status"], "blocked")
+
     def test_changed_report_or_image_is_rejected(self):
         self.write_scan([])
         with self.assertRaises(ValueError):
