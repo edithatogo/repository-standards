@@ -91,6 +91,8 @@ def verify() -> None:
         [
             "opengrep",
             "scan",
+            "--no-git-ignore",
+            "--semgrepignore-filename=/dev/null",
             "--taint-intrafile",
             "--strict",
             "--disable-nosem",
