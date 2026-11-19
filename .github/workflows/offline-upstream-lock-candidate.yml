@@ -1,4 +1,4 @@
-name: Hosted SAST integration diagnostic
+name: Inspect pinned Python base package dependencies
 
 on:
   workflow_dispatch:
@@ -7,194 +7,26 @@ permissions:
   contents: read
 
 jobs:
-  diagnose:
+  inspect:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 8
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          repository: edithatogo/repository-standards
-          ref: 4971ca1f3a72f55099259c029d3cf9f31b03b5df
-          persist-credentials: false
-          path: policy
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          repository: edithatogo/innovate
-          ref: 3db2c5ace5ebfad31561c2c2096c082f8f76692f
-          persist-credentials: false
-          path: consumer
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
-        with:
-          python-version: '3.15.2'
-      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
-        with:
-          toolchain: '1.100.0'
-          components: rustfmt
-      - name: Prepare exact SAST inputs
+      - name: Inspect removable packages in the immutable base
         shell: bash
         run: |
           set -euo pipefail
-          umask 022
-          trial="$RUNNER_TEMP/sast-diagnostic"
-          mkdir -p "$trial/context"
-          if ! command -v bsdtar >/dev/null; then
-            sudo apt-get -qq update
-            sudo apt-get -qq install -y --no-install-recommends libarchive-tools
-          fi
-          python -I -B policy/security/offline-ai/provision/hosted_sast_assets.py "$trial/bundle" "$(command -v bsdtar)" >/dev/null
-          cd "$trial/context"
-          curl -fsSL --proto '=https' --max-time 120 https://github.com/opengrep/opengrep/releases/download/v2.0.0/opengrep_linux_x86 -o opengrep
-          echo '37e93f4da5fd04a18c5c1febbdd12f7e98dfccd4d0c9cf2593bcb25eeb462da0  opengrep' | sha256sum --check
-          curl -fsSL --proto '=https' --max-time 30 https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.28.2.tgz -o esbuild.tgz
-          python -I -c 'import base64,hashlib,pathlib; assert base64.b64encode(hashlib.sha512(pathlib.Path("esbuild.tgz").read_bytes()).digest()).decode() == "4xTZr1FUmSoQW4XIWmit3tzQrUTZM+N3P0XV8xROKYF50XfI7xeO90+1bZvNwxIufQ9hDQVRJH5YhgPVF8A/HQ=="'
-          tar -xOzf esbuild.tgz package/bin/esbuild > esbuild
-          chmod 0755 opengrep esbuild
-          cat > Dockerfile <<'DOCKERFILE'
-          FROM docker.io/library/python@sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85
-          RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
-          COPY opengrep /usr/local/bin/opengrep
-          COPY esbuild /opt/promptfoo/node_modules/@esbuild/linux-x64/bin/esbuild
-          DOCKERFILE
-          docker build --platform linux/amd64 --tag localhost/innovate-sast-diagnostic:trial .
-      - name: Identify the first failing SAST check offline
-        shell: bash
-        run: |
+          base=docker.io/library/python@sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85
+          docker pull --platform linux/amd64 "$base"
+          docker run --rm --pull=never --network none "$base" bash -s <<'BASH'
           set -euo pipefail
-          trial="$RUNNER_TEMP/sast-diagnostic"
-          cat > "$trial/opengrep-report.py" <<'PYTHON'
-          import collections
-          import hashlib
-          import json
-          import subprocess
-          import sys
-          from pathlib import Path
-          sys.path.insert(0, "/policy/security/offline-ai/scripts")
-          import scan_opengrep as scanner
-
-          kinds = {"ParseError", "PartialParsing", "PatternParseError", "InvalidRuleSchemaError",
-                   "Timeout", "MatchFound", "MatchingError", "FatalError", "InterfileTimeout",
-                   "OtherParseError", "SyntaxError"}
-          rules = {"offline-python-raw-to-egress", "offline-ts-raw-to-egress"}
-          run = subprocess.run
-
-          def observed(command, **arguments):
-              result = run(command, **arguments)
-              if command[0] == "/usr/local/bin/opengrep" and "--error" in command:
-                  stream = arguments["stdout"]
-                  position = stream.tell()
-                  if position > scanner.MAX_REPORT_BYTES:
-                      return result
-                  try:
-                      stream.seek(0)
-                      payload = json.load(stream)
-                      counts = collections.Counter()
-                      for error in payload.get("errors", []):
-                          kind = error.get("type")
-                          counts[kind if isinstance(kind, str) and kind in kinds else "other"] += 1
-                      print("Opengrep report status", result.returncode, "errors", dict(counts),
-                            "findings", len(payload.get("results", [])), flush=True)
-                      for hit in payload.get("results", [])[:20]:
-                          filename = Path(hit["path"])
-                          rule = hit["check_id"].rsplit(".", 1)[-1]
-                          if rule in rules and filename.is_relative_to("/work"):
-                              relative = filename.relative_to("/work").as_posix()
-                              print("Finding", rule, hashlib.sha256(relative.encode()).hexdigest(),
-                                    hit["start"]["line"], flush=True)
-                  except (ValueError, TypeError, KeyError, AttributeError):
-                      print("Unrecognized Opengrep output schema", flush=True)
-                  finally:
-                      stream.seek(position)
-              return result
-
-          scanner.subprocess.run = observed
-          paths, submodules = scanner.tracked_sources(scanner.ROOT, offline_container=True)
-          non_rust = [name for name in paths if not name.lower().endswith(".rs")]
-          outcome = scanner.scan_paths(scanner.ROOT, scanner.RULES, non_rust, submodules)
-          print("Opengrep outcome", outcome)
-          raise SystemExit(outcome.status)
-          PYTHON
-          rustfmt="$(rustup which --toolchain 1.100.0 rustfmt)"
-          rust_toolchain="${rustfmt%/bin/rustfmt}"
-          docker run --rm --pull=never --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
-            --pids-limit 256 --memory 8g --cpus 4 --user 65534:65534 \
-            --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 --entrypoint=/bin/bash \
-            --mount "type=bind,src=$GITHUB_WORKSPACE/consumer,dst=/work,readonly" \
-            --mount "type=bind,src=$GITHUB_WORKSPACE/policy,dst=/policy,readonly" \
-            --mount "type=bind,src=$trial/bundle,dst=/hosted-sast,readonly" \
-            --mount "type=bind,src=$trial/opengrep-report.py,dst=/opengrep-report.py,readonly" \
-            --mount "type=bind,src=$rust_toolchain,dst=/rust-toolchain,readonly" \
-            -e HOME=/tmp -e TMPDIR=/tmp localhost/innovate-sast-diagnostic:trial \
-            -euc 'cd /work; exec python -I -B /opengrep-report.py'
-
-  base-advisory-comparison:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          repository: edithatogo/repository-standards
-          ref: 4519db96cbbd5aa7860dc02645d1b8f349844c7b
-          persist-credentials: false
-          path: qualification-policy
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
-        with:
-          python-version: '3.15.2'
-      - name: Compare unmodified official Python bases with identical advisory coverage
-        shell: bash
-        run: |
-          set -euo pipefail
-          umask 077
-          trial="$RUNNER_TEMP/base-advisory-comparison"
-          mkdir "$trial"
-          python -m venv "$trial/python"
-          "$trial/python/bin/python" -I - "$trial" "$GITHUB_WORKSPACE/qualification-policy/security/offline-ai/provision" <<'PY'
-          import collections
-          import json
-          import os
-          import subprocess
-          import sys
-          from pathlib import Path
-
-          trial, policy = map(Path, sys.argv[1:])
-          sys.path.insert(0, str(policy))
-          import collect_vulnerabilities as collector
-
-          base_images = {
-              "trixie": "fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85",
-              "bookworm": "6cae5760197a96ea5d0a41ae2e045733c351d605c61148dd030aafdf4919e33a",
-          }
-          binary = collector.download_tool(trial)
-          env = {key: value for key, value in os.environ.items() if not key.startswith(("GRYPE_", "SYFT_"))}
-          env["GRYPE_DB_CACHE_DIR"] = str(trial / "database")
-          cli = [binary, "--config", collector.CONFIG]
-          version = json.loads(collector.command(cli + ["version", "-o", "json"], env))
-          assert version["version"].removeprefix("v") == collector.VERSION
-          db_hashes = []
-          for distribution, expected in base_images.items():
-              image = "docker.io/library/python@sha256:" + expected
-              collector.command(["docker", "pull", "--platform", "linux/amd64", image], env, timeout=180)
-              inspected = json.loads(collector.command(["docker", "image", "inspect", image], env))
-              assert len(inspected) == 1 and inspected[0]["Os"] == "linux" and inspected[0]["Architecture"] == "amd64"
-              assert any(reference.endswith("@sha256:" + expected) for reference in inspected[0]["RepoDigests"])
-              report_file = trial / (distribution + ".json")
-              collector.command(cli + ["docker:" + image, "--scope", "all-layers", "-o", "json", "--file", report_file], env, timeout=360)
-              report = json.loads(report_file.read_bytes())
-              assert report["source"]["target"]["imageID"] == inspected[0]["Id"]
-              counts = collections.Counter(match["vulnerability"]["severity"] for match in report["matches"])
-              fixes = collections.Counter(
-                  match["vulnerability"]["fix"]["state"] for match in report["matches"]
-                  if match["vulnerability"]["severity"] in ("Critical", "High")
-              )
-              database = json.loads(collector.command(cli + ["db", "status", "-o", "json"], env))
-              assert database.get("valid") is True and not database.get("error")
-              assert database.get("built") and database.get("schemaVersion") and database.get("from")
-              database_file = Path(database["path"]).resolve(strict=True)
-              assert database_file.is_relative_to(trial / "database")
-              db_hashes.append(collector.digest(database_file))
-              print(json.dumps({
-                  "distribution": distribution, "digest": expected, "matches": counts,
-                  "high_and_critical_fix_status": fixes, "ignored": len(report.get("ignoredMatches", [])),
-              }, sort_keys=True), flush=True)
-          assert db_hashes[0] == db_hashes[1], "The bases require the same advisory database"
-          print("Both official bases scanned using the same advisory database", flush=True)
-          PY
+          python --version
+          dpkg-query -W -f='${binary:Package} ${Version} essential=${Essential} protected=${Protected}\n' \
+            libsqlite3-0 libncursesw6 ncurses-base ncurses-bin libtinfo6 login libuuid1
+          for package in libsqlite3-0 libncursesw6 ncurses-base ncurses-bin libtinfo6 login libuuid1; do
+            if dpkg --dry-run --purge "$package"; then
+              printf 'Package purge is dependency-compatible %s\n' "$package"
+            else
+              printf 'Package purge is blocked %s\n' "$package"
+            fi
+          done
+          BASH
