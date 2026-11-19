@@ -31,7 +31,7 @@ jobs:
           node="$(jq -er '.node.reference' "$provision/base-images.json")"
           registry="$(jq -er '.registry.reference' "$provision/base-images.json")"
           work="$RUNNER_TEMP/wolfi-probe"
-          mkdir -p "$work/context/apks" "$work/evidence"
+          mkdir -p "$work/context/apks/x86_64" "$work/evidence"
           docker pull --platform linux/amd64 "$WOLFI_INDEX"
           docker pull --platform linux/amd64 "$WOLFI_AMD64"
           test "$(docker image inspect --format '{{.Id}}' "$WOLFI_INDEX")" = \
@@ -47,12 +47,15 @@ jobs:
           )
           docker run --rm --pull=never -v "$work/context/apks:/apks" "$WOLFI_AMD64" \
             apk --no-cache --repositories-file /dev/null \
-            --repository https://apk.cgr.dev/chainguard fetch --recursive --output /apks \
+            --repository https://apk.cgr.dev/chainguard fetch --recursive --output /apks/x86_64 \
             python-3.15 py3.15-pip bash coreutils findutils grep libgcc libstdc++ libatomic libgomp
           for package in "${packages[@]}"; do
-            test -s "$work/context/apks/$package.apk" || { printf 'Missing exact package %s\n' "$package"; exit 2; }
+            test -s "$work/context/apks/x86_64/$package.apk" || { printf 'Missing exact package %s\n' "$package"; exit 2; }
           done
-          (cd "$work/context/apks" && sha256sum ./*.apk) > "$work/evidence/apk-sha256.txt"
+          curl --fail --silent --show-error --max-time 60 \
+            https://apk.cgr.dev/chainguard/x86_64/APKINDEX.tar.gz \
+            --output "$work/context/apks/x86_64/APKINDEX.tar.gz"
+          (cd "$work/context/apks/x86_64" && sha256sum APKINDEX.tar.gz ./*.apk) > "$work/evidence/apk-sha256.txt"
 
           cat > "$work/context/Dockerfile" <<'DOCKERFILE'
           ARG WOLFI
@@ -60,7 +63,10 @@ jobs:
           FROM ${NODE} AS node
           FROM ${WOLFI} AS runtime
           RUN --network=none --mount=type=bind,source=apks,target=/apks,readonly \
-              apk --no-network --no-cache --repositories-file /dev/null add /apks/*.apk
+              apk --no-network --no-cache --repositories-file /dev/null --repository /apks add \
+                python-3.15=3.15.2_git20261113-r0 py3.15-pip=26.2.2-r3 \
+                bash=5.3-r14 coreutils=9.12-r8 findutils=4.11.0-r6 grep=3.12-r12 \
+                libgcc=16.2.0-r5 libstdc++=16.2.0-r5 libatomic=16.2.0-r5 libgomp=16.2.0-r5
           COPY --from=node /usr/local/bin/node /usr/local/bin/node
           COPY --from=node /usr/local/LICENSE /usr/local/share/doc/node/LICENSE
           RUN --network=none ln -s /usr/bin/python3.15 /usr/local/bin/python
