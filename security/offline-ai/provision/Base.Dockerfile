@@ -34,6 +34,10 @@ RUN --network=none --mount=type=bind,source=os,target=/opt/offline-os,readonly \
     python -I /opt/offline-os/prepare_os_packages.py --install /opt/offline-os \
       --receipt /usr/local/share/offline-ai/os-packages.json \
     && python -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)' \
+    && extension="$(python -I -c 'import sysconfig; print(sysconfig.get_config_var("EXT_SUFFIX"))')" \
+    && rm -- "/usr/local/lib/python3.15/lib-dynload/_curses$extension" \
+             "/usr/local/lib/python3.15/lib-dynload/_curses_panel$extension" \
+    && python -I -c 'from importlib.util import find_spec; assert find_spec("_curses") is find_spec("_curses_panel") is None' \
     && node -e 'if (Number(process.versions.node.split(".")[0]) !== 24) process.exit(2)' \
     && git --version \
     && test ! -e "$(git --exec-path)/git-remote-http" \
@@ -41,7 +45,7 @@ RUN --network=none --mount=type=bind,source=os,target=/opt/offline-os,readonly \
     && linked="$(ldd /usr/local/bin/git)" \
     && ! printf '%s\n' "$linked" | grep -Ei 'libcurl|not found' \
     && packages="$(dpkg-query -W -f='${Package}\n')" \
-    && ! printf '%s\n' "$packages" | grep -E '^(git|libcurl[^[:space:]]*)$' \
+    && ! printf '%s\n' "$packages" | grep -E '^(git|libcurl[^[:space:]]*|libncursesw6)$' \
     && ! command -v mount && ! command -v umount \
     && test ! -e /usr/local/bin/npm \
     && test ! -e /usr/local/bin/npx \

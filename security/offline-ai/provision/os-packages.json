@@ -7,8 +7,8 @@
   "base_status_sha256": "75b63974c853f59abf2575cbcb5d0ff8075b2c8fa9151318c0ec7a98dafbe7e2",
   "base_status_layer": "sha256:ba56bf6127ad2b67230d545572f827a2f23ad144cf9956ff1358115f2c2b74f5",
   "base_installed_package_count": 88,
-  "dependency_policy": "The starting dpkg status is pinned. Runtime libraries and zlib must install, and mount must be purged, using normal dependency checks. The entire final inventory and dpkg audit must pass.",
-  "purge": ["mount"],
+  "dependency_policy": "The starting dpkg status is pinned. Runtime libraries and zlib must install, and unused mount and libncursesw6 packages must be purged, using normal dependency checks. The entire final inventory and dpkg audit must pass.",
+  "purge": ["libncursesw6", "mount"],
   "runtime_roots": {
     "libatomic1": "Node runtime",
     "libgomp1": "Native model OpenMP runtime",

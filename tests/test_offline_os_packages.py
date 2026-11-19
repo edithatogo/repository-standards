@@ -153,14 +153,15 @@ class OSPackageTests(unittest.TestCase):
         self.assertEqual(self.calls, [])
 
     def test_purge_requires_the_complete_resulting_package_inventory(self):
-        self.catalog["required_base"]["mount"] = "1.0-1"
-        self.catalog["purge"] = ["mount"]
+        self.catalog["required_base"].update({"libncursesw6": "1.0-1", "mount": "1.0-1"})
+        self.catalog["purge"] = ["libncursesw6", "mount"]
         (self.source / MODULE.CATALOG).write_text(json.dumps(self.catalog))
         status, receipt = self.invoke(install=True)
         self.assertEqual((status, receipt["status"]), (0, "installed"))
-        self.assertEqual(receipt["purged_packages"], ["mount"])
+        self.assertEqual(receipt["purged_packages"], ["libncursesw6", "mount"])
         self.assertNotIn("mount", receipt["installed_versions"])
-        self.assertIn(["dpkg", "--purge", "mount"], self.calls)
+        self.assertNotIn("libncursesw6", receipt["installed_versions"])
+        self.assertIn(["dpkg", "--purge", "libncursesw6", "mount"], self.calls)
         (self.root / "receipt.json").unlink()
         self.purge_incomplete = True
         status, receipt = self.invoke(install=True)

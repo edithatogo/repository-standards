@@ -16,6 +16,9 @@ Online preparation downloads the three Debian packages pinned by URL, version,
 size and SHA-256 in `os-packages.json`, including the fixed zlib package.
 The offline base build checks the exact starting dpkg database, installs the
 verified packages and checks the resulting versions and `dpkg --audit`.
+The build purges the unused `mount` and `libncursesw6` packages with normal
+Debian dependency checks. It also removes the two optional Python curses
+extensions that link against the removed library.
 It copies the updated filesystem, including Debian's installed package database
 and notices, into a fresh runtime layer. Global npm and npx are omitted because
 the scanner uses the separate reviewed Promptfoo installation.

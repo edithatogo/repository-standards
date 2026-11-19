@@ -992,3 +992,20 @@ immutable base and network-denied build arguments. The synthetic asset and
 socket permissions are now explicit. The same 106 tests pass locally with
 umask 077. The next hosted run repeats the full controls on Innovate
 `2b0eac8e76b05d8e7cb71dd7f2ec53b4bb9aab19`.
+
+### Remove unused wide-character ncurses from the runtime candidate
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this image correction
+in the existing hosted worktree from `b41977f72976d0bde3a59b80f43b4a6fc90c37c9`.
+Scope covers the base Dockerfile, package inventory and preparer, their
+focused tests, the provisioning documentation and the hosted policy pin.
+The registered native target is draft PR #152.
+
+Diagnostic run `44493115571` used the pinned Linux amd64 base and ordinary
+dpkg dry runs. Debian allowed removal of `libncursesw6`. Dependencies or
+distribution protections blocked removal of SQLite, the base ncurses packages,
+libtinfo, login and libuuid. Purge the wide-character library and remove the
+two unneeded Python curses extensions linked against it. The 15 package
+preparation tests and nine subtests passed locally. The hosted canary must
+recheck Innovate `abd1bc0d0f2da96bd965e3e6441dd1b23936e286` and collect the
+complete advisory report for the rebuilt image.

@@ -66,7 +66,7 @@ def read_catalog(path):
         if not NAME.fullmatch(name) or not VERSION.fullmatch(version):
             raise PreparationError("catalog")
     purge = data.get("purge", [])
-    if purge != [] and (purge != ["mount"] or "mount" not in baseline):
+    if purge not in ([], ["mount"], ["libncursesw6", "mount"]) or any(name not in baseline for name in purge):
         raise PreparationError("catalog")
     names, filenames, total = set(), set(), 0
     for package in packages:
