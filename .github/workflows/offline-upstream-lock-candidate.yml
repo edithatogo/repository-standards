@@ -39,13 +39,19 @@ jobs:
           docker pull --platform linux/amd64 "$node"
           docker pull --platform linux/amd64 "$registry"
 
-          # Signed package fetch is the only step with network access to Wolfi.
+          # Let apk select the signed dependency closure, then verify the root versions.
+          packages=(
+            python-3.15-3.15.2_git20261113-r0 py3.15-pip-26.2.2-r3
+            bash-5.3-r9 coreutils-9.9-r1 findutils-4.11.0-r6 grep-3.12-r9
+            libgcc-16.2.0-r5 libstdc++-16.2.0-r5 libatomic-16.2.0-r5 libgomp-16.2.0-r5
+          )
           docker run --rm --pull=never -v "$work/context/apks:/apks" "$WOLFI_AMD64" \
             apk --no-cache --repositories-file /dev/null \
             --repository https://apk.cgr.dev/chainguard fetch --recursive --output /apks \
-            python-3.15=3.15.2_git20261113-r0 py3.15-pip=26.2.2-r3 \
-            bash=5.3-r9 coreutils=9.9-r1 findutils=4.11.0-r6 grep=3.12-r9 \
-            libgcc=16.2.0-r5 libstdc++=16.2.0-r5 libatomic=16.2.0-r5 libgomp=16.2.0-r5
+            python-3.15 py3.15-pip bash coreutils findutils grep libgcc libstdc++ libatomic libgomp
+          for package in "${packages[@]}"; do
+            test -s "$work/context/apks/$package.apk" || { printf 'Missing exact package %s\n' "$package"; exit 2; }
+          done
           (cd "$work/context/apks" && sha256sum ./*.apk) > "$work/evidence/apk-sha256.txt"
 
           cat > "$work/context/Dockerfile" <<'DOCKERFILE'
