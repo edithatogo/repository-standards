@@ -36,17 +36,29 @@ if [[ "$hosted_sast" = true ]]; then
 else
   quiet opengrep python -I /policy/security/offline-ai/scripts/scan_opengrep.py
 fi
-quiet pytest python -m pytest -q -p no:cacheprovider \
-  /policy/security/offline-ai/tests/test_detect_ai.py \
-  /policy/security/offline-ai/tests/test_agent_boundary.py \
-  /policy/security/offline-ai/tests/test_verify_assets.py \
-  /policy/security/offline-ai/tests/test_target_provider.py \
-  /policy/security/offline-ai/tests/test_identifiers.py \
-  /policy/security/offline-ai/tests/test_identifier_properties.py \
-  /policy/security/offline-ai/tests/test_verify_network.py \
-  /policy/security/offline-ai/tests/test_quiet_exec.py \
-  /policy/security/offline-ai/tests/test_dlp_socket.py \
+policy_tests=(
+  /policy/security/offline-ai/tests/test_detect_ai.py
+  /policy/security/offline-ai/tests/test_agent_boundary.py
+  /policy/security/offline-ai/tests/test_verify_assets.py
+  /policy/security/offline-ai/tests/test_target_provider.py
+  /policy/security/offline-ai/tests/test_identifiers.py
+  /policy/security/offline-ai/tests/test_identifier_properties.py
+  /policy/security/offline-ai/tests/test_verify_network.py
+  /policy/security/offline-ai/tests/test_quiet_exec.py
+  /policy/security/offline-ai/tests/test_dlp_socket.py
   /policy/security/offline-ai/tests/test_node_python_bridge.py
+)
+if [[ "$hosted_sast" == true ]]; then
+  policy_tmp="$(mktemp -d /tmp/ai.XXXXXX)"
+  policy_report="$policy_tmp/report.xml"
+  if ! quiet pytest python -m pytest -q -p no:cacheprovider \
+    --basetemp="$policy_tmp/tests" --junitxml="$policy_report" "${policy_tests[@]}"; then
+    python -I /policy/security/offline-ai/scripts/summarize_policy_test_failures.py "$policy_report" "${policy_tests[@]}"
+    exit 2
+  fi
+else
+  quiet pytest python -m pytest -q -p no:cacheprovider "${policy_tests[@]}"
+fi
 quiet node-tests node --test /policy/security/offline-ai/clients/node/dlp-client.test.mjs
 ai=false
 if [[ "${ENFORCE_AI:-false}" == true ]]; then

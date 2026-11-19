@@ -57,17 +57,25 @@ class OfflineDLPServer(socketserver.UnixStreamServer):
             raise PermissionError("DLP socket directory must be privately owned, mode 0700")
         if path.exists() or path.is_symlink():
             raise FileExistsError("DLP socket path already exists")
+        self.socket_path: Path | None = None
+        super().__init__(str(path), DLPRequestHandler, bind_and_activate=False)
         old_umask = os.umask(0o077)
         try:
-            super().__init__(str(path), DLPRequestHandler)
+            self.server_bind()
+            self.socket_path = path
             os.chmod(path, 0o600)
+            self.server_activate()
+        except BaseException:
+            self.server_close()
+            raise
         finally:
             os.umask(old_umask)
-        self.socket_path = path
 
     def server_close(self):
         super().server_close()
-        self.socket_path.unlink(missing_ok=True)
+        if self.socket_path is not None:
+            self.socket_path.unlink(missing_ok=True)
+            self.socket_path = None
 
 def main():
     path = Path(os.environ.get("DLP_SOCKET_PATH", "/run/offline-dlp/dlp.sock"))

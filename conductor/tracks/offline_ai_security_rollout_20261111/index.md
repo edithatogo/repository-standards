@@ -966,3 +966,20 @@ SAST still failed at the identical two JOSS stdout calls after the path
 projection. Innovate now projects the process result to stage pass or fail.
 Run the full canary against `3db2c5ace5ebfad31561c2c2096c082f8f76692f`,
 including the release evidence verifier added since the first JOSS fix.
+
+### Verify policy tests after the hosted scanners, 19 November 2026
+
+Run `44479258221` passed both hosted SAST engines and then failed the
+second policy pytest group. The current work packet adds value-free failure
+names, uses a private short test directory and preserves the Unix socket bind
+error if initialization fails. Scope in the same policy worktree is the
+policy runner, socket broker, focused tests, this record, consumer target and
+source pin. The 106 grouped tests passed locally on Python 3.15.2 with a short
+scratch directory. The hosted runtime must rerun those same checks on
+Innovate `2b0eac8e76b05d8e7cb71dd7f2ec53b4bb9aab19`.
+
+Run `44479738024` compared unmodified, digest-pinned Python 3.15.2 bases
+with the same Grype database. Bookworm reported three critical findings
+and 69 high. Trixie reported zero critical and 78 high before runtime
+remediation. Keep Trixie for the canary. Debian marks the login package
+protected. The current candidate still needs image vulnerability review.

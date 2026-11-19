@@ -59,3 +59,10 @@ def test_refuses_world_readable_directory(tmp_path):
     root.mkdir(mode=0o755)
     with pytest.raises(PermissionError):
         dlp_socket.OfflineDLPServer(root / "dlp.sock")
+
+
+def test_failed_bind_preserves_the_socket_error(tmp_path):
+    path = tmp_path / ("d" * 160)
+    with pytest.raises(OSError, match="AF_UNIX path too long"):
+        dlp_socket.OfflineDLPServer(path)
+    assert not path.exists()
