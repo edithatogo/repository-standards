@@ -1026,3 +1026,19 @@ high and critical findings and eight lower-severity matches. Cosign verified
 the vendor's signed index and the hosted runner confirmed its amd64
 manifest resolves to the same image. Exercise the complete scanner, offline
 controls and Innovate canary using these exact base and package bytes.
+
+### Connect the reviewed assets to Innovate's hosted job
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet from
+`6d828d79ad05b86c473a5044c46fcd873fee9b1e` in the hosted policy
+worktree. Scope is the opt-in reusable workflow, image review, reviewed
+Gitleaks selection, focused tests and immutable pin. Its native targets
+are draft PR #152 and the offline check on Innovate draft PR #684.
+
+Runs `44499639400` and `44499639220` passed all eight image controls.
+The consumer canary denied container egress and passed both SAST engines.
+Its exact image and advisory report are recorded in the Wolfi review.
+The rebuilt Gitleaks scanner has separate source, library and fixture evidence.
+Use its existing locked bytes in the hosted job and preserve the receipt-only
+mode for historical canaries. Review the image advisories on every hosted job
+and keep unresolved findings visible and blocking.

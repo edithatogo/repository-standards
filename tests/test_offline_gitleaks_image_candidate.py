@@ -154,6 +154,16 @@ class GitleaksImageCandidateTests(unittest.TestCase):
                     with self.assertRaises(PREP.PreparationError):
                         PREP.load_gitleaks_image_candidate()
 
+    def test_hosted_review_binds_the_original_candidate(self):
+        lock, review_hash = PREP.reviewed_gitleaks_lock()
+        self.assertEqual(lock, PREP.load_gitleaks_image_candidate())
+        self.assertEqual(review_hash, sha((PREP.HERE / "gitleaks-hosted-review.json").read_bytes()))
+        invalid = copy.deepcopy(lock)
+        invalid["binary"]["sha256"] = "0" * 64
+        with mock.patch.object(PREP, "load_gitleaks_image_candidate", return_value=invalid):
+            with self.assertRaises(PREP.PreparationError):
+                PREP.reviewed_gitleaks_lock()
+
 
 if __name__ == "__main__":
     unittest.main()

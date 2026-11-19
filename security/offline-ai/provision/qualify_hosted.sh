@@ -4,15 +4,19 @@
 set -euo pipefail
 umask 022
 if [[ "$#" != 2 && "$#" != 3 ]]; then
-  echo "Usage: qualify_hosted.sh CLEAN_POLICY_CHECKOUT NEW_DESTINATION [--gitleaks-candidate-evidence-only]" >&2
+  echo "Usage: qualify_hosted.sh CLEAN_POLICY_CHECKOUT NEW_DESTINATION [GITLEAKS_BUILD_OPTION]" >&2
   exit 2
 fi
 candidate_args=()
 candidate_enabled=false
+reviewed_build=false
 if [[ "$#" = 3 ]]; then
-  [[ "$3" = --gitleaks-candidate-evidence-only ]] || exit 2
+  case "$3" in
+    --gitleaks-candidate-evidence-only) candidate_enabled=true ;;
+    --gitleaks-reviewed-build) reviewed_build=true ;;
+    *) exit 2 ;;
+  esac
   candidate_args+=("$3")
-  candidate_enabled=true
 fi
 policy_root="$(cd -- "$1" && pwd)"
 destination="$(python -I -c 'import pathlib,sys; print(pathlib.Path(sys.argv[1]).absolute())' "$2")"
@@ -38,9 +42,9 @@ finish() {
       stage=registry-cleanup
     fi
   fi
-  python -I - "$evidence/hosted-execution.json" "$stage" "$status" "$policy_sha" "$candidate_enabled" <<'PY'
+  python -I - "$evidence/hosted-execution.json" "$stage" "$status" "$policy_sha" "$candidate_enabled" "$reviewed_build" <<'PY'
 import json, os, pathlib, sys
-path, stage, status, policy, candidate = sys.argv[1:]
+path, stage, status, policy, candidate, reviewed = sys.argv[1:]
 record = {
     "schema_version": 1,
     "kind": "offline-image-hosted-execution",
@@ -48,6 +52,7 @@ record = {
     "last_stage": stage,
     "policy_commit": policy,
     "gitleaks_candidate_evidence_only": candidate == "true",
+    "gitleaks_reviewed_build": reviewed == "true",
     "preparation_network_access": True,
     "scanner_network_access": False,
     "runner_registration_qualified": False,

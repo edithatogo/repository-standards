@@ -311,6 +311,19 @@ def load_gitleaks_image_candidate():
     return lock
 
 
+def reviewed_gitleaks_lock():
+    lock_path = HERE / "gitleaks-image-candidate.json"
+    review_path = HERE / "gitleaks-hosted-review.json"
+    review = read_json(review_path)
+    lock = load_gitleaks_image_candidate()
+    if (review.get("schema_version") != 1 or review.get("scope") != "local-hosted-offline-image"
+            or review.get("candidate_lock_sha256") != digest(lock_path)
+            or review.get("binary_sha256") != lock["binary"]["sha256"]
+            or review.get("source_commit") != lock["source_commit"]):
+        raise PreparationError("gitleaks-hosted-review")
+    return lock, digest(review_path)
+
+
 def binaries(vendor, work, catalog, *, candidate_lock=None):
     (vendor / "bin").mkdir(mode=0o755)
     if candidate_lock is None:
@@ -465,7 +478,7 @@ def finalize(vendor, receipt, catalog):
     receipt["manifest_sha256"] = digest(manifest)
 
 
-def prepare(destination, receipt_path, *, gitleaks_candidate_evidence_only=False):
+def prepare(destination, receipt_path, *, gitleaks_candidate_evidence_only=False, gitleaks_reviewed_build=False):
     if (sys.version_info[:3] != (3, 15, 2) or platform.system() != "Linux"
             or platform.machine() != "x86_64"):
         raise PreparationError("runtime")
@@ -473,7 +486,14 @@ def prepare(destination, receipt_path, *, gitleaks_candidate_evidence_only=False
         if path.exists() or path.is_symlink() or not path.parent.is_dir():
             raise PreparationError("destination")
     catalog = load_catalog()
-    candidate_lock = load_gitleaks_image_candidate() if gitleaks_candidate_evidence_only else None
+    if gitleaks_candidate_evidence_only and gitleaks_reviewed_build:
+        raise PreparationError("gitleaks-build-selection")
+    review_digest = None
+    candidate_lock = None
+    if gitleaks_reviewed_build:
+        candidate_lock, review_digest = reviewed_gitleaks_lock()
+    elif gitleaks_candidate_evidence_only:
+        candidate_lock = load_gitleaks_image_candidate()
     receipt = {"schema_version": 1, "kind": "offline-vendor-preparation", "status": "failed",
                "sources_catalog_sha256": digest(HERE / "sources.json"),
                "policy_inputs": catalog["policy_inputs"], "upstream_sources": dict(catalog["downloads"]),
@@ -481,12 +501,14 @@ def prepare(destination, receipt_path, *, gitleaks_candidate_evidence_only=False
                "runner_registered": False}
     if candidate_lock is not None:
         receipt["upstream_sources"]["gitleaks"] = {
-            "kind": "unreviewed-source-build-evidence-only",
+            "kind": "reviewed-hosted-source-build" if review_digest else "unreviewed-source-build-evidence-only",
             "source_commit": candidate_lock["source_commit"],
             "binary_sha256": candidate_lock["binary"]["sha256"],
             "candidate_lock_sha256": digest(HERE / "gitleaks-image-candidate.json"),
             "dependency_artifact": candidate_lock["dependency_artifact"],
         }
+        if review_digest:
+            receipt["upstream_sources"]["gitleaks"]["review_sha256"] = review_digest
     destination.mkdir(mode=0o755)
     current = "binaries"
     try:
@@ -526,11 +548,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--destination", required=True, type=Path)
     parser.add_argument("--receipt", required=True, type=Path)
-    parser.add_argument("--gitleaks-candidate-evidence-only", action="store_true")
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument("--gitleaks-candidate-evidence-only", action="store_true")
+    selection.add_argument("--gitleaks-reviewed-build", action="store_true")
     args = parser.parse_args()
     try:
         prepare(args.destination.absolute(), args.receipt.absolute(),
-                gitleaks_candidate_evidence_only=args.gitleaks_candidate_evidence_only)
+                gitleaks_candidate_evidence_only=args.gitleaks_candidate_evidence_only,
+                gitleaks_reviewed_build=args.gitleaks_reviewed_build)
     except (Exception, KeyboardInterrupt):
         print(ERROR, file=sys.stderr)
         return 2

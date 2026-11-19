@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "kind": "offline-wolfi-advisory-review",
+  "canary": {
+    "artifact": 14516364004,
+    "archive_sha256": "142506cb9b9622b4c697376bb72948b8a3f6fddd73528b3b77e962b38d3c0543",
+    "image": "localhost/offline-ai-security@sha256:26b170e4977b3f2891a1e5dcb4af4376cf0c8d6f54ba86bd41efe561bb81fc79",
+    "report_sha256": "b03a8b37760f5fd6b55b1b30345061512782aa27c19a05fd55ff6d5b347345f1",
+    "run": 44499639220
+  },
+  "findings": {
+    "CVE-2026-100290": {
+      "package": "glibc-2.44",
+      "version": "2.44-r23",
+      "severity": "Low",
+      "disposition": "vendor_backport_unverified",
+      "assessment": "The GNU C Library has a release-branch fix for POSIX regex allocation failure. The installed APK's exact build recipe has not been traced to that fix. The offline process reads repository-supplied content, so network isolation alone cannot resolve this match.",
+      "source": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0028"
+    },
+    "CVE-2026-115819": {
+      "package": "glibc-2.44",
+      "version": "2.44-r23",
+      "severity": "Medium",
+      "disposition": "vendor_backport_unverified",
+      "assessment": "The GNU C Library has a release-branch fix for wide scanf. The installed APK's exact build recipe has not been traced to that fix.",
+      "source": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0027"
+    },
+    "CVE-2026-103995": {
+      "package": "python-3.15",
+      "version": "3.15.2_git20261113-r0",
+      "severity": "Low",
+      "disposition": "replacement_pending",
+      "assessment": "The scanner's container network denial limits exposure to remote HTTP responses. No verified fix is recorded for this CPython package.",
+      "source": "https://www.cve.org/CVERecord?id=CVE-2026-103995"
+    },
+    "CVE-2026-115559": {
+      "package": "python-3.15",
+      "version": "3.15.2_git20261113-r0",
+      "severity": "Medium",
+      "disposition": "replacement_pending",
+      "assessment": "The scanner has no remote IMAP connectivity. The provider still reports the exact CPython package as affected.",
+      "source": "https://mail.python.org/archives/list/security-announce@python.org/thread/LVAGFOFG26QVXEM6VXXPRMMOZBHM4CVB/"
+    },
+    "CVE-2026-115791": {
+      "package": "python-3.15",
+      "version": "3.15.2_git20261113-r0",
+      "severity": "Medium",
+      "disposition": "replacement_pending",
+      "assessment": "The scanner invokes no CPython archive extraction CLI on repository content. The fix appears in the next 3.15 changelog and is not verified in this package.",
+      "source": "https://docs.python.org/3.15/whatsnew/changelog.html"
+    },
+    "CVE-2026-124249": {
+      "package": "python-3.15",
+      "version": "3.15.2_git20261113-r0",
+      "severity": "Medium",
+      "disposition": "replacement_pending",
+      "assessment": "The scanner cannot contact remote cookie issuers. The provider still reports the exact CPython package as affected.",
+      "source": "https://mail.python.org/archives/list/security-announce@python.org/thread/Y6IKNZ2VZUS2L6CLQICSFUEMCLT7OLTY/"
+    },
+    "CVE-2026-16052": {
+      "package": "python-3.15",
+      "version": "3.15.2_git20261113-r0",
+      "severity": "Low",
+      "disposition": "replacement_pending",
+      "assessment": "The scanner exposes no network HTTP cookie endpoint. A fix is not verified in the installed CPython package.",
+      "source": "https://mail.python.org/archives/list/security-announce@python.org/thread/IZL4QUFV7PKGT2JYSU2DCBMLTWYJDGKZ/"
+    },
+    "CVE-2026-19552": {
+      "package": "python-3.15",
+      "version": "3.15.2_git20261113-r0",
+      "severity": "Negligible",
+      "disposition": "replacement_pending",
+      "assessment": "The scanner cannot retrieve remote TLS certificates. The provider still reports the exact CPython package as affected.",
+      "source": "https://mail.python.org/archives/list/security-announce@python.org/thread/SXBD6BGHDBTGM4KSUMQEWYIQ5RO4BQ76/"
+    }
+  }
+}

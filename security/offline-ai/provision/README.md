@@ -100,6 +100,17 @@ pass its update, age and integrity checks. Successful collection records
 The hosted scan requires network access for the pinned tool and current advisory
 database, and does not change the network-denied scanner control execution.
 
+Innovate can select the GitHub-hosted Ubuntu path of
+`reusable-ai-sec-pipeline.yml` with `github_hosted: true`. It uses the immutable
+policy, verified scanner inputs, and a fresh image. Both SAST engines and the
+existing controls execute with the consumer and policy mounted read-only and
+container networking disabled. The job inventories the actual scanner image
+and records its dispositions in `wolfi-image-disposition.json`. The gate fails
+on unresolved, unreviewed or ignored findings. The complete Grype report
+remains in the evidence artifact. The [review catalog](wolfi-image-review.json)
+records the eight findings in the qualification run and scopes the conclusions
+to the observed package versions.
+
 The registry listens on loopback only and is removed after the run. To provision
 the eventual runner, execute the preparation/build/qualification command above
 on the approved Linux x64 host using the exact reviewed policy checkout and
@@ -233,3 +244,9 @@ value-free receipts and inventories. The normal preparation path still uses the
 pinned upstream release. This evidence-only option does not approve the
 candidate, authorize its distribution, or establish a passing image or SAST
 scan.
+
+The hosted Innovate job selects `--gitleaks-reviewed-build`. The
+[review record](gitleaks-hosted-review.json) binds the existing candidate lock,
+source, binary, and observed execution and permission fixtures. Preparation
+still rebuilds the exact binary and runs all staging checks. The reviewed
+binary stays on the job host.
