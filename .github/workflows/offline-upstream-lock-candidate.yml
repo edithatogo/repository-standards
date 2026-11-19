@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/innovate
-          ref: 8a0021377ef2aab4dd07504bd619cd366fd96361
+          ref: 3db2c5ace5ebfad31561c2c2096c082f8f76692f
           persist-credentials: false
           path: consumer
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
@@ -125,3 +125,75 @@ jobs:
             --mount "type=bind,src=$rust_toolchain,dst=/rust-toolchain,readonly" \
             -e HOME=/tmp -e TMPDIR=/tmp localhost/innovate-sast-diagnostic:trial \
             -euc 'cd /work; exec python -I -B /opengrep-report.py'
+
+  base-advisory-comparison:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: edithatogo/repository-standards
+          ref: 4519db96cbbd5aa7860dc02645d1b8f349844c7b
+          persist-credentials: false
+          path: qualification-policy
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.15.2'
+      - name: Compare unmodified official Python bases with identical advisory coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          trial="$RUNNER_TEMP/base-advisory-comparison"
+          mkdir "$trial"
+          python -m venv "$trial/python"
+          "$trial/python/bin/python" -I - "$trial" "$GITHUB_WORKSPACE/qualification-policy/security/offline-ai/provision" <<'PY'
+          import collections
+          import json
+          import os
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          trial, policy = map(Path, sys.argv[1:])
+          sys.path.insert(0, str(policy))
+          import collect_vulnerabilities as collector
+
+          base_images = {
+              "trixie": "fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85",
+              "bookworm": "6cae5760197a96ea5d0a41ae2e045733c351d605c61148dd030aafdf4919e33a",
+          }
+          binary = collector.download_tool(trial)
+          env = {key: value for key, value in os.environ.items() if not key.startswith(("GRYPE_", "SYFT_"))}
+          env["GRYPE_DB_CACHE_DIR"] = str(trial / "database")
+          cli = [binary, "--config", collector.CONFIG]
+          version = json.loads(collector.command(cli + ["version", "-o", "json"], env))
+          assert version["version"].removeprefix("v") == collector.VERSION
+          db_hashes = []
+          for distribution, expected in base_images.items():
+              image = "docker.io/library/python@sha256:" + expected
+              collector.command(["docker", "pull", "--platform", "linux/amd64", image], env, timeout=180)
+              inspected = json.loads(collector.command(["docker", "image", "inspect", image], env))
+              assert len(inspected) == 1 and inspected[0]["Os"] == "linux" and inspected[0]["Architecture"] == "amd64"
+              assert any(reference.endswith("@sha256:" + expected) for reference in inspected[0]["RepoDigests"])
+              report_file = trial / (distribution + ".json")
+              collector.command(cli + ["docker:" + image, "--scope", "all-layers", "-o", "json", "--file", report_file], env, timeout=360)
+              report = json.loads(report_file.read_bytes())
+              assert report["source"]["target"]["imageID"] == inspected[0]["Id"]
+              counts = collections.Counter(match["vulnerability"]["severity"] for match in report["matches"])
+              fixes = collections.Counter(
+                  match["vulnerability"]["fix"]["state"] for match in report["matches"]
+                  if match["vulnerability"]["severity"] in ("Critical", "High")
+              )
+              database = json.loads(collector.command(cli + ["db", "status", "-o", "json"], env))
+              assert database["valid"] and not database["error"]
+              database_file = Path(database["path"]).resolve(strict=True)
+              assert database_file.is_relative_to(trial / "database")
+              db_hashes.append(collector.digest(database_file))
+              print(json.dumps({
+                  "distribution": distribution, "digest": expected, "matches": counts,
+                  "high_and_critical_fix_status": fixes, "ignored": len(report.get("ignoredMatches", [])),
+              }, sort_keys=True), flush=True)
+          assert db_hashes[0] == db_hashes[1], "The bases require the same advisory database"
+          print("Both official bases scanned using the same advisory database", flush=True)
+          PY
