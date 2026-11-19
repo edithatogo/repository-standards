@@ -21,13 +21,14 @@ track owners retain their work.
 - [x] Separate implemented candidates, observed targeted runs, pending receipts,
   already adequate approaches and legitimate owner holds.
 - [x] Record known full-gate failures without lowering their requirements.
-- [ ] Reconcile the remaining public implementation receipts and any repaired
-  candidate heads, then re-read their actual workflow outcomes.
+- [x] Reconcile all 20 public implementation receipts and repaired candidate
+  heads; retain pending campaigns as explicit open evidence rather than passes.
 - [x] Run the repository's Python 3.15.2 one-command policy suite: 296 tests
   discovered, 258 passed and 38 optional scanner capability skips, no failures.
   Those skips do not establish scanner execution; final-byte checks are recorded
   in the coordinating PR.
-- [ ] Publish the coordinating draft and observe its exact-head hosted checks.
+- [x] Publish [coordinating draft #155](https://github.com/edithatogo/repository-standards/pull/155).
+- [ ] Observe the coordinating draft's final-head hosted policy/privacy checks.
 - [ ] Reconcile consumer full gates, branch integration and receiving-main
   receipts before any rollout-acceptance claim or archival.
 
