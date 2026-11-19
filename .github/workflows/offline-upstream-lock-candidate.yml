@@ -1,4 +1,4 @@
-name: Inspect pinned Python base package dependencies
+name: Measure the Wolfi runtime candidate
 
 on:
   workflow_dispatch:
@@ -9,24 +9,97 @@ permissions:
 jobs:
   inspect:
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 15
     steps:
-      - name: Inspect removable packages in the immutable base
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: bd502d2a0264abdb75924fb5ce9b1c95f431ceb8
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.15.2'
+      - name: Assemble and inventory a diagnostic runtime
+        id: candidate
         shell: bash
+        env:
+          # Signature and linux/amd64 manifest verified before dispatch.
+          WOLFI_INDEX: cgr.dev/chainguard/wolfi-base@sha256:71f52fd289650f1d021d60ba11235550b1b5ce124f3797bd254ca70c4cef39f9
+          WOLFI_AMD64: cgr.dev/chainguard/wolfi-base@sha256:2d06fb2935825a63888248d29e28b944d12690d8ea320373f15f22cf5ac969d4
         run: |
           set -euo pipefail
-          base=docker.io/library/python@sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85
-          docker pull --platform linux/amd64 "$base"
-          docker run --rm -i --pull=never --network none "$base" bash -s <<'BASH'
-          set -euo pipefail
-          python --version
-          dpkg-query -W -f='${binary:Package} ${Version} essential=${Essential} protected=${Protected}\n' \
-            libsqlite3-0 libncursesw6 ncurses-base ncurses-bin libtinfo6 login libuuid1
-          for package in libsqlite3-0 libncursesw6 ncurses-base ncurses-bin libtinfo6 login libuuid1; do
-            if dpkg --dry-run --purge "$package"; then
-              printf 'Package purge is dependency-compatible %s\n' "$package"
-            else
-              printf 'Package purge is blocked %s\n' "$package"
-            fi
+          provision=security/offline-ai/provision
+          node="$(jq -er '.node.reference' "$provision/base-images.json")"
+          registry="$(jq -er '.registry.reference' "$provision/base-images.json")"
+          work="$RUNNER_TEMP/wolfi-probe"
+          mkdir -p "$work/context/apks" "$work/evidence"
+          docker pull --platform linux/amd64 "$WOLFI_INDEX"
+          docker pull --platform linux/amd64 "$WOLFI_AMD64"
+          test "$(docker image inspect --format '{{.Id}}' "$WOLFI_INDEX")" = \
+               "$(docker image inspect --format '{{.Id}}' "$WOLFI_AMD64")"
+          docker pull --platform linux/amd64 "$node"
+          docker pull --platform linux/amd64 "$registry"
+
+          # Signed package fetch is the only step with network access to Wolfi.
+          docker run --rm --pull=never -v "$work/context/apks:/apks" "$WOLFI_AMD64" \
+            apk --no-cache --repositories-file /dev/null \
+            --repository https://apk.cgr.dev/chainguard fetch --recursive --output /apks \
+            python-3.15=3.15.2_git20261113-r0 py3.15-pip=26.2.2-r3 \
+            bash=5.3-r9 coreutils=9.9-r1 findutils=4.11.0-r6 grep=3.12-r9 \
+            libgcc=16.2.0-r5 libstdc++=16.2.0-r5 libatomic=16.2.0-r5 libgomp=16.2.0-r5
+          (cd "$work/context/apks" && sha256sum ./*.apk) > "$work/evidence/apk-sha256.txt"
+
+          cat > "$work/context/Dockerfile" <<'DOCKERFILE'
+          ARG WOLFI
+          ARG NODE
+          FROM ${NODE} AS node
+          FROM ${WOLFI} AS runtime
+          RUN --network=none --mount=type=bind,source=apks,target=/apks,readonly \
+              apk --no-network --no-cache --repositories-file /dev/null add /apks/*.apk
+          COPY --from=node /usr/local/bin/node /usr/local/bin/node
+          COPY --from=node /usr/local/LICENSE /usr/local/share/doc/node/LICENSE
+          RUN --network=none ln -s /usr/bin/python3.15 /usr/local/bin/python
+          FROM scratch
+          COPY --from=runtime / /
+          ENV LANG=C.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          CMD ["python", "--version"]
+          DOCKERFILE
+          docker build --network none --pull=false --build-arg "WOLFI=$WOLFI_AMD64" \
+            --build-arg "NODE=$node" --tag localhost/offline-ai-security:wolfi-diagnostic "$work/context"
+          docker run --rm --pull=never --network none --read-only --cap-drop ALL \
+            --security-opt no-new-privileges localhost/offline-ai-security:wolfi-diagnostic \
+            /bin/bash -ec 'python -I -c "import bz2, lzma, ssl, sqlite3, sys, zlib; assert sys.version_info[:3] == (3, 15, 2); print(sys.version, ssl.OPENSSL_VERSION)" && python -I -m pip --version && node --version && apk info -v | sort' \
+            > "$work/evidence/runtime.txt"
+          cat "$work/evidence/runtime.txt"
+
+          docker run --detach --rm --name wolfi-probe-registry --read-only --cap-drop ALL \
+            --security-opt no-new-privileges --publish 127.0.0.1:80:5000 \
+            --tmpfs /var/lib/registry:rw,nosuid,noexec,mode=1777 \
+            --env REGISTRY_HTTP_ADDR=0.0.0.0:5000 "$registry" >/dev/null
+          for _ in {1..20}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1/v2/; then break; fi
+            sleep 1
           done
-          BASH
+          docker push localhost/offline-ai-security:wolfi-diagnostic
+          image="$(docker image inspect localhost/offline-ai-security:wolfi-diagnostic --format '{{index .RepoDigests 0}}')"
+          [[ "$image" =~ ^localhost/offline-ai-security@sha256:[0-9a-f]{64}$ ]]
+          printf '%s\n' "$image" > "$work/evidence/image.txt"
+          printf 'image=%s\n' "$image" >> "$GITHUB_OUTPUT"
+      - name: Run the existing all-layer Grype collector
+        env:
+          IMAGE: ${{ steps.candidate.outputs.image }}
+        run: |
+          python -I security/offline-ai/provision/collect_vulnerabilities.py \
+            "$IMAGE" "$RUNNER_TEMP/wolfi-probe/evidence" "$RUNNER_TEMP/wolfi-grype"
+          jq -c '{
+            ignored: (.ignoredMatches|length),
+            serious: [.matches[]|select(.vulnerability.severity|IN("Critical","High")) |
+                       {package:.artifact.name, advisory:.vulnerability.id, state:.vulnerability.fix.state}]
+          }' "$RUNNER_TEMP/wolfi-probe/evidence/vulnerability/grype.json"
+      - name: Retain diagnostic receipts
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: wolfi-runtime-probe-${{ github.run_id }}
+          path: ${{ runner.temp }}/wolfi-probe/evidence/
+          if-no-files-found: warn
+          retention-days: 14
