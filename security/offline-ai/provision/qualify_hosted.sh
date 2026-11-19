@@ -189,11 +189,11 @@ base_image="$(docker image inspect localhost/offline-ai-base:candidate --format 
 printf '%s\n' "$base_image" > "$evidence/base-image.txt"
 docker run --rm --pull=never --network none --read-only --cap-drop ALL \
   --security-opt no-new-privileges --pids-limit 32 --user 65534:65534 "$base_image" \
-  sh -eu -c 'git --version; sha256sum /usr/local/bin/git; apk info -v zlib' \
+  sh -eu -c 'git --version; sha256sum /usr/local/bin/git; apk --repositories-file /dev/null info -v zlib' \
   > "$evidence/git-runtime.txt"
 docker run --rm --pull=never --network none --read-only --cap-drop ALL \
   --security-opt no-new-privileges --pids-limit 32 --user 65534:65534 "$base_image" \
-  sh -eu -c 'apk info -v | LC_ALL=C sort' > "$evidence/wolfi-runtime-packages.txt"
+  sh -eu -c 'apk --repositories-file /dev/null info -v | LC_ALL=C sort' > "$evidence/wolfi-runtime-packages.txt"
 
 stage=offline-image-build
 git --no-replace-objects -C "$policy_root" archive "$policy_sha" security/offline-ai \

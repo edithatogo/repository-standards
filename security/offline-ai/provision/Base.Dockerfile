@@ -35,7 +35,7 @@ RUN --network=none --mount=type=bind,source=os,target=/opt/offline-os,readonly \
       python-3.15=3.15.2_git20261113-r0 py3.15-pip=26.2.2-r3 \
       bash=5.3-r14 coreutils=9.12-r8 findutils=4.11.0-r6 grep=3.12-r12 \
       libgcc=16.2.0-r5 libstdc++=16.2.0-r5 libatomic=16.2.0-r5 libgomp=16.2.0-r5 \
-    && apk info -v | LC_ALL=C sort > /tmp/wolfi-inventory \
+    && apk --repositories-file /dev/null info -v | LC_ALL=C sort > /tmp/wolfi-inventory \
     && cmp /tmp/wolfi-inventory /opt/offline-os/inventory.txt \
     && rm /tmp/wolfi-inventory \
     && python3.15 -I -m venv /opt/offline-venv \
@@ -45,9 +45,9 @@ RUN --network=none --mount=type=bind,source=os,target=/opt/offline-os,readonly \
     && git --version \
     && test ! -e "$(git --exec-path)/git-remote-http" \
     && test ! -e "$(git --exec-path)/git-remote-https" \
-    && linked="$(ldd /usr/local/bin/git)" \
+    && linked="$(/lib64/ld-linux-x86-64.so.2 --list /usr/local/bin/git)" \
     && ! printf '%s\n' "$linked" | grep -Ei 'libcurl|not found' \
-    && packages="$(apk info)" \
+    && packages="$(apk --repositories-file /dev/null info)" \
     && ! printf '%s\n' "$packages" | grep -E '^(git|libcurl[^[:space:]]*)$' \
     && test ! -e /usr/local/bin/npm \
     && test ! -e /usr/local/bin/npx \
