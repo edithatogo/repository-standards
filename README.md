@@ -38,6 +38,13 @@ records implementation and aggregate deployment evidence. Its inventory includes
 active forks as well as owned projects; archived repositories remain separately
 accounted for. Private repository details are not published here.
 
+## Grype dependency and release scanning
+
+The [Grype rollout](docs/grype-rollout.md) supplies checksum-pinned vulnerability
+scanning for resolved SBOMs and immutable image candidates, with advisory PR
+findings, critical release gates and retained tool/database evidence. Consumer
+publication and existing qualification gates remain separate.
+
 ## Community and repository bootstrap
 
 The [community/bootstrap standard](docs/community-bootstrap-standard.md) defines

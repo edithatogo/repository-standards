@@ -1,0 +1,34 @@
+name: Download immutable released SBOM
+description: Select a published release once and verify its SBOM by asset ID, size and SHA-256
+inputs:
+  sbom-asset:
+    description: Exact JSON asset filename in the latest stable release
+    required: true
+  output-directory:
+    description: New or empty download directory
+    required: true
+outputs:
+  sbom:
+    description: Verified downloaded SBOM path
+    value: ${{ steps.download.outputs.sbom }}
+  source-sha:
+    description: Observed release tag commit (does not establish build provenance)
+    value: ${{ steps.download.outputs.source-sha }}
+  evidence-directory:
+    description: SBOM and immutable asset metadata
+    value: ${{ steps.download.outputs.evidence-directory }}
+runs:
+  using: composite
+  steps:
+    - id: download
+      shell: bash
+      env:
+        RELEASE_ACTION_PATH: ${{ github.action_path }}
+        RELEASE_SBOM_ASSET: ${{ inputs.sbom-asset }}
+        RELEASE_SBOM_OUTPUT: ${{ inputs.output-directory }}
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+        python3 "$RELEASE_ACTION_PATH/../../../scripts/released_sbom.py" \
+          --repository "$GITHUB_REPOSITORY" --asset "$RELEASE_SBOM_ASSET" \
+          --output-directory "$RELEASE_SBOM_OUTPUT"
