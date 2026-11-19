@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/innovate
-          ref: 19603ac397a8e199eb5792559587fbf366f3df80
+          ref: 8a0021377ef2aab4dd07504bd619cd366fd96361
           persist-credentials: false
           path: consumer
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
