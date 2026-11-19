@@ -1009,3 +1009,20 @@ two unneeded Python curses extensions linked against it. The 15 package
 preparation tests and nine subtests passed locally. The hosted canary must
 recheck Innovate `abd1bc0d0f2da96bd965e3e6441dd1b23936e286` and collect the
 complete advisory report for the rebuilt image.
+
+### Qualify a signed Wolfi runtime candidate
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet from
+`6fe21a3c19a3d1bf923fb976c07d32227d8bbd11` in the hosted policy
+worktree for draft PR #152. Scope is the hosted base preparation, signed image
+and package inputs, the Innovate canary target and the immutable policy pin.
+
+Canary `44493770473` passed all eight runtime controls and the consumer
+checks. Its SPDX inventory excluded libncursesw6. All-layer Grype recorded
+76 high findings, zero critical and zero ignored. Diagnostic run
+`44497993455` installed the verified public Wolfi packages with no network
+and used the same database digest. Grype identified Wolfi, reporting zero
+high and critical findings and eight lower-severity matches. Cosign verified
+the vendor's signed index and the hosted runner confirmed its amd64
+manifest resolves to the same image. Exercise the complete scanner, offline
+controls and Innovate canary using these exact base and package bytes.

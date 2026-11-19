@@ -73,10 +73,25 @@ unset DOCKER_CONTEXT
 [[ "$(docker info --format '{{.OSType}}')" = linux ]] || exit 2
 docker version --format '{{json .}}' > "$evidence/docker-version.json"
 
-# Acquire only the reviewed Debian runtime closure before the offline build.
+# The vendor index authenticates the exact APKs during the network-denied installation.
 stage=os-package-preparation
-python -I "$policy_root/security/offline-ai/provision/prepare_os_packages.py" \
-  --destination "$destination/base-context/os" --receipt "$evidence/os-packages.json"
+provision="$policy_root/security/offline-ai/provision"
+apk_root="$destination/base-context/os"
+apk_repository=https://apk.cgr.dev/chainguard/x86_64
+mkdir -p "$apk_root/x86_64"
+while read -r digest member; do
+  [[ "$digest" =~ ^[0-9a-f]{64}$ && "$member" =~ ^\./[a-zA-Z0-9][a-zA-Z0-9.+_-]+\.apk$ ]] || exit 2
+  curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+    --max-time 90 --max-filesize 67108864 "$apk_repository/${member#./}" \
+    --output "$apk_root/x86_64/${member#./}"
+done < "$provision/wolfi-packages.sha256"
+(cd "$apk_root/x86_64" && sha256sum --check "$provision/wolfi-packages.sha256")
+curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+  --max-time 90 --max-filesize 33554432 "$apk_repository/APKINDEX.tar.gz" \
+  --output "$apk_root/x86_64/APKINDEX.tar.gz"
+(cd "$apk_root/x86_64" && sha256sum APKINDEX.tar.gz) > "$evidence/wolfi-index.txt"
+cp "$provision/wolfi-inventory.txt" "$apk_root/inventory.txt"
+cp "$provision/wolfi-packages.sha256" "$evidence/wolfi-package-hashes.txt"
 
 stage=git-source-preparation
 git_lock="$policy_root/security/offline-ai/provision/git-source.json"
@@ -121,7 +136,11 @@ with open(sys.argv[1], encoding="utf-8") as stream:
     data = json.load(stream)
 if data.get("schema_version") != 1 or data.get("architecture") != "linux/amd64":
     raise SystemExit(2)
-for name, repository in (("python", "python"), ("node", "node"),
+wolfi = data["wolfi"]["reference"]
+if not re.fullmatch(r"cgr\.dev/chainguard/wolfi-base@sha256:[0-9a-f]{64}", wolfi):
+    raise SystemExit(2)
+print(wolfi)
+for name, repository in (("node", "node"),
                          ("registry", "registry"), ("git_builder", "rust")):
     ref = data[name]["reference"]
     if not re.fullmatch(r"docker\.io/library/" + repository + r"@sha256:[0-9a-f]{64}", ref):
@@ -130,7 +149,7 @@ for name, repository in (("python", "python"), ("node", "node"),
 PY
 )
 [[ "${#images[@]}" = 4 ]] || exit 2
-python_image="${images[0]}"
+wolfi_image="${images[0]}"
 node_image="${images[1]}"
 registry_image="${images[2]}"
 for image in "${images[@]}"; do
@@ -157,7 +176,7 @@ done
 
 stage=offline-base-build
 docker build --network none --pull=false \
-  --build-arg "PYTHON_IMAGE=$python_image" --build-arg "NODE_IMAGE=$node_image" \
+  --build-arg "WOLFI_IMAGE=$wolfi_image" --build-arg "NODE_IMAGE=$node_image" \
   --build-arg "GIT_BUILD_IMAGE=${images[3]}" --build-arg "GIT_VERSION=${git_source[0]}" \
   --build-arg "GIT_ARCHIVE_SHA256=${git_source[3]}" \
   --build-arg "GIT_CARGO_LOCK_SHA256=${git_source[4]}" \
@@ -170,8 +189,11 @@ base_image="$(docker image inspect localhost/offline-ai-base:candidate --format 
 printf '%s\n' "$base_image" > "$evidence/base-image.txt"
 docker run --rm --pull=never --network none --read-only --cap-drop ALL \
   --security-opt no-new-privileges --pids-limit 32 --user 65534:65534 "$base_image" \
-  sh -eu -c 'git --version; sha256sum /usr/local/bin/git; dpkg-query -W zlib1g' \
+  sh -eu -c 'git --version; sha256sum /usr/local/bin/git; apk info -v zlib' \
   > "$evidence/git-runtime.txt"
+docker run --rm --pull=never --network none --read-only --cap-drop ALL \
+  --security-opt no-new-privileges --pids-limit 32 --user 65534:65534 "$base_image" \
+  sh -eu -c 'apk info -v | LC_ALL=C sort' > "$evidence/wolfi-runtime-packages.txt"
 
 stage=offline-image-build
 git --no-replace-objects -C "$policy_root" archive "$policy_sha" security/offline-ai \

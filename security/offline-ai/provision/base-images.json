@@ -19,5 +19,12 @@
   "git_builder": {
     "reference": "docker.io/library/rust@sha256:ebc54bef33ec8f9a5cd05799366010f35efbb73b354fb4f2cb086ec6b9460ef5",
     "source": "https://hub.docker.com/v2/repositories/library/rust/tags/1.100.0-trixie"
+  },
+  "wolfi": {
+    "reference": "cgr.dev/chainguard/wolfi-base@sha256:2d06fb2935825a63888248d29e28b944d12690d8ea320373f15f22cf5ac969d4",
+    "signed_index": "cgr.dev/chainguard/wolfi-base@sha256:71f52fd289650f1d021d60ba11235550b1b5ce124f3797bd254ca70c4cef39f9",
+    "signer": "https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main",
+    "source": "https://images.chainguard.dev/directory/image/wolfi-base/provenance",
+    "expected_version": "3.15.2"
   }
 }

@@ -7,21 +7,19 @@ control plane.
 
 ## Inputs and trust
 
-`base-images.json` fixes the Linux amd64 Docker Official Images by digest. Its
-source URLs record the metadata used to select those immutable manifests.
-`Base.Dockerfile` combines the Python 3.15.2 slim Debian 13 image with Node 24
-and a source-built Git. The build verifies the pinned Git release archive and
-compiles it offline without its HTTP transport. It preserves Git's licence.
-Online preparation downloads the three Debian packages pinned by URL, version,
-size and SHA-256 in `os-packages.json`, including the fixed zlib package.
-The offline base build checks the exact starting dpkg database, installs the
-verified packages and checks the resulting versions and `dpkg --audit`.
-The build purges the unused `mount` and `libncursesw6` packages with normal
-Debian dependency checks. It also removes the two optional Python curses
-extensions that link against the removed library.
-It copies the updated filesystem, including Debian's installed package database
-and notices, into a fresh runtime layer. Global npm and npx are omitted because
-the scanner uses the separate reviewed Promptfoo installation.
+`base-images.json` pins the Linux amd64 Wolfi, Node, Git builder and registry
+manifests. Its Wolfi entry also records the signed multi-architecture index
+and the verified publishing workflow. Online preparation checks the public
+package bytes against `wolfi-packages.sha256`. During the offline build, apk
+authenticates the vendor's signed index and verifies packages from the mounted
+local repository. The complete installed package inventory must match
+`wolfi-inventory.txt`. A separate virtual environment uses Python 3.15.2
+and the verified wheel inventory.
+
+The build verifies the pinned Git release archive and compiles it offline
+without HTTP transport. It preserves package metadata and licences in a fresh
+runtime layer. Node 24 runs the separate reviewed Promptfoo installation.
+The Debian catalog and its tests retain the earlier Trixie qualification.
 
 The scanner/model preparer separately verifies source hashes, committed
 dependency locks and their complete supplied-asset inventory. The new image must
@@ -37,7 +35,7 @@ the committed approved locks and rejects missing or changed input bytes.
 ## Execute
 
 Use a clean checkout of the exact policy commit on an isolated Linux x64 host
-with Docker, Python 3.15.2, Node 24.22.1, uv 0.13.8, `dpkg-deb` and sufficient
+with Docker, Python 3.15.2, Node 24.22.1, uv 0.13.8 and sufficient
 disk space.
 The local Docker daemon must enforce cgroup v2 memory, process and CPU limits.
 Port 80 on host loopback must be available for the temporary local registry.

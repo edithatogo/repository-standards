@@ -1,5 +1,5 @@
 ARG NODE_IMAGE
-ARG PYTHON_IMAGE
+ARG WOLFI_IMAGE
 ARG GIT_BUILD_IMAGE
 FROM ${NODE_IMAGE} AS node
 FROM ${GIT_BUILD_IMAGE} AS git-build
@@ -24,38 +24,46 @@ RUN --network=none --mount=type=bind,source=git,target=/opt/git-source,readonly 
     && test "$(/git-runtime/usr/local/bin/git --version)" = "git version $GIT_VERSION" \
     && install -D -m 0644 /tmp/git-source/COPYING /git-runtime/usr/local/share/doc/git/COPYING
 
-FROM ${PYTHON_IMAGE} AS runtime-files
+FROM ${WOLFI_IMAGE} AS runtime-files
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 COPY --from=node /usr/local/LICENSE /usr/local/share/doc/node/LICENSE
 COPY --from=git-build /git-runtime/usr/local/ /usr/local/
-# The prepared package bytes stay in a read-only build mount; dpkg preserves
-# the official package database and licenses in the resulting runtime image.
+# apk authenticates the original vendor index and validates each package
+# against it. The vendor bytes, including metadata, stay mounted read-only.
 RUN --network=none --mount=type=bind,source=os,target=/opt/offline-os,readonly \
-    python -I /opt/offline-os/prepare_os_packages.py --install /opt/offline-os \
-      --receipt /usr/local/share/offline-ai/os-packages.json \
-    && python -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)' \
-    && extension="$(python -I -c 'import sysconfig; print(sysconfig.get_config_var("EXT_SUFFIX"))')" \
-    && rm -- "/usr/local/lib/python3.15/lib-dynload/_curses$extension" \
-             "/usr/local/lib/python3.15/lib-dynload/_curses_panel$extension" \
-    && python -I -c 'from importlib.util import find_spec; assert find_spec("_curses") is find_spec("_curses_panel") is None' \
+    apk --no-network --no-cache --repositories-file /dev/null --repository /opt/offline-os add \
+      python-3.15=3.15.2_git20261113-r0 py3.15-pip=26.2.2-r3 \
+      bash=5.3-r14 coreutils=9.12-r8 findutils=4.11.0-r6 grep=3.12-r12 \
+      libgcc=16.2.0-r5 libstdc++=16.2.0-r5 libatomic=16.2.0-r5 libgomp=16.2.0-r5 \
+    && apk info -v | LC_ALL=C sort > /tmp/wolfi-inventory \
+    && cmp /tmp/wolfi-inventory /opt/offline-os/inventory.txt \
+    && rm /tmp/wolfi-inventory \
+    && python3.15 -I -m venv /opt/offline-venv \
+    && /opt/offline-venv/bin/python -I -c 'import ssl, sys, zlib; assert sys.version_info[:3] == (3, 15, 2)' \
+    && /opt/offline-venv/bin/python -I -m pip --version \
     && node -e 'if (Number(process.versions.node.split(".")[0]) !== 24) process.exit(2)' \
     && git --version \
     && test ! -e "$(git --exec-path)/git-remote-http" \
     && test ! -e "$(git --exec-path)/git-remote-https" \
     && linked="$(ldd /usr/local/bin/git)" \
     && ! printf '%s\n' "$linked" | grep -Ei 'libcurl|not found' \
-    && packages="$(dpkg-query -W -f='${Package}\n')" \
-    && ! printf '%s\n' "$packages" | grep -E '^(git|libcurl[^[:space:]]*|libncursesw6)$' \
-    && ! command -v mount && ! command -v umount \
+    && packages="$(apk info)" \
+    && ! printf '%s\n' "$packages" | grep -E '^(git|libcurl[^[:space:]]*)$' \
     && test ! -e /usr/local/bin/npm \
     && test ! -e /usr/local/bin/npx \
     && test ! -e /usr/local/lib/node_modules
 
-# Copy the patched runtime files into a new layer, including the Debian
-# package database. The earlier zlib bytes stay in the build stage.
+RUN --network=none set -eu; \
+    for tool in mount umount; do \
+      path="$(command -v "$tool" || true)"; \
+      if [ -n "$path" ]; then test -L "$path" && rm -- "$path" || exit 2; fi; \
+    done; \
+    ! command -v mount && ! command -v umount
+
+# Preserve the installed apk package inventory and all package notices.
 FROM scratch
 COPY --from=runtime-files / /
 ENV LANG=C.UTF-8 \
-    PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    PATH=/opt/offline-venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENTRYPOINT []
 CMD ["python", "--version"]
