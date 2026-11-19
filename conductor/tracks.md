@@ -33,6 +33,14 @@ for exact-head evidence, superseded PRs and open gates.
   Shared pinned Presidio/Gitleaks tooling; inventory complete, implementation in
   progress, consumer deployment and execution pending. Public evidence is aggregate-only.
 
+## Public fuzz and property rollout (20 November 2026)
+
+- [~] **Bounded consumer campaigns and revision-bound execution receipts**
+  [Track](tracks/fuzz_property_rollout_20261120/spec.md) ·
+  [Execution ledger](tracks/fuzz_property_rollout_20261120/ledger.md).
+  Public source candidates and targeted receipts are recorded separately from
+  full repository gates, integration and release/scientific acceptance.
+
 ## Community and repository bootstrap (15 November 2026)
 
 - [~] **Inherited community guidance, bounded validation and starter setup**
