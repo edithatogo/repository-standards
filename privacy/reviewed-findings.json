@@ -1498,6 +1498,426 @@
         "https://github.com/edithatogo/innovate/blob/5ee03ddc073b9c3bcf91efdcd62923d87748920f/conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact.json#L506",
         "https://github.com/edithatogo/innovate/blob/5ee03ddc073b9c3bcf91efdcd62923d87748920f/scripts/generate_api_reference.py"
       ]
+    },
+    {
+      "commit": "6579591366d746cde267bfae8950219a56da6855",
+      "path": "conductor/tracks/mchs_source_adapters_20261108/spec.md",
+      "rule_id": "generic-api-key",
+      "line": 21,
+      "value_sha256": "aac01ad510aecabf5c2ab66c3fcbe7fbc7d1fb5faf14179f02d607b5ebcdf781",
+      "reason": "Two ordinary words joined by a slash in a public MCHS adapter requirement about quotation dates.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/6579591366d746cde267bfae8950219a56da6855/conductor/tracks/mchs_source_adapters_20261108/spec.md#L21",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/6fe967f9ab076e1ea10f41a3ba59f26ea14f557b"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr21/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 541,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-1/pr21/qualification.json#L541",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr22/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 789,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-1/pr22/qualification.json#L789",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr23/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 436,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-1/pr23/qualification.json#L436",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr24/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 542,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-1/pr24/qualification.json#L542",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr24/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 568,
+      "value_sha256": "0c2e509d7e4f412b1504226ce8354cda1cc04d4a2d87f60517c596dad28b7ffb",
+      "reason": "SHA-256 of the exact synthetic duplicate-JSON-key fixture recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-1/pr24/qualification.json#L568",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/a20d3052a8ace92b365ff2650fca6ff45ba2d4b4"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr25/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 964,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-1/pr25/qualification.json#L964",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr26/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 1648,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-1/pr26/qualification.json#L1648",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr27/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 846,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-1/pr27/qualification.json#L846",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr21/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 541,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-2/pr21/qualification.json#L541",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr22/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 789,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-2/pr22/qualification.json#L789",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr23/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 436,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-2/pr23/qualification.json#L436",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr24/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 542,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-2/pr24/qualification.json#L542",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr24/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 568,
+      "value_sha256": "0c2e509d7e4f412b1504226ce8354cda1cc04d4a2d87f60517c596dad28b7ffb",
+      "reason": "SHA-256 of the exact synthetic duplicate-JSON-key fixture recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-2/pr24/qualification.json#L568",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/a20d3052a8ace92b365ff2650fca6ff45ba2d4b4"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr25/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 964,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-2/pr25/qualification.json#L964",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr26/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 1648,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-2/pr26/qualification.json#L1648",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr27/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 846,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/attempt-2/pr27/qualification.json#L846",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "87afe5a5adfae2f8869accc00b5de9a583b30b54",
+      "path": "conductor/roadmap-evidence-2026-11-15/owner-followup/pr21/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 539,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/87afe5a5adfae2f8869accc00b5de9a583b30b54/conductor/roadmap-evidence-2026-11-15/owner-followup/pr21/qualification.json#L539",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr21/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 541,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-1/pr21/qualification.json#L541",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr22/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 789,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-1/pr22/qualification.json#L789",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr23/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 436,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-1/pr23/qualification.json#L436",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr24/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 542,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-1/pr24/qualification.json#L542",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr24/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 568,
+      "value_sha256": "0c2e509d7e4f412b1504226ce8354cda1cc04d4a2d87f60517c596dad28b7ffb",
+      "reason": "SHA-256 of the exact synthetic duplicate-JSON-key fixture recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-1/pr24/qualification.json#L568",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/a20d3052a8ace92b365ff2650fca6ff45ba2d4b4"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr25/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 964,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-1/pr25/qualification.json#L964",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr26/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 1648,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-1/pr26/qualification.json#L1648",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-1/pr27/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 846,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-1/pr27/qualification.json#L846",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr21/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 541,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-2/pr21/qualification.json#L541",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr22/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 789,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-2/pr22/qualification.json#L789",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr23/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 436,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-2/pr23/qualification.json#L436",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr24/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 542,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-2/pr24/qualification.json#L542",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr24/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 568,
+      "value_sha256": "0c2e509d7e4f412b1504226ce8354cda1cc04d4a2d87f60517c596dad28b7ffb",
+      "reason": "SHA-256 of the exact synthetic duplicate-JSON-key fixture recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-2/pr24/qualification.json#L568",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/a20d3052a8ace92b365ff2650fca6ff45ba2d4b4"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr25/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 964,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-2/pr25/qualification.json#L964",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr26/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 1648,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-2/pr26/qualification.json#L1648",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/attempt-2/pr27/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 846,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/attempt-2/pr27/qualification.json#L846",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
+    },
+    {
+      "commit": "d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4",
+      "path": "conductor/roadmap-evidence-2026-11-15/owner-followup/pr21/qualification.json",
+      "rule_id": "generic-api-key",
+      "line": 539,
+      "value_sha256": "00984fbaa3526b71c945dd2fc0593da8a667cce3f9e09310b3c9f59337e4c847",
+      "reason": "SHA-256 of the exact privacy workflow file recorded in this qualification receipt. The frozen source bytes reproduce the recorded digest.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/dapane/blob/d73a847b2e9b62fbc6672b4bc8eaed6b6f5581a4/conductor/roadmap-evidence-2026-11-15/owner-followup/pr21/qualification.json#L539",
+        "https://api.github.com/repos/edithatogo/dapane/git/blobs/0c75631be3254e4077f06b2a12a30a44c0d37ae6"
+      ]
     }
   ]
 }
