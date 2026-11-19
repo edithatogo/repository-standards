@@ -942,3 +942,9 @@ indicates findings. The Innovate diagnostic-output repair at `60bfa505cf4543c236
 keeps the full file receipts and limits the console output of the four
 active commands. Rescan this exact PR #684 head. The two hash-bound JOSS
 source-evidence files keep their attested bytes and remain in scope.
+
+The first targeted rescan, `44424922110`, verified six active corrections
+and located the last active finding at the benchmark duplicate-path error.
+Retain the benchmark count summary and existing receipt on collision.
+The consumer revision `19603ac397a8e199eb5792559587fbf366f3df80` has the targeted error repair
+and a regression assertion on the collision path.
