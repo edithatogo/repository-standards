@@ -1,0 +1,105 @@
+name: Reusable OpenGrep SAST
+
+on:
+  workflow_call:
+    inputs:
+      source_path:
+        description: "Repository-relative Python source directory"
+        required: false
+        type: string
+        default: "."
+
+permissions:
+  contents: read
+
+jobs:
+  opengrep:
+    name: OpenGrep SAST (Python)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate source root (no symlink or parent traversal)
+        env:
+          SCAN_SOURCE_PATH: ${{ inputs.source_path }}
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          root = Path.cwd().resolve()
+          raw = os.environ["SCAN_SOURCE_PATH"]
+          source = Path(raw)
+          if not raw or raw.startswith("-") or source.is_absolute() or ".." in source.parts:
+              raise SystemExit("Invalid repository-relative scan directory")
+          resolved = (root / source).resolve()
+          if not resolved.is_relative_to(root) or not resolved.is_dir():
+              raise SystemExit("Scan directory absent or outside checkout")
+          print("Scan target checked")
+          PY
+      - name: Acquire the unchanged SHA-256-pinned Linux OpenGrep CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/opengrep-sast"
+          curl --fail --silent --show-error --location --proto '=https' \
+            --proto-redir '=https' --tlsv1.2 --retry 2 --max-time 120 \
+            --max-filesize 67108864 \
+            'https://github.com/opengrep/opengrep/releases/download/v1.33.1/opengrep_manylinux_x86' \
+            --output "$RUNNER_TEMP/opengrep-sast/opengrep"
+          printf '%s  %s\n' \
+            '46e8133cc490f9f50518061590ce2f6be5a08afaeda034471c0ceda4b3899808' \
+            "$RUNNER_TEMP/opengrep-sast/opengrep" | sha256sum --check --status
+          chmod 0500 "$RUNNER_TEMP/opengrep-sast/opengrep"
+          test "$("$RUNNER_TEMP/opengrep-sast/opengrep" --version)" = '1.33.1'
+      - name: Prove synthetic positive and safe controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'eval("1+1")\n' > "$RUNNER_TEMP/opengrep-bad.py"
+          printf 'print("safe")\n' > "$RUNNER_TEMP/opengrep-good.py"
+          set +e
+          "$RUNNER_TEMP/opengrep-sast/opengrep" scan --quiet --strict --error \
+            --pattern 'eval(...)' --lang python "$RUNNER_TEMP/opengrep-bad.py" >/dev/null 2>&1
+          detected=$?
+          set -e
+          test "$detected" -eq 1 || { echo "Positive control did not trigger" >&2; exit 1; }
+          "$RUNNER_TEMP/opengrep-sast/opengrep" scan --quiet --strict --error \
+            --pattern 'eval(...)' --lang python "$RUNNER_TEMP/opengrep-good.py" >/dev/null 2>&1
+      - name: Run full tracked Python source scan without uploading raw findings
+        env:
+          SCAN_SOURCE_PATH: ${{ inputs.source_path }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          "$RUNNER_TEMP/opengrep-sast/opengrep" scan --json --strict --error \
+            --config p/python --severity WARNING "$SCAN_SOURCE_PATH" \
+            > "$RUNNER_TEMP/opengrep-sast/report.json" \
+            2> "$RUNNER_TEMP/opengrep-sast/diagnostics.txt"
+          scanner_exit=$?
+          set -e
+          SCANNER_EXIT="$scanner_exit" python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          report_path = Path(os.environ["RUNNER_TEMP"]) / "opengrep-sast/report.json"
+          try:
+              data = json.loads(report_path.read_text(encoding="utf-8"))
+          except (OSError, ValueError) as exc:
+              raise SystemExit("Missing or invalid OpenGrep JSON report") from exc
+          if not isinstance(data, dict):
+              raise SystemExit("OpenGrep report is not a JSON object")
+          results = data.get("results")
+          errors = data.get("errors")
+          paths = data.get("paths")
+          scanned = paths.get("scanned") if isinstance(paths, dict) else None
+          if not isinstance(results, list) or not isinstance(errors, list):
+              raise SystemExit("OpenGrep result or error inventory is incomplete")
+          if not isinstance(scanned, list) or not scanned:
+              raise SystemExit("OpenGrep did not demonstrate nonempty scan coverage")
+          print("Scanned files: %s, findings: %s, analysis errors: %s" % (len(scanned), len(results), len(errors)))
+          if errors or int(os.environ["SCANNER_EXIT"]) != 0:
+              raise SystemExit("OpenGrep blocking findings or analysis errors; inspect locally")
+          PY
