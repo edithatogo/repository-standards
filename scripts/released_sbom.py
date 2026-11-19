@@ -69,7 +69,9 @@ def main() -> int:
         if ref["type"] != "commit" or not re.fullmatch(r"[0-9a-f]{40}", ref["sha"]):
             raise ValueError("release tag did not resolve to a commit")
         evidence.update(observed_tag_commit=ref["sha"], stage="download")
-        path = output / args.asset
+        # Downloaded asset names cannot collide with our evidence receipt.
+        path = output / "sbom" / args.asset
+        path.parent.mkdir()
         with path.open("wb") as stream:
             subprocess.run(["gh", "api", f"repos/{args.repository}/releases/assets/{asset['id']}",
                             "--header", "Accept: application/octet-stream"], stdout=stream, check=True, timeout=180)

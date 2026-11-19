@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 import os
 import tempfile
@@ -72,3 +73,24 @@ class ReleaseAssetTests(unittest.TestCase):
             self.assertEqual(receipt["asset_id"], 42)
             self.assertEqual(receipt["observed_size"], len(b"substituted bytes"))
             self.assertNotIn("sbom=", gh_output.read_text())
+
+    def test_asset_named_like_receipt_is_not_overwritten(self):
+        payload = b'{"bomFormat":"CycloneDX"}'
+        release = copy.deepcopy(self.release)
+        release["tag_name"] = "v1.0"
+        release["assets"][0].update(name="release-input.json", size=len(payload), digest="sha256:" + hashlib.sha256(payload).hexdigest())
+        def download(*args, **kwargs):
+            kwargs["stdout"].write(payload)
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "evidence"
+            gh_output = Path(temp) / "outputs"
+            with patch.dict(os.environ, {"GITHUB_OUTPUT": str(gh_output)}), \
+                 patch("released_sbom.api", side_effect=[release, {"object": {"type": "commit", "sha": "a" * 40}}]), \
+                 patch("released_sbom.subprocess.run", side_effect=download), \
+                 patch("sys.argv", ["released_sbom", "--repository", "example/tool", "--asset", "release-input.json", "--output-directory", str(output)]):
+                self.assertEqual(main(), 0)
+            receipt = json.loads((output / "release-input.json").read_text())
+            self.assertTrue(receipt["input_verified"])
+            downloaded = output / "sbom/release-input.json"
+            self.assertEqual(downloaded.read_bytes(), payload)
+            self.assertIn(f"sbom={downloaded}", gh_output.read_text())
