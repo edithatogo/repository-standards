@@ -983,3 +983,12 @@ with the same Grype database. Bookworm reported three critical findings
 and 69 high. Trixie reported zero critical and 78 high before runtime
 remediation. Keep Trixie for the canary. Debian marks the login package
 protected. The current candidate still needs image vulnerability review.
+
+Run `44486965224` again passed hosted Semgrep and Opengrep. Its private
+test report identified `test_verify_assets.test_build_wrapper_runs_verified_bundle_before_docker`.
+The fixture now records the same Docker calls through the installed
+interpreter. It still checks the verified vendor before build and the
+immutable base and network-denied build arguments. The synthetic asset and
+socket permissions are now explicit. The same 106 tests pass locally with
+umask 077. The next hosted run repeats the full controls on Innovate
+`2b0eac8e76b05d8e7cb71dd7f2ec53b4bb9aab19`.
