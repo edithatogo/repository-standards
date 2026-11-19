@@ -186,7 +186,8 @@ jobs:
                   if match["vulnerability"]["severity"] in ("Critical", "High")
               )
               database = json.loads(collector.command(cli + ["db", "status", "-o", "json"], env))
-              assert database["valid"] and not database["error"]
+              assert database.get("valid") is True and not database.get("error")
+              assert database.get("built") and database.get("schemaVersion") and database.get("from")
               database_file = Path(database["path"]).resolve(strict=True)
               assert database_file.is_relative_to(trial / "database")
               db_hashes.append(collector.digest(database_file))
