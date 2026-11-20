@@ -32,7 +32,15 @@ PIN = re.compile(r"([A-Za-z0-9][A-Za-z0-9_.-]*)==([A-Za-z0-9][A-Za-z0-9.+!-]*)\Z
 ALLOWED_HOSTS = {"github.com", "files.pythonhosted.org", "download-r2.pytorch.org"}
 POLICY_INPUTS = {
     "privacy/requirements.lock", "privacy/build-requirements.lock",
-    "scripts/build_privacy_wheels.py", "scripts/install_gitleaks.py",
+    "scripts/build_privacy_wheels.py",
+    "security/offline-ai/provision/gitleaks_candidate.py",
+    "security/offline-ai/provision/gitleaks-build-sources.json",
+    "security/offline-ai/provision/gitleaks-reviewed/build.json",
+    "security/offline-ai/provision/gitleaks-reviewed/go.mod",
+    "security/offline-ai/provision/gitleaks-reviewed/go.sum",
+    "security/offline-ai/scripts/verify_gitleaks.py",
+    "security/offline-ai/.gitleaks.toml",
+    "security/offline-ai/scanner-notices/gitleaks-LICENSE.txt",
     "security/offline-ai/provision/requirements.extra.lock",
     "security/offline-ai/provision/promptfoo/package.json",
     "security/offline-ai/provision/promptfoo/package-lock.json",
@@ -159,7 +167,7 @@ def load_catalog():
     # Only a separate reviewed commit may promote generated candidate locks.
     if catalog.get("lock_status") != "reviewed":
         raise PreparationError("lock-readiness")
-    if set(catalog.get("downloads", {})) != {"gitleaks", "opengrep", "torch"}:
+    if set(catalog.get("downloads", {})) != {"opengrep", "torch"}:
         raise PreparationError("source-catalog")
     for source in catalog["downloads"].values():
         url = urllib.parse.urlsplit(source.get("url", ""))
@@ -240,18 +248,18 @@ def run(command, *, cwd=None, timeout=1800):
 
 def binaries(vendor, work, catalog):
     (vendor / "bin").mkdir(mode=0o755)
-    archive = work / "gitleaks.tar.gz"
-    download(catalog["downloads"]["gitleaks"], archive)
     spec = importlib.util.spec_from_file_location(
-        "pinned_gitleaks_installer", ROOT / "scripts/install_gitleaks.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    payload = module.extract_verified(archive.read_bytes(), "linux_x64.tar.gz",
-                                      catalog["downloads"]["gitleaks"]["sha256"])
-    (vendor / "bin/gitleaks").write_bytes(payload)
+        "gitleaks_builder", HERE / "gitleaks_candidate.py")
+    builder = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(builder)
+    result = builder.candidate(work / "gitleaks-build", locked_binary=vendor / "bin/gitleaks")
+    if result["status"] != "locked_build_complete":
+        raise PreparationError("gitleaks-build")
     download(catalog["downloads"]["opengrep"], vendor / "bin/opengrep")
     for path in (vendor / "bin").iterdir():
         path.chmod(0o755)
+    return {"source_commit": result["source"]["commit"], "toolchain": result["toolchain"]["version"],
+            "binary_sha256": result["build"]["binary_sha256"], "fixture": result["fixture"]["status"]}
 
 
 def stage_privacy_wheels(built_directory, wheels):
@@ -396,7 +404,7 @@ def prepare(destination, receipt_path):
     try:
         with tempfile.TemporaryDirectory(prefix="offline-vendor-build-") as temporary:
             work = Path(temporary)
-            binaries(destination, work, catalog)
+            receipt["gitleaks_build"] = binaries(destination, work, catalog)
             receipt["stages"][current] = "passed"
             current = "python"
             runtime = python_wheels(destination, work, catalog)

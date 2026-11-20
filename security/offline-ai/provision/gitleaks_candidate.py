@@ -338,7 +338,25 @@ def emit_public_metadata(destination, *, complete):
           "total_bytes": sum(map(len, payloads.values()))})
 
 
-def candidate(destination):
+def locked_inputs(catalog_hash, expected_mod):
+    directory = HERE / "gitleaks-reviewed"
+    lock = json.loads(regular(directory / "build.json"), object_pairs_hook=unique_object)
+    require(lock["schema_version"] == 1 and lock["catalog_sha256"] == catalog_hash
+            and set(lock["files"]) == set(OUTPUTS[1:]), "inputs")
+    mod = regular(directory / "go.mod")
+    sums = regular(directory / "go.sum")
+    require(mod == expected_mod and hashlib.sha256(mod).hexdigest() == lock["files"]["go.mod"]
+            and hashlib.sha256(sums).hexdigest() == lock["files"]["go.sum"], "inputs")
+    return lock, mod, sums
+
+
+def verify_locked_output(lock, payloads, binary_digest, binary_size):
+    require({name: hashlib.sha256(data).hexdigest() for name, data in payloads.items()}
+            == lock["files"] and binary_digest == lock["binary_sha256"]
+            and binary_size == lock["binary_size_bytes"], "metadata")
+
+
+def candidate(destination, *, locked_binary=None):
     require(not destination.exists() and not destination.is_symlink(), "preflight")
     destination.mkdir(mode=0o700, parents=True)
     receipt = {"schema_version": 1, "kind": "unreviewed-gitleaks-build-candidate",
@@ -394,8 +412,14 @@ def candidate(destination):
             actual = run([go, "version"], cwd=source, env=env, stage="toolchain", timeout=30)
             require(actual.decode().strip() == "go version go1.27.4 linux/amd64", "toolchain")
             receipt["last_stage"] = "resolution"
-            run([go, "get", *[x["path"] + "@" + x["after"] for x in catalog["updates"]
-                             if x["requested"]]], cwd=source, env=env, stage="resolution")
+            lock = None
+            if locked_binary is None:
+                run([go, "get", *[x["path"] + "@" + x["after"] for x in catalog["updates"]
+                                 if x["requested"]]], cwd=source, env=env, stage="resolution")
+            else:
+                lock, mod, sums = locked_inputs(catalog_hash, expected)
+                (source / "go.mod").write_bytes(mod)
+                (source / "go.sum").write_bytes(sums)
             assert_go_mod(source / "go.mod", expected)
             selected = objects(run([go, "list", "-mod=readonly", "-m", "-json", "all"],
                                    cwd=source, env=env, stage="closure"))
@@ -407,6 +431,11 @@ def candidate(destination):
             go_sum = regular(source / "go.sum")
             modules, closure = module_closure(selected, downloads, work / "modcache",
                                               catalog, go_sum)
+            if lock is not None:
+                require(go_sum == sums
+                        and hashlib.sha256(json_bytes(modules)).hexdigest() == lock["files"]["modules.json"]
+                        and hashlib.sha256(json_bytes(closure)).hexdigest() == lock["files"]["module-closure.json"],
+                        "closure")
             receipt["module_closure_verified"] = True
             receipt["last_stage"] = "build"
             offline = environment(work, offline=True)
@@ -454,7 +483,24 @@ def candidate(destination):
                 (destination / name).write_bytes(payload)
             receipt["files"] = [{"path": name, **file_record(payload)}
                                 for name, payload in payloads.items()]
-            receipt["status"] = "candidate_complete"
+            if lock is not None:
+                verify_locked_output(lock, payloads, binary_digest, binary.stat().st_size)
+                # Publish into the new private vendor staging directory only
+                # after the closure, binary and real clean/canary controls match.
+                with tempfile.NamedTemporaryFile(dir=locked_binary.parent) as staged:
+                    with binary.open("rb") as stream:
+                        shutil.copyfileobj(stream, staged)
+                    staged.flush()
+                    staged.seek(0)
+                    require(os.fstat(staged.fileno()).st_size == lock["binary_size_bytes"]
+                            and hashlib.file_digest(staged, "sha256").hexdigest() == lock["binary_sha256"],
+                            "metadata")
+                    os.fchmod(staged.fileno(), 0o755)
+                    os.link(staged.name, locked_binary)
+                receipt["kind"] = "locked-gitleaks-vendor-build"
+                receipt["status"] = "locked_build_complete"
+            else:
+                receipt["status"] = "candidate_complete"
             receipt["last_stage"] = "complete"
             save()
         return receipt

@@ -8,14 +8,6 @@
     "python": "3.15.2"
   },
   "downloads": {
-    "gitleaks": {
-      "version": "8.30.1",
-      "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz",
-      "sha256": "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb",
-      "size_bytes": 8230402,
-      "maximum_bytes": 16777216,
-      "provenance_url": "https://api.github.com/repos/gitleaks/gitleaks/releases/tags/v8.30.1"
-    },
     "opengrep": {
       "version": "2.0.0",
       "url": "https://github.com/opengrep/opengrep/releases/download/v2.0.0/opengrep_linux_x86",
@@ -57,11 +49,18 @@
     "privacy/requirements.lock": "7c40a1210834013a3cfabf36ddf355671313f6a5a3da59afc8d6755947a0d3f4",
     "privacy/build-requirements.lock": "ce050323fbcce580de7c1bf25e4ac88833aaec79789cbeeb8460ee037d523cef",
     "scripts/build_privacy_wheels.py": "150e7a72bbcd00215a0b26e5a5fa5020f467e72e98b0819fa836b4401426987c",
-    "scripts/install_gitleaks.py": "5995885e3d1e39da26680ebe5e18cf32f03a2a28ffdaeb37ccad6c1a9f29c711",
     "security/offline-ai/provision/promptfoo/package.json": "57619aa529d4e5d3d2bb8589b21f74558fad323c469384dfb6714ebd6141365e",
     "security/offline-ai/provision/requirements.extra.lock": "8dff90e3d0de90b82e4685c505a5e2099487ea42ad0933b5b07cc302c966e302",
     "security/offline-ai/provision/promptfoo/package-lock.json": "28794c2307783f00db6d389b1a89824f0f1f4ca38f70e4a27a4c9aa24132447b",
-    "security/offline-ai/provision/dependency-review.json": "b78adc58c61f5aa2eb56ddeb1dd62688e69800f7959f3f828420c1cef02a3197"
+    "security/offline-ai/provision/dependency-review.json": "b78adc58c61f5aa2eb56ddeb1dd62688e69800f7959f3f828420c1cef02a3197",
+    "security/offline-ai/provision/gitleaks_candidate.py": "cc39fb5e05043a4101447d72a6740d4fc5f589fbfc5fc525c8e8968582e32064",
+    "security/offline-ai/provision/gitleaks-build-sources.json": "b9eac29429f06d83e24a942a67dfb2bfe53f7315faf62ab042f0a349e545d695",
+    "security/offline-ai/provision/gitleaks-reviewed/build.json": "92f4a901003818e925e94145f4a039c4b2e87bd6aad032fed12b20a53aac8c99",
+    "security/offline-ai/provision/gitleaks-reviewed/go.mod": "a13ed4c5bd482e1f8b9c459d304cac2613329f66cc9d464bd5899a3884b1c2c4",
+    "security/offline-ai/provision/gitleaks-reviewed/go.sum": "eb5392c2cf4d717fbe4d63bcd9b6b733863c70f35c4f0e33d3fa394c9d3eca2a",
+    "security/offline-ai/scripts/verify_gitleaks.py": "a56ff972490afb863cfb5422f7c43873f54d944ae222ca2743deeb9194f07e15",
+    "security/offline-ai/.gitleaks.toml": "c78b89dc0da5e5fb49bc36330452eab50bd7f267137982bdf51565f7ee1b5a58",
+    "security/offline-ai/scanner-notices/gitleaks-LICENSE.txt": "e3884b252b3bfc045e55be43a34d1e80da070bc6f804ac95bf4660e97d62ebc6"
   },
   "qualification": {
     "image": false,
