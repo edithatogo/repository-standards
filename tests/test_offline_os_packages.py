@@ -42,7 +42,7 @@ class OSPackageTests(unittest.TestCase):
                              "size_bytes": len(payload),
                              "sha256": hashlib.sha256(payload).hexdigest()})
         self.catalog = {
-            "schema_version": 1, "distribution": "bookworm", "architecture": "amd64",
+            "schema_version": 1, "distribution": "trixie", "architecture": "amd64",
             "base_image": "docker.io/library/python@sha256:" + "a" * 64,
             "base_status_sha256": hashlib.sha256(self.base_status.read_bytes()).hexdigest(),
             "required_base": {"libstdc++6": "1.0-1", "libgcc-s1": "1.0-1"},
@@ -243,7 +243,9 @@ class OSPackageTests(unittest.TestCase):
         catalog = MODULE.read_catalog(directory / MODULE.CATALOG)
         bases = json.loads((directory / "base-images.json").read_text())
         self.assertEqual(catalog["base_image"], bases["python"]["reference"])
-        self.assertIn("slim-bookworm", bases["python"]["source"])
+        self.assertEqual(catalog["distribution"], "trixie")
+        self.assertIn("slim-trixie", bases["python"]["source"])
+        self.assertIn("trixie-slim", bases["node"]["source"])
         names = {p["name"] for p in catalog["packages"]}
         self.assertFalse(any("imagemagick" in n or n.endswith("-dev") for n in names))
 

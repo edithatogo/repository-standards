@@ -52,7 +52,7 @@ def digest(path):
 def read_catalog(path):
     digest(path)
     data = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique_object)
-    if (data.get("schema_version") != 1 or data.get("distribution") != "bookworm"
+    if (data.get("schema_version") != 1 or data.get("distribution") != "trixie"
             or data.get("architecture") != "amd64"
             or not re.fullmatch(r"docker.io/library/python@sha256:[0-9a-f]{64}",
                                 data.get("base_image", ""))
