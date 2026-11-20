@@ -1,4 +1,4 @@
-# Offline-only build. Supply a preloaded, digest-pinned image with Python 3.15.1, Node and Git.
+# Offline-only build. Supply a preloaded, digest-pinned image with Python 3.15.2, Node and Git.
 # Never substitute a remote tag, or run this with build network access.
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
@@ -8,7 +8,7 @@ ENV PIP_NO_INDEX=1 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
     PYTHONSAFEPATH=1 \
     SECURITY_ASSET_MANIFEST=/opt/offline-ai/manifest.json \
     GLINER_MODEL_DIR=/opt/models/gliner-pii
-RUN --network=none python -c 'import sys; assert sys.version_info[:3] == (3, 15, 1), sys.version'
+RUN --network=none python -c 'import sys; assert sys.version_info[:3] == (3, 15, 2), sys.version'
 COPY vendor/python-wheels/ /opt/offline-ai/wheels/
 COPY vendor/requirements.lock /opt/offline-ai/requirements.lock
 COPY vendor/bin/gitleaks /usr/local/bin/gitleaks

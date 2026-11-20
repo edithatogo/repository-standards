@@ -327,3 +327,38 @@ The existing Grype collector still inventories vulnerabilities across all
 layers. Thirteen focused source tests passed; the full Python 3.15.2 source
 suite completed 282 tests with 247 passes and 35 existing skips. These fixture
 tests do not replace actual Syft execution, image review or runner qualification.
+
+
+## Actual image qualification and image review — 2026-11-15
+
+Runtime preparation PR #145 merged into this draft rollout branch at
+`3c47f49719a7c862c4a4870955303db2f4b2b55d`; its receiving tree exactly matches
+tested head `258b590d01506da42c7113fc17eac992fab803d5`. Its branch was deleted
+and that deletion verified. All current source checks passed. Local and hosted
+policy validation recorded **282 tests: 247 passes and 35 existing capability
+skips**.
+
+[Image run 43660592619](https://github.com/edithatogo/repository-standards/actions/runs/43660592619)
+passed all eight actual image controls, including the required real model tests
+and corrected full Promptfoo evaluation. Cleanup, checksum-pinned Syft inventory
+and Grype evidence collection also passed. The complete 58,000,358-byte artifact
+14140484647 was downloaded and independently verified against SHA256
+`a6045446103e66dd410340342858b0c9366e8f4da83f5df20b1f53a67d1304c8`.
+Independent read/hash checks confirmed policy, image, manifest and both report
+identities. The database file itself is not included in the artifact; its hash
+is a collector observation. Exact identities and findings are retained in
+`security/offline-ai/provision/image-review-baseline.json`.
+
+The full-image report contains **3,246 package/advisory matches** (748 distinct
+advisory IDs) and 1,985 scanner-internal suppressions. It is not a passing
+vulnerability disposition. The reviewed Promptfoo lock's zero-advisory npm
+audit did not cover the global npm copied from the base image. The image review
+identified concrete fixes for the full Debian base, unused global npm, Python
+patch level and the released Gitleaks compiler/module closure.
+
+The continuation preserves all-layer evidence, source ancestry/byte checks and
+separate runner/release gates. Python 3.15.2 fixes two reported Python advisories;
+its remaining socket and HTTP issues stay explicit. Any rebuilt Gitleaks module
+candidate must be fully reviewed before use. The approved isolated host must
+qualify and review its own actual image and manifest. Central #126 and consumer
+#9 remain draft; no runner was registered and no consumer pin changed.

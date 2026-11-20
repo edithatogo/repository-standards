@@ -32,6 +32,7 @@ TRUSTED_REVIEWED_FINDINGS = (
 )
 MAX_REVIEW_REGISTRY_BYTES = 128 * 1024
 PRIVATE_MATCH_PROCESSING = os.name == "posix"
+OFFLINE_CONSUMER_MOUNT = Path("/work")
 FindingIdentity = tuple[str, str, str, int, str]
 
 

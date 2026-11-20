@@ -32,7 +32,15 @@ PIN = re.compile(r"([A-Za-z0-9][A-Za-z0-9_.-]*)==([A-Za-z0-9][A-Za-z0-9.+!-]*)\Z
 ALLOWED_HOSTS = {"github.com", "files.pythonhosted.org", "download-r2.pytorch.org"}
 POLICY_INPUTS = {
     "privacy/requirements.lock", "privacy/build-requirements.lock",
-    "scripts/build_privacy_wheels.py", "scripts/install_gitleaks.py",
+    "scripts/build_privacy_wheels.py",
+    "security/offline-ai/provision/gitleaks_candidate.py",
+    "security/offline-ai/provision/gitleaks-build-sources.json",
+    "security/offline-ai/provision/gitleaks-reviewed/build.json",
+    "security/offline-ai/provision/gitleaks-reviewed/go.mod",
+    "security/offline-ai/provision/gitleaks-reviewed/go.sum",
+    "security/offline-ai/scripts/verify_gitleaks.py",
+    "security/offline-ai/.gitleaks.toml",
+    "security/offline-ai/scanner-notices/gitleaks-LICENSE.txt",
     "security/offline-ai/provision/requirements.extra.lock",
     "security/offline-ai/provision/promptfoo/package.json",
     "security/offline-ai/provision/promptfoo/package-lock.json",
@@ -112,7 +120,7 @@ def merge_locks(*paths):
 
 
 def write_lock(path, pins):
-    lines = ["# Exact Linux x64 Python 3.15.1 dependency hashes.\n"]
+    lines = ["# Exact Linux x64 Python 3.15.2 dependency hashes.\n"]
     for name, (version, hashes) in sorted(pins.items()):
         lines.append(f"{name}=={version} " + " ".join(
             "--hash=sha256:" + value for value in sorted(hashes)) + "\n")
@@ -154,12 +162,12 @@ def validate_npm_lock(package_path, lock_path, expected_integrity):
 def load_catalog():
     catalog = read_json(HERE / "sources.json")
     if (catalog.get("schema_version") != 1 or catalog.get("target") != {
-            "os": "linux", "architecture": "x86_64", "python": "3.15.1"}):
+            "os": "linux", "architecture": "x86_64", "python": "3.15.2"}):
         raise PreparationError("source-catalog")
     # Only a separate reviewed commit may promote generated candidate locks.
     if catalog.get("lock_status") != "reviewed":
         raise PreparationError("lock-readiness")
-    if set(catalog.get("downloads", {})) != {"gitleaks", "opengrep", "torch"}:
+    if set(catalog.get("downloads", {})) != {"opengrep", "torch"}:
         raise PreparationError("source-catalog")
     for source in catalog["downloads"].values():
         url = urllib.parse.urlsplit(source.get("url", ""))
@@ -240,26 +248,26 @@ def run(command, *, cwd=None, timeout=1800):
 
 def binaries(vendor, work, catalog):
     (vendor / "bin").mkdir(mode=0o755)
-    archive = work / "gitleaks.tar.gz"
-    download(catalog["downloads"]["gitleaks"], archive)
     spec = importlib.util.spec_from_file_location(
-        "pinned_gitleaks_installer", ROOT / "scripts/install_gitleaks.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    payload = module.extract_verified(archive.read_bytes(), "linux_x64.tar.gz",
-                                      catalog["downloads"]["gitleaks"]["sha256"])
-    (vendor / "bin/gitleaks").write_bytes(payload)
+        "gitleaks_builder", HERE / "gitleaks_candidate.py")
+    builder = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(builder)
+    result = builder.candidate(work / "gitleaks-build", locked_binary=vendor / "bin/gitleaks")
+    if result["status"] != "locked_build_complete":
+        raise PreparationError("gitleaks-build")
     download(catalog["downloads"]["opengrep"], vendor / "bin/opengrep")
     for path in (vendor / "bin").iterdir():
         path.chmod(0o755)
+    return {"source_commit": result["source"]["commit"], "toolchain": result["toolchain"]["version"],
+            "binary_sha256": result["build"]["binary_sha256"], "fixture": result["fixture"]["status"]}
 
 
 def stage_privacy_wheels(built_directory, wheels):
     """Copy only the exact built wheels; uv output metadata stays in scratch."""
     if not stat.S_ISDIR(built_directory.lstat().st_mode):
         raise PreparationError("built-wheel-inventory")
-    expected = {"presidio_analyzer": "2.2.366+python315.1",
-                "presidio_anonymizer": "2.2.366+python315.1", "pyyaml": "6.0.3"}
+    expected = {"presidio_analyzer": "2.2.366+python315.2",
+                "presidio_anonymizer": "2.2.366+python315.2", "pyyaml": "6.0.3"}
     built = []
     for path in sorted(built_directory.iterdir()):
         info = path.lstat()
@@ -295,7 +303,8 @@ def python_wheels(vendor, work, catalog):
     run(["uv", "pip", "install", "--python", python, "--require-hashes", "--only-binary=:all:",
          "--default-index", "https://pypi.org/simple", "-r", str(ROOT / "privacy/build-requirements.lock")])
     built_directory = work / "built-wheels"
-    run([python, "-I", str(ROOT / "scripts/build_privacy_wheels.py"), "--destination", str(built_directory)])
+    run([python, "-I", str(ROOT / "scripts/build_privacy_wheels.py"),
+         "--destination", str(built_directory)])
     pins = merge_locks(ROOT / "privacy/requirements.lock", HERE / "requirements.extra.lock")
     for name, source in catalog["python_roots"].items():
         pins[name] = (source["version"], {source["sha256"]})
@@ -378,7 +387,7 @@ def finalize(vendor, receipt, catalog):
 
 
 def prepare(destination, receipt_path):
-    if (sys.version_info[:3] != (3, 15, 1) or platform.system() != "Linux"
+    if (sys.version_info[:3] != (3, 15, 2) or platform.system() != "Linux"
             or platform.machine() != "x86_64"):
         raise PreparationError("runtime")
     for path in (destination, receipt_path):
@@ -395,7 +404,7 @@ def prepare(destination, receipt_path):
     try:
         with tempfile.TemporaryDirectory(prefix="offline-vendor-build-") as temporary:
             work = Path(temporary)
-            binaries(destination, work, catalog)
+            receipt["gitleaks_build"] = binaries(destination, work, catalog)
             receipt["stages"][current] = "passed"
             current = "python"
             runtime = python_wheels(destination, work, catalog)
