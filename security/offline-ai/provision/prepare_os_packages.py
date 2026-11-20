@@ -20,12 +20,16 @@ import urllib.request
 
 HERE = Path(__file__).resolve().parent
 CATALOG = "os-packages.json"
+CATALOGS = {"runtime": CATALOG, "git-compiler": "git-compiler-packages.json"}
 BASE_STATUS = Path("/var/lib/dpkg/status")
 ERROR = "Offline OS package preparation failed"
 HASH = re.compile(r"[0-9a-f]{64}\Z")
 NAME = re.compile(r"[a-z0-9][a-z0-9+.-]*\Z")
 VERSION = re.compile(r"[0-9][A-Za-z0-9.+:~\-]*\Z")
-ROOTS = {"git", "libatomic1", "libgomp1", "libstdc++6", "libgcc-s1"}
+ROOTS = {
+    "runtime": {"libatomic1", "libgomp1", "libstdc++6", "libgcc-s1", "zlib1g"},
+    "git-compiler": {"gcc", "make", "libc6-dev", "zlib1g-dev"},
+}
 QUERY = "${Package}\t${Version}\t${Architecture}\t${db:Status-Abbrev}\n"
 
 
@@ -49,7 +53,7 @@ def digest(path):
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
-def read_catalog(path):
+def read_catalog(path, profile="runtime"):
     digest(path)
     data = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique_object)
     if (data.get("schema_version") != 1 or data.get("distribution") != "trixie"
@@ -66,6 +70,7 @@ def read_catalog(path):
         if not NAME.fullmatch(name) or not VERSION.fullmatch(version):
             raise PreparationError("catalog")
     names, filenames, total = set(), set(), 0
+    max_package_bytes = (32 if profile == "git-compiler" else 16) * 1024 * 1024
     for package in packages:
         name, version = package.get("name", ""), package.get("version", "")
         architecture = package.get("architecture")
@@ -81,13 +86,16 @@ def read_catalog(path):
                     r"/[a-z0-9]+/[a-z0-9+.-]+/" + re.escape(filename), parsed.path)
                 or not HASH.fullmatch(package.get("sha256", ""))
                 or type(package.get("size_bytes")) is not int
-                or not 0 < package["size_bytes"] <= 16 * 1024 * 1024
+                or not 0 < package["size_bytes"] <= max_package_bytes
                 or name in names or filename in filenames or name in baseline):
             raise PreparationError("catalog")
         names.add(name)
         filenames.add(filename)
         total += package["size_bytes"]
-    if total > 64 * 1024 * 1024 or not ROOTS <= names | set(baseline):
+    installed_names = names | set(baseline)
+    if (total > 64 * 1024 * 1024 or not ROOTS[profile] <= installed_names
+            or installed_names & {"git", "libcurl3t64-gnutls"}
+            or (profile == "runtime" and installed_names & ROOTS["git-compiler"])):
         raise PreparationError("catalog")
     return data
 
@@ -183,10 +191,13 @@ def main(argv=None):
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--destination", type=Path)
     mode.add_argument("--install", type=Path)
+    parser.add_argument("--profile", choices=CATALOGS, default="runtime")
     parser.add_argument("--receipt", type=Path, required=True)
     args = parser.parse_args(argv)
+    catalog_name = CATALOGS[args.profile]
     record = {"schema_version": 1, "kind": "offline-os-packages",
               "status": "failed", "last_stage": "preflight",
+              "profile": args.profile,
               "release_qualified": False, "runner_registration_qualified": False}
     can_record = False
     try:
@@ -198,10 +209,10 @@ def main(argv=None):
         if directory.is_symlink() or not directory.is_dir():
             raise PreparationError("directory")
         record["last_stage"] = "catalog"
-        catalog = read_catalog(directory / CATALOG)
+        catalog = read_catalog(directory / catalog_name, args.profile)
         record.update({"base_image": catalog["base_image"],
                        "base_status_sha256": catalog["base_status_sha256"],
-                       "catalog_sha256": digest(directory / CATALOG),
+                       "catalog_sha256": digest(directory / catalog_name),
                        "preparer_sha256": digest(HERE / "prepare_os_packages.py"),
                        "package_count": len(catalog["packages"])})
         if args.destination is not None:
@@ -213,7 +224,7 @@ def main(argv=None):
             destination = args.destination
             destination.mkdir(mode=0o755)
             (destination / "debs").mkdir(mode=0o755)
-            for name in (CATALOG, "prepare_os_packages.py"):
+            for name in (catalog_name, "prepare_os_packages.py"):
                 (destination / name).write_bytes((HERE / name).read_bytes())
                 (destination / name).chmod(0o644)
             record["last_stage"] = "downloads"

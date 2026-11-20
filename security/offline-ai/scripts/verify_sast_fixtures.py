@@ -19,6 +19,8 @@ def verify() -> None:
         [
             "opengrep",
             "scan",
+            # The trusted fixtures live outside the consumer Git checkout.
+            "--no-git-ignore",
             "--taint-intrafile",
             "--strict",
             "--disable-nosem",

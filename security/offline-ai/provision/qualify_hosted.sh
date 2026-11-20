@@ -65,10 +65,18 @@ unset DOCKER_CONTEXT
 [[ "$(docker info --format '{{.OSType}}')" = linux ]] || exit 2
 docker version --format '{{json .}}' > "$evidence/docker-version.json"
 
-# Acquire only the reviewed Debian runtime closure before the offline build.
+# Acquire the separate, reviewed Debian runtime and compiler closures.
 stage=os-package-preparation
 python -I "$policy_root/security/offline-ai/provision/prepare_os_packages.py" \
   --destination "$destination/base-context/os" --receipt "$evidence/os-packages.json"
+python -I "$policy_root/security/offline-ai/provision/prepare_os_packages.py" \
+  --profile git-compiler --destination "$destination/base-context/git-os" \
+  --receipt "$evidence/git-compiler-packages.json"
+
+stage=git-source-preparation
+bash "$policy_root/security/offline-ai/provision/prepare_git.sh" \
+  --prepare "$destination/base-context/git-source"
+cp "$destination/base-context/git-source/git-source.json" "$evidence/git-source.json"
 
 stage=upstream-preparation
 # Missing committed locks fail here; candidate-lock generation is a separate job.
