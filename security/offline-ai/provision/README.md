@@ -9,9 +9,10 @@ control plane.
 
 `base-images.json` fixes the Linux amd64 Docker Official Images by digest. Its
 source URLs record the metadata used to select those immutable manifests.
-`Base.Dockerfile` combines the Python 3.15.2 slim image with Node 24 and the
-reviewed Git/native runtime closure. Online preparation downloads only the
-24 Debian packages pinned by exact URL, version, size and SHA256 in
+`Base.Dockerfile` combines the Python 3.15.2 slim image and Node 24 from
+Debian 13 (trixie) with the reviewed Git and native runtime dependencies.
+The 33 additional packages bind Debian-signed indexes, exact URLs, versions,
+sizes and SHA-256 values in
 `os-packages.json`. The offline base build mounts those verified packages
 read-only, checks the exact base dpkg database, installs without apt or network
 access, and verifies installed versions and `dpkg --audit`. Debian's installed
