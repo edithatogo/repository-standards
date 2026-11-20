@@ -270,18 +270,18 @@ def test_build_wrapper_runs_verified_bundle_before_docker(tmp_path, tamper):
     shutil.copytree(source / "security", destination / "security", ignore=shutil.ignore_patterns("__pycache__"))
     (destination / "docker").mkdir()
     shutil.copy2(source / "docker/build_offline.sh", destination / "docker/build_offline.sh")
-    tools = tmp_path / "tools"
-    tools.mkdir()
     calls = tmp_path / "docker-calls.jsonl"
-    docker = tools / "docker"
-    docker.write_text("#!" + sys.executable + "\nimport json, os, sys\n"
+    docker = tmp_path / "docker_fixture.py"
+    docker.write_text("import json, os, sys\n"
         "with open(os.environ['DOCKER_CALLS'], 'a') as stream: stream.write(json.dumps(sys.argv[1:]) + '\\n')\n"
         "if sys.argv[1:3] == ['image', 'inspect']: print('localhost/offline-ai-security@sha256:' + 'c' * 64)\n")
-    docker.chmod(0o755)
     environment = dict(os.environ,
-        PATH=str(tools) + os.pathsep + str(Path(sys.executable).parent) + os.pathsep + os.environ["PATH"],
-        BASE_IMAGE="localhost/synthetic-base@sha256:" + "a" * 64, DOCKER_CALLS=str(calls))
-    result = subprocess.run(["bash", "security/offline-ai/docker/build_offline.sh"],
+        PATH=str(Path(sys.executable).parent) + os.pathsep + os.environ["PATH"],
+        BASE_IMAGE="localhost/synthetic-base@sha256:" + "a" * 64, DOCKER_CALLS=str(calls),
+        DOCKER_FIXTURE=str(docker), FIXTURE_PYTHON=sys.executable)
+    # Invoke fixture code through the test interpreter on the noexec scratch mount.
+    wrapper = 'docker() { "$FIXTURE_PYTHON" "$DOCKER_FIXTURE" "$@"; }; export -f docker; exec bash "$@"'
+    result = subprocess.run(["bash", "-c", wrapper, "_", "security/offline-ai/docker/build_offline.sh"],
         cwd=checkout, env=environment, capture_output=True, text=True, check=False)
     if tamper:
         assert result.returncode == 2
