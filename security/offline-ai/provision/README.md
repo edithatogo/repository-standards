@@ -22,7 +22,8 @@ reviewed Promptfoo installation.
 the matching source archive. An unprivileged build stage packages Git
 with local history support, its templates, licence and source receipt.
 That package is installed through dpkg, which exposes the Git identity
-in the image inventory. The source receipt is installed in
+in the image inventory. Its package version retains Debian's Git epoch
+for comparison with distribution advisories. The source receipt is installed in
 `/usr/share/offline-ai/git-source.json`. Git links to libc and zlib.
 The compiler and source stay in the build stage, and package archives
 are mounted for installation.

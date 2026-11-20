@@ -8,7 +8,8 @@ revision=03b41523c576f26ad34085378717a0c1b287470f
 archive_size=12804471
 archive_sha256=234c011d07f7a7c8420ad3a1b692e71ec5b5a62a4626b07bc8d20a332eb3b1a8
 source_url="https://codeload.github.com/git/git/tar.gz/$revision"
-package_version="$version-0+offline1"
+# Preserve Debian's Git epoch for dpkg and vulnerability version comparisons.
+package_version="1:$version-0+offline1"
 
 verify_source() {
   local archive=$1
