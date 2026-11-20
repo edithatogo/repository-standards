@@ -112,7 +112,7 @@ def merge_locks(*paths):
 
 
 def write_lock(path, pins):
-    lines = ["# Exact Linux x64 Python 3.15.1 dependency hashes.\n"]
+    lines = ["# Exact Linux x64 Python 3.15.2 dependency hashes.\n"]
     for name, (version, hashes) in sorted(pins.items()):
         lines.append(f"{name}=={version} " + " ".join(
             "--hash=sha256:" + value for value in sorted(hashes)) + "\n")
@@ -154,7 +154,7 @@ def validate_npm_lock(package_path, lock_path, expected_integrity):
 def load_catalog():
     catalog = read_json(HERE / "sources.json")
     if (catalog.get("schema_version") != 1 or catalog.get("target") != {
-            "os": "linux", "architecture": "x86_64", "python": "3.15.1"}):
+            "os": "linux", "architecture": "x86_64", "python": "3.15.2"}):
         raise PreparationError("source-catalog")
     # Only a separate reviewed commit may promote generated candidate locks.
     if catalog.get("lock_status") != "reviewed":
@@ -258,8 +258,8 @@ def stage_privacy_wheels(built_directory, wheels):
     """Copy only the exact built wheels; uv output metadata stays in scratch."""
     if not stat.S_ISDIR(built_directory.lstat().st_mode):
         raise PreparationError("built-wheel-inventory")
-    expected = {"presidio_analyzer": "2.2.366+python315.1",
-                "presidio_anonymizer": "2.2.366+python315.1", "pyyaml": "6.0.3"}
+    expected = {"presidio_analyzer": "2.2.366+python315.2",
+                "presidio_anonymizer": "2.2.366+python315.2", "pyyaml": "6.0.3"}
     built = []
     for path in sorted(built_directory.iterdir()):
         info = path.lstat()
@@ -295,7 +295,8 @@ def python_wheels(vendor, work, catalog):
     run(["uv", "pip", "install", "--python", python, "--require-hashes", "--only-binary=:all:",
          "--default-index", "https://pypi.org/simple", "-r", str(ROOT / "privacy/build-requirements.lock")])
     built_directory = work / "built-wheels"
-    run([python, "-I", str(ROOT / "scripts/build_privacy_wheels.py"), "--destination", str(built_directory)])
+    run([python, "-I", str(ROOT / "scripts/build_privacy_wheels.py"),
+         "--destination", str(built_directory)])
     pins = merge_locks(ROOT / "privacy/requirements.lock", HERE / "requirements.extra.lock")
     for name, source in catalog["python_roots"].items():
         pins[name] = (source["version"], {source["sha256"]})
@@ -378,7 +379,7 @@ def finalize(vendor, receipt, catalog):
 
 
 def prepare(destination, receipt_path):
-    if (sys.version_info[:3] != (3, 15, 1) or platform.system() != "Linux"
+    if (sys.version_info[:3] != (3, 15, 2) or platform.system() != "Linux"
             or platform.machine() != "x86_64"):
         raise PreparationError("runtime")
     for path in (destination, receipt_path):

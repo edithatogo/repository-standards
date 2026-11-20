@@ -26,7 +26,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
-          python-version: '3.15.1'
+          python-version: '3.15.2'
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: '24.22.1'
@@ -44,4 +44,37 @@ jobs:
           name: offline-upstream-lock-candidate
           path: ${{ runner.temp }}/offline-lock-candidate
           if-no-files-found: error
+          retention-days: 7
+
+  gitleaks-candidate:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.15.2'
+      - name: Build an unreviewed Gitleaks dependency candidate
+        run: |
+          python -I security/offline-ai/provision/gitleaks_candidate.py \
+            --destination "$RUNNER_TEMP/offline-gitleaks-candidate"
+      - name: Preserve public Gitleaks candidate metadata
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: offline-gitleaks-candidate
+          path: |
+            ${{ runner.temp }}/offline-gitleaks-candidate/candidate-receipt.json
+            ${{ runner.temp }}/offline-gitleaks-candidate/go.mod
+            ${{ runner.temp }}/offline-gitleaks-candidate/go.sum
+            ${{ runner.temp }}/offline-gitleaks-candidate/modules.json
+            ${{ runner.temp }}/offline-gitleaks-candidate/module-closure.json
+            ${{ runner.temp }}/offline-gitleaks-candidate/gitleaks-LICENSE.txt
+          if-no-files-found: warn
           retention-days: 7
