@@ -33,6 +33,29 @@ class GitleaksCandidateTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
 
+    def test_reviewed_build_rejects_source_or_lock_drift(self):
+        _, catalog_hash = CANDIDATE.load_catalog()
+        expected_mod = (HERE / "gitleaks-reviewed/go.mod").read_bytes()
+        lock, mod, sums = CANDIDATE.locked_inputs(catalog_hash, expected_mod)
+        self.assertEqual(hashlib.sha256(mod).hexdigest(), lock["files"]["go.mod"])
+        self.assertEqual(hashlib.sha256(sums).hexdigest(), lock["files"]["go.sum"])
+        with self.assertRaises(CANDIDATE.CandidateError):
+            CANDIDATE.locked_inputs("0" * 64, expected_mod)
+        with self.assertRaises(CANDIDATE.CandidateError):
+            CANDIDATE.locked_inputs(catalog_hash, expected_mod + b"\n")
+
+    def test_reviewed_output_binds_all_metadata_and_compiled_bytes(self):
+        payloads = {name: name.encode() for name in CANDIDATE.OUTPUTS[1:]}
+        lock = {"files": {name: hashlib.sha256(data).hexdigest() for name, data in payloads.items()},
+                "binary_sha256": "a" * 64, "binary_size_bytes": 20}
+        CANDIDATE.verify_locked_output(lock, payloads, "a" * 64, 20)
+        for name in payloads:
+            with self.subTest(name=name), self.assertRaises(CANDIDATE.CandidateError):
+                CANDIDATE.verify_locked_output(lock, {**payloads, name: b"changed"}, "a" * 64, 20)
+        for digest, size in [("b" * 64, 20), ("a" * 64, 19)]:
+            with self.assertRaises(CANDIDATE.CandidateError):
+                CANDIDATE.verify_locked_output(lock, payloads, digest, size)
+
     def archive(self, entries):
         path = self.root / "archive.tar.gz"
         with tarfile.open(path, "w:gz") as archive:

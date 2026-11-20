@@ -10,7 +10,8 @@ These notices accompany locally built scanner images. The adjacent license files
 - Source revision for tag `v8.30.1`: `83d9cd684c87d95d656c1458ef04895a7f1cbd8e`.
 - [Exact upstream license source](https://raw.githubusercontent.com/gitleaks/gitleaks/83d9cd684c87d95d656c1458ef04895a7f1cbd8e/LICENSE).
 - License SHA256: `e3884b252b3bfc045e55be43a34d1e80da070bc6f804ac95bf4660e97d62ebc6` (1069 bytes).
-- [Upstream Linux x64 release archive](https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz).
+- The offline image rebuilds the same source using the [reviewed Go dependencies and toolchain](../provision/gitleaks-reviewed/build.json).
+- [Historical upstream Linux x64 release archive](https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz).
 - Release archive SHA256: `551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb`.
 
 ## Opengrep 2.0.0

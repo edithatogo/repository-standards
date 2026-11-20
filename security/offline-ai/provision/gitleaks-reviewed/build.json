@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "scope": "scanner build inputs and resulting Linux amd64 binary",
+  "candidate_run": 44642688040,
+  "candidate_commit": "769d0bb4c5a303b745e6af4443f316089f3b6aef",
+  "artifact_sha256": "2d43078865b6e42cb71d12dffe611166b87ee7e5e3a3d1bc916adc5f6c8ab18d",
+  "catalog_sha256": "b9eac29429f06d83e24a942a67dfb2bfe53f7315faf62ab042f0a349e545d695",
+  "files": {
+    "go.mod": "a13ed4c5bd482e1f8b9c459d304cac2613329f66cc9d464bd5899a3884b1c2c4",
+    "go.sum": "eb5392c2cf4d717fbe4d63bcd9b6b733863c70f35c4f0e33d3fa394c9d3eca2a",
+    "modules.json": "b8165b740bab316bd0521d6dc3d061adab210189b4f99931c473b15056148ab1",
+    "module-closure.json": "850343bc0ccf0baf3eeec0efb32f2ef64b92a165d66b5fd8dbb2b5de0d6b87ba",
+    "gitleaks-LICENSE.txt": "e3884b252b3bfc045e55be43a34d1e80da070bc6f804ac95bf4660e97d62ebc6"
+  },
+  "binary_sha256": "91e19b44e13e80419dea1f94fc13c7697c8c433930d72c53f92b911a63ec3203",
+  "binary_size_bytes": 22810748
+}
