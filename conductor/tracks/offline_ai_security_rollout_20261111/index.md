@@ -1,0 +1,329 @@
+# Offline AI security estate rollout — 2026-11-11
+
+Status: **implementation staged / execution not qualified**. Central draft PR #126.
+
+## Estate discovery and rollout receipts
+
+GitHub search `user:edithatogo archived:false fork:false` returned 177 repositories on 2026-11-11, including `repository-standards`. An additional accessible repository (`academic-research-skills`) was included via owner-affiliation discovery. Search `is:pr is:open head:security/offline-ai-security-rollout-20261111` reported **175 open consumer PRs**. These are proposals, **not** active controls.
+
+Two exceptions require separate remediation:
+- `Budget_2026_MMH`: branch and workflow committed; creating a PR returned GitHub 403 `Resource not accessible by integration`.
+- `nztaxmicrosim`: branch created; GitHub ruleset rejected file creation with 409 `Changes must be made through a pull request`. No executable caller committed.
+
+No existing workflows were removed or replaced. Several existing repositories already deploy the independent Gitleaks/Presidio guard; this new strict-offline profile is additive.
+
+## Requirements and MoSCoW
+
+**Must**
+- Immutable SHA reference for central workflow and immutable SHA-256 local security image.
+- Runner checkout performed with no persisted credentials, scanner execution in `--network none` container, no runtime downloads or model fetches.
+- Runner image includes independently verified Gitleaks, Opengrep, Presidio, anonymizer, GLiNER and Promptfoo with hashes/SBOM; local model weights only.
+- Gitleaks complete git history plus changed-range scan; Opengrep taint rules; fail-closed runtime DLP; deterministic mock red-team cases.
+- Repository and central implementation CI must be validated, including negative controls; evidence never contains raw secret/PII values.
+- CI runner should enforce protected non-root execution, resource constraints, isolation, no workflow-token access in scanning container, and local-only caches.
+- Exemptions are tracked with precise provenance, not blanket ignores.
+- Protected repository exceptions remediated without bypassing branch rules.
+
+**Should**
+- Add real application ingress, retrieval, MCP, logging and egress DLP integrations; mock-only tests cannot substantiate live protection.
+- Validate Rust and TS sanitizer implementations independently; a Python wrapper alone is not sufficient.
+- Review source-to-sink reachability on real code bases; quantify false positive/false negative rates.
+- Reconcile estate manifest, managed-files registry, privacy-secrets standard and Conductor requirement tests.
+- Enforce code coverage against seeded adversarial datasets and observed boundary integrations.
+
+**Could**
+- Generate SARIF with value-free annotations; produce sealed local compliance receipts and a periodic attestation.
+- Hardware-backed isolated runners and offline artifact mirror.
+
+**Won't yet**
+- Hosted LLM judges, live token verification, auto-downloads inside scanning, or claims of complete PII recall.
+
+## Executable tracks
+
+- [ ] 01. Qualify scanner container image and binary/model digests, generate SBOM and local SPDX record.
+- [ ] 02. Provision self-hosted runner labels and network denial; verify no egress via test harness.
+- [ ] 03. Integration-test exact Gitleaks and Opengrep CLI arguments against pinned binary versions (positive and negative fixtures).
+- [ ] 04. Integration-test Presidio+GLiNER model loading, offsets, clinical and financial fixtures, failure-closed behavior and offline dependency enforcement.
+- [ ] 05. Validate Promptfoo provider API against pinned CLI and add real, local agent providers.
+- [ ] 06. Add per-language sanitizer contracts for Python, TypeScript and Rust and enforce genuine egress interception.
+- [ ] 07. Resolve repository exceptions and audit PRs, checks, branch policies and merges.
+- [ ] 08. Update caller workflow SHA only after qualified central merge; roll out merges one by one after checks pass.
+- [ ] 09. Reconcile all managed-file and estate conformance contracts; publish no-sensitive-data aggregate outcomes.
+
+## Known limitations
+
+A GitHub-managed controller/checkout requires GitHub connectivity even when the scanner container cannot reach the network. Configuration labels such as `SECURITY_NO_EGRESS` are not sufficient proof; namespace/container/network tests must demonstrate denied egress. Regex/SAST/NER detectors are bounded, and 100% detection across arbitrary PII and unknown code is not establishable.
+
+## Continuation evidence — 2026-11-11
+
+- Added a tracked-content AI detector (`security/offline-ai/scripts/detect_ai.sh`), including generic filename imports. Its five local synthetic fixture tests passed using Python pytest; this is not proof of whole-estate classifier recall.
+- Added dedicated regression fixtures for the AI detector, enabled on the offline runner for all repositories.
+- Hardened container options with `--pull=never`, a non-root UID, a readonly workspace, a dedicated writable tmpfs and tool-specific offline cache environment variables. Scanner execution stays `--network none`.
+- Added a **non-mocked Presidio/GLiNER integration smoke suite**, required when AI code is detected. No successful full-model run has yet been observed. This remains a blocking qualification gate.
+- Scanner runtime policy checkout now points at the updated immutable commit `dc52f7b5364253d7ff94684a8c8a62d97e349d88`. Consumer reusable workflow calls are still pinned to `36362fa872e4ce747266a6e795fcefa3dd343f67`; these call the changing central draft only after their PRs are updated to the qualified final SHA.
+- The two identified exceptions remain unresolved: `Budget_2026_MMH` (403 creating PR) and `nztaxmicrosim` (409 protected-branch write).
+- GitHub Actions security lint, policy and existing privacy workflows were observed queued/pending during these commits, not passing. Do not merge based on these observations.
+
+## Implementation tranche — offline contracts and source-to-sink assurance
+
+Implemented in the central draft PR:
+
+- `security/offline-ai/security/agent_boundary.py`: explicit DLP ingress and egress contracts, preventing tool invocation when sanitization fails and normalizing potentially sensitive exception text from transformations.
+- `security/offline-ai/tests/test_agent_boundary.py`: five offline boundary regression tests, passed in a local isolated test environment using a minimal test-only DLP stub; production detector behavior was not tested by these five cases.
+- `security/offline-ai/security/verify_assets.py`: SHA-256 verifier for a reviewed local asset manifest, trusted-root enforcement, duplicate and symlink rejection, required GLiNER config/weight verification.
+- `security/offline-ai/tests/test_verify_assets.py`: seven positive/negative synthetic manifest cases passed locally (tampered weights, missing weights, duplicates, symlink, untrusted root, malformed manifest).
+- `security/offline-ai/docker/Dockerfile`, `docker/build_offline.sh`, `docker/README.md`: offline build recipe requiring a preloaded digest-pinned base, local wheels, package hashes, binaries, Promptfoo and GLiNER files. Not built, qualified or deployed; provisioning assets are not present.
+- `security/offline-ai/fixtures/taint/`: Python, TypeScript and Rust positive/negative fixtures; `scripts/verify_sast_fixtures.py` requires the real Opengrep executable to detect all three positive examples without flagging benign controls. Not yet executed against the binary.
+- `security/offline-ai/run.sh`: asset verification and SAST rule qualification now execute before repository scan; locally runnable unit tests are invoked in scanner before conditional model tests.
+- Central reusable workflow references scanner policy commit `06def09d9595bce33fc43fa390940a3c61fce125`. Consumer caller references are unchanged pending central qualification and merge.
+
+The 12 locally executed unit cases are **not** a complete validation of the scanner stack. Requirements 01–09 remain open until independent asset/model verification, full real-tool tests, network-denial tests, cross-language runtime integrations and estate-wide reconciliation succeed.
+
+**Design limitation:** explicit `guarded_invoke` and `guarded_transform` calls do not automatically interpose on unmodified application code. Product-level interception and Rust/TypeScript compatibility remain open, and Python `sanitize_context` must not be treated as proof of anonymization.
+
+## Security engineering tranche — continuation
+
+Additional centrally committed assets and status:
+
+| Track | Implemented locally | Qualification remaining |
+| --- | --- | --- |
+| 01 Offline supply chain | Offline-only Dockerfile, vetted wheelhouse and binary contract, digest-locked base-image requirement, local manifest checksum verifier with 7 synthetic tests | Actual image build, complete dependency lock and signed release/SBOM |
+| 02 Offline isolation | Loopback-only network namespace preflight with 5 synthetic tests | Real Docker network and ephemeral runner verification, host firewall policy |
+| 03 Gitleaks | Ephemeral clean/secret synthetic Git-history qualification script; no test secrets committed | Execute against pinned Gitleaks binary and verify correct CLI flags |
+| 04 Opengrep | 8 positive/negative language fixtures, including spoofed sanitizer tests; intrafile taint flag; no generic TypeScript sanitizer exemption | Execute against real Opengrep, qualify Rust coverage and all rule syntax |
+| 05 DLP | Validated NHI and Medicare recognizers with 5 synthetic tests; model and checksum gates | Production Presidio/GLiNER integration, PHI recall and false-positive evidence |
+| 06 Agent boundaries | Explicit input/result sanitization, normalized tool exceptions; regression first exposed an unsanitized tool response and exception and both were fixed | Integrate into actual agent ingress, retrieval, MCP, logs and egress |
+| 07 Local red-team | Repo-scoped real-agent Python Promptfoo provider and integration configuration; 5 provider tests | Actual local agent adapters, adversarial corpus quality, pinned CLI |
+| 08 Estate rollout | Retained 175 draft consumer PRs; central PR #126 updated, no merges | Two protected repository exceptions, repin after central qualification |
+| 09 Evidence | Updated README and granular Conductor receipts | Publish value-free SARIF and audited aggregate receipt |
+
+Local unit-testing evidence: 29 checks passed across asset integrity, network namespace, synthetic identifiers, agent-boundary behavior and constrained provider loading; three additional focused shell AI-detector tests passed locally. These tests use synthetic fixtures; they do **not** prove model PII recall, production agent boundary coverage or real scanner binary execution.
+
+A negative TDD run caught two cases in `guarded_invoke`: returning raw tool output and propagating a tool exception with unmasked contents. The implementation now sanitizes the sink result and suppresses unsafe exception text. A separate AI-detector correction distinguishes an inspection error (exit 2) from a genuine absence of AI code (exit 1), preventing accidental skipping of conditional security checks.
+
+**Remaining hard blockers:** preprovisioned vetted image/weights, real Opengrep/Gitleaks/Promptfoo and GLiNER qualification, end-to-end application interception, vulnerability review and branch-policy exceptions. The local image build recipe is not itself a built image or verified SBOM.
+
+## Final local security hardening in this tranche
+
+- Discovered and repaired an offline **data-leak channel via GitHub Actions logs**: Opengrep findings and Promptfoo outputs were previously emitted to standard output. The new `security/quiet_exec.py` executes scanner controls with stdout/stderr redirected to `DEVNULL`, emits fixed labels only on failure, and suppresses potentially sensitive exception/response text. Four synthetic local tests passed, including a failing child process that prints a synthetic canary.
+- Required loopback-only namespace check, model asset hash verification and real Gitleaks positive/negative temporary Git-history qualification before repo scanning. No secret fixtures are committed for Gitleaks history testing.
+- Strengthened Opengrep policy against **no-op sanitizer-name spoofing**. Only explicitly qualified Python sanitizer paths are accepted; TypeScript currently has **no approved sanitizer** pending a real implementation. Added two spoof fixtures and selected Opengrep `--taint-intrafile`.
+- Fixed the fail-open AI-code classification path: detector now returns 2 on Git inspection error, and the orchestration aborts rather than silently skipping AI stages. Three additional local shell regression tests passed.
+- Added tests and wiring for all new modules. In total **36 distinct local focused tests passed** in the development sandbox across the Python boundary, asset verifier, local agent provider, clinical identifiers, network isolation, quiet executor and shell AI detector. This excludes unverified real Opengrep/Gitleaks/GLiNER/Promptfoo integration and no whole-repository test-suite pass is claimed.
+- Real-model GLiNER, Opengrep and Gitleaks fixture checks are **not verified** until the pinned scanner image and pre-provisioned model assets are made available to the self-hosted runner.
+
+**Risk register:** CI logs must never contain raw findings, snippets, model responses, prompts, PII, PHI or plaintext secrets. The runtime intentionally returns only coarse control-failure labels. A privacy-safe count/receipt format can be added after integration, without exposing matched values.
+
+## Cross-language DLP and regression evidence
+
+Completed in this tranche:
+
+- Added a local, private Unix socket `security/dlp_socket.py` broker, wrapping the Python sanitizer for other native runtimes, with 1 MiB payload limits, 0700 parent directory, 0600 socket, duplicate JSON-key rejection and fixed value-free error responses. Seven broker tests passed.
+- Added Node.js + TypeScript-compatible, dependency-free `clients/node/dlp-client.mjs` / `.d.mts` with strict socket path, timeout, payload/response caps, transport failure and no HTTP. Five Node tests passed.
+- Added Rust `clients/rust/` typed `serde_json` Unix client and tests, **not compiled in this environment**; exact dependency and Cargo.lock qualification remain open.
+- Added an actual Python broker↔Node client process interoperability fixture, with two passing synthetic tests, including a value-free rejection response.
+- Added deterministic seeded checksum metamorphic tests for AU Medicare and both NZ NHI formats (2,400 generated input cases plus mutations), all three pytest tests passed.
+- The central scanner's `run.sh` includes Python broker tests, Python↔Node interop, standalone Node tests and identifier property tests as required controls.
+- The isolated privacy wrapper `security.quiet_exec` removes raw findings, tool outputs and stack traces from GitHub CI logs; its four regression tests passed.
+- The local focused regression run passed **48 Python tests and 5 Node tests**. It used a test-only DLP stub for socket/boundary checks. It does not establish real GLiNER/Presidio integration recall or prove Rust correctness.
+
+Outstanding mandatory qualification:
+
+1. Fully validated image, actual Gitleaks/Opengrep/Promptfoo CLI and Presidio/GLiNER model tests.
+2. Real agent, retrieval and MCP adapters in each application; no automatic instrumentation is claimed.
+3. Rust `cargo test --offline --locked` and TypeScript consumer integration with a live model-backed socket server.
+4. Deployment on a hardened ephemeral, private, self-hosted runner with measured network isolation and log review.
+5. Two GitHub repository policy exceptions, repinning 175 consumer callers to the final qualified central commit, and merging only after checks pass.
+
+## Qualification tooling repairs — 2026-11-15
+
+Follow-up for `unimelb-thesis-template-typst` PR #9:
+
+- Replaced the partial manifest with schema 2, requiring complete inventories of
+  supplied scanner binaries, locked wheels, Promptfoo files and model files.
+  Verification runs against the vendor bundle before Docker, and against image
+  paths before package installation. Unlisted files, tampering, path aliases and
+  unsafe links fail closed. The manifest still requires independent approval.
+- Added `docker/qualify_image.py` to execute eight real runtime, network,
+  manifest, asset, Gitleaks, Opengrep, model and Promptfoo controls against a
+  local digest-pinned image. All stages use one exported immutable policy
+  snapshot and explicit container entrypoints. Private outcome receipts retain
+  failed and unexecuted stages and container-cleanup results without raw output.
+- Added `scripts/qualify_model.py`, which requires the three exact real-model
+  tests and every setup/call/teardown phase to pass. Skipped, deselected, missing,
+  extra or incomplete tests cannot qualify the model. Pytest configuration,
+  plugin autoload and inherited options cannot alter the intended test set.
+- Repaired consumer-directory Python import shadowing: the trusted quiet
+  wrapper and its child controls use safe-path mode. Three process regressions
+  reproduced false success before the fix and passed after it on Python 3.15.1
+  and 3.15.2.
+- The Python 3.15.2 policy command
+  `PYTHONPATH=scripts .venv/bin/python -m unittest discover -s tests -v` completed
+  with **186 tests: 151 passed and 35 existing capability-dependent skips**.
+  This includes 7 asset-preflight, 11 image-orchestration, 12 model-orchestration
+  and 3 trusted-Python regression tests. An additional 57 focused asset cases
+  passed on both Python 3.15.1 and 3.15.2. Eight synthetic real-pytest protocol
+  scenarios confirmed acceptance of complete passes and rejection of skipped,
+  errored, incomplete or unexpected model-test execution.
+- Restored the consumer's disabled Typst CI and executed it on PR #9 head
+  `52b9ce77354183fcfe7c4a663a3901b6665e702c`.
+  [Run 43608782761](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43608782761)
+  passed all four profiles (default, draft, print and screen), including
+  formatting, compilation and PDF validation. Repository runner settings showed
+  no configured self-hosted runners; this build does not qualify offline scanning.
+
+The orchestration tests use fake Docker or synthetic pytest reports. No actual
+scanner image was built or qualified, no approved asset bundle or model was
+supplied, and no runner was registered. Steps 01–09 remain incomplete. The
+central rollout and consumer PR #9 remain draft until their real qualification
+gates pass; this tranche does not authorize a qualified-release claim or
+consumer merge. Existing application-adapter and Rust qualification gaps remain.
+
+## Runtime provisioning continuation — 2026-11-15
+
+- Reconciled source repair PR #140: merged into the existing rollout branch at
+  `0523a1d450476f5e49265f9ec1c888691e1b4884`, with successful source checks and
+  the fix branch already pruned. Central PR #126 remains draft.
+- No remote device was connected at this checkpoint. The development workspace
+  had no container engine or writable cgroup controls and subsequently became
+  unavailable. It was not registered as a security runner.
+- Added independently pinned upstream acquisition and a separate metadata-only
+  candidate-lock workflow. Missing reviewed locks fail preparation before any
+  download. Generated candidates remain unreviewed until their complete hashes,
+  versions and provenance are checked and committed.
+- Repaired the native GLiNER model format and selected a built-in, local-only
+  Deberta uni-encoder path. Preparation converts the verified tensor checkpoint
+  to safetensors and supplies its complete local tokenizer/encoder configuration.
+- Added actual container-state checks for non-root identity, zero capabilities,
+  no privilege escalation, read-only policy/root mounts and finite cgroup-v2
+  memory, process and CPU limits. Requested Docker flags alone are insufficient.
+- Added hosted preparation followed by network-denied Docker build and the real
+  image controls. Evidence retains exact source/image/manifest identities.
+  Binary registry export was subsequently withheld pending the redistribution
+  review recorded below. Hosted success cannot register a runner or qualify the
+  central release by itself.
+
+Eleven native-model contract tests passed on Python 3.15.2 before the workspace
+connection was lost. The combined source and subsequent preparation/container
+regressions require hosted verification; no image/model execution result is
+claimed by this source checkpoint. Requirements 01–09 remain open, including
+real self-hosted runner eligibility, host isolation, vulnerability review and
+applicable application/language qualification. Consumer PR #9 remains draft.
+
+## Reviewed preparation follow-up — 2026-11-15
+
+The workspace recovered and Python 3.15.2 was restored. The combined policy
+suite initially reproduced a stale image-test failure marker left after the
+runtime check became `security.verify_container`; correcting the marker restored
+the required failure-path coverage. The first hosted policy run reproduced that
+same defect. Its privacy and Actions-security checks passed, and
+[candidate run 43651617676](https://github.com/edithatogo/repository-standards/actions/runs/43651617676)
+completed using Python 3.15.1. Its three public candidate files were reconstructed
+from retained chunks and verified against their exact byte lengths, SHA256 and
+Git blob identifiers.
+
+The first image run reached the Docker host and failed at upstream preparation
+with the expected unreviewed-lock catalog. Its retained execution receipt keeps
+release, runner and application qualification false. No scanner execution is
+inferred from that attempt.
+
+The follow-up also requires byte equality between the selected policy workflow
+and the calling commit after normalizing only the single immutable policy SHA.
+Regression cases reproduced the old acceptance of changed container entrypoints
+and network flags, then verified rejection. Model preparation now preserves
+private fixed-stage failure receipts, pinned model cards and associated
+source-code license texts, with exact attribution hashes and explicit scopes.
+
+The reviewed dependency commit retains all 21 shared privacy pins/hash sets and
+verifies all 18 additional Python releases and 603 unique npm releases against
+upstream metadata. Four exact transitive npm overrides resolve the reported
+advisories; the final npm audit reports zero known advisories. The committed
+`security/offline-ai/provision/dependency-review.json` binds the reviewed lock
+bytes and records the source checks, advisory dispositions and remaining real
+execution gates. Native optional packages remain included without lifecycle
+scripts, with a silent libsql/esbuild execution check during preparation.
+
+The integrated Python 3.15.2 policy suite completed with **250 tests: 215 passed
+and 35 existing capability-dependent skips**. It includes 19 container-control,
+12 immutable-source, 13 vendor-preparation and 9 model-preparation cases. Shell
+syntax and diff whitespace checks passed. These source tests do not substitute
+for the required Python 3.15.1 model and image execution.
+
+Central PR #145 contains this preparation work. Central PR #126 and consumer
+PR #9 remain draft while real image execution, image vulnerability review,
+isolated self-hosted runner eligibility and applicable integration gates remain
+open. No runner has been registered and no consumer pin has been changed.
+
+
+## First hosted preparation result — 2026-11-15
+
+[Run 43653722717](https://github.com/edithatogo/repository-standards/actions/runs/43653722717)
+passed the actual binary downloads, Python wheel installation and dependency
+check, Promptfoo native SQLite/esbuild smoke, and model export on Python 3.15.1.
+The retained model receipt records GLiNER 0.2.30, CPU Torch 2.15.0+cpu,
+Transformers 5.22.2, safetensors 0.8.0, sentencepiece 0.2.3 and protobuf 7.36.2.
+Its tokenizer export is 16,034,016 bytes, within the existing 16 MiB limit.
+Model inference and scanner-image qualification remain separate unexecuted gates.
+
+Preparation then failed during manifest finalization. The wheel builder puts
+uv's one-byte build-only metadata beside its wheels, which the strict flat
+wheelhouse verifier rejects. The follow-up stages the exact three expected
+regular wheels from temporary build output. Unexpected and aliased outputs
+remain rejected, and the complete manifest verifier is unchanged.
+
+The same source increment adds a checksum-pinned Grype collector for the exact
+qualified image, retaining the complete findings, internal suppressions,
+database provenance and hashes with review and release qualification false.
+Pin-only workflow changes now trigger image qualification. The repository permits
+squash merges, so a receiving squash source requires a subsequent pin-only PR;
+the ancestor and source-byte checks remain in force.
+
+The Grype source increment completed the Python 3.15.2 policy suite with 265
+tests and 35 existing capability skips. The three additional wheel-staging
+regressions were published after the workspace disconnected; their final local
+completion was not observed. The combined source requires hosted validation.
+No runner or consumer has been activated.
+
+## Actual controls and packaging correction — 2026-11-15
+
+[Run 43655829149](https://github.com/edithatogo/repository-standards/actions/runs/43655829149)
+passed complete preparation and the strict manifest check, built the image
+without build network access, and passed seven actual controls: runtime
+restrictions, network preflight, manifest binding, asset verification,
+Gitleaks fixtures, Opengrep fixtures and the required real-model DLP tests.
+The receipt binds policy `f44ec9e4c1e1fb28f70292b73ab3c6dd31469c22`, manifest
+`f83008306612aeeb980cb6d6813c58639563ac9eb358539221c88c9ad8c5a25e` and image
+`sha256:b460fc731abe0f09a7880e6bc726965e711bc67a4757d17132f9d4f86aa405a9`.
+The artifact's full SHA256 was independently verified. Promptfoo mock evaluation
+failed, while container cleanup passed; inventory and vulnerability collection
+did not run after that failure.
+
+The exact Promptfoo release and its Node/Commander parser confirmed that all
+three eval invocations used an unsupported progress option. They now use
+`--no-progress-bar`. The regression first failed on all three old calls, then
+passed; full local Python 3.15.2 validation completed 269 tests with 234 passes
+and 35 existing capability-dependent skips. The pinned Python wrapper also
+executed all four configured mock cases successfully. Full image execution
+remains required after the correction.
+
+The subsequent bounded packaging review identified missing attributable license
+notices for the pinned Gitleaks and Opengrep binaries. Their exact upstream
+license texts and source records are retained in the policy and copied into the
+image. This does not establish complete binary-redistribution qualification.
+The optional image/registry archive is therefore no longer produced or uploaded;
+the artifact retains execution receipts, the manifest, inventory and advisory
+evidence. The approved host must build from the verified inputs, qualify its own
+actual digest and manifest, and obtain SPDX and vulnerability review for those
+bytes. Existing runner, release and applicable integration gates remain open.
+
+The pinned SBOM action was also found to retrieve an installer from a mutable
+upstream branch. A bounded collector now downloads the exact Syft 1.57.1 Linux
+amd64 archive (31,432,061 bytes; SHA256
+`bf52519eb57f675d47c07d43213cb6dff6449f3d6d1147ff6701ed91f44eef0c`),
+verifies those bytes and runs no installer script. It records private SPDX,
+configuration, version and provenance evidence, binds the described container
+to the local digest, and retains the prior squashed-image inventory scope.
+The existing Grype collector still inventories vulnerabilities across all
+layers. Thirteen focused source tests passed; the full Python 3.15.2 source
+suite completed 282 tests with 247 passes and 35 existing skips. These fixture
+tests do not replace actual Syft execution, image review or runner qualification.
