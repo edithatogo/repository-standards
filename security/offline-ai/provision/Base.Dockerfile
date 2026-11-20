@@ -21,6 +21,7 @@ RUN --network=none --mount=type=bind,source=os,target=/opt/offline-os,readonly \
       --receipt /usr/local/share/offline-ai/os-packages.json \
     && dpkg --install /opt/built/git.deb \
     && test -z "$(dpkg --audit)" \
+    && test -r /usr/share/offline-ai/git-source.json \
     && ! dpkg-query --show libcurl3t64-gnutls \
     && python -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)' \
     && node -e 'if (Number(process.versions.node.split(".")[0]) !== 24) process.exit(2)' \

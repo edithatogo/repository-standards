@@ -64,7 +64,8 @@ case "${1:-}" in
     install -D -m 0755 "$source/git" "$package/usr/bin/git"
     strip --strip-debug "$package/usr/bin/git"
     install -D -m 0644 "$source/COPYING" "$package/usr/share/doc/git/copyright"
-    source_receipt > "$package/usr/share/doc/git/offline-source.json"
+    install -d -m 0755 "$package/usr/share/offline-ai"
+    source_receipt > "$package/usr/share/offline-ai/git-source.json"
     make -C "$source/templates" prefix=/usr DESTDIR="$package" install
     install -d -m 0755 "$package/DEBIAN"
     cat > "$package/DEBIAN/control" <<EOF
