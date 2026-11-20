@@ -10,15 +10,21 @@ control plane.
 `base-images.json` fixes the Linux amd64 Docker Official Images by digest. Its
 source URLs record the metadata used to select those immutable manifests.
 `Base.Dockerfile` combines the Python 3.15.2 slim image and Node 24 from
-Debian 13 (trixie) with the reviewed Git and native runtime dependencies.
-The 33 additional packages bind Debian-signed indexes, exact URLs, versions,
-sizes and SHA-256 values in
-`os-packages.json`. The offline base build mounts those verified packages
-read-only, checks the exact base dpkg database, installs without apt or network
-access, and verifies installed versions and `dpkg --audit`. Debian's installed
-package database and notices are preserved; downloaded package archives are not
-baked into an image layer. Global npm/npx are omitted because the scanner uses
-the separate reviewed Promptfoo installation.
+Debian 13 (trixie) with the reviewed native runtime dependencies.
+`os-packages.json` and `git-compiler-packages.json` bind separate package
+closures to Debian-signed indexes, exact URLs, versions, sizes and SHA-256
+values. Each install uses read-only package mounts, the exact base dpkg
+database, a network-disabled build step and an installed-version audit.
+The runtime retains the Debian database and notices and uses the separate
+reviewed Promptfoo installation.
+
+`prepare_git.sh` pins Git 2.56.1 to the signed upstream tag's commit and
+the matching source archive. An unprivileged build stage packages Git
+with local history support, its templates, licence and source receipt.
+That package is installed through dpkg, which exposes the Git identity
+in the image inventory. The runtime uses libc and zlib for Git. The
+compiler and source stay in the build stage, and package archives are
+mounted for installation.
 
 The scanner/model preparer separately verifies source hashes, committed
 dependency locks and their complete supplied-asset inventory. The new image must
