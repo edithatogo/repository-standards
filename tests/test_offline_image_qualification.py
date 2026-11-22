@@ -120,7 +120,8 @@ else:
         for call in runs:
             for required in ("--pull=never", "--network=none", "--read-only",
                              "--cap-drop=ALL", "--security-opt=no-new-privileges",
-                             "--user=65534:65534", "--pids-limit=256", "--memory=8g", "--cpus=4"):
+                             "--user=65534:65534", "--pids-limit=256", "--memory=8g", "--cpus=4",
+                             "/tmp:rw,noexec,nosuid,size=512m,mode=1777"):
                 self.assertIn(required, call)
             mount = next(value for value in call if value.startswith("type=bind,src="))
             mounts.add(mount)
