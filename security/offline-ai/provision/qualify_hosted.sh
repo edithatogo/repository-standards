@@ -78,7 +78,7 @@ unset DOCKER_CONTEXT
 [[ "$(docker info --format '{{.OSType}}')" = linux ]] || exit 2
 docker version --format '{{json .}}' > "$evidence/docker-version.json"
 
-# The vendor index authenticates the exact APKs during the network-denied installation.
+# The package signatures are verified during the network-denied installation.
 stage=os-package-preparation
 provision="$policy_root/security/offline-ai/provision"
 apk_root="$destination/base-context/os"
@@ -91,10 +91,6 @@ while read -r digest member; do
     --output "$apk_root/x86_64/${member#./}"
 done < "$provision/wolfi-packages.sha256"
 (cd "$apk_root/x86_64" && sha256sum --check "$provision/wolfi-packages.sha256")
-curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
-  --max-time 90 --max-filesize 33554432 "$apk_repository/APKINDEX.tar.gz" \
-  --output "$apk_root/x86_64/APKINDEX.tar.gz"
-(cd "$apk_root/x86_64" && sha256sum APKINDEX.tar.gz) > "$evidence/wolfi-index.txt"
 cp "$provision/wolfi-inventory.txt" "$apk_root/inventory.txt"
 cp "$provision/wolfi-packages.sha256" "$evidence/wolfi-package-hashes.txt"
 mkdir "$apk_root/cpython"
@@ -112,6 +108,7 @@ for fix in catalog["findings"].values():
 PY
 while read -r commit; do
   curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+    --retry 3 --retry-max-time 30 \
     --max-time 90 --max-filesize 1048576 "https://github.com/python/cpython/commit/$commit.patch" \
     --output "$apk_root/cpython/$commit.patch"
 done < "$apk_root/cpython/patches.txt"

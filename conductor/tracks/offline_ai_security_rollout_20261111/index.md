@@ -1058,3 +1058,24 @@ release-branch security commits. The review compares the installed shared
 library and SPDX file to that package. No package downgrade is needed.
 The CPython input and output file inventory matched all six fixes in the
 local exact-APK check. The hosted lane repeats both package verifications.
+
+### Retry CPython patch downloads and install the locked Wolfi packages
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the provisioning script,
+base Dockerfile, package hashes, documentation and immutable workflow pin in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44` from
+`37f3e987a765756e6f168410056c8250caea56ef`. The native scope is PR #152.
+
+Two Innovate runs failed on HTTP 503 while retrieving CPython patches. The
+HTTPS test using the provisioning command recovered from a single 503, stopped
+after four attempts on persistent 503, and failed immediately on 404. The
+CPython patch size, request timeout and SHA-256 checks still apply.
+
+Innovate run `44991607474` reached the offline APK install. The live index
+selected ncurses `6.6.20261121-r0`, which was absent from the staged packages.
+The build now verifies the signatures of the checksum-pinned APKs with the
+pinned base's Wolfi keys and installs those files with networking disabled.
+The expected 50-package inventory and glibc backport checks still apply.
+Five Wolfi image-review tests and 12 immutable policy-source tests passed on
+Python 3.15.2. Linux qualification must confirm the real package installation,
+image review and consumer scan.
