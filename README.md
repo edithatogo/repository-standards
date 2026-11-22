@@ -64,6 +64,12 @@ This increment has a [separate delivery track](conductor/tracks/community_bootst
 A valid file or successful snapshot audit does not establish a hosted run,
 active provider, enabled setting or estate-wide rollout.
 
+The [Community Standards file gate](docs/community-bootstrap-standard.md#continuous-community-file-gate)
+provides a small consumer CI check using the same auditor. It checks effective
+community file bodies and templates, plus a nonempty local licence file, through
+the [shared action](.github/actions/community-standards/action.yml). The full
+17-control bootstrap policy remains unchanged.
+
 ## Installation and development
 
 Use the repository's qualified **Python 3.15.2** runtime. The commands below use

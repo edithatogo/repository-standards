@@ -85,7 +85,6 @@
     },
     "issue_form_kinds": {
       "type": "object",
-      "minProperties": 1,
       "propertyNames": {
         "pattern": "^[a-z][a-z_]*$"
       },
@@ -99,5 +98,25 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "issue_form_kinds": {"maxProperties": 0}
+        }
+      },
+      "then": {
+        "properties": {
+          "required": {
+            "const": [
+              "readme", "contributing", "code_of_conduct", "security",
+              "issue_templates", "pull_request_template"
+            ]
+          },
+          "recommended": {"maxItems": 0}
+        }
+      }
+    }
+  ]
 }

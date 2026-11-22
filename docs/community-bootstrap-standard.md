@@ -159,6 +159,96 @@ force-overwrite local extensions. The existing F01 credential gate, F03 apply
 gate, unrelated offline-security drafts and zero mandatory human approvals stay
 unchanged.
 
+## Continuous community file gate
+
+The shared [Community Standards action](../.github/actions/community-standards/action.yml)
+uses [the narrow profile](../profiles/native-community.json) and
+[`check_community_standards.py`](../scripts/check_community_standards.py), which
+calls the existing bootstrap auditor. It requires a local README,
+effective contribution/Code of Conduct/security files, at least one valid
+effective issue template, an effective PR template, and a **local nonempty,
+non-placeholder licence file**. Native Markdown checks require readable, nonempty body content
+that is not a placeholder; plain prose and nested sections are accepted without
+requiring particular headings. The full bootstrap audit retains its substantive
+section requirements. Neither file presence nor this gate rates prose quality.
+
+The narrow profile has no mandatory issue-role names. An empty role mapping is
+accepted only for this exact six-control profile with no recommended controls;
+it still fails when there is no valid effective issue form. The full bootstrap
+policy retains all 17 controls and its bug, feature and documentation roles.
+Native checks accept empty optional labels/assignees in legacy Markdown
+frontmatter. Additional invalid forms remain visible in result details when one
+valid effective form exists; full bootstrap checks still reject invalid forms.
+It remains the authority for agent context, runtime setup and other bootstrap
+requirements; the narrow gate does not replace it.
+
+The licence check reads root `LICENSE`, `LICENCE` or `COPYING`, optionally with
+`.md`, `.txt` or `.rst`, through the auditor's bounded, non-following Tree reads.
+It never inherits the account's licence, chooses terms, copies a licence or
+certifies legal suitability. A missing, empty or obvious placeholder file stays a failed
+control until the repository owner supplies appropriate existing terms.
+Multiple nonempty local licence files are recorded together as presence
+evidence, without choosing or reconciling their terms.
+
+### Consumer workflow
+
+Create `.github/workflows/community-standards.yml` with the following shape.
+Replace `REVIEWED_40_CHARACTER_COMMIT_SHA` with the reviewed immutable commit
+that contains the action. Keep the stable job name and avoid path filters so
+required-check rules can always receive a result.
+
+```yaml
+name: Community Standards
+on:
+  pull_request:
+  push:
+  merge_group:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  community-standards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: edithatogo/repository-standards/.github/actions/community-standards@REVIEWED_40_CHARACTER_COMMIT_SHA
+```
+
+The action owns sibling checkouts: the candidate in `project` and account
+defaults in `community-defaults`. It reads actual GitHub repository metadata,
+requires the matching owner's `.github` repository to be public, resolves its
+default branch to an immutable commit, then verifies both checkout SHAs,
+origins and clean state. Unavailable or inconsistent observations fail closed.
+Local overrides retain precedence, including the whole issue-group override.
+
+Only central scripts from the SHA-pinned action's `github.action_path` execute.
+The isolated Python 3.15.2 environment uses the existing hash-pinned PyYAML
+source/build dependencies. Neither consumer nor defaults code is imported or
+executed, checkout credentials are not persisted, and the workflow needs only
+`contents: read`; it does not use `pull_request_target`. Bounded metadata and
+reports are retained as a run artifact for 14 days under that repository's
+access controls. Private reports are not public estate aggregates.
+
+### What a passing check means
+
+This is a **candidate file gate**. [GitHub's community profile metrics](https://docs.github.com/en/rest/metrics/community#get-community-profile-metrics) are a
+separate observation of the default branch and GitHub's own recognition rules;
+adding a PR workflow does not itself update that score. The gate also checks
+bounded issue-form structure. A passing gate is not a claim of a 100% GitHub
+health score or a complete bootstrap audit.
+
+The central policy workflow includes a `community-standards` canary job calling
+the local composite action. Observe that final head's canary and policy tests
+before consumers pin its published SHA; a local unit suite alone is not a
+hosted action receipt.
+
+A configured workflow is not automatically a merge requirement. After a real
+`community-standards` run succeeds, use authenticated repository-administration
+access to require that exact check through branch protection or a ruleset. Do not report
+protection, private reporting, hosted success or estate-wide adoption from
+source files alone. This action changes no repository settings and assigns no
+licence or mandatory human approval.
+
 ## GitHub references
 
 - [Default community health files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file)
