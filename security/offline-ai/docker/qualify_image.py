@@ -122,7 +122,7 @@ def policy_snapshot(commit):
     """Export committed files once; ignored files and later edits cannot enter."""
     with tempfile.TemporaryDirectory(prefix="offline-policy-") as temporary:
         snapshot = Path(temporary) / "policy"
-        snapshot.mkdir(mode=0o755)
+        snapshot.mkdir()
         try:
             with tempfile.TemporaryFile() as stream:
                 result = subprocess.run(
@@ -140,6 +140,9 @@ def policy_snapshot(commit):
                     archive.extractall(snapshot, filter="data")
         except (OSError, tarfile.TarError, subprocess.TimeoutExpired):
             raise QualificationError("policy-snapshot") from None
+        # Let the non-root scanner traverse the bind mount under a private host parent.
+        for directory, _, _ in snapshot.walk():
+            directory.chmod(0o755)
         yield snapshot
 
 
@@ -148,7 +151,7 @@ def container_command(docker, image, name, command, snapshot):
         "run", "--rm", "--pull=never", "--network=none", "--read-only", "--cap-drop=ALL",
         "--security-opt=no-new-privileges", "--pids-limit=256", "--memory=8g", "--cpus=4",
         "--user=65534:65534", "--name=" + name, "--entrypoint=" + command[0],
-        "--tmpfs", "/tmp:rw,nosuid,size=2g,mode=1777",
+        "--tmpfs", "/tmp:rw,noexec,nosuid,size=512m,mode=1777",
         "--mount", f"type=bind,src={snapshot},dst=/policy,readonly",
         "--workdir", "/policy/security/offline-ai",
     ]

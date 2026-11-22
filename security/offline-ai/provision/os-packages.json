@@ -8,12 +8,12 @@
   "base_status_sha256": "75b63974c853f59abf2575cbcb5d0ff8075b2c8fa9151318c0ec7a98dafbe7e2",
   "base_installed_package_count": 88,
   "dependency_policy": "Debian-signed APT release and package indexes, amd64, no Recommends",
-  "runtime_roots": [
-    "git",
+  "required_roots": [
     "libatomic1",
     "libgomp1",
     "libstdc++6",
-    "libgcc-s1"
+    "libgcc-s1",
+    "zlib1g"
   ],
   "package_indexes": [
     {
@@ -128,119 +128,17 @@
     "sysvinit-utils": "3.14-4",
     "tar": "1.35+dfsg-3.1",
     "tzdata": "2026f-0+deb13u1",
-    "util-linux": "2.41.5-0+deb13u1",
-    "zlib1g": "1:1.3.dfsg+really1.3.1-1+b1"
+    "util-linux": "2.41.5-0+deb13u1"
   },
   "packages": [
-    {
-      "name": "git",
-      "version": "1:2.47.3-0+deb13u1",
-      "architecture": "amd64",
-      "filename": "git_2.47.3-0+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/g/git/git_2.47.3-0+deb13u1_amd64.deb",
-      "sha256": "3e35662fd5c46add561703e54031a1d8ad9df45811927689f0a51122b13be722",
-      "size_bytes": 8861572,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/git/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "git-man",
-      "version": "1:2.47.3-0+deb13u1",
-      "architecture": "all",
-      "filename": "git-man_2.47.3-0+deb13u1_all.deb",
-      "url": "https://deb.debian.org/debian/pool/main/g/git/git-man_2.47.3-0+deb13u1_all.deb",
-      "sha256": "b58306b60e1dff920e1e18bc7e1e499f2ef75184190ab3d98657b165969bf7c9",
-      "size_bytes": 2204692,
-      "provenance_url": "https://packages.debian.org/trixie/all/git-man/download",
-      "source_index": "trixie"
-    },
     {
       "name": "libatomic1",
       "version": "14.2.0-19",
       "architecture": "amd64",
       "filename": "libatomic1_14.2.0-19_amd64.deb",
       "url": "https://deb.debian.org/debian/pool/main/g/gcc-14/libatomic1_14.2.0-19_amd64.deb",
-      "sha256": "212b399aae2f7299203d261a57e49372e09565a9a5ea971905f94a3960366c05",
       "size_bytes": 9308,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libatomic1/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libbrotli1",
-      "version": "1.1.0-2+deb13u1",
-      "architecture": "amd64",
-      "filename": "libbrotli1_1.1.0-2+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian-security/pool/updates/main/b/brotli/libbrotli1_1.1.0-2+deb13u1_amd64.deb",
-      "sha256": "db46824c60fee46aff3cc0be3e5f736bc606cae669b1fb17516a41e8073251a9",
-      "size_bytes": 303640,
-      "provenance_url": "https://packages.debian.org/trixie-security/amd64/libbrotli1/download",
-      "source_index": "trixie-security"
-    },
-    {
-      "name": "libcom-err2",
-      "version": "1.47.2-3+b12",
-      "architecture": "amd64",
-      "filename": "libcom-err2_1.47.2-3+b12_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/e/e2fsprogs/libcom-err2_1.47.2-3+b12_amd64.deb",
-      "sha256": "bd43e020b8fed399db3eebf098111f10fba4c436fff99ccad72cc7e27c9764ec",
-      "size_bytes": 25036,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libcom-err2/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libcurl3t64-gnutls",
-      "version": "8.14.1-2+deb13u7",
-      "architecture": "amd64",
-      "filename": "libcurl3t64-gnutls_8.14.1-2+deb13u7_amd64.deb",
-      "url": "https://deb.debian.org/debian-security/pool/updates/main/c/curl/libcurl3t64-gnutls_8.14.1-2+deb13u7_amd64.deb",
-      "sha256": "9475c591b338b81859ee6d06bf2a9fbb01b52f184c235afa7f6e7f1652136e55",
-      "size_bytes": 384636,
-      "provenance_url": "https://packages.debian.org/trixie-security/amd64/libcurl3t64-gnutls/download",
-      "source_index": "trixie-security"
-    },
-    {
-      "name": "liberror-perl",
-      "version": "0.17030-1",
-      "architecture": "all",
-      "filename": "liberror-perl_0.17030-1_all.deb",
-      "url": "https://deb.debian.org/debian/pool/main/libe/liberror-perl/liberror-perl_0.17030-1_all.deb",
-      "sha256": "06110a972bdc52f6c6d6615dddbe97f836c61d0e36c685ef4107c2eaa81f871f",
-      "size_bytes": 26872,
-      "provenance_url": "https://packages.debian.org/trixie/all/liberror-perl/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libexpat1",
-      "version": "2.9.0-1~deb13u1",
-      "architecture": "amd64",
-      "filename": "libexpat1_2.9.0-1~deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian-security/pool/updates/main/e/expat/libexpat1_2.9.0-1~deb13u1_amd64.deb",
-      "sha256": "feff874772cae904ae4d24e917b35664952bec4b4ae9100a4edda5a7fa746832",
-      "size_bytes": 125744,
-      "provenance_url": "https://packages.debian.org/trixie-security/amd64/libexpat1/download",
-      "source_index": "trixie-security"
-    },
-    {
-      "name": "libgdbm-compat4t64",
-      "version": "1.24-2",
-      "architecture": "amd64",
-      "filename": "libgdbm-compat4t64_1.24-2_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/g/gdbm/libgdbm-compat4t64_1.24-2_amd64.deb",
-      "sha256": "2cbd43cf2dfbf57ff48188b5d79d29cf7ea8f0dedaa61ab0bcc02eceff50ea01",
-      "size_bytes": 50280,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libgdbm-compat4t64/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libgnutls30t64",
-      "version": "3.8.9-3+deb13u4",
-      "architecture": "amd64",
-      "filename": "libgnutls30t64_3.8.9-3+deb13u4_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/g/gnutls28/libgnutls30t64_3.8.9-3+deb13u4_amd64.deb",
-      "sha256": "18a8bdfd91c7e3bcb01719d55a2b56849c7160b34f1f52b1c4fdfdd41bf1352b",
-      "size_bytes": 1469024,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libgnutls30t64/download",
-      "source_index": "trixie"
+      "sha256": "212b399aae2f7299203d261a57e49372e09565a9a5ea971905f94a3960366c05"
     },
     {
       "name": "libgomp1",
@@ -248,252 +146,17 @@
       "architecture": "amd64",
       "filename": "libgomp1_14.2.0-19_amd64.deb",
       "url": "https://deb.debian.org/debian/pool/main/g/gcc-14/libgomp1_14.2.0-19_amd64.deb",
-      "sha256": "72b7a1a33c48f3195efeb044111b34ae684b1e640bb6495c832443b798601cd5",
       "size_bytes": 137148,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libgomp1/download",
-      "source_index": "trixie"
+      "sha256": "72b7a1a33c48f3195efeb044111b34ae684b1e640bb6495c832443b798601cd5"
     },
     {
-      "name": "libgssapi-krb5-2",
-      "version": "1.21.3-5+deb13u1",
+      "name": "zlib1g",
+      "version": "1:1.3.dfsg+really1.3.1-1+deb13u1",
       "architecture": "amd64",
-      "filename": "libgssapi-krb5-2_1.21.3-5+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/k/krb5/libgssapi-krb5-2_1.21.3-5+deb13u1_amd64.deb",
-      "sha256": "30847c1fde4240567d7ed3aeab4f655dd591203758b857e85e824045aae70299",
-      "size_bytes": 138356,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libgssapi-krb5-2/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libidn2-0",
-      "version": "2.3.8-2",
-      "architecture": "amd64",
-      "filename": "libidn2-0_2.3.8-2_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/libi/libidn2/libidn2-0_2.3.8-2_amd64.deb",
-      "sha256": "90b039bcdc4578f8e1c4935adf8dbb525e36a164deefdbbb8c45bac347d48278",
-      "size_bytes": 109096,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libidn2-0/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libk5crypto3",
-      "version": "1.21.3-5+deb13u1",
-      "architecture": "amd64",
-      "filename": "libk5crypto3_1.21.3-5+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/k/krb5/libk5crypto3_1.21.3-5+deb13u1_amd64.deb",
-      "sha256": "7da07ee674b47f1f0be7cc89317c25310086a1f1761217d0f72e6ae2c5a69b84",
-      "size_bytes": 81152,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libk5crypto3/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libkeyutils1",
-      "version": "1.6.3-6",
-      "architecture": "amd64",
-      "filename": "libkeyutils1_1.6.3-6_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/k/keyutils/libkeyutils1_1.6.3-6_amd64.deb",
-      "sha256": "0b11ad17be0300b63ad4eeb4c6450fed24d34b7b740f23e5363dcb29ee6d5eba",
-      "size_bytes": 9456,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libkeyutils1/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libkrb5-3",
-      "version": "1.21.3-5+deb13u1",
-      "architecture": "amd64",
-      "filename": "libkrb5-3_1.21.3-5+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/k/krb5/libkrb5-3_1.21.3-5+deb13u1_amd64.deb",
-      "sha256": "47d71d6a7f2e59b9bae5f89602397594805113b95889ad18fa703cd53abafc97",
-      "size_bytes": 326056,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libkrb5-3/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libkrb5support0",
-      "version": "1.21.3-5+deb13u1",
-      "architecture": "amd64",
-      "filename": "libkrb5support0_1.21.3-5+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/k/krb5/libkrb5support0_1.21.3-5+deb13u1_amd64.deb",
-      "sha256": "3a0acd8b37955c0e102c756b52c97df2a31f67b96453c35dab70df218d309117",
-      "size_bytes": 33124,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libkrb5support0/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libldap2",
-      "version": "2.6.10+dfsg-1",
-      "architecture": "amd64",
-      "filename": "libldap2_2.6.10+dfsg-1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/o/openldap/libldap2_2.6.10+dfsg-1_amd64.deb",
-      "sha256": "60069e4a550ca890113fa89d3001417781b18e146ec5d637d31e368dec9909bd",
-      "size_bytes": 193576,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libldap2/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libnghttp2-14",
-      "version": "1.64.0-1.1+deb13u1",
-      "architecture": "amd64",
-      "filename": "libnghttp2-14_1.64.0-1.1+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/n/nghttp2/libnghttp2-14_1.64.0-1.1+deb13u1_amd64.deb",
-      "sha256": "896cb217537c09251fb909b8541349010ac279d802d871e98c06a62a2c67ce2c",
-      "size_bytes": 76188,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libnghttp2-14/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libnghttp3-9",
-      "version": "1.8.0-1",
-      "architecture": "amd64",
-      "filename": "libnghttp3-9_1.8.0-1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/n/nghttp3/libnghttp3-9_1.8.0-1_amd64.deb",
-      "sha256": "388e4c33b72829cbf0d098afdc8539fa5ba7458eddb077f5538fdb4d5538716b",
-      "size_bytes": 67656,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libnghttp3-9/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libngtcp2-16",
-      "version": "1.11.0-1+deb13u1",
-      "architecture": "amd64",
-      "filename": "libngtcp2-16_1.11.0-1+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/n/ngtcp2/libngtcp2-16_1.11.0-1+deb13u1_amd64.deb",
-      "sha256": "627eec81ebbd48c4e6091f5cd9dc5070b792b7075000eed60ab08c7daa961caf",
-      "size_bytes": 131904,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libngtcp2-16/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libngtcp2-crypto-gnutls8",
-      "version": "1.11.0-1+deb13u1",
-      "architecture": "amd64",
-      "filename": "libngtcp2-crypto-gnutls8_1.11.0-1+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/n/ngtcp2/libngtcp2-crypto-gnutls8_1.11.0-1+deb13u1_amd64.deb",
-      "sha256": "2a7f109c0c4db6a800e4661c5e5e34e1f1f83c8162482276183d1ada9da7c96c",
-      "size_bytes": 29524,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libngtcp2-crypto-gnutls8/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libp11-kit0",
-      "version": "0.25.5-3",
-      "architecture": "amd64",
-      "filename": "libp11-kit0_0.25.5-3_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/p/p11-kit/libp11-kit0_0.25.5-3_amd64.deb",
-      "sha256": "784bf2063e166c8bc851a32623b74ebd85c499043a9d57c5bbd64fa63447f45a",
-      "size_bytes": 425240,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libp11-kit0/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libperl5.40",
-      "version": "5.40.1-6+deb13u1",
-      "architecture": "amd64",
-      "filename": "libperl5.40_5.40.1-6+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/p/perl/libperl5.40_5.40.1-6+deb13u1_amd64.deb",
-      "sha256": "e44777ff47ad248d1debd57e1f96ab5e89061a341008ae39880ba3b5fc15f273",
-      "size_bytes": 4325996,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libperl5.40/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libpsl5t64",
-      "version": "0.21.2-1.1+b1",
-      "architecture": "amd64",
-      "filename": "libpsl5t64_0.21.2-1.1+b1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/libp/libpsl/libpsl5t64_0.21.2-1.1+b1_amd64.deb",
-      "sha256": "59d42bb1f9ebc0d1776fe616efb08a7a8568b05982e00f70b03c63863db768ab",
-      "size_bytes": 57188,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libpsl5t64/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "librtmp1",
-      "version": "2.4+20151223.gitfa8646d.1-2+b5",
-      "architecture": "amd64",
-      "filename": "librtmp1_2.4+20151223.gitfa8646d.1-2+b5_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/r/rtmpdump/librtmp1_2.4+20151223.gitfa8646d.1-2+b5_amd64.deb",
-      "sha256": "93baa2004cbe6c8721b9e81beed078612540aef120970b4751305c51c6697368",
-      "size_bytes": 58840,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/librtmp1/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libsasl2-2",
-      "version": "2.1.28+dfsg1-9",
-      "architecture": "amd64",
-      "filename": "libsasl2-2_2.1.28+dfsg1-9_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/c/cyrus-sasl2/libsasl2-2_2.1.28+dfsg1-9_amd64.deb",
-      "sha256": "66e49d7ae026811b49a0050f18b0325960a2625ffd1ff60d91b7844a815fa9d2",
-      "size_bytes": 57512,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libsasl2-2/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libsasl2-modules-db",
-      "version": "2.1.28+dfsg1-9",
-      "architecture": "amd64",
-      "filename": "libsasl2-modules-db_2.1.28+dfsg1-9_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/c/cyrus-sasl2/libsasl2-modules-db_2.1.28+dfsg1-9_amd64.deb",
-      "sha256": "a5c38659fbd62c33c6d9bfa2be43e75a572d1818531aad32dd74d0a58cc4bd19",
-      "size_bytes": 19768,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libsasl2-modules-db/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libssh2-1t64",
-      "version": "1.11.1-1+deb13u2",
-      "architecture": "amd64",
-      "filename": "libssh2-1t64_1.11.1-1+deb13u2_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/libs/libssh2/libssh2-1t64_1.11.1-1+deb13u2_amd64.deb",
-      "sha256": "dbb1024c192d4d292b7cfa902b96076cfe81b56a5eed4fb28da36e8bf543e49a",
-      "size_bytes": 245240,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libssh2-1t64/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libtasn1-6",
-      "version": "4.20.0-2+deb13u1",
-      "architecture": "amd64",
-      "filename": "libtasn1-6_4.20.0-2+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/libt/libtasn1-6/libtasn1-6_4.20.0-2+deb13u1_amd64.deb",
-      "sha256": "23fec6e06583ce2bad9b2c04c9b485e90440e259b1abf8677cd80d3ce60831ad",
-      "size_bytes": 50112,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libtasn1-6/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "libunistring5",
-      "version": "1.3-2",
-      "architecture": "amd64",
-      "filename": "libunistring5_1.3-2_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/libu/libunistring/libunistring5_1.3-2_amd64.deb",
-      "sha256": "6dd3490bef06ea1096f32d10766b7e016cf579bfae8451d1b7df15ce05b8aa46",
-      "size_bytes": 476768,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/libunistring5/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "perl",
-      "version": "5.40.1-6+deb13u1",
-      "architecture": "amd64",
-      "filename": "perl_5.40.1-6+deb13u1_amd64.deb",
-      "url": "https://deb.debian.org/debian/pool/main/p/perl/perl_5.40.1-6+deb13u1_amd64.deb",
-      "sha256": "ef145c247787d6f40dcdefd5b417502484827cde0d555998c17fd5b27ec1e1dd",
-      "size_bytes": 267736,
-      "provenance_url": "https://packages.debian.org/trixie/amd64/perl/download",
-      "source_index": "trixie"
-    },
-    {
-      "name": "perl-modules-5.40",
-      "version": "5.40.1-6+deb13u1",
-      "architecture": "all",
-      "filename": "perl-modules-5.40_5.40.1-6+deb13u1_all.deb",
-      "url": "https://deb.debian.org/debian/pool/main/p/perl/perl-modules-5.40_5.40.1-6+deb13u1_all.deb",
-      "sha256": "4c46cdd8f3135aa1c95f07e817f8e5d9be590687441ac1c27e3a8c49400f35ce",
-      "size_bytes": 3013728,
-      "provenance_url": "https://packages.debian.org/trixie/all/perl-modules-5.40/download",
-      "source_index": "trixie"
+      "filename": "zlib1g_1.3.dfsg+really1.3.1-1+deb13u1_amd64.deb",
+      "url": "https://deb.debian.org/debian-security/pool/updates/main/z/zlib/zlib1g_1.3.dfsg+really1.3.1-1+deb13u1_amd64.deb",
+      "size_bytes": 88720,
+      "sha256": "8c27c342230503b73dfde629642c3b352e87b554e06d60cf58772f236a305ceb"
     }
   ]
 }

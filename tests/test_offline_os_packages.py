@@ -32,7 +32,7 @@ class OSPackageTests(unittest.TestCase):
         self.base_status = self.root / "base-status"
         self.base_status.write_bytes(b"fixture dpkg status\n")
         self.payloads = {name: ("fixture-" + name).encode()
-                         for name in ("git", "libatomic1", "libgomp1")}
+                         for name in ("zlib1g", "libatomic1", "libgomp1")}
         packages = []
         for name, payload in self.payloads.items():
             filename = name + "_1.0-1_amd64.deb"
@@ -93,7 +93,7 @@ class OSPackageTests(unittest.TestCase):
             versions = dict(self.catalog["required_base"])
             versions.update({p["name"]: p["version"] for p in self.catalog["packages"]})
             if self.installed_error:
-                versions["git"] = "9.9-1"
+                versions["zlib1g"] = "9.9-1"
             return "".join(f"{name}\t{version}\tamd64\tii \n"
                            for name, version in sorted(versions.items())).encode()
         if args == ["dpkg", "--audit"]:
@@ -135,7 +135,7 @@ class OSPackageTests(unittest.TestCase):
     def test_install_verifies_baseline_and_records_real_package_versions(self):
         status, receipt = self.invoke(install=True)
         self.assertEqual((status, receipt["status"]), (0, "installed"))
-        self.assertEqual(receipt["installed_versions"]["git"], "1.0-1")
+        self.assertEqual(receipt["installed_versions"]["zlib1g"], "1.0-1")
         self.assertEqual(receipt["installed_versions"]["libgcc-s1"], "1.0-1")
         self.assertFalse(any("apt" in c[0] or "--force-depends" in c for c in self.calls))
 
@@ -192,7 +192,7 @@ class OSPackageTests(unittest.TestCase):
 
     def test_catalog_rejects_traversal_duplicate_packages_and_unpinned_sources(self):
         original = copy.deepcopy(self.catalog)
-        changes = [("filename", "../git.deb"), ("sha256", "latest"),
+        changes = [("filename", "../zlib1g.deb"), ("sha256", "latest"),
                    ("url", "http://deb.debian.org/debian/pool/main/g/git/git_1.0-1_amd64.deb")]
         for field, value in changes:
             with self.subTest(field=field):
@@ -248,6 +248,33 @@ class OSPackageTests(unittest.TestCase):
         self.assertIn("trixie-slim", bases["node"]["source"])
         names = {p["name"] for p in catalog["packages"]}
         self.assertFalse(any("imagemagick" in n or n.endswith("-dev") for n in names))
+
+    def test_compiler_catalog_cannot_supply_the_runtime(self):
+        directory = ROOT / "security/offline-ai/provision"
+        catalog_path = directory / MODULE.CATALOGS["git-compiler"]
+        compiler = MODULE.read_catalog(catalog_path, "git-compiler")
+        self.assertEqual(compiler["base_status_sha256"], MODULE.read_catalog(
+            directory / MODULE.CATALOG)["base_status_sha256"])
+        with self.assertRaises(MODULE.PreparationError):
+            MODULE.read_catalog(catalog_path)
+
+    def test_catalog_rejects_reintroducing_libcurl_at_runtime(self):
+        self.catalog["required_base"]["libcurl3t64-gnutls"] = "1.0-1"
+        self.write_catalog()
+        with self.assertRaises(MODULE.PreparationError):
+            MODULE.read_catalog(self.source / MODULE.CATALOG)
+
+    def test_git_build_refuses_a_substituted_archive(self):
+        recipe = ROOT / "security/offline-ai/provision/prepare_git.sh"
+        (self.source / "git.tar.gz").write_bytes(b"unexpected source")
+        output = self.root / "git.deb"
+        child = subprocess.run(
+            ["bash", str(recipe), "--build", str(self.source), str(output)],
+            capture_output=True, check=False,
+        )
+        self.assertEqual(child.returncode, 2)
+        self.assertIn(b"Git source archive size or type does not match the lock", child.stderr)
+        self.assertFalse(output.exists())
 
 
 if __name__ == "__main__":
