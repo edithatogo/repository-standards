@@ -149,7 +149,7 @@ In a disposable extraction, check the preimage and patched file:
 ```sh
 cd openssl
 printf '%s\n' 'b0d127f71a439bf83935fdbcdda3fdd5e38fa8cf66edfe493aa359d8820c087e  crypto/x509/x509_vfy.c' | sha256sum -c -
-git apply --unidiff-zero /absolute/path/to/openssl35-dane-guard.patch
+git apply /absolute/path/to/openssl35-dane-guard.patch
 printf '%s\n' '3c638f6c64c431a88b2e94c9f3ed12fb9b431778d818e8d1fe0e633c5b98aa1a  crypto/x509/x509_vfy.c' | sha256sum -c -
 ```
 
@@ -161,10 +161,36 @@ bash security/offline-ai/provision/test_openssl35_backport.sh \
   /absolute/openssl-source.tar /absolute/new/candidate-build
 ```
 
-This recipe tests the backport on the chosen upstream source. Deployable
-Debian packages also require the distribution configuration, package inventory,
-and provenance. A scanner built from those packages requires its own eight
-controls, SPDX inventory, and all-layer vulnerability review.
+The package build uses Debian trixie's OpenSSL `3.5.9-1~deb13u1` source.
+The signed Stable InRelease used for the source lock has SHA-256
+`bfacad4ca61899ce20d4a0d439f29339f66541561b67506364efb88e27dee870`.
+Its amd64 builder inputs and source archives have separate locks. The signed
+`main/source/Sources.xz` has SHA-256
+`b449439c113900c8607c1005f7a1ec0704d0f3b7376ba312b2150c79e4e4e06c`. See the
+[Debian release metadata](https://deb.debian.org/debian/dists/trixie/InRelease),
+[compiler package lock](openssl-compiler-packages.json), and
+[source lock](openssl-debian-sources.lock).
+
+The build retains the Debian patch series and append-only changelog, then
+applies the DANE guard and six OpenSSL fixes from these vendor commits.
+The [ordered patch lock](openssl-debian-patches/series.lock) binds their
+production-source hunks.
+
+- CVE-2026-88823. [OpenSSL commit](https://github.com/openssl/openssl/commit/159e1de0c448d7b9f09ad768c8e141def4aa1eb4)
+- CVE-2026-107496. [OpenSSL commit](https://github.com/openssl/openssl/commit/a0051cfe699bf5a047bc1c4faef65f80f7987366)
+- CVE-2026-95692. [OpenSSL commit](https://github.com/openssl/openssl/commit/257a3427aa0ef8d9dd2ef5b3e2d1c021a221b116)
+- CVE-2026-95691. [OpenSSL commit](https://github.com/openssl/openssl/commit/f6244675833e097c2429a40d1b206d95385bd42f)
+- CVE-2026-107493. [OpenSSL commit](https://github.com/openssl/openssl/commit/c8f6d04f8e6d40b1bf83334e4a2ec9daf5943a3d)
+- CVE-2026-124709. [OpenSSL commit](https://github.com/openssl/openssl/commit/f3acb0a3328046741479482c51cec815839e1b05)
+
+`dpkg-buildpackage` runs Debian's standard native OpenSSL tests in the
+network-disabled builder. The scanner runtime installs the three amd64
+packages through dpkg with version `3.5.9-1~deb13u1+offline1` and checks their
+identities, providers and Python TLS integration. The image evidence retains the
+source lock, package hashes, test counts and build log digest. Review the
+resulting scanner's own eight controls, SPDX inventory and complete all-layer
+vulnerability results before approving it. Include retained base-layer records
+and findings outside these seven patches in that review.
 
 ## Source acquisition and lock review
 

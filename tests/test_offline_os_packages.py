@@ -258,6 +258,27 @@ class OSPackageTests(unittest.TestCase):
         with self.assertRaises(MODULE.PreparationError):
             MODULE.read_catalog(catalog_path)
 
+    def test_openssl_compiler_catalog_extends_only_the_pinned_compiler(self):
+        directory = ROOT / "security/offline-ai/provision"
+        catalog_path = directory / MODULE.CATALOGS["openssl-compiler"]
+        catalog = MODULE.read_catalog(catalog_path, "openssl-compiler")
+        compiler_path = directory / MODULE.CATALOGS["git-compiler"]
+        compiler = MODULE.read_catalog(compiler_path, "git-compiler")
+        self.assertEqual(catalog["base_image"], compiler["base_image"])
+        self.assertEqual(catalog["base_catalog_sha256"], MODULE.digest(compiler_path))
+        self.assertNotEqual(catalog["base_status_sha256"], compiler["base_status_sha256"])
+        installed = compiler["required_base"] | {
+            package["name"]: package["version"] for package in compiler["packages"]
+        }
+        self.assertEqual(catalog["required_base"], {
+            name: installed[name] for name in catalog["required_base"]
+        })
+        self.assertTrue(installed.keys().isdisjoint(
+            package["name"] for package in catalog["packages"]
+        ))
+        with self.assertRaises(MODULE.PreparationError):
+            MODULE.read_catalog(catalog_path)
+
     def test_catalog_rejects_reintroducing_libcurl_at_runtime(self):
         self.catalog["required_base"]["libcurl3t64-gnutls"] = "1.0-1"
         self.write_catalog()
