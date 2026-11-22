@@ -1981,6 +1981,11 @@
     },
     {
       "repository": "edithatogo/innovate",
+      "fair_software": {
+        "enabled": true,
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #698; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2136,6 +2141,11 @@
     },
     {
       "repository": "edithatogo/lifecourse",
+      "fair_software": {
+        "enabled": true,
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #59; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -4480,6 +4490,11 @@
     },
     {
       "repository": "edithatogo/tobac",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #195; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
