@@ -2023,6 +2023,12 @@
     },
     {
       "repository": "edithatogo/kairos",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "FAIR metadata from merged PR #416; manual ARDC and scientific acceptance remain unverified"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -5221,6 +5227,12 @@
     },
     {
       "repository": "edithatogo/voiage",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/reviews/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "FAIR metadata from merged PR #1388; manual ARDC and scientific acceptance remain unverified"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
