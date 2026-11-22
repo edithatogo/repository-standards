@@ -1437,6 +1437,11 @@
     },
     {
       "repository": "edithatogo/ginsim",
+      "fair_software": {
+        "enabled": true,
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #59; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2181,6 +2186,11 @@
     },
     {
       "repository": "edithatogo/mchs",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #420; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "master",
@@ -2429,6 +2439,11 @@
     },
     {
       "repository": "edithatogo/NationalWeightedActivityUnitWrapper.jl",
+      "fair_software": {
+        "enabled": true,
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #13; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2460,6 +2475,11 @@
     },
     {
       "repository": "edithatogo/new-drug-reimbursement-game",
+      "fair_software": {
+        "enabled": true,
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #119; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2615,6 +2635,11 @@
     },
     {
       "repository": "edithatogo/NwauCore.jl",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #12; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -3638,6 +3663,11 @@
     },
     {
       "repository": "edithatogo/scimapping",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #20; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -3948,6 +3978,11 @@
     },
     {
       "repository": "edithatogo/sourceright",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #156; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -4819,6 +4854,11 @@
     },
     {
       "repository": "edithatogo/UOGTO",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #140; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
