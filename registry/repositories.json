@@ -692,6 +692,29 @@
       "exceptions": []
     },
     {
+      "repository": "edithatogo/careops-sim",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "rust",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #219; ARDC and scientific acceptance remain unverified"
+      },
+      "exceptions": []
+    },
+    {
       "repository": "edithatogo/CFTRDataTransfer",
       "visibility": "public",
       "archetype": "data-config",
@@ -751,6 +774,29 @@
       "supply_chain_profile": "none",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
+      "exceptions": []
+    },
+    {
+      "repository": "edithatogo/CiteLattice",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "rust",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #32; ARDC and scientific acceptance remain unverified"
+      },
       "exceptions": []
     },
     {
@@ -999,6 +1045,29 @@
       "supply_chain_profile": "baseline",
       "managed_files": "detect_and_issue",
       "verification_receipt": "required",
+      "exceptions": []
+    },
+    {
+      "repository": "edithatogo/dapane",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "scientific-native",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #72; ARDC and scientific acceptance remain unverified"
+      },
       "exceptions": []
     },
     {
@@ -2902,6 +2971,29 @@
       "exceptions": []
     },
     {
+      "repository": "edithatogo/paignia",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "rust",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #69; ARDC and scientific acceptance remain unverified"
+      },
+      "exceptions": []
+    },
+    {
       "repository": "edithatogo/policy_-paramedics_mentalhealth_cxsyx",
       "visibility": "private",
       "archetype": "docs-template",
@@ -3744,6 +3836,24 @@
       "exceptions": []
     },
     {
+      "repository": "edithatogo/searchright",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "rust",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "exceptions": []
+    },
+    {
       "repository": "edithatogo/sim_hospital_emergencydepartment",
       "visibility": "private",
       "archetype": "docs-template",
@@ -4122,7 +4232,7 @@
     },
     {
       "repository": "edithatogo/Syspop",
-      "visibility": "private",
+      "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
       "sole_developer": true,
@@ -4366,6 +4476,24 @@
       "supply_chain_profile": "none",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
+      "exceptions": []
+    },
+    {
+      "repository": "edithatogo/tobac",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "python",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
       "exceptions": []
     },
     {
