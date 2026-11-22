@@ -31,6 +31,10 @@ CONTROLS = (
     "workflows", "dependency_updates", "gitignore", "editorconfig",
     "env_example", "devcontainer", "discussion_templates", "template_repository",
 )
+NATIVE_COMMUNITY_CONTROLS = (
+    "readme", "contributing", "code_of_conduct", "security",
+    "issue_templates", "pull_request_template",
+)
 DEFAULT_POLICY = {
     "schema_version": 1, "required": list(CONTROLS), "recommended": [],
     "environment_configuration": None, "devcontainer": "optional",
@@ -220,7 +224,12 @@ def nonempty(value):
     return isinstance(value, str) and bool(value.strip())
 
 
-def guidance_errors(text, control):
+def guidance_errors(text, control, *, native=False):
+    if native:
+        text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+        body = "\n".join(line for line in text.splitlines() if line.strip()
+                         and not re.match(r"^\s*(?:#{1,6}\s|`{3,}|~{3,}|[-*_]{3,}\s*$)", line))
+        return [] if nonempty(body) and not re.match(r"^\s*(TODO|TBD|placeholder)\b", body, re.I) else ["Empty or placeholder community document"]
     sections = []
     for line in text.splitlines():
         match = re.match(r"^#{1,6}\s+(.+?)\s*#*\s*$", line)
@@ -236,7 +245,7 @@ def guidance_errors(text, control):
     return errors
 
 
-def form_errors(value, *, discussion=False, markdown=False):
+def form_errors(value, *, discussion=False, markdown=False, native=False):
     if not isinstance(value, dict):
         return ["Template must be a mapping"]
     allowed = {"body", "title", "labels"} if discussion else {"name", "description", "about", "title", "labels", "assignees", "projects", "type", "body"}
@@ -252,7 +261,8 @@ def form_errors(value, *, discussion=False, markdown=False):
         if key in value and not isinstance(value[key], str):
             errors.append(key + " must be text")
     for key in ("labels", "assignees", "projects"):
-        if key in value and not (nonempty(value[key]) or isinstance(value[key], list) and all(nonempty(item) for item in value[key])):
+        empty_legacy_metadata = native and markdown and key in {"labels", "assignees"} and value.get(key) == ""
+        if key in value and not empty_legacy_metadata and not (nonempty(value[key]) or isinstance(value[key], list) and all(nonempty(item) for item in value[key])):
             errors.append(key + " must contain text values")
     if markdown:
         return errors
@@ -319,7 +329,7 @@ def form_errors(value, *, discussion=False, markdown=False):
     return errors
 
 
-def template_errors(tree, path, *, discussion=False):
+def template_errors(tree, path, *, discussion=False, native=False):
     text = tree.read(path)
     if Path(path).suffix.casefold() == ".md":
         lines = text.splitlines()
@@ -328,8 +338,8 @@ def template_errors(tree, path, *, discussion=False):
         end = next((i for i, line in enumerate(lines[1:], 1) if line.strip() == "---"), None)
         if end is None or not nonempty("\n".join(lines[end + 1:])):
             return ["Markdown issue template requires closed frontmatter and prompts"]
-        return form_errors(yaml_value("\n".join(lines[1:end])), markdown=True)
-    return form_errors(yaml_value(text), discussion=discussion)
+        return form_errors(yaml_value("\n".join(lines[1:end])), markdown=True, native=native)
+    return form_errors(yaml_value(text), discussion=discussion, native=native)
 
 
 def chooser_errors(value):
@@ -371,7 +381,8 @@ def validate_policy(policy):
     if not isinstance(result["devcontainer"], str) or result["devcontainer"] not in {"required", "optional"} or type(result["template_repository"]) is not bool:
         raise ValueError("Invalid bootstrap applicability")
     kinds = result["issue_form_kinds"]
-    if not isinstance(kinds, dict) or not kinds or not all(nonempty(role) and re.fullmatch(r"[a-z][a-z_]*", role) and isinstance(stems, list) and stems and all(nonempty(stem) and re.fullmatch(r"[A-Za-z0-9_-]+", stem) for stem in stems) and len(stems) == len(set(stems)) for role, stems in kinds.items()):
+    narrow = result["required"] == list(NATIVE_COMMUNITY_CONTROLS) and not result["recommended"]
+    if not isinstance(kinds, dict) or (not kinds and not narrow) or not all(nonempty(role) and re.fullmatch(r"[a-z][a-z_]*", role) and isinstance(stems, list) and stems and all(nonempty(stem) and re.fullmatch(r"[A-Za-z0-9_-]+", stem) for stem in stems) and len(stems) == len(set(stems)) for role, stems in kinds.items()):
         raise ValueError("Issue form role mapping is invalid")
     return result
 
@@ -467,6 +478,8 @@ def audit_repository(repository_dir, *, defaults_dir=None, metadata=None, policy
     local = Tree(repository_dir)
     defaults = Tree(defaults_dir) if defaults_dir is not None and visibility == "public" else None
     policy = local_policy(local, validate_policy(policy))
+    native = (policy["required"] == list(NATIVE_COMMUNITY_CONTROLS)
+              and not policy["recommended"] and not policy["issue_form_kinds"])
     checks = {}
 
     def default_missing():
@@ -499,7 +512,7 @@ def audit_repository(repository_dir, *, defaults_dir=None, metadata=None, policy
                     tree, source = local, "local"
             if tree is None:
                 return default_missing() if inherit else record("fail", "missing", details=["Repository-local file is required"])
-            errors = guidance_errors(tree.read(path), control)
+            errors = guidance_errors(tree.read(path), control, native=native)
             return record("fail" if errors else "pass", source, [path], errors)
         run(control, document)
 
@@ -523,7 +536,7 @@ def audit_repository(repository_dir, *, defaults_dir=None, metadata=None, policy
             errors, valid, unknown = [], [], []
             for path in forms:
                 try:
-                    found = template_errors(tree, path)
+                    found = template_errors(tree, path, native=native)
                     errors.extend(path + ": " + reason for reason in found)
                     if not found:
                         valid.append(path)
@@ -539,7 +552,8 @@ def audit_repository(repository_dir, *, defaults_dir=None, metadata=None, policy
                 if not stems.intersection(stem.casefold() for stem in accepted):
                     errors.append("Missing effective issue form role: " + role)
             # Invalid local attempts are not silently certified via inherited forms.
-            checks["issue_templates"] = record("unknown" if unknown else "fail" if errors else "pass", source, forms + unsupported, errors + unknown)
+            status = "pass" if native and valid else "unknown" if unknown else "fail" if errors else "pass"
+            checks["issue_templates"] = record(status, source, forms + unsupported, errors + unknown)
     except EvidenceError as exc:
         checks["issue_templates"] = checks["issue_chooser"] = record(exc.status, "unavailable", details=[str(exc)])
 
@@ -555,7 +569,7 @@ def audit_repository(repository_dir, *, defaults_dir=None, metadata=None, policy
                     if paths:
                         break
             if paths:
-                errors = [path + ": " + reason for path in paths for reason in guidance_errors(tree.read(path), "pull_request_template")]
+                errors = [path + ": " + reason for path in paths for reason in guidance_errors(tree.read(path), "pull_request_template", native=native)]
                 return record("fail" if errors else "pass", source, paths, errors)
         return default_missing()
     run("pull_request_template", pr_templates)

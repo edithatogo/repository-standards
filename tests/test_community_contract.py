@@ -34,6 +34,22 @@ class CommunityContractTests(unittest.TestCase):
         self.assertEqual(set(self.policy["required"]), set(CONTROLS))
         self.assertEqual(self.policy["recommended"], [])
 
+    def test_only_native_community_profile_allows_an_empty_role_mapping(self):
+        narrow = json.loads((ROOT / "profiles/native-community.json").read_text())
+        self.policy_schema(copy.deepcopy(narrow))
+        validate_policy(copy.deepcopy(narrow))
+        self.assertEqual(set(self.policy["issue_form_kinds"]), {"bug", "feature", "documentation"})
+        for invalid in (
+            {**self.policy, "issue_form_kinds": {}},
+            {**narrow, "required": narrow["required"][:-1]},
+            {**narrow, "recommended": ["agents"]},
+        ):
+            with self.subTest(required=invalid["required"]):
+                with self.assertRaises(fastjsonschema.JsonSchemaException):
+                    self.policy_schema(copy.deepcopy(invalid))
+                with self.assertRaises(ValueError):
+                    validate_policy(copy.deepcopy(invalid))
+
     def test_unknown_control_is_rejected(self):
         policy = copy.deepcopy(self.policy)
         policy["required"].append("unknown_future_control")

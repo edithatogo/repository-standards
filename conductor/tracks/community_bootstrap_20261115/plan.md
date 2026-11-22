@@ -79,3 +79,44 @@ fastjsonschema 2.21.2.
 Python starter PR #9 passed its actual Python 3.15.1 CI (one test), privacy scan
 and Codecov patch check, and was merged at
 `126d23c1f4c0e020fba87fb0ddfa5f3cbdb81d5d`. The other candidates retain their own head-specific gates.
+
+## Bounded Community Standards CI — 22 November 2026
+
+- [x] Reuse the existing auditor for a narrow community profile and local
+  nonempty licence presence; preserve the full 17-control bootstrap policy.
+- [x] Add the shared action with immutable public-default observations,
+  sibling checkouts, safe reads and provenance checks; execute no consumer code.
+- [x] Add positive/negative tests for inheritance, local overrides, empty issue
+  roles, licence absence, private defaults and checkout provenance.
+- [x] Keep native Markdown body presence separate from full bootstrap section
+  requirements; retain extra invalid forms as native details and record all
+  nonempty local licence paths without selecting terms.
+- [x] Add the shared-action canary job to the existing policy workflow.
+- [x] Record the final local suite and schema acceptance results below.
+- [ ] Observe hosted checks for the final shared-action head before consumer
+  workflows adopt its exact SHA.
+- [ ] Record each consumer's own `community-standards` result separately from
+  GitHub's default-branch Community Standards score.
+- [ ] Enable the required-check setting after an actual run, when authenticated
+  repository-administration access is available; workflow delivery alone does
+  not establish a merge requirement.
+
+Missing licences remain owner decisions. This increment neither selects nor
+copies licence terms and does not complete F01/F03 or estate-wide rollout.
+
+### Final local source evidence
+
+On Python 3.15.2, PyYAML 6.0.3 without LibYAML and fastjsonschema 2.21.2,
+the final one-command suite selected **349 tests: 311 passed and 38 existing
+capability skips** (26 Presidio-tooling and 12 Gitleaks-binary checks).
+Separate evidence schema/pipeline acceptance passed **4/4**. The native boundary
+and schema additions contributed 16 executed regression tests; the full policy
+and its original community-bootstrap tests remain unchanged.
+
+The edited central candidate passed all seven native controls against the
+public account-defaults snapshot
+`078000775f7fa5349e315cd56e3521ca0615313f`; issue and PR templates were inherited.
+This is local candidate evidence, not a hosted canary receipt or an exact-commit
+claim for edited files. The archive repository's actual checkout contained
+5,695 tracked files and 6,097 inventoried files, below the unchanged 20,000-file
+Tree bound. Hosted canary success and consumer adoption remain the next gates.
