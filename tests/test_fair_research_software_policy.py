@@ -13,7 +13,7 @@ class FAIRProfileTests(unittest.TestCase):
         self.assertTrue(policy["selection"]["missing_is_disabled"])
         self.assertFalse(policy["selection"]["automatic_rollout"])
         self.assertEqual(policy["mode"], "advisory")
-        self.assertFalse(policy["governance"]["score_is_not_release_gate"])
+        self.assertTrue(policy["governance"]["score_is_not_release_gate"])
         self.assertTrue(policy["controls"]["howfairis"]["hosted_run_required_for_acceptance"])
 
     def test_repository_entry_schema_does_not_require_fair(self):
