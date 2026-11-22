@@ -4170,37 +4170,6 @@
       "exceptions": []
     },
     {
-      "repository": "edithatogo/standardflow",
-      "visibility": "private",
-      "archetype": "software",
-      "default_branch": "main",
-      "sole_developer": true,
-      "mandatory_human_approvals": 0,
-      "renovate": {
-        "current": "activate_via_inherited_config",
-        "target": "hosted_app_plus_inherited_config",
-        "canonical_preset": "github>edithatogo/renovate-config",
-        "dependabot_detected": false,
-        "removal_gate": "Renovate first successful run"
-      },
-      "codecov": {
-        "current": "private_unverified_requires_codecov_authorization",
-        "warranted": true,
-        "target": "active_oidc_upload_with_real_coverage"
-      },
-      "quality_issue": "https://github.com/edithatogo/standardflow/issues/13",
-      "policy_version": 1,
-      "profile": "generic-software",
-      "support_status": "active",
-      "maintenance_tier": "review_required",
-      "release_maturity": "review_required",
-      "canonical_status": "review_required",
-      "supply_chain_profile": "baseline",
-      "managed_files": "detect_and_issue",
-      "verification_receipt": "required",
-      "exceptions": []
-    },
-    {
       "repository": "edithatogo/standards_check",
       "visibility": "public",
       "archetype": "software",
