@@ -133,6 +133,15 @@
         },
         "notes": {
           "type": "string"
+        },
+        "assessment_status": {
+          "enum": [
+            "requested",
+            "provisional",
+            "validated",
+            "accepted"
+          ],
+          "description": "Evidence disposition, independent of an automated five-point score. `accepted` requires explicit owner review."
         }
       },
       "additionalProperties": false
