@@ -53,6 +53,11 @@ elif "inspect" in args:
 elif "run" in args:
     mount = next(value for value in args if value.startswith("type=bind,src="))
     source = Path(mount.removeprefix("type=bind,src=").split(",dst=", 1)[0])
+    if source.parent.stat().st_mode & 0o777 != 0o700:
+        sys.exit(25)
+    for directory in (source, source / "security", source / "security/offline-ai"):
+        if directory.stat().st_mode & 0o777 != 0o755:
+            sys.exit(26)
     if (source / "ignored.py").exists():
         sys.exit(23)
     original = os.environ.get("FAKE_MUTATE_ORIGINAL")
@@ -86,7 +91,8 @@ else:
             [sys.executable, str(self.helper), "--policy-sha", self.sha,
              "--image", IMAGE, "--manifest-sha256", MANIFEST,
              "--receipt", str(self.receipt), *extra],
-            env=dict(self.env, **environment), capture_output=True, text=True, timeout=15,
+            env=dict(self.env, **environment), capture_output=True, text=True,
+            timeout=15, umask=0o077,
         )
 
     def calls(self):

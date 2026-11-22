@@ -122,7 +122,7 @@ def policy_snapshot(commit):
     """Export committed files once; ignored files and later edits cannot enter."""
     with tempfile.TemporaryDirectory(prefix="offline-policy-") as temporary:
         snapshot = Path(temporary) / "policy"
-        snapshot.mkdir(mode=0o755)
+        snapshot.mkdir()
         try:
             with tempfile.TemporaryFile() as stream:
                 result = subprocess.run(
@@ -140,6 +140,9 @@ def policy_snapshot(commit):
                     archive.extractall(snapshot, filter="data")
         except (OSError, tarfile.TarError, subprocess.TimeoutExpired):
             raise QualificationError("policy-snapshot") from None
+        # Let the non-root scanner traverse the bind mount under a private host parent.
+        for directory, _, _ in snapshot.walk():
+            directory.chmod(0o755)
         yield snapshot
 
 
