@@ -23,7 +23,11 @@
       "pattern": "^[^/]+/[^/]+$"
     },
     "visibility": {
-      "enum": ["public", "private", "internal"]
+      "enum": [
+        "public",
+        "private",
+        "internal"
+      ]
     },
     "archetype": {
       "type": "string"
@@ -42,33 +46,97 @@
       "const": 0
     },
     "support_status": {
-      "enum": ["active", "limited", "experimental", "unsupported", "review_required"]
+      "enum": [
+        "active",
+        "limited",
+        "experimental",
+        "unsupported",
+        "review_required"
+      ]
     },
     "maintenance_tier": {
-      "enum": ["critical", "maintained", "best_effort", "historical", "review_required"]
+      "enum": [
+        "critical",
+        "maintained",
+        "best_effort",
+        "historical",
+        "review_required"
+      ]
     },
     "release_maturity": {
-      "enum": ["not_released", "experimental", "pre_release", "stable", "mature", "not_applicable", "review_required"]
+      "enum": [
+        "not_released",
+        "experimental",
+        "pre_release",
+        "stable",
+        "mature",
+        "not_applicable",
+        "review_required"
+      ]
     },
     "canonical_status": {
-      "enum": ["canonical", "historical_line", "superseded", "duplicate_candidate", "empty", "review_required"]
+      "enum": [
+        "canonical",
+        "historical_line",
+        "superseded",
+        "duplicate_candidate",
+        "empty",
+        "review_required"
+      ]
     },
     "exceptions": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["control", "reason", "owner", "review_after"],
+        "required": [
+          "control",
+          "reason",
+          "owner",
+          "review_after"
+        ],
         "properties": {
-          "control": {"type": "string"},
-          "reason": {"type": "string", "minLength": 1},
-          "owner": {"type": "string", "minLength": 1},
-          "review_after": {"type": "string", "format": "date"},
-          "evidence": {"type": "string"}
+          "control": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "review_after": {
+            "type": "string",
+            "format": "date"
+          },
+          "evidence": {
+            "type": "string"
+          }
         },
         "additionalProperties": false
       }
+    },
+    "fair_software": {
+      "type": "object",
+      "description": "Optional FAIR research-software assessment; absent means disabled. Advisory only.",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "type": "string",
+          "description": "Repository-local FAIR evidence document or receiving assessment URL"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": true
 }
-

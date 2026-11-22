@@ -24,6 +24,10 @@ The [scientific/native profile](docs/scientific-native.md) coordinates ownership
 frontier dependency qualification and resource evidence without replacing local
 numerical gates. Delivery is tracked in [Conductor](conductor/index.md).
 
+## Optional FAIR research software assessment
+
+The [FAIR research software standard](docs/fair-research-software-standard.md) defines an **opt-in advisory** profile for active public scientific libraries and reusable research methods. The [policy](profiles/fair-research-software.json) and optional `fair_software.enabled` registry field preserve disabled-by-default semantics; an automated howfairis assessment is not a certification, release gate or substitute for separate ARDC and reproducibility evidence.
+
 ## Privacy and secret scanning
 
 The [privacy and secrets standard](docs/privacy-secrets-standard.md) defines a
