@@ -192,6 +192,8 @@ def scan_paths(root: Path, rules: Path, paths: list[str], submodules: int,
         command = [
             executable, "scan", "--no-git-ignore", "--semgrepignore-filename=/dev/null",
             "--max-target-bytes=0", "--strict", "--disable-nosem", "--taint-intrafile",
+            # Bound each rule on each target, including on the offline x64 runner.
+            "--timeout=30",
             "--config", str(rules), "--error", "--json", "--", *batch,
         ]
         with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as diagnostics:
