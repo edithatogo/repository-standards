@@ -23,6 +23,18 @@ class FAIRProfileTests(unittest.TestCase):
         self.assertEqual(field["properties"]["enabled"]["type"], "boolean")
         self.assertEqual(field["required"], ["enabled"])
 
+    def test_enabled_assessments_have_explicit_valid_dispositions(self):
+        schema = json.loads((ROOT / "schemas/repository-entry.schema.json").read_text())
+        allowed = set(schema["properties"]["fair_software"]["properties"]["assessment_status"]["enum"])
+        self.assertEqual(allowed, {"requested", "provisional", "validated", "accepted"})
+        registry = json.loads((ROOT / "registry/repositories.json").read_text())
+        enabled = [row["fair_software"] for row in registry["repositories"] if row.get("fair_software", {}).get("enabled")]
+        self.assertTrue(enabled)
+        for record in enabled:
+            self.assertIn(record.get("assessment_status"), allowed)
+            if record["assessment_status"] in {"validated", "accepted"}:
+                self.assertTrue(record.get("evidence"))
+
     def test_external_action_pinned_to_commit(self):
         policy = json.loads((ROOT / "profiles/fair-research-software.json").read_text())
         sha = policy["controls"]["howfairis"]["pinned_action_commit"]
