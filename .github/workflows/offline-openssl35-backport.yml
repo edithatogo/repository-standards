@@ -45,6 +45,9 @@ jobs:
           tail -30 "$build_log"
           grep -Fx 'Result: PASS' "$build_log"
           grep -E '^Files=5, Tests=[1-9][0-9]*,' "$build_log"
+          for suite in 25-test_verify 25-test_verify_store 70-test_verify_extra 80-test_dane 90-test_sslapi; do
+            grep -E "^${suite}[.]t +[.]* ok$" "$build_log"
+          done
           cd "$RUNNER_TEMP/openssl35-build/staged"
           sha256sum usr/bin/openssl usr/lib/x86_64-linux-gnu/libssl.so.3 \
             usr/lib/x86_64-linux-gnu/libcrypto.so.3 usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so

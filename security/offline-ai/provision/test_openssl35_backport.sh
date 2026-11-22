@@ -7,11 +7,17 @@ if [[ "$#" -ne 2 ]]; then
     echo "Usage: test_openssl35_backport.sh SOURCE_TAR NEW_BUILD_DIRECTORY" >&2
     exit 2
 fi
-if [[ "$(uname -sm)" != "Linux x86_64" || "$(id -u)" == 0 ||
-      "$(ls -1 /sys/class/net)" != lo ]]; then
-    echo "Run the backport build as a non-root user on Linux x64 with loopback only" >&2
+if [[ "$(uname -sm)" != "Linux x86_64" || "$(id -u)" == 0 ]]; then
+    echo "Run the backport build as a non-root user on Linux x64" >&2
     exit 2
 fi
+# /proc/net describes this process's network namespace even when /sys is shared.
+interfaces=$(awk -F: 'NR > 2 {gsub(/[[:space:]]/, "", $1); print $1}' /proc/net/dev)
+if [[ "$interfaces" != lo ]]; then
+    echo "The OpenSSL build must have a loopback-only network namespace" >&2
+    exit 2
+fi
+echo "Verified unprivileged Linux x64 build with loopback-only networking"
 
 archive=$1
 destination=$2
