@@ -11,9 +11,9 @@ control plane.
 manifests. Its Wolfi entry also records the signed multi-architecture index
 and the verified publishing workflow. Online preparation checks the public
 package bytes against `wolfi-packages.sha256`. During the offline build, apk
-verifies each pinned package signature against the Wolfi keys in the pinned
-image before installing those files. The complete installed package inventory
-must match `wolfi-inventory.txt`. A separate virtual environment uses Python 3.15.2
+authenticates the vendor's signed index and verifies packages from the mounted
+local repository. The complete installed package inventory must match
+`wolfi-inventory.txt`. A separate virtual environment uses Python 3.15.2
 and the verified wheel inventory.
 
 The build verifies the pinned Git release archive and compiles it offline

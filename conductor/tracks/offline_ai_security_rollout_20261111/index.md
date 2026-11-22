@@ -1073,9 +1073,12 @@ CPython patch size, request timeout and SHA-256 checks still apply.
 
 Innovate run `44991607474` reached the offline APK install. The live index
 selected ncurses `6.6.20261121-r0`, which was absent from the staged packages.
-The build now verifies the signatures of the checksum-pinned APKs with the
-pinned base's Wolfi keys and installs those files with networking disabled.
-The expected 50-package inventory and glibc backport checks still apply.
+The direct-package candidate in run `44993400698` rejected the APKs with
+`UNTRUSTED`. Restore verification through the signed Wolfi index. It still
+contains the two locked `6.6.20261114-r0` packages, and both downloads match
+their SHA-256 pins. Select those versions explicitly in the offline install.
+The expected 50-package inventory remains the same. Both glibc verification
+file hashes match the pinned Linux amd64 base.
 Five Wolfi image-review tests and 12 immutable policy-source tests passed on
 Python 3.15.2. Linux qualification must confirm the real package installation,
 image review and consumer scan.
