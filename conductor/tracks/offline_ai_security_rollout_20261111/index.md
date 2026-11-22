@@ -1090,7 +1090,8 @@ timeout and this record in
 `/Volumes/PortableSSD/GitHub/repository-standards-innovate44` from
 `7a4a73e6b751c5bb20a462e49a2987d30fad0812`. The native scope is policy PR
 #152 and Innovate PR #684's local x86-64 replay. The selected files are
-`security/offline-ai/provision/gitleaks_candidate.py` and this record.
+`security/offline-ai/provision/gitleaks_candidate.py`, the immutable source pin
+in `.github/workflows/reusable-ai-sec-pipeline.yml`, and this record.
 
 The local replay reached Gitleaks compilation, then binary preparation failed.
 The Go process ran for the existing 600-second build limit. The retained
