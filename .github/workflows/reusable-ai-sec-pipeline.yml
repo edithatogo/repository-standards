@@ -43,7 +43,7 @@ jobs:
       - name: Checkout consumer without credentials
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: ${{ inputs.github_hosted && (github.event.pull_request.head.sha || github.sha) || '' }}
+          ref: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.sha) || github.sha }}
           fetch-depth: 0
           persist-credentials: false
           submodules: false
@@ -53,7 +53,7 @@ jobs:
         with:
           repository: edithatogo/repository-standards
           # Immutable snapshot containing the offline scanner rules and replay controls.
-          ref: 9870ef0e6aeafae448e42ca7b67189b260f988d1
+          ref: 634bfa54c6f37d9de4dbc3b2fd39d1b45e6a5eee
           persist-credentials: false
           submodules: false
           path: policy
