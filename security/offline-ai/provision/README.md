@@ -133,6 +133,39 @@ host network isolation, vulnerability review and applicable application/language
 qualification remain separate gates before the consumer pin is changed and its
 PR is merged.
 
+## OpenSSL 3.5 backport candidate
+
+The [candidate patch](openssl35-dane-guard.patch) adapts the certificate
+availability check from [OpenSSL PR #33634](https://github.com/openssl/openssl/pull/33634)
+to OpenSSL 3.5. It leaves the existing trust fallback and the behavior for
+present certificates in place.
+
+Use OpenSSL tree `e110612e5fa0451e9d70746bc28ba873070bcf81` from the vendor's
+`openssl-3.5` branch. The uncompressed archive produced by
+`git archive --format=tar --prefix=openssl/ e110612e5fa0451e9d70746bc28ba873070bcf81`
+has SHA-256 `a578782cdf05135b5fbee788be505de6b1d9066c1a46fc5b6096b5acd44ad3ed`.
+In a disposable extraction, check the preimage and patched file:
+
+```sh
+cd openssl
+printf '%s\n' 'b0d127f71a439bf83935fdbcdda3fdd5e38fa8cf66edfe493aa359d8820c087e  crypto/x509/x509_vfy.c' | sha256sum -c -
+git apply --unidiff-zero /absolute/path/to/openssl35-dane-guard.patch
+printf '%s\n' '3c638f6c64c431a88b2e94c9f3ed12fb9b431778d818e8d1fe0e633c5b98aa1a  crypto/x509/x509_vfy.c' | sha256sum -c -
+```
+
+In a Linux x64 builder with loopback-only networking, run the candidate build
+and its five upstream verification and TLS test suites as a non-root user:
+
+```sh
+bash security/offline-ai/provision/test_openssl35_backport.sh \
+  /absolute/openssl-source.tar /absolute/new/candidate-build
+```
+
+This recipe tests the backport on the chosen upstream source. Deployable
+Debian packages also require the distribution configuration, package inventory,
+and provenance. A scanner built from those packages requires its own eight
+controls, SPDX inventory, and all-layer vulnerability review.
+
 ## Source acquisition and lock review
 
 This directory separates online acquisition of pinned public assets from offline image construction and real qualification. Preparation never registers a runner or declares an image qualified.

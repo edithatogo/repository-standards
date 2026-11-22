@@ -1,0 +1,10 @@
+--- a/crypto/x509/x509_vfy.c
++++ b/crypto/x509/x509_vfy.c
+@@ -3256 +3256 @@
+-    X509 *cert = sk_X509_value(ctx->chain, num - 1);
++    X509 *cert;
+@@ -3258,0 +3259,4 @@
++
++    /* Bare trust-anchor keys can only sign a remaining untrusted certificate. */
++    if (num <= 0 || (cert = sk_X509_value(ctx->chain, num - 1)) == NULL)
++        return X509_TRUST_UNTRUSTED;
