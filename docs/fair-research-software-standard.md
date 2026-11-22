@@ -7,6 +7,16 @@ This is an **opt-in, advisory** repository standard, not a new mandatory complia
 See [the machine-readable policy](../profiles/fair-research-software.json).
 Adopt for active, canonical, public research libraries, reusable scientific methods, and independently published scientific software where maintainers select `fair_software.enabled: true` in the registry. Applications, research datasets and workflows require case-by-case classification. Private, archived, fork-only, documentation-only and operational repositories are excluded by default. Missing declarations mean **disabled**. Do not auto-rollout or promote a repository based solely on name or a badge.
 
+## Evidence disposition
+
+The optional `fair_software.assessment_status` field separates reporting from assurance:
+- `requested`: repository owner has requested assessment, with no verified run.
+- `provisional`: advisory tooling/evidence record exists, but the independent ARDC, rights and reproducibility reviews are incomplete.
+- `validated`: actual hosted receipt and independently reviewed evidence have been reconciled, without owner acceptance.
+- `accepted`: the designated owner has explicitly approved the evidence and existing security/scientific gates remain satisfied.
+
+A score, green advisory workflow, registry badge or DOI cannot itself advance a status. All 18 already-merged pilots remain `provisional`. The absence of this field in older entries does not imply acceptance.
+
 ## Minimum evidence when opted in
 
 1. Verify a specific published commit and repository identity. Use the existing howfairis action, pinned to upstream `4c11146488125aa6e1531184eed51d781bcd5871` (v0.2.1), with `contents: read`, advisory operation and an actual hosted-run receipt. The checker uses public repository metadata; PR results may reflect the default branch.
