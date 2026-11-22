@@ -1504,6 +1504,11 @@
     },
     {
       "repository": "edithatogo/global-medicines-atlas",
+      "fair_software": {
+        "enabled": true,
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Merged PR #1474; advisory metadata only, ARDC and science evidence pending"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2315,7 +2320,12 @@
     },
     {
       "repository": "edithatogo/microcosting_genomics",
-      "visibility": "private",
+      "fair_software": {
+        "enabled": true,
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Merged PR #176; advisory metadata only, ARDC and science evidence pending"
+      },
+      "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
       "sole_developer": true,
@@ -2346,7 +2356,12 @@
     },
     {
       "repository": "edithatogo/microcosting_healthworkforce",
-      "visibility": "private",
+      "fair_software": {
+        "enabled": true,
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Merged PR #307; advisory metadata only, ARDC and science evidence pending"
+      },
+      "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
       "sole_developer": true,
