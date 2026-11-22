@@ -448,7 +448,7 @@ def candidate(destination, *, local_binary=None):
                      "-tags=gore2regex", "-ldflags=-s -w -buildid= "
                      "-X=github.com/zricethezav/gitleaks/v8/version.Version=8.30.1"]
             run([go, "build", *flags, "-o", str(binary), "."],
-                cwd=source, env=offline, stage="build")
+                cwd=source, env=offline, stage="build", timeout=1800)
             assert_go_mod(source / "go.mod", expected)
             require(regular(source / "go.sum") == go_sum, "build")
             version = run([str(binary), "version"], cwd=source, env=offline,

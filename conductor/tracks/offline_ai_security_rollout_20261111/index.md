@@ -1082,3 +1082,29 @@ file hashes match the pinned Linux amd64 base.
 Five Wolfi image-review tests and 12 immutable policy-source tests passed on
 Python 3.15.2. Linux qualification must confirm the real package installation,
 image review and consumer scan.
+
+### Bound the Gitleaks build on emulated x86-64
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the Gitleaks build
+timeout and this record in
+`/Volumes/PortableSSD/GitHub/repository-standards-innovate44` from
+`7a4a73e6b751c5bb20a462e49a2987d30fad0812`. The native scope is policy PR
+#152 and Innovate PR #684's local x86-64 replay. The selected files are
+`security/offline-ai/provision/gitleaks_candidate.py` and this record.
+
+The local replay reached Gitleaks compilation, then binary preparation failed.
+The Go process ran for the existing 600-second build limit. The retained
+preparation receipt identifies the failed binary stage but intentionally
+suppresses the underlying exception, so the timeout diagnosis is based on the
+observed process timing. Allow a bounded 1,800 seconds for this one build on
+emulated hardware. Continue to require the locked binary hash, module closure,
+fixtures and report-permission checks. A fresh policy qualification and local
+consumer run are needed.
+
+The 20 focused Gitleaks candidate and image-identity tests passed with Python
+3.15.2. The full local macOS suite ran 368 tests and failed with nine failures,
+30 errors and 26 skips. Its temporary paths resolved through `/private`; using
+a canonical temporary directory fixed those affected cases. A targeted rerun
+still had five failures and 26 errors in the Linux-only image collectors, whose
+platform guard correctly rejects macOS. Preserve both logs in the local
+qualification directory and run the full suite on Linux for policy acceptance.
