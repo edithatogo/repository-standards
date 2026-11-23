@@ -35,7 +35,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
         run: |
           set -euo pipefail
-          test "$GITHUB_REPOSITORY" = edithatogo/innovate
+          test "$GITHUB_REPOSITORY" = edithatogo/dapane
           case "$EVENT_NAME" in
             pull_request|push|workflow_dispatch) ;;
             *) exit 2 ;;
@@ -53,7 +53,7 @@ jobs:
         with:
           repository: edithatogo/repository-standards
           # Immutable snapshot containing the offline scanner rules and replay controls.
-          ref: 634bfa54c6f37d9de4dbc3b2fd39d1b45e6a5eee
+          ref: b108a0f0724571f6f6fed31a2574b8769badf7d4
           persist-credentials: false
           submodules: false
           path: policy
@@ -132,6 +132,7 @@ jobs:
           set -euo pipefail
           [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]]
           test "$(git -C consumer rev-parse HEAD)" = "$TARGET_SHA"
+          printf 'Verified consumer source %s\n' "$TARGET_SHA"
           case "$EVENT_NAME" in
             pull_request|push)
               [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]]
@@ -167,7 +168,7 @@ jobs:
           POLICY_SHA: ${{ steps.hosted_source.outputs.sha }}
         run: |
           set -euo pipefail
-          destination="$RUNNER_TEMP/innovate44-consumer-policy"
+          destination="$RUNNER_TEMP/consumer-policy"
           python -I "$POLICY_ROOT/security/offline-ai/provision/export_consumer_policy.py" \
             --commit "$POLICY_SHA" --destination "$destination"
           echo "path=$destination" >> "$GITHUB_OUTPUT"
@@ -192,11 +193,12 @@ jobs:
           python -I -B "$CONSUMER_POLICY/security/offline-ai/provision/hosted_sast_assets.py" \
             "$trial" "$(command -v bsdtar)" > "$RUNNER_TEMP/offline-runtime/evidence/hosted-sast-assets.json"
           printf 'bundle=%s\nrust_toolchain=%s\n' "$trial" "$rust_toolchain" >> "$GITHUB_OUTPUT"
-      - name: Scan the Innovate source without container networking
+      - name: Scan the exact source without container networking
         if: inputs.github_hosted
         id: consumer
         shell: bash
         env:
+          VERIFY_SCANNER_MODEL: ${{ inputs.verify_scanner_model }}
           ENFORCE_AI: ${{ inputs.enforce_ai }}
           EVENT_NAME: ${{ github.event_name }}
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
@@ -210,12 +212,12 @@ jobs:
           docker image inspect "$CANDIDATE_IMAGE" >/dev/null
           docker run --rm --pull=never --entrypoint=bash --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
             --pids-limit 256 --memory 8g --cpus 4 --user 65534:65534 \
-            --tmpfs /tmp:rw,nosuid,size=2g,mode=1777 \
+            --tmpfs /tmp:rw,noexec,nosuid,size=512m,mode=1777 \
             --mount "type=bind,src=$GITHUB_WORKSPACE/consumer,dst=/work,readonly" \
             --mount "type=bind,src=$CONSUMER_POLICY,dst=/policy,readonly" \
             --mount "type=bind,src=$HOSTED_SAST,dst=/hosted-sast,readonly" \
             --mount "type=bind,src=$RUST_TOOLCHAIN,dst=/rust-toolchain,readonly" \
-            -e ENFORCE_AI -e EVENT_NAME -e BASE_SHA -e HOME=/tmp \
+            -e ENFORCE_AI -e VERIFY_SCANNER_MODEL -e EVENT_NAME -e BASE_SHA -e HOME=/tmp \
             -e SECURITY_ASSET_MANIFEST=/opt/offline-ai/manifest.json -e GLINER_MODEL_DIR=/opt/models/gliner-pii \
             -e HF_HUB_OFFLINE=1 -e TRANSFORMERS_OFFLINE=1 -e HF_DATASETS_OFFLINE=1 \
             -e HF_HOME=/opt/models -e XDG_CACHE_HOME=/tmp/cache -e TMPDIR=/tmp \
