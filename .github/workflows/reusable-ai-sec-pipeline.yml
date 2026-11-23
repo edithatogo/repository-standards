@@ -14,7 +14,7 @@ permissions:
   contents: read
 jobs:
   offline-security:
-    runs-on: ${{ inputs.github_hosted && 'ubuntu-24.04' || fromJSON('["self-hosted","linux","x64","ai-security-offline"]') }}
+    runs-on: ${{ inputs.github_hosted && 'ubuntu-24.04' || fromJSON('["self-hosted","linux","x64","ai-security-offline-v2"]') }}
     timeout-minutes: 45
     env:
       PYTHONDONTWRITEBYTECODE: "1"
