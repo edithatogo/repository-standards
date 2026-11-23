@@ -4177,16 +4177,19 @@
       "sole_developer": true,
       "mandatory_human_approvals": 0,
       "renovate": {
-        "current": "activate_via_inherited_config",
+        "current": "hosted_app_verified",
         "target": "hosted_app_plus_inherited_config",
         "canonical_preset": "github>edithatogo/renovate-config",
-        "dependabot_detected": false,
+        "dependabot_detected": true,
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "listed_inactive",
+        "current": "active_oidc_upload_verified",
         "warranted": true,
-        "target": "active_oidc_upload_with_real_coverage"
+        "target": "active_oidc_upload_with_real_coverage",
+        "evidence_revision": "12b7b00737124aa7c0feaead893c930124332489",
+        "receiving_main_qualified": false,
+        "assessment": "docs/standards-check-maintenance-assessment.md"
       },
       "quality_issue": "https://github.com/edithatogo/standards_check/issues/30",
       "policy_version": 1,
