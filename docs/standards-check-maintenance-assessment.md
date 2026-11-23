@@ -107,3 +107,156 @@ collector, workflow or repository setting was changed by this correction.
 [codecov-report]: https://app.codecov.io/gh/edithatogo/standards_check/commit/12b7b00737124aa7c0feaead893c930124332489
 [latex-assessment]: typesetting-unimelb-latex-assessment.md
 [typst-assessment]: typesetting-unimelb-typst-assessment.md
+
+## Receiving-main follow-up — 23 November 2026
+
+Central base: `2efdbd988064f6857795b9fa9ed4e1d08d18791d`. The preceding
+assessment remains the historical record of its original PR head and cutoff.
+This follow-up updates five descriptive fields in the same consumer entry.
+
+### Qualified corrective receiving main
+
+[PR #107][corrective-pr] merged normally as
+[`dd3f995c473db0cc1cd6dad9d392b3744166958b`][corrective-main], tree
+`3bdbebf0bb72a7f7edf9c90a7c4fc10412d98200`. Its parents are main
+`8029b1a55fb4273878510681c1a5a7b5c02b57f0` and qualified PR head
+`4e8e13a632777f2916b183101774cf2ff5389823`. The earlier main's coverage
+qualification remains historical; it did not qualify this API repair.
+[Assurance run 45106620582][corrective-assurance] measured the actual corrective
+main and uploaded separately verified reports:
+
+| Component | Actual main result | Measurement job | OIDC upload job |
+| --- | --- | --- | --- |
+| Python | 265 tests; 28 production modules; 76.68% combined coverage | [137469276587][corrective-python] | [137469891138][corrective-python-upload] |
+| Rust | 72 tests; 2,742/3,430 lines, 79.94% | [137469276491][corrective-rust] | [137469891156][corrective-rust-upload] |
+| API | 41 tests; 143/143 lines, 100%; 41/42 branches, 97.62% | [137469276443][corrective-api] | [137469891135][corrective-api-upload] |
+
+All three uploads acquired OIDC tokens, verified the native report checksum and
+selected one explicit report with its component flag and file search disabled.
+These push jobs detected the checked-out main revision; `CC_SHA` was empty and
+the CLI used no explicit `--sha` override. Every returned provider URL names
+`dd3f995c473db0cc1cd6dad9d392b3744166958b`.
+
+At `2026-11-23T03:37:59Z`, the [legacy status endpoint][corrective-status]
+reported successful `codecov/patch` status **59621115216**, created at
+`2026-11-23T03:35:37Z`, with description “Coverage not affected when comparing
+4e8e13a...dd3f995” and the exact [main report][corrective-codecov]. No Codecov
+App ID 254 check-run or project result was returned. The status payload did not
+include creator attribution, so this legacy result is not attributed to that
+App. Uploader execution, queue acceptance and provider processing remain
+separate observations. The registry advances `codecov.evidence_revision` to
+this corrective main and `codecov.receiving_main_qualified` to `true` for this
+scoped coverage qualification; it does not claim a project check or universal
+repository acceptance.
+
+The ten hand-selected boundary mutations were killed by assertions, with no
+survivors, unviable cases or timeouts. This is not a global mutation score.
+The actual main Python job also passed the retained two authored PRISMA pairs
+and checked two documented validation differences; full legacy semantic parity
+remains separate.
+
+### Protection and security observations
+
+[Ruleset 27871801][receiving-ruleset] is active on the default branch, with
+strict up-to-date checks, zero mandatory human approvals, resolved review
+conversations, no bypass actors, and no deletion or non-fast-forward pushes.
+All seven required contexts are bound to GitHub Actions App ID 15368:
+`assurance`, `privacy-and-secrets`, `Maintained dependency inventories`, and
+`Analyze (actions)`, `Analyze (javascript-typescript)`, `Analyze (python)` and
+`Analyze (rust)`. The native CodeQL rule requires `high_or_higher` security
+severity and ordinary alert threshold `errors`.
+
+The receiving-main security readback at `2026-11-23T03:36:04Z` showed zero open
+and four closed CodeQL alerts; [path-selection alerts #5][path-alert-five] and
+[#6][path-alert-six] were fixed through PR #107. Privacy job **137469276069**
+passed with zero Gitleaks findings, zero reviewed exceptions and zero blocking
+Presidio findings; its seven advisory findings remain distinguished from
+blocking findings. Saved protection, executed checks and actual protected
+merge are separate evidence.
+
+### Evidence-grounded classifications
+
+The existing [entry schema][classification-schema] provides these descriptive
+values; the [lifecycle standard][lifecycle-standard] requires evidence for
+canonical roles. The user's explicit retention and continued-maintenance
+instruction, together with the [receiving README][receiving-readme], supports:
+
+| Field | Recorded value | Evidence boundary |
+| --- | --- | --- |
+| `maintenance_tier` | `maintained` | Ongoing authorized maintenance and accepted repairs in the retained repository. |
+| `canonical_status` | `canonical` | The repository identifies itself as the primary adoption home; the source repository has been made private and archived after consolidation. |
+| `release_maturity` | `experimental` | The README explicitly describes a platform being developed, operational legacy surfaces and future architecture. A `v0.1` tag exists; the GitHub releases collection returned no releases. This does not claim no external distribution, a stable release, full migration parity or source-rights acceptance. |
+
+### Managed CI disposition
+
+The registered `node` profile and explicit `baseline` supply-chain selection
+remain unchanged. The [profile][receiving-profile] requires dependency review
+and SBOM; the local workflows provide these, root/API npm tests, measured
+Python/Rust/API coverage, and isolated source-bound uploads. No extra native
+test type or baseline supply-chain capability was identified in the shared
+Node workflow that is missing from this implementation.
+
+The [managed-file manifest][receiving-managed] preserves local additions and
+prohibits forced overwrite. The [continuous-conformance standard][conflict-route]
+routes semantic conflicts and repository-local extensions to issues, while the
+[enforcement track][stronger-controls] preserves stronger consumer controls.
+This source-bound review and actual receiving evidence complete the narrow
+local-CI specialization assessment requested by [issue #30][quality-issue].
+No profile change, new exception or human approval dependency is introduced.
+
+The manifest still describes `ci.yml` delivery as
+`thin_immutable_reusable_workflow_call`; the actual consumer implements local
+jobs. This is a reviewed specialization, not exact reusable-call conformance.
+The [shared Node workflow][shared-node] executes repository tests and Codecov
+OIDC upload in one job without explicit report selection. Blind substitution
+would lose the consumer's stronger upload boundary. Future reusable adoption
+requires a focused central adaptation preserving that boundary and stable
+required checks, not a forced profile migration in this repair.
+
+Portable [verification-receipt schema][portable-receipt] compatibility is
+separate from the validity of the retained component evidence. The receiving
+Conductor follow-up owns its aggregate export and exact-source binding.
+The [one-command harness recommendation][quick-harness] remains an optional
+integration improvement, not an added merge gate; no new generic harness is
+introduced by this accepted implementation increment.
+
+### Retained limits
+
+All other registry fields and all other repository entries retain their values.
+The existing profile, supply-chain selection, zero-approval policy and empty
+exception list are preserved. Renovate installation and historical merged
+updates do not establish a new updater completing the saved protection rules
+or handover for every ecosystem. The GitHub Actions Dependabot manifest and
+`removal_gate: "Renovate first successful run"` remain unchanged. No artificial
+version bump is needed to manufacture lifecycle evidence.
+
+The offline-security image, assigned runner and actual execution remain gated.
+The prior failures and assessments, F01 live acceptance, F03 apply-mode limits,
+source/methodology reviews, broader migration and release obligations remain
+separate. Main's PR-only dependency review was skipped by applicability;
+queued offline work is not counted as passing.
+
+[corrective-pr]: https://github.com/edithatogo/standards_check/pull/107
+[corrective-main]: https://github.com/edithatogo/standards_check/commit/dd3f995c473db0cc1cd6dad9d392b3744166958b
+[corrective-assurance]: https://github.com/edithatogo/standards_check/actions/runs/45106620582
+[corrective-python]: https://github.com/edithatogo/standards_check/actions/runs/45106620582/job/137469276587
+[corrective-rust]: https://github.com/edithatogo/standards_check/actions/runs/45106620582/job/137469276491
+[corrective-api]: https://github.com/edithatogo/standards_check/actions/runs/45106620582/job/137469276443
+[corrective-python-upload]: https://github.com/edithatogo/standards_check/actions/runs/45106620582/job/137469891138
+[corrective-rust-upload]: https://github.com/edithatogo/standards_check/actions/runs/45106620582/job/137469891156
+[corrective-api-upload]: https://github.com/edithatogo/standards_check/actions/runs/45106620582/job/137469891135
+[corrective-status]: https://api.github.com/repos/edithatogo/standards_check/commits/dd3f995c473db0cc1cd6dad9d392b3744166958b/status
+[corrective-codecov]: https://app.codecov.io/gh/edithatogo/standards_check/commit/dd3f995c473db0cc1cd6dad9d392b3744166958b
+[receiving-ruleset]: https://github.com/edithatogo/standards_check/rules/27871801
+[path-alert-five]: https://github.com/edithatogo/standards_check/security/code-scanning/5
+[path-alert-six]: https://github.com/edithatogo/standards_check/security/code-scanning/6
+[classification-schema]: https://github.com/edithatogo/repository-standards/blob/2efdbd988064f6857795b9fa9ed4e1d08d18791d/schemas/repository-entry.schema.json#L57
+[lifecycle-standard]: https://github.com/edithatogo/repository-standards/blob/2efdbd988064f6857795b9fa9ed4e1d08d18791d/docs/continuous-conformance-standard.md#L87
+[receiving-readme]: https://github.com/edithatogo/standards_check/blob/dd3f995c473db0cc1cd6dad9d392b3744166958b/README.md
+[receiving-profile]: https://github.com/edithatogo/repository-standards/blob/2efdbd988064f6857795b9fa9ed4e1d08d18791d/profiles/archetype-profiles.json#L81
+[receiving-managed]: https://github.com/edithatogo/repository-standards/blob/2efdbd988064f6857795b9fa9ed4e1d08d18791d/managed-files/manifest.json#L91
+[conflict-route]: https://github.com/edithatogo/repository-standards/blob/2efdbd988064f6857795b9fa9ed4e1d08d18791d/docs/continuous-conformance-standard.md#L46
+[stronger-controls]: https://github.com/edithatogo/repository-standards/blob/2efdbd988064f6857795b9fa9ed4e1d08d18791d/conductor/tracks/frontier_02_enforcement_20261113/spec.md#L4
+[shared-node]: https://github.com/edithatogo/repository-standards/blob/2efdbd988064f6857795b9fa9ed4e1d08d18791d/.github/workflows/node-ci.yml
+[portable-receipt]: https://github.com/edithatogo/repository-standards/blob/2efdbd988064f6857795b9fa9ed4e1d08d18791d/schemas/verification-receipt.schema.json
+[quick-harness]: https://github.com/edithatogo/repository-standards/blob/2efdbd988064f6857795b9fa9ed4e1d08d18791d/docs/continuous-conformance-standard.md#L62
