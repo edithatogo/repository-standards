@@ -222,7 +222,7 @@ def container_command(docker, image, name, command, snapshot):
         "run", "--rm", "--pull=never", "--network=none", "--read-only", "--cap-drop=ALL",
         "--security-opt=no-new-privileges", "--pids-limit=256", "--memory=8g", "--cpus=4",
         "--user=65534:65534", "--name=" + name, "--entrypoint=" + command[0],
-        "--tmpfs", "/tmp:rw,nosuid,size=2g,mode=1777",
+        "--tmpfs", "/tmp:rw,noexec,nosuid,size=512m,mode=1777",
         "--mount", f"type=bind,src={snapshot},dst=/policy,readonly",
         "--workdir", "/policy/security/offline-ai",
     ]
