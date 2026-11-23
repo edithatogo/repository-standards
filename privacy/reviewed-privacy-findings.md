@@ -45,3 +45,34 @@ offsets and matched-value digest. No other values or files are reviewed here.
 Changes require exact-source provenance review, neighboring unreviewed-match
 tests with the real recognizer, the shared scanner and policy suites, and current
 hosted qualification before a consumer adopts a new action pin.
+
+## Limma numeric fixtures — 23 November 2026
+
+The registry adds 123 exact phone-pattern spans in nine paths (seven distinct
+Git blobs) at Limma commit `c6a757779c0f5d9869bf71a55df0c64cc69ac7b5`.
+All source blobs match the audited upstream revision
+`ba41fb6bbf6e3f2524bd44f5be017c827d5c4aaa`. Independent review verified each
+blob, line, Unicode offset, matched-value digest, CSV field and pinned generator:
+121 matches are fractional digits strictly inside numeric log-intensity fields;
+two are whole noninteger numeric covariate fields from a seeded R generator.
+None cross fields or match a row label or header. Every entry links the exact
+source and the applicable generator. This is a review of those numeric spans;
+it neither certifies the dataset as anonymous nor establishes historical
+regeneration or scientific acceptance.
+
+The complete original scan reported 123 blocking matches and 61,671 advisories.
+Its public report omitted 52,001 finding groups after its reporting cap; the
+review therefore used a complete, reconciled inventory from the unchanged
+scanner and immutable blobs. All 123 blocking identities were checked, including
+the 93 matches absent from the capped report. Advisory findings and the skipped
+Conductor submodule remain visible and are outside this exact-span review.
+
+The registry is now bounded to 128 KiB and formatted as one compact JSON object
+per finding line. The 144 entries retain all 21 prior records unchanged. Tests
+accept valid JSON at the exact byte bound and reject one additional byte. The
+larger capacity does not alter recognizers, severity, identity matching, profile
+or staged-scan behavior. Future additions must remain within the fixed bound
+or undergo a separate reviewed capacity change.
+
+See the [qualification record](../conductor/tracks/privacy_secrets_rollout_20261110/limma-numeric-review-2026-11-23.md)
+for provenance, commands, evidence hashes and the remaining hosted/receiving gates.

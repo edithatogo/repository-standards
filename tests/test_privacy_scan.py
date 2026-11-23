@@ -198,6 +198,16 @@ class ReviewedPrivacyFindingTests(GitFixture):
             json.dumps({"schema_version": 1, "findings": [self.entry(blob)]})
         )
 
+    def test_registry_accepts_128_kib_and_rejects_one_extra_byte(self) -> None:
+        # Bound the trusted registry even when valid JSON has trailing whitespace.
+        raw = self.registry.read_bytes()
+        at_limit = raw + b" " * (128 * 1024 - len(raw))
+        self.registry.write_bytes(at_limit)
+        self.assertEqual(len(privacy_scan.load_privacy_reviews()), 1)
+        self.registry.write_bytes(at_limit + b" ")
+        with self.assertRaisesRegex(privacy_scan.ScanError, "invalid_privacy_reviews"):
+            privacy_scan.load_privacy_reviews()
+
     def test_reviewed_span_does_not_hide_another_match_on_the_same_line(self) -> None:
         report = privacy_scan.scan_repository(self.root, recognizers=[self.recognizer])
         self.assertEqual(report["reviewed_nonidentifier_count"], 1)

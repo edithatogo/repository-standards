@@ -127,3 +127,24 @@ receiving repository installation and execution remain in progress. See
 [the dated rollout checkpoint](rollout-status.md) for aggregate evidence.
 Prepared changes, successful scans and installed default-branch workflows are
 separate states. The full repository audit remains private.
+
+## Limma numeric review increment — 23 November 2026
+
+Owner: the isolated `codex/limma-numeric-privacy-review-20261123` branch from
+`4517ffdc2ffc9161af4f1fc9a2560b8690d760cd`; no overlapping pending source bytes
+were found in the 27 open PRs inspected. This bounded increment keeps the wider
+rollout track open. See [its qualification record](limma-numeric-review-2026-11-23.md).
+
+- [x] Reconcile all 123 blocking identities against immutable source blobs and
+  have their intrinsically nonidentifying numeric roles independently reviewed.
+- [x] Capture a failing exact-size boundary test before increasing the trusted
+  registry bound; preserve existing entries and all detection/scope semantics.
+- [x] Pass the candidate policy suite, real privacy/secrets suites, independent
+  review and complete fixed-target receiving replay. The blocking gate passed;
+  advisory findings and the unscanned submodule remain explicit.
+- [ ] Pass the actual native pre-commit hook on the candidate commit; retain
+  its receipt with the published integration evidence.
+- [ ] Qualify the published candidate in the hosted source canary and applicable
+  repository checks before integrating or adopting the consumer pin.
+- [ ] Replay Limma's complete receiving scan and strict CI, retaining advisory
+  findings and submodule coverage limits in the acceptance evidence.
