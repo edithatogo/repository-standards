@@ -101,7 +101,15 @@ CHANGELOG
       [[ "$(dpkg-query --showformat='${Version}' --show "$name")" == "$package_version" ]]
     done
     openssl list -providers -provider default -provider legacy
-    python -I -c 'import ssl; assert ssl.OPENSSL_VERSION_INFO[:3] == (3, 5, 9); assert ssl.create_default_context().get_ca_certs()'
+    python -I - <<'PY'
+import ssl
+
+if ssl.OPENSSL_VERSION.split()[:2] != ["OpenSSL", "3.5.9"]:
+    raise SystemExit(f"Expected OpenSSL 3.5.9, loaded {ssl.OPENSSL_VERSION}")
+if not ssl.create_default_context().get_ca_certs():
+    raise SystemExit("Python could not load its default CA certificates")
+print(ssl.OPENSSL_VERSION)
+PY
     ;;
   *)
     echo "Usage: prepare_openssl.sh --prepare NEW_SOURCE_DIR | --build NEW_OUTPUT_DIR | --install PACKAGE_DIR" >&2
