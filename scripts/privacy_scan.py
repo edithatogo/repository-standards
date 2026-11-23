@@ -34,7 +34,7 @@ SHA_PATTERN = re.compile(r"[0-9a-fA-F]{40}(?:[0-9a-fA-F]{24})?\Z")
 TRUSTED_PRIVACY_REVIEWS = (
     Path(__file__).resolve().parents[1] / "privacy" / "reviewed-privacy-findings.json"
 )
-MAX_PRIVACY_REVIEW_BYTES = 64 * 1024
+MAX_PRIVACY_REVIEW_BYTES = 128 * 1024
 PrivacyFindingIdentity = tuple[str, str, str, int, int, int, str, str]
 DATA_PARTS = frozenset({"data", "datasets", "fixtures", "exports", "records"})
 CONTEXT = {
