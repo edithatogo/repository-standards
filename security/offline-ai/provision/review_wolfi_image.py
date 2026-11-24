@@ -13,6 +13,7 @@ CATALOG = Path(__file__).with_name("wolfi-image-review.json")
 CPYTHON = Path(__file__).with_name("cpython-backports.json")
 GLIBC = Path(__file__).with_name("glibc-backports.json")
 IMAGE = re.compile(r"localhost/offline-ai-security@sha256:[0-9a-f]{64}\Z")
+GLIBC_ICONV_ADVISORY = "CVE-2026-124024"
 
 
 def verify_image_identity(image: str, evidence: Path) -> None:
@@ -25,6 +26,24 @@ def verify_image_identity(image: str, evidence: Path) -> None:
     ).strip()
     if not re.fullmatch(r"sha256:[0-9a-f]{64}", image_id) or receipt["image_id"] != image_id:
         raise ValueError("The scan receipt belongs to a different installed image")
+
+
+def verify_glibc_iconv_absence(runner: list[str], image: str) -> bool:
+    packages = subprocess.check_output(
+        runner + ["--entrypoint", "apk", image, "--repositories-file", "/dev/null", "info"],
+        timeout=45,
+        stderr=subprocess.DEVNULL,
+        text=True,
+    ).splitlines()
+    modules = subprocess.check_output(
+        runner + ["--entrypoint", "find", image, "/usr",
+                  "-iname", "IBM1390.so*", "-o", "-iname", "IBM1399.so*"],
+        timeout=45,
+        stderr=subprocess.DEVNULL,
+        text=True,
+    )
+    iconv_packages = {"glibc-2.44-iconv", "glibc-iconv"}
+    return "glibc-2.44" in packages and not iconv_packages.intersection(packages) and not modules
 
 
 def verify_image_backports(image: str) -> dict:
@@ -54,6 +73,7 @@ def verify_image_backports(image: str) -> dict:
     expected = "".join(f"{digest}  {name}\n" for name, digest in glibc["files"].items())
     if checksums != expected:
         raise ValueError("The glibc library or package SBOM differs from the reviewed bytes")
+    glibc["iconv_absent"] = verify_glibc_iconv_absence(runner, image)
     return {"python-3.15": catalog, glibc["package"]: glibc}
 
 
@@ -104,12 +124,20 @@ def review_image(image: str, evidence: Path, *, backports: dict | None = None) -
         if (
             proof is not None
             and identity["version"] == proof["package_version"]
-            and identity["advisory"] in proof["findings"]
             and disposition != "unreviewed"
         ):
-            disposition = "verified_backport"
+            if disposition == "component_absence_unverified":
+                if (
+                    identity["advisory"] == GLIBC_ICONV_ADVISORY
+                    and identity["package"] == "glibc-2.44"
+                    and proof.get("iconv_absent") is True
+                ):
+                    disposition = "verified_component_absent"
+            elif identity["advisory"] in proof["findings"]:
+                disposition = "verified_backport"
         findings.append({**identity, "disposition": disposition})
-    blocked = any(match["disposition"] != "verified_backport" for match in findings)
+    verified = {"verified_backport", "verified_component_absent"}
+    blocked = any(match["disposition"] not in verified for match in findings)
     return {
         "schema_version": 1,
         "kind": catalog["kind"],
