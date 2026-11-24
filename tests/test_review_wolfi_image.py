@@ -88,11 +88,12 @@ class WolfiReviewTests(unittest.TestCase):
         self.assertEqual(REVIEW.review_image(IMAGE, self.evidence, backports=proof)["status"], "blocked")
 
     def test_iconv_presence_check_requires_both_package_and_file_evidence(self):
+        core = "glibc-2.44-2.44-r23\n"
         for packages, files, expected in (
-            ("glibc-2.44\n", "", True),
-            ("glibc-2.44\nglibc-2.44-iconv\n", "", False),
-            ("glibc-2.44\nglibc-iconv\n", "", False),
-            ("glibc-2.44\n", "/usr/lib/gconv/IBM1399.so\n", False),
+            (core, "", True),
+            (core + "glibc-2.44-iconv-2.44-r23\n", "", False),
+            (core + "glibc-iconv-2.44-r23\n", "", False),
+            (core, "IBM1399.so\n", False),
             ("", "", False),
         ):
             with self.subTest(packages=packages, files=files):

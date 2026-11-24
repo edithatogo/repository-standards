@@ -14,6 +14,17 @@ CPYTHON = Path(__file__).with_name("cpython-backports.json")
 GLIBC = Path(__file__).with_name("glibc-backports.json")
 IMAGE = re.compile(r"localhost/offline-ai-security@sha256:[0-9a-f]{64}\Z")
 GLIBC_ICONV_ADVISORY = "CVE-2026-124024"
+GLIBC_ICONV_PROBE = """\
+import os
+
+try:
+    with os.scandir("/usr/lib/gconv") as entries:
+        for entry in entries:
+            if entry.name.lower().startswith(("ibm1390.so", "ibm1399.so")):
+                print(entry.name)
+except FileNotFoundError:
+    pass
+"""
 
 
 def verify_image_identity(image: str, evidence: Path) -> None:
@@ -30,20 +41,21 @@ def verify_image_identity(image: str, evidence: Path) -> None:
 
 def verify_glibc_iconv_absence(runner: list[str], image: str) -> bool:
     packages = subprocess.check_output(
-        runner + ["--entrypoint", "apk", image, "--repositories-file", "/dev/null", "info"],
+        runner + ["--entrypoint", "sh", image, "-eu", "-c",
+                  "apk --repositories-file /dev/null info -v"],
         timeout=45,
         stderr=subprocess.DEVNULL,
         text=True,
     ).splitlines()
     modules = subprocess.check_output(
-        runner + ["--entrypoint", "find", image, "/usr",
-                  "-iname", "IBM1390.so*", "-o", "-iname", "IBM1399.so*"],
+        runner + ["--entrypoint", "python", image, "-I", "-B", "-c", GLIBC_ICONV_PROBE],
         timeout=45,
         stderr=subprocess.DEVNULL,
         text=True,
     )
-    iconv_packages = {"glibc-2.44-iconv", "glibc-iconv"}
-    return "glibc-2.44" in packages and not iconv_packages.intersection(packages) and not modules
+    has_glibc = any(package.startswith("glibc-2.44-2.44-r") for package in packages)
+    has_iconv = any(package.startswith(("glibc-2.44-iconv-", "glibc-iconv-")) for package in packages)
+    return has_glibc and not has_iconv and not modules
 
 
 def verify_image_backports(image: str) -> dict:
