@@ -78,6 +78,15 @@ bash "$policy_root/security/offline-ai/provision/prepare_git.sh" \
   --prepare "$destination/base-context/git-source"
 cp "$destination/base-context/git-source/git-source.json" "$evidence/git-source.json"
 
+stage=openssl-source-preparation
+python -I "$policy_root/security/offline-ai/provision/prepare_os_packages.py" \
+  --profile openssl-compiler --destination "$destination/base-context/openssl-os" \
+  --receipt "$evidence/openssl-compiler-packages.json"
+bash "$policy_root/security/offline-ai/provision/prepare_openssl.sh" \
+  --prepare "$destination/base-context/openssl-source"
+cp "$destination/base-context/openssl-source/openssl-debian-sources.lock" "$evidence/openssl-source-lock.txt"
+cp "$destination/base-context/openssl-source/openssl-debian-patches/series.lock" "$evidence/openssl-patch-lock.txt"
+
 stage=upstream-preparation
 # Missing committed locks fail here; candidate-lock generation is a separate job.
 PYTHONDONTWRITEBYTECODE=1 python "$policy_root/security/offline-ai/provision/prepare_vendor.py" \
@@ -137,6 +146,11 @@ docker push localhost/offline-ai-base:candidate
 base_image="$(docker image inspect localhost/offline-ai-base:candidate --format '{{index .RepoDigests 0}}')"
 [[ "$base_image" =~ ^localhost/offline-ai-base@sha256:[0-9a-f]{64}$ ]] || exit 2
 printf '%s\n' "$base_image" > "$evidence/base-image.txt"
+docker run --rm --pull=never --network none --read-only --cap-drop ALL \
+  --security-opt no-new-privileges --user 65534:65534 --entrypoint cat "$base_image" \
+  /usr/local/share/offline-ai/openssl-tests.txt \
+  /usr/local/share/offline-ai/openssl-build-log.sha256 \
+  /usr/local/share/offline-ai/openssl-packages.sha256 > "$evidence/openssl-build.txt"
 
 stage=offline-image-build
 git --no-replace-objects -C "$policy_root" archive "$policy_sha" security/offline-ai \

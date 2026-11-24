@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "recorded_on": "2026-11-21",
+  "recorded_on": "2026-11-24",
   "distribution": "trixie",
   "architecture": "amd64",
   "base_image": "docker.io/library/python@sha256:fd2aef5e0d8438208de9fe154ab5b331a2428fc0c9838d41611e611fd7a80d85",
@@ -19,10 +19,10 @@
     {
       "name": "trixie",
       "release_url": "https://deb.debian.org/debian/dists/trixie/InRelease",
-      "release_sha256": "0584fba32e13e0ab8285fb16c27adea1ec03a73669c18702821094fd6ca86675",
+      "release_sha256": "bfacad4ca61899ce20d4a0d439f29339f66541561b67506364efb88e27dee870",
       "packages_url": "https://deb.debian.org/debian/dists/trixie/main/binary-amd64/Packages.xz",
-      "packages_sha256": "7778d3e3f303b7ddb8ce0fe7c8d57473a076c6bf2e8f241f75421d2396352498",
-      "packages_size_bytes": 9678380
+      "packages_sha256": "be3d7d96a040eda0505c1808cccc67f183bbc05dff0842c50f88e6c396557412",
+      "packages_size_bytes": 9679304
     },
     {
       "name": "trixie-security",
@@ -70,8 +70,6 @@
     "libblkid1": "2.41.5-0+deb13u1",
     "libbsd0": "0.12.2-2",
     "libbz2-1.0": "1.0.8-6",
-    "libc-bin": "2.41-12+deb13u4",
-    "libc6": "2.41-12+deb13u4",
     "libcap-ng0": "0.8.5-4+b1",
     "libcap2": "1:2.75-10+deb13u1+b3",
     "libcrypt1": "1:4.4.38-1",
@@ -131,6 +129,24 @@
     "util-linux": "2.41.5-0+deb13u1"
   },
   "packages": [
+    {
+      "name": "libc6",
+      "version": "2.41-12+deb13u5",
+      "architecture": "amd64",
+      "filename": "libc6_2.41-12+deb13u5_amd64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/g/glibc/libc6_2.41-12+deb13u5_amd64.deb",
+      "size_bytes": 2850108,
+      "sha256": "b59b0625cd1a791375d40dab23a4d5d3d0641e3d0a773501becdc3725b7f99cf"
+    },
+    {
+      "name": "libc-bin",
+      "version": "2.41-12+deb13u5",
+      "architecture": "amd64",
+      "filename": "libc-bin_2.41-12+deb13u5_amd64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/g/glibc/libc-bin_2.41-12+deb13u5_amd64.deb",
+      "size_bytes": 638876,
+      "sha256": "f30ee7381a9c6a3936165259bcd58e65f4b288e351606d200c8435724c5876dd"
+    },
     {
       "name": "libatomic1",
       "version": "14.2.0-19",

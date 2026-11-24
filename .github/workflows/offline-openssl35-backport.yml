@@ -1,0 +1,53 @@
+name: OpenSSL 3.5 backport candidate
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/offline-openssl35-backport.yml
+      - security/offline-ai/provision/openssl35-dane-guard.patch
+      - security/offline-ai/provision/test_openssl35_backport.sh
+
+permissions:
+  contents: read
+
+jobs:
+  native-backport:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Fetch the immutable OpenSSL source
+        run: |
+          set -euo pipefail
+          source_commit=e110612e5fa0451e9d70746bc28ba873070bcf81
+          source_root="$RUNNER_TEMP/openssl35-source"
+          git init --template= "$source_root"
+          git -C "$source_root" fetch --depth=1 --no-tags https://github.com/openssl/openssl.git "$source_commit"
+          git -C "$source_root" archive --format=tar --prefix=openssl/ "$source_commit" > "$RUNNER_TEMP/openssl35-source.tar"
+      - name: Build and test with loopback only
+        run: |
+          set -euo pipefail
+          build_log="$RUNNER_TEMP/openssl35-build.log"
+          if ! {
+            sudo unshare --net -- sh -ec '
+              ip link set lo up
+              exec setpriv --reuid "$1" --regid "$2" --clear-groups --no-new-privs \
+                bash "$3" "$4" "$5"
+            ' sh "$(id -u)" "$(id -g)" "$GITHUB_WORKSPACE/security/offline-ai/provision/test_openssl35_backport.sh" \
+              "$RUNNER_TEMP/openssl35-source.tar" "$RUNNER_TEMP/openssl35-build"
+          } > "$build_log" 2>&1; then
+            tail -100 "$build_log"
+            exit 1
+          fi
+          tail -30 "$build_log"
+          grep -Fx 'Result: PASS' "$build_log"
+          grep -E '^Files=5, Tests=[1-9][0-9]*,' "$build_log"
+          for suite in 25-test_verify 25-test_verify_store 70-test_verify_extra 80-test_dane 90-test_sslapi; do
+            grep -E "^${suite}[.]t +[.]* ok$" "$build_log"
+          done
+          cd "$RUNNER_TEMP/openssl35-build/staged"
+          sha256sum usr/bin/openssl usr/lib/x86_64-linux-gnu/libssl.so.3 \
+            usr/lib/x86_64-linux-gnu/libcrypto.so.3 usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so

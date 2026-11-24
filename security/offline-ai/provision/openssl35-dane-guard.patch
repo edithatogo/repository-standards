@@ -1,0 +1,17 @@
+--- a/crypto/x509/x509_vfy.c
++++ b/crypto/x509/x509_vfy.c
+@@ -3253,9 +3253,13 @@
+     SSL_DANE *dane = ctx->dane;
+     danetls_record *t;
+     int num = ctx->num_untrusted;
+-    X509 *cert = sk_X509_value(ctx->chain, num - 1);
++    X509 *cert;
+     int recnum = sk_danetls_record_num(dane->trecs);
+     int i;
++
++    /* Bare trust-anchor keys can only sign a remaining untrusted certificate. */
++    if (num <= 0 || (cert = sk_X509_value(ctx->chain, num - 1)) == NULL)
++        return X509_TRUST_UNTRUSTED;
+
+     for (i = 0; i < recnum; ++i) {
+         t = sk_danetls_record_value(dane->trecs, i);

@@ -20,7 +20,11 @@ import urllib.request
 
 HERE = Path(__file__).resolve().parent
 CATALOG = "os-packages.json"
-CATALOGS = {"runtime": CATALOG, "git-compiler": "git-compiler-packages.json"}
+CATALOGS = {
+    "runtime": CATALOG,
+    "git-compiler": "git-compiler-packages.json",
+    "openssl-compiler": "openssl-compiler-packages.json",
+}
 BASE_STATUS = Path("/var/lib/dpkg/status")
 ERROR = "Offline OS package preparation failed"
 HASH = re.compile(r"[0-9a-f]{64}\Z")
@@ -29,6 +33,7 @@ VERSION = re.compile(r"[0-9][A-Za-z0-9.+:~\-]*\Z")
 ROOTS = {
     "runtime": {"libatomic1", "libgomp1", "libstdc++6", "libgcc-s1", "zlib1g"},
     "git-compiler": {"gcc", "make", "libc6-dev", "zlib1g-dev"},
+    "openssl-compiler": {"debhelper", "dpkg-dev", "libzstd-dev", "zlib1g-dev"},
 }
 QUERY = "${Package}\t${Version}\t${Architecture}\t${db:Status-Abbrev}\n"
 
@@ -62,6 +67,10 @@ def read_catalog(path, profile="runtime"):
                                 data.get("base_image", ""))
             or not HASH.fullmatch(data.get("base_status_sha256", ""))):
         raise PreparationError("catalog")
+    if profile == "openssl-compiler" and (
+            data.get("base_stage") != "git-compiler"
+            or not HASH.fullmatch(data.get("base_catalog_sha256", ""))):
+        raise PreparationError("base-catalog")
     packages, baseline = data.get("packages"), data.get("required_base")
     if (not isinstance(packages, list) or not 1 <= len(packages) <= 64
             or not isinstance(baseline, dict) or not 1 <= len(baseline) <= 128):
@@ -221,6 +230,9 @@ def main(argv=None):
                                 object_pairs_hook=unique_object)
             if images["python"]["reference"] != catalog["base_image"]:
                 raise PreparationError("base-image")
+            if (args.profile == "openssl-compiler"
+                    and catalog["base_catalog_sha256"] != digest(HERE / CATALOGS["git-compiler"])):
+                raise PreparationError("base-catalog")
             destination = args.destination
             destination.mkdir(mode=0o755)
             (destination / "debs").mkdir(mode=0o755)
