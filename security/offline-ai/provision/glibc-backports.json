@@ -8,7 +8,8 @@
   "source_archive_sha256": "9219a66cdb2f3cc6c5bd7a730a2d3121fbdcff2842679d870ca0d7b4e3150e74",
   "findings": {
     "CVE-2026-100290": "fcfb867c58ab5dc402a072fe23534fa3b8ff2616",
-    "CVE-2026-115819": "063fdd4c7e034dfc1a0f14dbf3a9718a502033cf"
+    "CVE-2026-115819": "063fdd4c7e034dfc1a0f14dbf3a9718a502033cf",
+    "CVE-2026-121758": "625054f30f0e7a961519f045f2364aa3ca6c1c6b"
   },
   "files": {
     "/usr/lib/libc.so.6": "fa53383f5889ebc862550631d138de41ad96a0a0601df75895c76135523711c5",

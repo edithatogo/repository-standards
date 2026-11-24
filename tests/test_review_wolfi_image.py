@@ -87,6 +87,39 @@ class WolfiReviewTests(unittest.TestCase):
         self.write_scan([match])
         self.assertEqual(REVIEW.review_image(IMAGE, self.evidence, backports=proof)["status"], "blocked")
 
+    def test_iconv_presence_check_requires_both_package_and_file_evidence(self):
+        for packages, files, expected in (
+            ("glibc-2.44\n", "", True),
+            ("glibc-2.44\nglibc-2.44-iconv\n", "", False),
+            ("glibc-2.44\nglibc-iconv\n", "", False),
+            ("glibc-2.44\n", "/usr/lib/gconv/IBM1399.so\n", False),
+            ("", "", False),
+        ):
+            with self.subTest(packages=packages, files=files):
+                with patch.object(REVIEW.subprocess, "check_output", side_effect=[packages, files]):
+                    self.assertIs(REVIEW.verify_glibc_iconv_absence(["docker", "run"], IMAGE), expected)
+
+    def test_only_verified_absence_for_the_exact_glibc_match_can_pass(self):
+        catalog = json.loads(REVIEW.GLIBC.read_bytes())
+        match = {
+            "vulnerability": {"id": REVIEW.GLIBC_ICONV_ADVISORY, "severity": "Medium"},
+            "artifact": {"name": "glibc-2.44", "version": catalog["package_version"]},
+        }
+        self.write_scan([match])
+        self.assertEqual(REVIEW.review_image(IMAGE, self.evidence)["status"], "blocked")
+        unresolved = {"glibc-2.44": {**catalog, "iconv_absent": False}}
+        self.assertEqual(REVIEW.review_image(IMAGE, self.evidence, backports=unresolved)["status"], "blocked")
+        proof = {"glibc-2.44": {**catalog, "iconv_absent": True}}
+        review = REVIEW.review_image(IMAGE, self.evidence, backports=proof)
+        self.assertEqual(review["status"], "passed")
+        self.assertEqual(review["findings"][0]["disposition"], "verified_component_absent")
+        for version, severity in (("2.44-r24", "Medium"), (catalog["package_version"], "High")):
+            with self.subTest(version=version, severity=severity):
+                match["artifact"]["version"] = version
+                match["vulnerability"]["severity"] = severity
+                self.write_scan([match])
+                self.assertEqual(REVIEW.review_image(IMAGE, self.evidence, backports=proof)["status"], "blocked")
+
     def test_changed_report_or_image_is_rejected(self):
         self.write_scan([])
         with self.assertRaises(ValueError):
