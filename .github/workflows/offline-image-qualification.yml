@@ -64,6 +64,23 @@ jobs:
           python -I "$POLICY_ROOT/security/offline-ai/provision/collect_sbom.py" \
             "$QUALIFIED_IMAGE" "$RUNNER_TEMP/offline-runtime/evidence" \
             "$RUNNER_TEMP/offline-syft"
+      - name: Verify the installed glibc evidence
+        env:
+          POLICY_ROOT: ${{ steps.policy.outputs.path }}
+          QUALIFIED_IMAGE: ${{ steps.qualify.outputs.image }}
+        run: |
+          python -I - "$POLICY_ROOT" "$QUALIFIED_IMAGE" <<'PY'
+          from pathlib import Path
+          from runpy import run_path
+          import sys
+
+          root, image = sys.argv[1:]
+          verifier = run_path(str(Path(root) / "security/offline-ai/provision/review_wolfi_image.py"))
+          proof = verifier["verify_image_backports"](image)
+          if proof["glibc-2.44"].get("iconv_absent") is not True:
+              raise SystemExit("Installed glibc iconv absence was not verified")
+          print("Verified installed glibc provenance and iconv module absence")
+          PY
       - name: Collect image vulnerability evidence for review
         env:
           POLICY_ROOT: ${{ steps.policy.outputs.path }}
