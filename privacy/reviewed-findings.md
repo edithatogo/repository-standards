@@ -66,6 +66,14 @@ separate identity and evidence entry; an unreviewed value on the same line still
 blocks. Registry publication and a consumer pin update require their own current
 source, security and hosted checks.
 
+## CallTrack qualification fixtures
+
+The CallTrack full-history audit matched 25 UUID4 fixture identifiers in
+historical Android qualification receipts. Each entry points to the exact
+JSON line and the fixture generator at the same Git revision. The generator
+creates the identifier for a synthetic instrumentation session. The registry
+stores the matched-value digest and exact finding coordinates.
+
 ## Change process
 
 1. Establish the exact scanner finding locally, without posting raw values or

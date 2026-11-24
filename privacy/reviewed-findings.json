@@ -1318,6 +1318,306 @@
         "https://github.com/edithatogo/voiage/blob/f7fcbe4d0a27174d5ae69c33da46575f149f5c1e/conductor/tracks/pandas_free_io_20261026/final-acceptance-python315.json#L135",
         "https://github.com/edithatogo/voiage/tree/f7fcbe4d0a27174d5ae69c33da46575f149f5c1e/specs/core-api"
       ]
+    },
+    {
+      "commit": "0f75a9630e83aef2c8ae2ca6cd5fbabc401e6485",
+      "path": "conductor/archive/calendar_slice_20261020/evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 98,
+      "value_sha256": "98902721d58ae91d1426f9f7537a0793979ed371bcfbdbb33154e837ff746dab",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/0f75a9630e83aef2c8ae2ca6cd5fbabc401e6485/conductor/archive/calendar_slice_20261020/evidence.json#L98",
+        "https://github.com/edithatogo/CallTrack/blob/0f75a9630e83aef2c8ae2ca6cd5fbabc401e6485/scripts/qualify_slice_device.py#L35"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/final-provider-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "a1952465d4bbf1c8fcce37172a1f0005fbcbb1d72425d736e513870bf656c64a",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/final-provider-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_provider.py#L39"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/final-source-identity-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "2b77f7439e2c44b4663a3051db7b645db2393e5923c506475e7f3206f7bcb75c",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/final-source-identity-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_emulator.py#L41"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/final-store-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "dc22784bd1574029d6cf12ce2c66066b4c2399808b67a609fecfd2ee1a134a2f",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/final-store-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_emulator.py#L41"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/final-worker-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "baa2017210dc0a474ee65136702c9615f66a3f67d971308170a47363f19e2e05",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/final-worker-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_worker.py#L39"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/final-worker-progress-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "15a109f0f9e0014f60e8987696fd72b4fcd5c577364b4b938d7c01189c308796",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/final-worker-progress-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_worker.py#L39"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/lifecycle-preparation-crash-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "4d028f24dc2d01713e1a4f1466466722d375b53f636534da6c9d895a7e553aad",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/lifecycle-preparation-crash-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_lifecycle.py#L42"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/lifecycle-reboot-observation-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "5e8c6228114eb7c6096d925d00327e2fefa5a5b56336430c457d78643bae504d",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/lifecycle-reboot-observation-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_lifecycle.py#L42"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/lifecycle-reboot-recovery-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 3,
+      "value_sha256": "5e8c6228114eb7c6096d925d00327e2fefa5a5b56336430c457d78643bae504d",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/lifecycle-reboot-recovery-evidence.json#L3",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_lifecycle.py#L42"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/recovery-lifecycle-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "cab3238e5bafadddebd79f314daa0be0da88f1394946c99cd07e09bfb93b68a7",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/recovery-lifecycle-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_lifecycle.py#L42"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/recovery-provider-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "d66a287c7cd471785fa60d119049e33d27f78da440abec4a91d11285af4f6d73",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/recovery-provider-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_provider.py#L39"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/recovery-store-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "ef20c831c8c709688a1c67e2af3de086e30d31220e6b508e8a35212675bffcb9",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/recovery-store-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_emulator.py#L41"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/recovery-ui-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 3,
+      "value_sha256": "a0f40d748d73478bf1a5a0c7d8bd658ad5a240392d6910da80f2d5ed0adf3560",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/recovery-ui-evidence.json#L3",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_ui.py#L44"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/recovery-withdrawal-red-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 3,
+      "value_sha256": "48ccc39226f368534706a20f657e12ab26601871387d31dfbd126959eae8dda5",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/recovery-withdrawal-red-evidence.json#L3",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_ui.py#L44"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/settings-ui-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "1485dd97a4c9f3989827ac8295fc32f25ac5631df3406a968f84084a0f628e33",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/settings-ui-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_ui.py#L44"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/settings-ui-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 835,
+      "value_sha256": "dcbaed542de499c851894b5bcfcb8b388fc1c4a27e41c9804de890a416adef22",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/settings-ui-evidence.json#L835",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_ui.py#L44"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/settings-ui-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 1534,
+      "value_sha256": "a72b92fe56f5a68954be974bf29e4d513dba1861537dc3cda34607db47870abb",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/settings-ui-evidence.json#L1534",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_ui.py#L44"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/settings-ui-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2193,
+      "value_sha256": "85067339605766e9f4714d60e7c3b51f56c401ac5aeda8e89d1642e1a2fd042c",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/settings-ui-evidence.json#L2193",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_ui.py#L44"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/source-identity-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "456955bb6a5e7f050cf384692ff6110b3720937433951276ffe78dd914fcbcd3",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/source-identity-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_emulator.py#L41"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/source-identity-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 307,
+      "value_sha256": "65e0e390e89955b734f16f86f7f3cc8ff47013ae4f03ad58d94f6456cdbc527e",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/source-identity-evidence.json#L307",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_emulator.py#L41"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/telephony-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "19e6fc3df5aef5832fc0ff91d28cfe709998e1fb58c78837160c10ea17cdf2ef",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/telephony-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_telephony.py#L43"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/telephony-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 595,
+      "value_sha256": "8d110a6b39b14769ba25bbaed0d988e3da10eb8c396ac6aad1d68247396ac3bc",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/telephony-evidence.json#L595",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_telephony.py#L43"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/wake-budget-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "f12ac2e85a661c69407ea8f1d51b4fbe0511ecb2f4a9180fc93d68c8ca30c9cb",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/wake-budget-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_emulator.py#L41"
+      ]
+    },
+    {
+      "commit": "4ca32eeaeca8d42789e2fe929d2f007b37200f49",
+      "path": "conductor/archive/parity_20261020/wake-budget-red-evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 2,
+      "value_sha256": "dec8e812530ff1dc23e314cdb4e078a7569706ab841c2493c7f0f4f424f52a26",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/conductor/archive/parity_20261020/wake-budget-red-evidence.json#L2",
+        "https://github.com/edithatogo/CallTrack/blob/4ca32eeaeca8d42789e2fe929d2f007b37200f49/scripts/qualify_parity_emulator.py#L41"
+      ]
+    },
+    {
+      "commit": "52fa7e4152257a5fca9fe6b5216591af8918b970",
+      "path": "conductor/tracks/calendar_slice_20261020/evidence.json",
+      "rule_id": "generic-api-key",
+      "line": 98,
+      "value_sha256": "98902721d58ae91d1426f9f7537a0793979ed371bcfbdbb33154e837ff746dab",
+      "reason": "UUID4 identifier for a synthetic Android qualification fixture. The linked runner generates it for the test session and passes it to instrumentation.",
+      "evidence_urls": [
+        "https://github.com/edithatogo/CallTrack/blob/52fa7e4152257a5fca9fe6b5216591af8918b970/conductor/tracks/calendar_slice_20261020/evidence.json#L98",
+        "https://github.com/edithatogo/CallTrack/blob/52fa7e4152257a5fca9fe6b5216591af8918b970/scripts/qualify_slice_device.py#L35"
+      ]
     }
   ]
 }
