@@ -53,7 +53,7 @@ jobs:
         with:
           repository: edithatogo/repository-standards
           # Immutable snapshot containing the offline scanner rules and replay controls.
-          ref: b108a0f0724571f6f6fed31a2574b8769badf7d4
+          ref: 61ec65173af13e661e5f8c0b078bf2926a5ae8eb
           persist-credentials: false
           submodules: false
           path: policy
@@ -182,8 +182,19 @@ jobs:
           set -euo pipefail
           umask 022
           if ! command -v bsdtar >/dev/null; then
-            sudo apt-get -qq update
-            sudo apt-get -qq install -y --no-install-recommends libarchive-tools
+            # libarchive-tools is in Noble's universe component. Use a job-local,
+            # Ubuntu-signed source list when the hosted runner has no bsdtar.
+            keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg
+            test -r "$keyring"
+            sources="$RUNNER_TEMP/hosted-sast-ubuntu.list"
+            printf 'deb [signed-by=%s] https://archive.ubuntu.com/ubuntu %s main universe\n' \
+              "$keyring" noble "$keyring" noble-updates > "$sources"
+            printf 'deb [signed-by=%s] https://security.ubuntu.com/ubuntu noble-security main universe\n' \
+              "$keyring" >> "$sources"
+            apt_options=(-o "Dir::Etc::sourcelist=$sources" -o Dir::Etc::sourceparts=-
+                         -o Acquire::Retries=2 -o Acquire::Languages=none)
+            sudo apt-get -q "${apt_options[@]}" -o APT::Update::Error-Mode=any update
+            sudo apt-get -q "${apt_options[@]}" install -y --no-install-recommends libarchive-tools
           fi
           trial="$RUNNER_TEMP/hosted-sast"
           rustfmt="$(rustup which --toolchain 1.100.0 rustfmt)"

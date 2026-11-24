@@ -30,12 +30,13 @@ COPY --from=node /usr/local/LICENSE /usr/local/share/doc/node/LICENSE
 COPY --from=git-build /git-runtime/usr/local/ /usr/local/
 # apk authenticates the original vendor index and validates each package
 # against it. The vendor bytes, including metadata, stay mounted read-only.
+# Pin libzstd1 to the checksum-locked package when the signed index also offers newer versions.
 RUN --network=none --mount=type=bind,source=os,target=/opt/offline-os,readonly \
     apk --no-network --no-cache --repositories-file /dev/null --repository /opt/offline-os add \
       python-3.15=3.15.2_git20261113-r0 py3.15-pip=26.2.2-r3 \
       bash=5.3-r14 coreutils=9.12-r8 findutils=4.11.0-r6 grep=3.12-r12 \
       libgcc=16.2.0-r5 libstdc++=16.2.0-r5 libatomic=16.2.0-r5 libgomp=16.2.0-r5 \
-      ncurses=6.6.20261114-r0 ncurses-terminfo-base=6.6.20261114-r0 \
+      ncurses=6.6.20261114-r0 ncurses-terminfo-base=6.6.20261114-r0 libzstd1=1.5.7-r15 \
     && apk --repositories-file /dev/null info -v | LC_ALL=C sort > /tmp/wolfi-inventory \
     && cmp /tmp/wolfi-inventory /opt/offline-os/inventory.txt \
     && rm /tmp/wolfi-inventory \
