@@ -6,7 +6,7 @@
         "http/client.py": "a7cbea0d057eb87747c590e88cbf8a24e2e35ca3bc26b99b69f21c91a0f1c857"
       },
       "input_sha256": "928d81dc92794ce21d938111aed2aea7627c85c13bd3aa336c3de88f12a15fac",
-      "patch_sha256": "53ecc6818a010f6e660e65ef2efab1efe3d6ef3c0e7036232f2a633075612d52"
+      "patch_sha256": "2563b662f99ab6ac2e87907d49ebe476200728ce5ea224cf3f5b4d196d9aa478"
     },
     "CVE-2026-115559": {
       "commit": "2f0e294d85c905691e360586ebd1d1f7e7a1f5df",
@@ -14,7 +14,7 @@
         "imaplib.py": "18b47ca17656420e36eeaddcfb172751a6b88478d5761a7b4d733c590a274de9"
       },
       "input_sha256": "ebb09bab21dbabf7414aca19d8334aea67fa1c21b1cefa83149ad3ae14957570",
-      "patch_sha256": "6f56cfddf9a3a163650ba600fd9a4afe59aed6b4a5c9e552d1877b5f8ff910da"
+      "patch_sha256": "12af197534812de977645885a2675aaef99f7d12a1fbcdc954dc5061552018d4"
     },
     "CVE-2026-115791": {
       "commit": "673607ef5362c62144fb7c3a78cf6d66dffd5bfb",
@@ -37,7 +37,7 @@
         "http/cookies.py": "bcb82cbcf4002a53d00796de80ff4deadf323990e386e57b8f789db886b05588"
       },
       "input_sha256": "e4eab3206b471fd94b04cfbdd99057c0a55a49cc6acb5e3b8cf5370a36cbb3e8",
-      "patch_sha256": "aee651efa981ca23141f9914858d56b4e9a8dea0a655824a0c30aa92593aabb3"
+      "patch_sha256": "b49a67a8586676df37dd6e83321329be77d7ab67836c48eb466ab5d9f0b2aac0"
     },
     "CVE-2026-19552": {
       "commit": "8dde46eaa6baf5f027a7234845b20d50b509624e",
@@ -45,7 +45,7 @@
         "ssl.py": "5ac78b5a6023502f4e70b801b6b26c90b63356f5869cfca877807d35605312d3"
       },
       "input_sha256": "6dcd56245fa34f62a2ce95f4250e30b18ac95c5aa680087412549d06ce8ff674",
-      "patch_sha256": "6d1dc9e573dee42b88cba82d5185264572c5e228c034332c8233d2a2cb83db78"
+      "patch_sha256": "6b3c97ffca70214902175700da725105cfbd5502459263a74a2b6a695600cf28"
     }
   },
   "package_version": "3.15.2_git20261113-r0",
