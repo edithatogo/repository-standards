@@ -17,7 +17,7 @@ libbrotlidec1-1.2.1-r4
 libbrotlienc1-1.2.1-r4
 libbz2-1-1.0.8-r31
 libcrypt1-2.44-2.44-r23
-libexpat1-2.10.0-r1
+libexpat1-2.11.0-r0
 libffi-3.8.1-r0
 libgcc-16.2.0-r5
 libgomp-16.2.0-r5
