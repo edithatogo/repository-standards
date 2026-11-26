@@ -111,9 +111,7 @@ for fix in catalog["findings"].values():
         print(commit)
 PY
 while read -r commit; do
-  curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
-    --max-time 90 --max-filesize 1048576 "https://github.com/python/cpython/commit/$commit.patch" \
-    --output "$apk_root/cpython/$commit.patch"
+  cp "$provision/cpython-patches/$commit.patch" "$apk_root/cpython/$commit.patch"
 done < "$apk_root/cpython/patches.txt"
 
 stage=git-source-preparation

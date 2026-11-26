@@ -112,8 +112,12 @@ records the eight findings in the qualification run and scopes the conclusions
 to the observed package versions.
 
 The [CPython catalog](cpython-backports.json) pins two fixes already present in
-Wolfi's 3.15.2 build and four official standard-library patches. The offline
-image build verifies each patch, original file and resulting file by hash.
+Wolfi's 3.15.2 build and four official standard-library patches. The
+[retained diffs](cpython-patches/) contain the applied library changes
+from those upstream commits and carry the original CPython licence. The
+GitHub patch endpoint can change its abbreviated blob IDs. The build
+copies the retained diffs and verifies each patch, original file and
+resulting file by hash.
 The image review checks the packaged executable and fixed files again in the
 exact scanner image. Verified findings remain visible in the Grype evidence.
 The [glibc catalog](glibc-backports.json) traces the release-branch fixes to the
