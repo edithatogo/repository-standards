@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: '17 */6 * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pr-integration-plan.yml'
+      - 'scripts/pr_integration_plan.py'
+      - 'tests/test_pr_integration_plan.py'
 
 permissions:
   contents: read
