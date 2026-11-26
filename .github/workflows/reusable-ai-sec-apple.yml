@@ -19,14 +19,20 @@ jobs:
     env:
       ENFORCE_AI: ${{ inputs.enforce_ai }}
       BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
-      POLICY_SHA: 77d33d3fb0c452de573262b81b911826c164aa62
+      POLICY_SHA: >-
+        ${{ github.repository == 'edithatogo/CallTrack'
+            && 'a54a64fdd87f6e7e91423bdfff7d82a713118ae5'
+            || '77d33d3fb0c452de573262b81b911826c164aa62' }}
       IMAGE_INDEX: sha256:e4a7036b17f47911b1d2f33652d5c6a84583ce14498055756c987ca8d9e8aefb
     steps:
       - name: Verify the offline scanner result for this run and source
         shell: bash
         run: |
           set -euo pipefail
-          test "$GITHUB_REPOSITORY" = edithatogo/paignia
+          case "$GITHUB_REPOSITORY" in
+            edithatogo/CallTrack|edithatogo/paignia) ;;
+            *) exit 2 ;;
+          esac
           test "$RUNNER_ENVIRONMENT" = self-hosted
           test "$RUNNER_OS" = Linux
           test "$RUNNER_ARCH" = X64
