@@ -92,3 +92,14 @@ Full qualified Python 3.15.2 suite and hosted acceptance remain to be checked.
 Add path-limited main-push inventory triggering so scanner changes can be
 qualified immediately without a manual dispatch API. First actual hosted run
 remains unobserved; no write activation or actual CI retries are claimed.
+
+### Hosted scan acceptance
+
+#194 merged at 49b532a8cb5627fe904ae6fa7032b6814fb001f3 after all eight observed
+exact-head checks succeeded. First hosted inventory run [45785120410](https://github.com/edithatogo/repository-standards/actions/runs/45785120410)
+succeeded on that receiving main SHA. Downloaded artifact 15099572973 was independently
+SHA-256 verified as b880e2f11754d22bcef578ca0ba07fc05b2fd568c8fabb1fa6c887890bd5f332.
+The receipt dated 2026-11-26T08:41:16.527351+00:00 contains 27 PRs (13 hold,
+14 wait), zero merge candidates, mode plan_only and write_authorized false.
+The live inventory is accepted for observation only, not for automatic writes.
+#192 A is accepted. B, actual CI reruns and writer qualification remain open.
