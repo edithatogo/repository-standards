@@ -1992,13 +1992,14 @@
       "sole_developer": true,
       "mandatory_human_approvals": 0,
       "renovate": {
-        "current": "activate_via_inherited_config",
+        "current": "repository_config_detected",
         "target": "hosted_app_plus_inherited_config",
         "canonical_preset": "github>edithatogo/renovate-config",
         "dependabot_detected": false,
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
+        "current": "active_oidc_upload_verified",
         "warranted": true,
         "target": "active_oidc_upload_with_real_coverage"
       },
