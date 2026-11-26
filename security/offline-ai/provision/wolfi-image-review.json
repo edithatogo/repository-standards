@@ -11,7 +11,7 @@
   "findings": {
     "CVE-2026-100290": {
       "package": "glibc-2.44",
-      "version": "2.44-r23",
+      "version": "2.44-r26",
       "severity": "Low",
       "disposition": "vendor_backport_unverified",
       "assessment": "The GNU C Library has a release-branch fix for POSIX regex allocation failure. The installed APK's exact build recipe has not been traced to that fix. The offline process reads repository-supplied content, so network isolation alone cannot resolve this match.",
@@ -19,7 +19,7 @@
     },
     "CVE-2026-115819": {
       "package": "glibc-2.44",
-      "version": "2.44-r23",
+      "version": "2.44-r26",
       "severity": "Medium",
       "disposition": "vendor_backport_unverified",
       "assessment": "The GNU C Library has a release-branch fix for wide scanf. The installed APK's exact build recipe has not been traced to that fix.",
@@ -27,15 +27,15 @@
     },
     "CVE-2026-121758": {
       "package": "glibc-2.44",
-      "version": "2.44-r23",
+      "version": "2.44-r26",
       "severity": "Medium",
       "disposition": "vendor_backport_unverified",
-      "assessment": "The hash-locked r23 APK's embedded recipe identifies the glibc release-branch fix. The installed library and package SBOM must match the reviewed APK.",
+      "assessment": "The hash-locked r26 APK's embedded recipe identifies the glibc release-branch fix. The installed library and package SBOM must match the reviewed APK.",
       "source": "https://gitlab.com/gnutools/glibc/-/commit/625054f30f0e7a961519f045f2364aa3ca6c1c6b"
     },
     "CVE-2026-124024": {
       "package": "glibc-2.44",
-      "version": "2.44-r23",
+      "version": "2.44-r26",
       "severity": "Medium",
       "disposition": "component_absence_unverified",
       "assessment": "Wolfi removes the affected IBM1390 and IBM1399 modules in its build recipe. Require the exact image to omit both the optional glibc iconv package and both shared objects.",
@@ -43,51 +43,59 @@
     },
     "CVE-2026-103995": {
       "package": "python-3.15",
-      "version": "3.15.2_git20261113-r0",
+      "version": "3.15.2_git20261120-r0",
       "severity": "Low",
-      "disposition": "replacement_pending",
-      "assessment": "The scanner's container network denial limits exposure to remote HTTP responses. No verified fix is recorded for this CPython package.",
+      "disposition": "vendor_backport_unverified",
+      "assessment": "Wolfi packages this fix from the pinned CPython source. Verify the installed interpreter and the reviewed library bytes.",
       "source": "https://www.cve.org/CVERecord?id=CVE-2026-103995"
     },
     "CVE-2026-115559": {
       "package": "python-3.15",
-      "version": "3.15.2_git20261113-r0",
+      "version": "3.15.2_git20261120-r0",
       "severity": "Medium",
-      "disposition": "replacement_pending",
-      "assessment": "The scanner has no remote IMAP connectivity. The provider still reports the exact CPython package as affected.",
+      "disposition": "vendor_backport_unverified",
+      "assessment": "Verify the retained upstream fix against the installed interpreter and the reviewed library bytes.",
       "source": "https://mail.python.org/archives/list/security-announce@python.org/thread/LVAGFOFG26QVXEM6VXXPRMMOZBHM4CVB/"
     },
     "CVE-2026-115791": {
       "package": "python-3.15",
-      "version": "3.15.2_git20261113-r0",
+      "version": "3.15.2_git20261120-r0",
       "severity": "Medium",
-      "disposition": "replacement_pending",
-      "assessment": "The scanner invokes no CPython archive extraction CLI on repository content. The fix appears in the next 3.15 changelog and is not verified in this package.",
+      "disposition": "vendor_backport_unverified",
+      "assessment": "Wolfi packages this fix from the pinned CPython source. Verify the installed interpreter and the reviewed library bytes.",
       "source": "https://docs.python.org/3.15/whatsnew/changelog.html"
     },
     "CVE-2026-124249": {
       "package": "python-3.15",
-      "version": "3.15.2_git20261113-r0",
+      "version": "3.15.2_git20261120-r0",
       "severity": "Medium",
-      "disposition": "replacement_pending",
-      "assessment": "The scanner cannot contact remote cookie issuers. The provider still reports the exact CPython package as affected.",
+      "disposition": "vendor_backport_unverified",
+      "assessment": "Wolfi packages this fix from the pinned CPython source. Verify the installed interpreter and the reviewed library bytes.",
       "source": "https://mail.python.org/archives/list/security-announce@python.org/thread/Y6IKNZ2VZUS2L6CLQICSFUEMCLT7OLTY/"
     },
     "CVE-2026-16052": {
       "package": "python-3.15",
-      "version": "3.15.2_git20261113-r0",
+      "version": "3.15.2_git20261120-r0",
       "severity": "Low",
-      "disposition": "replacement_pending",
-      "assessment": "The scanner exposes no network HTTP cookie endpoint. A fix is not verified in the installed CPython package.",
+      "disposition": "vendor_backport_unverified",
+      "assessment": "Verify the retained upstream fix against the installed interpreter and the reviewed library bytes.",
       "source": "https://mail.python.org/archives/list/security-announce@python.org/thread/IZL4QUFV7PKGT2JYSU2DCBMLTWYJDGKZ/"
     },
     "CVE-2026-19552": {
       "package": "python-3.15",
-      "version": "3.15.2_git20261113-r0",
+      "version": "3.15.2_git20261120-r0",
       "severity": "Negligible",
-      "disposition": "replacement_pending",
-      "assessment": "The scanner cannot retrieve remote TLS certificates. The provider still reports the exact CPython package as affected.",
+      "disposition": "vendor_backport_unverified",
+      "assessment": "Verify the retained upstream fix against the installed interpreter and the reviewed library bytes.",
       "source": "https://mail.python.org/archives/list/security-announce@python.org/thread/SXBD6BGHDBTGM4KSUMQEWYIQ5RO4BQ76/"
+    },
+    "CVE-2026-126765": {
+      "package": "glibc-2.44",
+      "version": "2.44-r26",
+      "severity": "Low",
+      "disposition": "vendor_backport_unverified",
+      "assessment": "The locked Wolfi recipe pins the glibc release-branch fix for BZ 34993. The image review verifies the installed library and package SBOM.",
+      "source": "https://gitlab.com/gnutools/glibc/-/commit/809fd7179d4391debd553459e58c414ef59a32c8"
     }
   }
 }

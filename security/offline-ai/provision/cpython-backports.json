@@ -4,9 +4,7 @@
       "commit": "5b9e3d044764cf59329fb8147177f54a88d1fb49",
       "files": {
         "http/client.py": "a7cbea0d057eb87747c590e88cbf8a24e2e35ca3bc26b99b69f21c91a0f1c857"
-      },
-      "input_sha256": "928d81dc92794ce21d938111aed2aea7627c85c13bd3aa336c3de88f12a15fac",
-      "patch_sha256": "3bb62ba77cff68b7592a35315428690f2f16f31b678055e2013187c6f5ca785b"
+      }
     },
     "CVE-2026-115559": {
       "commit": "2f0e294d85c905691e360586ebd1d1f7e7a1f5df",
@@ -22,7 +20,7 @@
         "gzip.py": "6a9f2ca536b1db70a773427952aee435a35fe8a8f4703facabe256918750e1c8",
         "runpy.py": "bfcf7eb5de9f967588cfce5bef26242ae583c55e0ec2d25408581ff80f990a03",
         "tarfile.py": "f5bcac71ef3ffff786a92fabe16dfd93b9ef9497a39d2843ebecb99179fdaa26",
-        "zipfile/__init__.py": "0671de70ec631c62982ab2180fe5e3d620d1d4d382a0649e573fa95b7b055065"
+        "zipfile/__init__.py": "68f0d6c385f68bfe8cfd8700d34b7dba9d3dff4a75297dabb47ba9d1ebbc355d"
       }
     },
     "CVE-2026-124249": {
@@ -48,6 +46,6 @@
       "patch_sha256": "526e1da8b5a6c0f6b3e564092ceb82d4b637f9bd87c9ea210e45e5e580156351"
     }
   },
-  "package_version": "3.15.2_git20261113-r0",
-  "source_commit": "64b5cfdf7548a21741398ce0826728818327aea7"
+  "package_version": "3.15.2_git20261120-r0",
+  "source_commit": "a37c337ff97cb4c49eba29e34d3c42b99a44b673"
 }

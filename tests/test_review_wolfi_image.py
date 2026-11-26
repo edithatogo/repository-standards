@@ -57,7 +57,9 @@ class WolfiReviewTests(unittest.TestCase):
         self.assertEqual(REVIEW.review_image(IMAGE, self.evidence)["status"], "passed")
 
     def test_known_and_unknown_versions_remain_blocking(self):
-        for version, disposition in (("2.44-r23", "vendor_backport_unverified"), ("2.44-r24", "unreviewed")):
+        catalog = json.loads(REVIEW.GLIBC.read_bytes())
+        versions = ((catalog["package_version"], "vendor_backport_unverified"), ("2.44-r24", "unreviewed"))
+        for version, disposition in versions:
             with self.subTest(version=version):
                 self.write_scan([{
                     "vulnerability": {"id": "CVE-2026-100290", "severity": "Low"},
@@ -72,20 +74,26 @@ class WolfiReviewTests(unittest.TestCase):
         self.assertEqual(REVIEW.review_image(IMAGE, self.evidence)["status"], "blocked")
 
     def test_only_verified_exact_package_findings_are_resolved(self):
-        catalog = json.loads(REVIEW.CPYTHON.read_bytes())
-        match = {
-            "vulnerability": {"id": "CVE-2026-103995", "severity": "Low"},
-            "artifact": {"name": "python-3.15", "version": catalog["package_version"]},
-        }
-        self.write_scan([match])
-        self.assertEqual(REVIEW.review_image(IMAGE, self.evidence)["status"], "blocked")
-        proof = {"python-3.15": catalog}
-        reviewed = REVIEW.review_image(IMAGE, self.evidence, backports=proof)
-        self.assertEqual(reviewed["status"], "passed")
-        self.assertEqual(reviewed["findings"][0]["disposition"], "verified_backport")
-        match["artifact"]["version"] += "-different"
-        self.write_scan([match])
-        self.assertEqual(REVIEW.review_image(IMAGE, self.evidence, backports=proof)["status"], "blocked")
+        cases = (
+            (REVIEW.CPYTHON, "python-3.15", "CVE-2026-103995"),
+            (REVIEW.GLIBC, "glibc-2.44", "CVE-2026-126765"),
+        )
+        for path, package, advisory in cases:
+            with self.subTest(advisory=advisory):
+                catalog = json.loads(path.read_bytes())
+                match = {
+                    "vulnerability": {"id": advisory, "severity": "Low"},
+                    "artifact": {"name": package, "version": catalog["package_version"]},
+                }
+                self.write_scan([match])
+                self.assertEqual(REVIEW.review_image(IMAGE, self.evidence)["status"], "blocked")
+                proof = {package: catalog}
+                reviewed = REVIEW.review_image(IMAGE, self.evidence, backports=proof)
+                self.assertEqual(reviewed["status"], "passed")
+                self.assertEqual(reviewed["findings"][0]["disposition"], "verified_backport")
+                match["artifact"]["version"] += "-different"
+                self.write_scan([match])
+                self.assertEqual(REVIEW.review_image(IMAGE, self.evidence, backports=proof)["status"], "blocked")
 
     def test_iconv_presence_check_requires_both_package_and_file_evidence(self):
         core = "glibc-2.44-2.44-r23\n"
