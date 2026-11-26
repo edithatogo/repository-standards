@@ -692,6 +692,30 @@
       "exceptions": []
     },
     {
+      "repository": "edithatogo/careops-sim",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "rust",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #219; ARDC and scientific acceptance remain unverified"
+      },
+      "exceptions": []
+    },
+    {
       "repository": "edithatogo/CFTRDataTransfer",
       "visibility": "public",
       "archetype": "data-config",
@@ -751,6 +775,30 @@
       "supply_chain_profile": "none",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
+      "exceptions": []
+    },
+    {
+      "repository": "edithatogo/CiteLattice",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "rust",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #32; ARDC and scientific acceptance remain unverified"
+      },
       "exceptions": []
     },
     {
@@ -999,6 +1047,30 @@
       "supply_chain_profile": "baseline",
       "managed_files": "detect_and_issue",
       "verification_receipt": "required",
+      "exceptions": []
+    },
+    {
+      "repository": "edithatogo/dapane",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "scientific-native",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #72; ARDC and scientific acceptance remain unverified"
+      },
       "exceptions": []
     },
     {
@@ -1437,6 +1509,12 @@
     },
     {
       "repository": "edithatogo/ginsim",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #59; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -1499,6 +1577,12 @@
     },
     {
       "repository": "edithatogo/global-medicines-atlas",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Merged PR #1474; advisory metadata only, ARDC and science evidence pending"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -1902,6 +1986,12 @@
     },
     {
       "repository": "edithatogo/innovate",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #698; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -1933,6 +2023,12 @@
     },
     {
       "repository": "edithatogo/kairos",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "FAIR metadata from merged PR #416; manual ARDC and scientific acceptance remain unverified"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2057,6 +2153,12 @@
     },
     {
       "repository": "edithatogo/lifecourse",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #59; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2181,6 +2283,12 @@
     },
     {
       "repository": "edithatogo/mchs",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #420; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "master",
@@ -2305,7 +2413,13 @@
     },
     {
       "repository": "edithatogo/microcosting_genomics",
-      "visibility": "private",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Merged PR #176; advisory metadata only, ARDC and science evidence pending"
+      },
+      "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
       "sole_developer": true,
@@ -2336,7 +2450,13 @@
     },
     {
       "repository": "edithatogo/microcosting_healthworkforce",
-      "visibility": "private",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Merged PR #307; advisory metadata only, ARDC and science evidence pending"
+      },
+      "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
       "sole_developer": true,
@@ -2429,6 +2549,12 @@
     },
     {
       "repository": "edithatogo/NationalWeightedActivityUnitWrapper.jl",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #13; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2460,6 +2586,12 @@
     },
     {
       "repository": "edithatogo/new-drug-reimbursement-game",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": ".github/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #119; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2615,6 +2747,12 @@
     },
     {
       "repository": "edithatogo/NwauCore.jl",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #12; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -2859,6 +2997,30 @@
       "supply_chain_profile": "baseline",
       "managed_files": "detect_and_issue",
       "verification_receipt": "required",
+      "exceptions": []
+    },
+    {
+      "repository": "edithatogo/paignia",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "rust",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #69; ARDC and scientific acceptance remain unverified"
+      },
       "exceptions": []
     },
     {
@@ -3638,6 +3800,12 @@
     },
     {
       "repository": "edithatogo/scimapping",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #20; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -3696,6 +3864,24 @@
       "supply_chain_profile": "none",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
+      "exceptions": []
+    },
+    {
+      "repository": "edithatogo/searchright",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "rust",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
       "exceptions": []
     },
     {
@@ -3948,6 +4134,12 @@
     },
     {
       "repository": "edithatogo/sourceright",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #156; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -3978,37 +4170,6 @@
       "exceptions": []
     },
     {
-      "repository": "edithatogo/standardflow",
-      "visibility": "private",
-      "archetype": "software",
-      "default_branch": "main",
-      "sole_developer": true,
-      "mandatory_human_approvals": 0,
-      "renovate": {
-        "current": "activate_via_inherited_config",
-        "target": "hosted_app_plus_inherited_config",
-        "canonical_preset": "github>edithatogo/renovate-config",
-        "dependabot_detected": false,
-        "removal_gate": "Renovate first successful run"
-      },
-      "codecov": {
-        "current": "private_unverified_requires_codecov_authorization",
-        "warranted": true,
-        "target": "active_oidc_upload_with_real_coverage"
-      },
-      "quality_issue": "https://github.com/edithatogo/standardflow/issues/13",
-      "policy_version": 1,
-      "profile": "generic-software",
-      "support_status": "active",
-      "maintenance_tier": "review_required",
-      "release_maturity": "review_required",
-      "canonical_status": "review_required",
-      "supply_chain_profile": "baseline",
-      "managed_files": "detect_and_issue",
-      "verification_receipt": "required",
-      "exceptions": []
-    },
-    {
       "repository": "edithatogo/standards_check",
       "visibility": "public",
       "archetype": "software",
@@ -4016,24 +4177,27 @@
       "sole_developer": true,
       "mandatory_human_approvals": 0,
       "renovate": {
-        "current": "activate_via_inherited_config",
+        "current": "hosted_app_verified",
         "target": "hosted_app_plus_inherited_config",
         "canonical_preset": "github>edithatogo/renovate-config",
-        "dependabot_detected": false,
+        "dependabot_detected": true,
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "listed_inactive",
+        "current": "active_oidc_upload_verified",
         "warranted": true,
-        "target": "active_oidc_upload_with_real_coverage"
+        "target": "active_oidc_upload_with_real_coverage",
+        "evidence_revision": "dd3f995c473db0cc1cd6dad9d392b3744166958b",
+        "receiving_main_qualified": true,
+        "assessment": "docs/standards-check-maintenance-assessment.md"
       },
       "quality_issue": "https://github.com/edithatogo/standards_check/issues/30",
       "policy_version": 1,
       "profile": "node",
       "support_status": "active",
-      "maintenance_tier": "review_required",
-      "release_maturity": "review_required",
-      "canonical_status": "review_required",
+      "maintenance_tier": "maintained",
+      "release_maturity": "experimental",
+      "canonical_status": "canonical",
       "supply_chain_profile": "baseline",
       "managed_files": "detect_and_issue",
       "verification_receipt": "required",
@@ -4072,7 +4236,7 @@
     },
     {
       "repository": "edithatogo/Syspop",
-      "visibility": "private",
+      "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
       "sole_developer": true,
@@ -4316,6 +4480,30 @@
       "supply_chain_profile": "none",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
+      "exceptions": []
+    },
+    {
+      "repository": "edithatogo/tobac",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #195; manual ARDC and scientific acceptance remain separate"
+      },
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "policy_version": 1,
+      "profile": "python",
+      "support_status": "review_required",
+      "maintenance_tier": "review_required",
+      "release_maturity": "review_required",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
       "exceptions": []
     },
     {
@@ -4667,16 +4855,16 @@
       "sole_developer": true,
       "mandatory_human_approvals": 0,
       "renovate": {
-        "current": "repository_config_detected",
+        "current": "hosted_app_verified",
         "target": "hosted_app_plus_inherited_config",
         "canonical_preset": "github>edithatogo/renovate-config",
         "dependabot_detected": false,
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "not_applicable_no_executable_coverage",
-        "warranted": false,
-        "target": "not_applicable_until_executable_tests_exist"
+        "current": "active_oidc_upload_verified",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
       },
       "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-latex/issues/8",
       "policy_version": 1,
@@ -4685,7 +4873,7 @@
       "maintenance_tier": "review_required",
       "release_maturity": "review_required",
       "canonical_status": "review_required",
-      "supply_chain_profile": "none",
+      "supply_chain_profile": "published",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
       "exceptions": []
@@ -4736,9 +4924,12 @@
         "removal_gate": "Renovate first successful run"
       },
       "codecov": {
-        "current": "not_applicable_no_executable_coverage",
-        "warranted": false,
-        "target": "not_applicable_until_executable_tests_exist"
+        "current": "active",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage",
+        "evidence_revision": "402dec742a80278cd239554b929092e75724c1e6",
+        "receiving_main_qualified": true,
+        "assessment": "docs/typesetting-unimelb-typst-assessment.md"
       },
       "quality_issue": "https://github.com/edithatogo/unimelb-thesis-template-typst/issues/5",
       "policy_version": 1,
@@ -4747,7 +4938,7 @@
       "maintenance_tier": "review_required",
       "release_maturity": "review_required",
       "canonical_status": "review_required",
-      "supply_chain_profile": "none",
+      "supply_chain_profile": "published",
       "managed_files": "detect_and_issue",
       "verification_receipt": "profile_specific",
       "exceptions": []
@@ -4816,6 +5007,12 @@
     },
     {
       "repository": "edithatogo/UOGTO",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "Advisory pilot from merged PR #140; manual ARDC and scientific acceptance remain separate"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",
@@ -5002,6 +5199,12 @@
     },
     {
       "repository": "edithatogo/voiage",
+      "fair_software": {
+        "enabled": true,
+        "assessment_status": "provisional",
+        "evidence": "docs/reviews/FAIR_SOFTWARE_ASSESSMENT.md",
+        "notes": "FAIR metadata from merged PR #1388; manual ARDC and scientific acceptance remain unverified"
+      },
       "visibility": "public",
       "archetype": "software",
       "default_branch": "main",

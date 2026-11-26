@@ -1,0 +1,49 @@
+name: Offline AI security (Apple Container)
+on:
+  workflow_call:
+    inputs:
+      enforce_ai:
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  offline-security:
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+      - ai-security-offline-apple
+      - offline-${{ github.run_id }}-${{ github.run_attempt }}
+    timeout-minutes: 45
+    env:
+      ENFORCE_AI: ${{ inputs.enforce_ai }}
+      BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
+      POLICY_SHA: >-
+        ${{ github.repository == 'edithatogo/CallTrack'
+            && 'a54a64fdd87f6e7e91423bdfff7d82a713118ae5'
+            || '77d33d3fb0c452de573262b81b911826c164aa62' }}
+      IMAGE_INDEX: sha256:e4a7036b17f47911b1d2f33652d5c6a84583ce14498055756c987ca8d9e8aefb
+    steps:
+      - name: Verify the offline scanner result for this run and source
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$GITHUB_REPOSITORY" in
+            edithatogo/CallTrack|edithatogo/paignia) ;;
+            *) exit 2 ;;
+          esac
+          test "$RUNNER_ENVIRONMENT" = self-hosted
+          test "$RUNNER_OS" = Linux
+          test "$RUNNER_ARCH" = X64
+          case "$GITHUB_EVENT_NAME" in
+            push|pull_request|workflow_dispatch) ;;
+            *) exit 2 ;;
+          esac
+          result=/offline-receipt/result
+          while [[ ! -f "$result" && "$SECONDS" -lt 2500 ]]; do sleep 2; done
+          test -f "$result" && test ! -L "$result"
+          printf '%s\n' passed "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            "$RUNNER_NAME" "$GITHUB_EVENT_NAME" "$GITHUB_SHA" "$BASE_SHA" "$ENFORCE_AI" \
+            "$POLICY_SHA" "$IMAGE_INDEX" | cmp -s - "$result"
+          echo "Apple Container offline scan passed for $GITHUB_SHA"

@@ -22,6 +22,10 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.15.2"
+      - name: Install hash-verified policy tooling
+        run: |
+          python -m pip install --disable-pip-version-check --only-binary=:all: --require-hashes -r tooling/estate-evidence-requirements.txt -r tooling/community-bootstrap-build-requirements.txt
+          PYYAML_FORCE_LIBYAML=0 python -m pip install --disable-pip-version-check --no-build-isolation --no-deps --no-binary=pyyaml --require-hashes -r tooling/community-bootstrap-requirements.txt
       - name: Validate policy control plane
         run: |
           python -m json.tool profiles/archetype-profiles.json >/dev/null
@@ -33,3 +37,12 @@ jobs:
           python scripts/scientific_ecosystem.py policy profiles/scientific-native.json
           python -m compileall -q scripts tests
           PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_*.py' -v
+
+  community-standards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/community-standards

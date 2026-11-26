@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "proposed_opt_in",
+  "mode": "advisory",
+  "applicability": {
+    "eligible": [
+      "public_active_research_software_library",
+      "public_active_reusable_scientific_method",
+      "public_active_research_simulation",
+      "public_active_research_data_pipeline"
+    ],
+    "case_by_case": [
+      "research_application",
+      "research_workflow",
+      "scientific_tool",
+      "research_dataset_with_software"
+    ],
+    "excluded_by_default": [
+      "private_repository",
+      "archived_repository",
+      "fork_without_independent_release",
+      "research_paper_only",
+      "documentation_only",
+      "non_research_operational_system",
+      "empty_or_unclassified"
+    ]
+  },
+  "selection": {
+    "declaration": "repository registry entry fair_software.enabled = true",
+    "automatic_rollout": false,
+    "missing_is_disabled": true,
+    "private_registry_details_publication": false
+  },
+  "controls": {
+    "howfairis": {
+      "required_when_enabled": false,
+      "advisory_only": true,
+      "pinned_action_commit": "4c11146488125aa6e1531184eed51d781bcd5871",
+      "version": "0.2.1",
+      "permissions": "contents:read",
+      "triggers": [
+        "pull_request",
+        "push_default_branch",
+        "workflow_dispatch"
+      ],
+      "hosted_run_required_for_acceptance": true
+    },
+    "manual_review": {
+      "ardc_checklist": "evidence_per_answer",
+      "license": "verify_existing_grants_do_not_invent",
+      "citation": "verify_attribution_and_version",
+      "registry": "verify_real_listing",
+      "research_reproducibility": "independent_from_fair_score",
+      "security": "existing_gates_preserved"
+    }
+  },
+  "governance": {
+    "existing_conductor_authority_preserved": true,
+    "existing_required_checks_preserved": true,
+    "score_is_not_release_gate": true,
+    "automated_claims_not_certification": true,
+    "changes_by_draft_pr": true,
+    "ponytail_reuse_first": true
+  }
+}

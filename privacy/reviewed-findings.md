@@ -26,10 +26,15 @@ qualified action pin. The registry links the exact introducing commit and
 objects. Public visibility alone never makes a credential safe to admit.
 
 An admission does not cover another commit, file, rule, line or value, even if
-the text appears similar. Paths are compared as reported, without normalization
-into an approved path. Staged findings and findings lacking a commit are never
-admitted. Duplicate coordinates or JSON keys, unknown fields, invalid types,
-missing files and malformed registries fail closed.
+the text appears similar. Distinct values on the same line require separate
+entries, each with its own value digest and review. Paths are compared as
+reported, without normalization into an approved path. Staged findings and
+findings lacking a commit are never admitted. Duplicate complete identities or
+JSON keys, unknown fields, invalid types, missing files and malformed registries
+fail closed.
+
+The registry is limited to 128 KiB. This permits the individually recorded
+identities in the current audit while retaining a fixed fail-closed size limit.
 
 ## Tobacco capsule and historical full audit — 14 November 2026
 
@@ -46,6 +51,28 @@ documented by [Google](https://developers.google.com/recaptcha/docs/display).
 The consumer issues new capsule pins as `sha256:` content identifiers. Real
 Gitleaks regressions retain SHA-1 and SHA-256 exact-admission coverage and verify
 that a nearby bare hexadecimal credential continues to block.
+
+## Voiage historical findings — 16 November 2026
+
+The Voiage full-history audit exposed 100 exact findings. Eighty-six are archive
+checksums for 14 Rust crate releases: each value was checked against both an
+immutable crates.io index revision and the downloaded crate bytes. The remaining
+entries identify frozen API-contract digests, Git tree or submodule identifiers,
+bibliography keys, a test-code symbol and a prose phrase. Their immutable source
+and corroborating object links are recorded with each entry.
+
+Some historical lines contain several different checksums. Each one has a
+separate identity and evidence entry; an unreviewed value on the same line still
+blocks. Registry publication and a consumer pin update require their own current
+source, security and hosted checks.
+
+## CallTrack qualification fixtures
+
+The CallTrack full-history audit matched 25 UUID4 fixture identifiers in
+historical Android qualification receipts. Each entry points to the exact
+JSON line and the fixture generator at the same Git revision. The generator
+creates the identifier for a synthetic instrumentation session. The registry
+stores the matched-value digest and exact finding coordinates.
 
 ## Change process
 

@@ -42,3 +42,15 @@ Required: (a) dated near-complete classified inventory with exceptions rather th
 
 ## Review loop
 Use Conductor implementation and review: spec -> tests that initially fail -> implementation -> focused tests -> full policy suite -> adversarial/agent security review -> hosted canaries -> reconcile code and track metadata -> archive only after evidence. Report exact failed/queued/skipped and blocked steps; do not claim an unexecuted run passed.
+
+
+## 26 November 2026 — PR integration extension
+
+[Issue #192](https://github.com/edithatogo/repository-standards/issues/192) is assigned
+to F03 (controller), F04 (verification), F06 (local-model diagnostics and repair),
+and F07 (measurements). A read-only, native-CLI inventory can be developed while F01/F02
+and F03 write canaries remain open. Preserve the programme order for any mutations;
+the first operational target is the existing repository-standards PR backlog, then
+disposable write canaries and opt-in standards_check. Model weights must come from
+Hugging Face and run locally, with no proprietary model APIs. See the respective
+track plans for scope and gates. No new track, rollout or activation is implied.

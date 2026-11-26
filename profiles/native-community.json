@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "required": [
+    "readme",
+    "contributing",
+    "code_of_conduct",
+    "security",
+    "issue_templates",
+    "pull_request_template"
+  ],
+  "recommended": [],
+  "environment_configuration": null,
+  "devcontainer": "optional",
+  "template_repository": false,
+  "issue_form_kinds": {}
+}

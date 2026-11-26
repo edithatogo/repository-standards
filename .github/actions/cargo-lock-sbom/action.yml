@@ -1,0 +1,32 @@
+name: Resolved Cargo lock inventory
+description: Generate a CycloneDX source-resolution inventory without changing Cargo.lock
+inputs:
+  lockfile:
+    description: Exact Cargo.lock used by the locked build
+    required: true
+  output:
+    description: Output CycloneDX JSON path
+    required: true
+  name:
+    description: Repository or package inventory name
+    required: true
+  source-sha:
+    description: Exact source Git commit
+    required: true
+    default: ${{ github.sha }}
+runs:
+  using: composite
+  steps:
+    - name: Generate resolved dependency inventory
+      shell: bash
+      env:
+        CARGO_INVENTORY_ACTION_PATH: ${{ github.action_path }}
+        CARGO_INVENTORY_LOCK: ${{ inputs.lockfile }}
+        CARGO_INVENTORY_OUTPUT: ${{ inputs.output }}
+        CARGO_INVENTORY_NAME: ${{ inputs.name }}
+        CARGO_INVENTORY_COMMIT: ${{ inputs.source-sha }}
+      run: |
+        set -euo pipefail
+        python3 "$CARGO_INVENTORY_ACTION_PATH/../../../scripts/cargo_lock_sbom.py" \
+          --lockfile "$CARGO_INVENTORY_LOCK" --output "$CARGO_INVENTORY_OUTPUT" \
+          --name "$CARGO_INVENTORY_NAME" --source-sha "$CARGO_INVENTORY_COMMIT"

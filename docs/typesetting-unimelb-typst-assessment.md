@@ -1,0 +1,320 @@
+# UniMelb Typst: executable components and release applicability
+
+Assessment date: 15 November 2026 (Australia/Brisbane).
+Central baseline: `10e59936e132f28597cb7d2f10efa27629dc4837`.
+Consumer: [edithatogo/unimelb-thesis-template-typst][consumer].
+Owners: [consumer #5][consumer-governance] and [central typesetting #5][typesetting].
+
+This assessment corrects a July registry classification. It does not activate
+settings, implement a new collector, or complete the separate [UMTHESIS document programme][contract]. The existing
+`typesetting-template` archetype and `typst` profile are retained.
+
+## Contract validator scope update — 15 November 2026
+
+[Consumer PR #28](https://github.com/edithatogo/unimelb-thesis-template-typst/pull/28)
+adds `scripts/thesis_contract.py` to the measured validation component. Both
+`.coveragerc` and Codecov's `validation-tools` paths name the same four helpers:
+`preflight.py`, `validate_template.py`, `check_repository_policy.py` and
+`thesis_contract.py`, all under `scripts/`. The existing 80% thresholds remain.
+The central base for this scoped addendum is
+`52a093de92ac1f5a5d59a2f55c16da946a81556d`.
+
+PR #28's source passed, but its receiving commit
+`60a95ba6863e602347ebf64ee16a689486473237` failed the native pip dependency graph:
+an archived prose file ending in `requirements.txt` was misclassified as a pip
+manifest. It remains an unqualified receiving observation. The completed
+provider result for that commit does not erase the graph failure.
+[PR #30](https://github.com/edithatogo/unimelb-thesis-template-typst/pull/30)
+renames that archive to `.md`, retaining all 23,561 bytes and SHA-256
+`af9c04793dfe2738bf77b658c3d60d8cd0531d0be6121531c6467c82c4753cbc`.
+Only the filename, bundle references and migration note changed.
+
+The corrected source `708b5b2c8a66ff949d97ece070eeb48977991066`, tree
+`8b2ce42e2550d9b00f426810c28914edea08cfd2`, passed all fourteen applicable hosted
+checks; the scheduled/manual property corpus was the one expected skip.
+[Quality](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43657758447)
+ran 106 contract tests, 65 maintenance tests, 640 generated cases, all eighteen
+configuration fixtures, 55/7-page thesis/sample PDF checks and four profiles.
+The final independent and automated source reviews found no blocker.
+
+[Coverage](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43657758166)
+measured 92.84615384615384% combined line/branch coverage: 802/854 statements and
+405/446 branches, with zero excluded lines. The contract helper measured
+88.96551724137932% combined coverage. These are four-file denominators, not
+whole-repository coverage or Typst output correctness. Actual
+[Codecov check 132646999341](https://github.com/edithatogo/unimelb-thesis-template-typst/runs/132646999341),
+app 254, succeeded at 10:48:34 AEST and reported coverage unaffected; no numerical
+diff percentage is inferred. Python/Actions CodeQL, dependency review and the
+selected-file privacy scan also executed successfully.
+
+The source qualification receipt has SHA-256
+`3e7db2c501ba98897a6b6fa1530eaa6b56a06f54f3dcb4df79f3a64fe52cfb90`.
+Downloaded verification and coverage archive digests are respectively
+`70b1dcaf4db9f46e1db4826a4e356b5984d7f3413e31a1e3ce23a64d59bba0e7`
+and `f4495edb43f918ae516410f407b02f4c79e195651373f496dc7a4ccbdb973acd`.
+The corrected contract bundle digest is
+`338f93c64ce84621670f267c0919555d77c592e92e75f04e12afd6cab57cea7c`.
+The original `19fc08a02c4851301718d3a7a06fa9366633c67590a8be9a7ba0dabb4087b4d4`
+remains a historical pin, with the path-only migration documented in the consumer.
+
+PR #30 merged normally at 10:50:33 AEST as
+`402dec742a80278cd239554b929092e75724c1e6`, with the qualified source tree.
+The receiving revision was qualified at **11:24:28 AEST**: all twelve
+applicable executable checks succeeded, with two expected event-condition skips.
+[Receiving Quality](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660182750)
+ran the full 106-contract/65-maintenance/640-generated-case gate and four profiles;
+[receiving Maintenance](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660182535)
+measured the same four-helper scope and uploaded the results successfully.
+The actual `codecov/patch` status `58942556250`, owned by `codecov[bot]`, succeeded
+at 11:23:51 AEST for this exact receiving revision and reported coverage unaffected.
+No numerical diff percentage is inferred from that message.
+
+The [native pip graph](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660186496)
+job `132647540445` executed successfully. Its archival-source directory correctly
+reported no pip manifest files, and GitHub accepted the empty dependency
+submission for the `dependabot-pip-contracts/thesis/v1/sources` correlator.
+This is the observed check outcome, not a vulnerability-scan result for archived
+prose or an independent read-back of the resulting graph state. The
+[privacy](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660182491)
+and [CodeQL](https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43660181538)
+workflows also completed successfully. The full receiving receipt, including
+actual run/job/provider identities, twelve retained logs and downloaded artifact
+digests, has SHA-256
+`904eb4802585bd8aaccf21e2182b951c544b2d391a9b0de0ce92c245a48be962`.
+The registry's evidence revision now records this qualified receiving commit;
+the earlier failed `60a95ba` observation remains retained.
+
+Both canonical document adapters remain planned in this bundle. A separate
+local Typst adapter prototype is not merged or qualified receiving evidence.
+Schema/API results do not establish rendered conformance, institutional
+approval or LaTeX execution. Existing compiler/font and nonfatal PDF-tool
+warnings remain recorded, with accessibility and full output qualification
+owned by their document-programme issues.
+
+The foundation observations below retain their original three-helper scope,
+denominators and commit identities. This addendum changes no archetype, profile,
+collector, approval rule or release control. The independent offline-security
+rollout retains its existing runtime prerequisites.
+
+## Historical foundation: receiving `9375798`
+
+The foundation assessment below records the earlier receiving revision
+`937579897af22d7d28f20a49e94a1bdbe4e05855` and its three-helper scope. References
+to the candidate, current coverage and `evidence_revision` in this historical
+assessment retain those original identities; the dated addendum above records
+the later four-helper qualification.
+
+| Field | Decision | Evidence boundary |
+| --- | --- | --- |
+| `archetype` / `profile` | Retain `typesetting-template` / `typst`. | Typst compilation and document-output checks remain required; Python helpers do not replace the document profile. |
+| `codecov.warranted` | `true`. | Executable Python validation/policy helpers have measured unit-test coverage. The previous no-executable-coverage exclusion is stale. |
+| `codecov.current` | `active`, scoped by `evidence_revision`. | Actual upload and a `codecov[bot]`-owned `codecov/patch` status succeeded for receiving main `937579897af22d7d28f20a49e94a1bdbe4e05855`. Source-candidate check evidence is preserved separately. |
+| `codecov.target` | `active_oidc_upload_with_real_coverage`. | Preserve OIDC upload and actual producer-check verification on each final candidate and receiving revision. |
+| `codecov.receiving_main_qualified` | `true`. | All five receiving workflows succeeded, and Codecov status `58926800850` passed for the exact `evidence_revision`. This is dated qualification of that commit, not later revisions. |
+| `supply_chain_profile` | `published`. | Published source releases exist, and the tag-only release workflow is configured to publish a PDF. This selects applicable controls; it does not claim those controls are implemented or passed. |
+
+The consumer's qualified source candidate is
+`7e2d09c934c3c9805a222f39c6fd073885196b48` in [PR #12][maintenance-pr].
+Its quality, privacy, Python coverage, CodeQL and Codecov checks passed before
+merge. The actual receiving main is
+`937579897af22d7d28f20a49e94a1bdbe4e05855`, with the same source tree
+`dad36e87cc3971538228056a04c091e59023ab98`. Its five hosted workflows and
+actual Codecov status completed successfully. The receiving coverage job
+independently ran all 61 tests on Python 3.15.1 and measured 97.74% combined
+coverage. Source-tree equality is recorded alongside that fresh execution evidence.
+The main migration from PR #10 was integrated as
+`b947d5ea0ad1a9c118a9c3670bcb82200052c9a2`; it is not a substitute for
+qualification of PR #12's additional executable code.
+
+## Executable helpers and document checks
+
+The measured coverage component consists of exactly:
+
+- `scripts/preflight.py`;
+- `scripts/validate_template.py`;
+- `scripts/check_repository_policy.py`.
+
+The [published policy-fix receipt][policy-fix-receipt] records local Python
+3.15.1 and coverage.py 7.17.3 results for the source published at
+`b1b465c74324f75c815cf199ef45d7ff631d20d5`: 59 unit tests and
+97.72329246935202% combined line/branch coverage (372/381 statements,
+186/190 branches, zero excluded lines). It records source SHA-256 hashes,
+10 properties / 640 iterations, and real thesis/sample PDF checks.
+These are revision-specific results; the later governance delta is not
+certified by them.
+
+The current candidate's [hosted coverage job][current-coverage] independently
+ran Python 3.15.1 and all 61 maintenance tests, reporting 97.74% combined
+coverage. Its exact local coverage.py 7.17.3 measurement is
+97.73913043478261%: 374/383 statements and 188/192 branches, with zero
+excluded lines. The retained hosted artifact is `14120206858`, with digest
+`sha256:1e90c3a5af3591a32ba8543e6c21aeaeedbd4f4546691dc3de0d8c01eb2a3a50`.
+The upload/provider boundary remains separate from successful measurement.
+
+The current source's [Codecov-owned check][current-codecov-check] (app ID 254,
+check `132503365652`) succeeded at `2026-11-14T16:03:15Z`, reporting
+**98.91% diff coverage** against an 80% target. Its OIDC upload also succeeded.
+This supplies actual provider acceptance for `7e2d09c`; it is not inferred
+from a workflow declaration or the earlier historical result.
+
+The earlier [hosted maintenance run][maintenance-run] at `66beec5` executed
+the then-current 54 tests with 97.59% combined coverage. Its upload succeeded,
+and the actual [producer check][codecov-checks], app ID 254, reported
+98.80% of the diff hit against an 80% target. The [Codecov PR view][codecov-pr]
+identifies this repository and PR. An upload job alone would not establish
+successful provider processing.
+
+The 80% floor applies to the declared three-file component. It is not a
+whole-repository coverage claim. Other Python helpers, including the term and
+abbreviation management utilities, are outside this denominator; generated
+property tests exercise some of their contracts separately. Shell scripts and
+Typst sources are not measured by coverage.py. Zero excluded lines refers to
+the selected component, not to all executable files in the repository.
+Typst compilation, four profile builds, PDF structure/text checks and visual
+inspection remain separate evidence; none is represented as document line
+coverage or proof of institutional compliance.
+
+If these results are wrapped in the [central receipt schema][receipt-schema],
+put separate line and branch percentages in their named metric fields. Keep
+the combined percentage, denominators, source hashes and exclusions in the
+native coverage sidecar. Do not add unsupported top-level fields or place a
+combined percentage in `line_coverage_percent`. The complete adapter remains
+owned by [consumer #22][consumer-evidence] and [central #19][receipt-owner].
+
+## CodeQL applicability and collector limits
+
+Python helpers and GitHub Actions are applicable CodeQL analysis components.
+The consumer uses default setup; adding a competing advanced configuration
+is unnecessary. [Baseline analysis][baseline-codeql] passed Python and Actions
+at `6d4652936b4eabaac29462ab8caf86e248c0f96a`, and
+[PR #10 analysis][candidate-codeql] passed at
+`0f2f2ecc4b4a0ba3e99a1bb2f84bf5cec5ee5068`. These source identities must remain
+attached to their results. Obtain applicable analysis on the changed final
+candidate and its receiving revision; the historical analyses do not qualify
+the newer policy checker. The [current candidate analysis][current-codeql]
+passed both languages and the CodeQL-owned aggregate check on `7e2d09c`.
+The [receiving-main analysis][receiving-codeql] also passed Python and Actions
+for `9375798`. No CodeQL analysis of Typst layout is claimed.
+
+The current central [`typst` profile][profiles] inherits `executable: false`
+and `coverage: not_applicable` from `documentation`. The legacy
+[`audit_estate_conformance.py`][collector] also detects CodeQL from committed
+workflow paths/text and does not establish default-setup execution from those
+heuristics. The registry's component evidence corrects the stale classification
+but does not change these implementation limits or make new enforcement
+claims. Component-aware collector/profile semantics belong to the existing
+[F04 verification track][f04] and its inventory owners. Do not globally change
+all typesetting repositories to executable software to resolve this consumer.
+
+## Published-artifact supply-chain applicability
+
+The release API records published `v0.2.1`, `v0.1.1` and `v0.1` releases. Their
+attached asset lists are empty at this assessment; see [release inventory][releases]
+and [v0.2.1][release]. Source releases therefore exist, but no release PDF
+attachment is claimed. The [current tag-only workflow][release-workflow]
+checks tag/version agreement, compiles and validates `build/thesis.pdf`, then
+is configured to publish that PDF. It does not currently establish an executed,
+artifact-bound SBOM/provenance/consumer-verification chain.
+
+The existing `published` profile requires dependency review, Scorecard, SBOM,
+provenance and checksums. The public-repository audit also selects Security
+Insights and SLSA verification for this profile. The consumer has executed
+dependency-review evidence in its [qualified PR #10 quality run][quality-run].
+This assessment does not claim completion of the other selected controls;
+changing the registry may correctly surface additional conformance gaps.
+No blanket exception is introduced to hide them.
+
+Release evidence should bind the exact source, build/tool/input identities
+and final artifact digest, and downstream verification should reject mismatched
+artifacts or provenance. A workflow declaration or an SBOM for the source tree
+alone is not that proof; no SLSA level or reproducible-PDF claim is made here.
+Implementation stays with [central supply-chain #20][supply-chain-owner],
+[F05][f05] and consumer release/replay [#20][consumer-release], packaging #21,
+and evidence #22. The foundation's GOV-03 obligation is this truthful
+applicability/evidence reconciliation, not completion of all later document
+outputs. [F07][f07] remains responsible for dated, scoped assurance claims.
+
+## Remaining integration and ownership
+
+Source-head and receiving-main coverage, CodeQL and provider results are
+qualified for their recorded commits. The receiving [quality][receiving-quality],
+[privacy][receiving-privacy], [maintenance][receiving-maintenance],
+[CodeQL][receiving-codeql] and [dependency-graph][receiving-dependencies]
+runs all succeeded. The ordinary push event correctly skipped Dependency review
+and Extended property corpus; those skips are not counted as executed passes.
+
+The [receiving coverage upload][receiving-upload] completed at
+`2026-11-14T17:10:14Z`. GitHub's [commit-status objects][receiving-statuses]
+then recorded `codecov/patch` status **58926800850**, state **success**, at
+`2026-11-14T17:10:25Z`, created by **codecov[bot]**, user ID **22429695**.
+Its [exact-commit report][receiving-codecov] states that coverage was unaffected
+when comparing `7e2d09c...9375798`. This is a legacy status, distinct from the
+source PR's Codecov App 254 check-run; check-run-only collection would miss it.
+
+Before completing consumer #5/#6, integrate this central correction and the
+final evidence PR, qualify their exact final heads and receiving revisions, and
+retain the final governance read-back. The desired policy alone does not activate
+a ruleset. Preserve zero required approvals, conversation resolution and owner
+recovery; this central patch changes no settings.
+
+The full live ruleset inventory read back at 2026-11-14T15:51:12Z contains
+one active [ruleset, 27266891][live-ruleset]. The candidate's checker returned
+MATCH / exit 0: all eight intended status contexts are bound to GitHub Actions
+app ID 15368, conversation resolution is required, approval count is zero,
+and the only recovery actor is repository owner `edithatogo`. The consumer's
+[integration receipt][integration-receipt] retains the full snapshot and its
+observation boundary. A fresh full read-back on 15 November 2026 (Brisbane)
+confirmed the same qualified policy. The dated receipt's earlier queued receiving
+observations are historical; final integration evidence is being reconciled in
+consumer PR #11. Settings and provider results remain distinct evidence.
+
+This change owns only the Typst registry entry and this assessment. Central
+[PR #119][registry-overlap] edits the same registry file for genomics, and
+[PR #141][latex-overlap] updates the LaTeX classification; preserve those
+entries and reconcile the current central main before integration. No
+LaTeX, Quarto or other repository classification is changed by this assessment.
+Existing Renovate ownership is retained. The separately held offline-security
+rollout is unaffected. Full programme acceptance remains with #13 and its
+existing leaf owners; it is not added to the historical #6 child count.
+
+[consumer]: https://github.com/edithatogo/unimelb-thesis-template-typst
+[consumer-governance]: https://github.com/edithatogo/unimelb-thesis-template-typst/issues/5
+[typesetting]: https://github.com/edithatogo/repository-standards/issues/5
+[contract]: https://github.com/edithatogo/unimelb-thesis-template-typst/issues/13
+[maintenance-pr]: https://github.com/edithatogo/unimelb-thesis-template-typst/pull/12
+[policy-fix-receipt]: https://github.com/edithatogo/unimelb-thesis-template-typst/blob/b1b465c74324f75c815cf199ef45d7ff631d20d5/docs/maintenance/issue-5-receipt.json
+[maintenance-run]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43606355606
+[current-coverage]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43609602102/job/132491525752
+[current-codecov-check]: https://github.com/edithatogo/unimelb-thesis-template-typst/runs/132503365652
+[codecov-checks]: https://api.github.com/repos/edithatogo/unimelb-thesis-template-typst/commits/66beec5cd7b78a9cdc1aad37dd288350184ef14d/check-runs?per_page=100
+[codecov-pr]: https://app.codecov.io/gh/edithatogo/unimelb-thesis-template-typst/pull/12
+[receipt-schema]: ../schemas/verification-receipt.schema.json
+[consumer-evidence]: https://github.com/edithatogo/unimelb-thesis-template-typst/issues/22
+[receipt-owner]: https://github.com/edithatogo/repository-standards/issues/19
+[baseline-codeql]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43604503605
+[candidate-codeql]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43608078096
+[current-codeql]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43609599167
+[live-ruleset]: https://github.com/edithatogo/unimelb-thesis-template-typst/rules/27266891
+[receiving-quality]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613548339
+[receiving-privacy]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613547805
+[receiving-maintenance]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613547923
+[receiving-codeql]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613547696
+[integration-receipt]: https://github.com/edithatogo/unimelb-thesis-template-typst/blob/1df319593c1df31d2a7314fbb309d23a8391d86f/docs/maintenance/issue-5-integration-receipt.json
+[profiles]: ../profiles/archetype-profiles.json
+[collector]: ../scripts/audit_estate_conformance.py
+[f04]: ../conductor/tracks/frontier_04_verification_harness_20261113/spec.md
+[releases]: https://api.github.com/repos/edithatogo/unimelb-thesis-template-typst/releases?per_page=20
+[release]: https://github.com/edithatogo/unimelb-thesis-template-typst/releases/tag/v0.2.1
+[release-workflow]: https://github.com/edithatogo/unimelb-thesis-template-typst/blob/7e2d09c934c3c9805a222f39c6fd073885196b48/.github/workflows/release.yml
+[quality-run]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43608082998
+[supply-chain-owner]: https://github.com/edithatogo/repository-standards/issues/20
+[f05]: ../conductor/tracks/frontier_05_release_supplychain_20261113/spec.md
+[consumer-release]: https://github.com/edithatogo/unimelb-thesis-template-typst/issues/20
+[f07]: ../conductor/tracks/frontier_07_observability_certification_20261113/spec.md
+[registry-overlap]: https://github.com/edithatogo/repository-standards/pull/119
+[latex-overlap]: https://github.com/edithatogo/repository-standards/pull/141
+
+[receiving-dependencies]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613554074
+[receiving-upload]: https://github.com/edithatogo/unimelb-thesis-template-typst/actions/runs/43613547923/job/132516395426
+[receiving-statuses]: https://api.github.com/repos/edithatogo/unimelb-thesis-template-typst/commits/937579897af22d7d28f20a49e94a1bdbe4e05855/statuses
+[receiving-codecov]: https://app.codecov.io/gh/edithatogo/unimelb-thesis-template-typst/commit/937579897af22d7d28f20a49e94a1bdbe4e05855

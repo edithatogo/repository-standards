@@ -1,0 +1,82 @@
+name: Grype release vulnerability evidence
+description: Scan resolved dependencies or an immutable image and preserve fail-closed evidence
+inputs:
+  sbom:
+    description: Resolved CycloneDX, SPDX or Syft JSON (exactly one of sbom/image)
+    default: ''
+  image:
+    description: Registry image at a platform manifest sha256 digest
+    default: ''
+  platform:
+    description: Expected image platform (linux/amd64 or linux/arm64)
+    default: ''
+  go-main-module:
+    description: Exact caller Go module allowed to remain explicitly unmatchable when binary build metadata reports UNKNOWN
+    default: github.com/${{ github.repository }}
+  mode:
+    description: advisory reports findings; enforce blocks the severity threshold; operational errors always fail
+    default: advisory
+  severity-cutoff:
+    description: Initial release policy is critical; baselined consumers may choose high
+    default: critical
+  source-sha:
+    description: Exact source Git commit
+    default: ${{ github.sha }}
+  source-role:
+    description: build-source, monitor-workflow or observed-release-tag (describes the source-sha claim)
+    default: build-source
+  output-directory:
+    description: New or empty directory for scan evidence
+    required: true
+  artifact-name:
+    description: Unique evidence artifact name within this workflow run
+    required: true
+  upload-artifact:
+    description: Set false only when the caller retains evidence through its own qualified storage
+    default: 'true'
+outputs:
+  evidence-directory:
+    description: Absolute evidence directory
+    value: ${{ steps.scan.outputs.evidence-directory }}
+  report:
+    description: Grype report path (absent if scan could not run)
+    value: ${{ steps.scan.outputs.report }}
+  policy-outcome:
+    description: pass, findings, blocked, or error
+    value: ${{ steps.scan.outputs.policy-outcome }}
+runs:
+  using: composite
+  steps:
+    - name: Scan immutable inventory with pinned Grype
+      id: scan
+      shell: bash
+      env:
+        SCANNER_ACTION_PATH: ${{ github.action_path }}
+        SCAN_SBOM: ${{ inputs.sbom }}
+        SCAN_IMAGE: ${{ inputs.image }}
+        SCAN_PLATFORM: ${{ inputs.platform }}
+        SCAN_GO_MAIN: ${{ inputs.go-main-module }}
+        SCAN_MODE: ${{ inputs.mode }}
+        SCAN_CUTOFF: ${{ inputs.severity-cutoff }}
+        SCAN_SOURCE: ${{ inputs.source-sha }}
+        SCAN_SOURCE_ROLE: ${{ inputs.source-role }}
+        SCAN_OUTPUT: ${{ inputs.output-directory }}
+        SCAN_UPLOAD: ${{ inputs.upload-artifact }}
+      run: |
+        set -euo pipefail
+        [[ "$SCAN_UPLOAD" == true || "$SCAN_UPLOAD" == false ]] || exit 1
+        target=()
+        [[ -z "$SCAN_SBOM" ]] || target+=(--sbom "$SCAN_SBOM")
+        [[ -z "$SCAN_IMAGE" ]] || target+=(--image "$SCAN_IMAGE")
+        python3 "$SCANNER_ACTION_PATH/../../../scripts/grype_scan.py" "${target[@]}" \
+          --platform "$SCAN_PLATFORM" --go-main-module "$SCAN_GO_MAIN" --mode "$SCAN_MODE" --severity-cutoff "$SCAN_CUTOFF" \
+          --source-sha "$SCAN_SOURCE" --source-role "$SCAN_SOURCE_ROLE" --output-directory "$SCAN_OUTPUT"
+    - name: Preserve Grype evidence even when policy fails
+      if: ${{ always() && inputs.upload-artifact == 'true' && steps.scan.outputs.evidence-directory != '' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ steps.scan.outputs.evidence-directory }}
+        include-hidden-files: true
+        if-no-files-found: error
+        retention-days: 90

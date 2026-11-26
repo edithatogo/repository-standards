@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Audit an owner's active GitHub repositories for product-metadata standards."""
 
-from __future__ import annotations
-
 import argparse
 import base64
 import json
@@ -12,7 +10,7 @@ import sys
 import time
 import urllib.error
 import urllib.parse
-import urllib.request
+from urllib.request import Request, urlopen
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
@@ -51,6 +49,10 @@ LOGGING_TERMS = re.compile(
     r"bunyan|serilog|nlog|slf4j|log4j|zap|zerolog)\b",
     re.I,
 )
+LOGGING_PATHS = re.compile(
+    r"(^|/)(logging|logger|telemetry|observability)(\.|/)",
+    re.I,
+)
 APP_TERMS = re.compile(
     r"\b(api|service|server|cli|command.line|pipeline|etl|daemon|worker|bot|"
     r"application|app|scraper|crawler|ingest)\b",
@@ -69,10 +71,10 @@ class GitHub:
         }
 
     def get(self, path: str) -> Any:
-        request = urllib.request.Request(f"{API}{path}", headers=self.headers)
+        request = Request(f"{API}{path}", headers=self.headers)
         for attempt in range(4):
             try:
-                with urllib.request.urlopen(request, timeout=60) as response:
+                with urlopen(request, timeout=60) as response:
                     return json.load(response)
             except urllib.error.HTTPError as error:
                 if error.code in {404, 409, 422}:
@@ -257,12 +259,12 @@ def audit_repository(client: GitHub, repository: dict[str, Any]) -> dict[str, An
         path for path in paths if path.casefold().rsplit("/", 1)[-1] in CITATION_NAMES
     )
     license_files = sorted(path for path in paths if LICENSE_NAMES.search(path))
-    executable = bool({path.casefold() for path in paths}.intersection(EXECUTABLE_MARKERS))
+    executable = bool(lowered_paths.keys() & EXECUTABLE_MARKERS)
     logging_warranted = kind in {"software", "data"} and executable and bool(
         APP_TERMS.search(f"{repository['name']} {description}")
         or any(
-            path.casefold().startswith(("src/", "app/", "cmd/", "scripts/"))
-            for path in paths
+            lowered.startswith(("src/", "app/", "cmd/", "scripts/"))
+            for lowered in lowered_paths
         )
     )
     manifest_text = "\n".join(
@@ -272,7 +274,7 @@ def audit_repository(client: GitHub, repository: dict[str, Any]) -> dict[str, An
     logging_detected = bool(
         LOGGING_TERMS.search(manifest_text)
         or any(
-            re.search(r"(^|/)(logging|logger|telemetry|observability)(\.|/)", path, re.I)
+            LOGGING_PATHS.search(path)
             for path in paths
         )
     )
@@ -396,7 +398,9 @@ def main() -> int:
     parser.add_argument("--owner", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
-    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    github_token = os.environ.pop("GITHUB_TOKEN", None)
+    gh_token = os.environ.pop("GH_TOKEN", None)
+    token = github_token or gh_token
     if not token:
         print("GITHUB_TOKEN or GH_TOKEN is required", file=sys.stderr)
         return 2

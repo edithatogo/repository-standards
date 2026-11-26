@@ -1,0 +1,64 @@
+name: Community Standards
+description: Check candidate community files with observed public account defaults and local licence presence.
+runs:
+  using: composite
+  steps:
+    - name: Set up policy Python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: '3.15.2'
+    - name: Install hash-verified policy parser
+      shell: bash
+      env:
+        POLICY_ROOT: ${{ github.action_path }}/../../..
+        PIP_CACHE_DIR: ${{ runner.temp }}/community-standards/pip-cache
+      run: |
+        umask 077
+        python -m venv "$RUNNER_TEMP/community-standards/venv"
+        "$RUNNER_TEMP/community-standards/venv/bin/python" -m pip install --disable-pip-version-check --only-binary=:all: --require-hashes -r "$POLICY_ROOT/tooling/community-bootstrap-build-requirements.txt"
+        PYYAML_FORCE_LIBYAML=0 "$RUNNER_TEMP/community-standards/venv/bin/python" -m pip install --disable-pip-version-check --no-build-isolation --no-deps --no-binary=pyyaml --require-hashes -r "$POLICY_ROOT/tooling/community-bootstrap-requirements.txt"
+    - name: Observe public defaults and exact revision
+      id: defaults
+      shell: bash
+      env:
+        POLICY_ROOT: ${{ github.action_path }}/../../..
+        AUDIT_REPOSITORY: ${{ github.repository }}
+        AUDIT_REVISION: ${{ github.sha }}
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        umask 077
+        "$RUNNER_TEMP/community-standards/venv/bin/python" -I "$POLICY_ROOT/scripts/check_community_standards.py" observe --repository "$AUDIT_REPOSITORY" --revision "$AUDIT_REVISION" > "$RUNNER_TEMP/community-standards/metadata.json"
+    - name: Check out the candidate as data
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        path: project
+        persist-credentials: false
+        submodules: false
+    - name: Check out observed public defaults
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        repository: ${{ steps.defaults.outputs.defaults-repository }}
+        ref: ${{ steps.defaults.outputs.defaults-revision }}
+        path: community-defaults
+        persist-credentials: false
+        submodules: false
+    - name: Check community files and local licence
+      shell: bash
+      env:
+        POLICY_ROOT: ${{ github.action_path }}/../../..
+      run: |
+        umask 077
+        status=0
+        "$RUNNER_TEMP/community-standards/venv/bin/python" -I "$POLICY_ROOT/scripts/check_community_standards.py" audit --repository-dir "$GITHUB_WORKSPACE/project" --defaults-dir "$GITHUB_WORKSPACE/community-defaults" --metadata "$RUNNER_TEMP/community-standards/metadata.json" > "$RUNNER_TEMP/community-standards/report.json" || status=$?
+        cat "$RUNNER_TEMP/community-standards/report.json"
+        exit "$status"
+    - name: Retain the bounded report
+      if: always()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: community-standards
+        path: |
+          ${{ runner.temp }}/community-standards/metadata.json
+          ${{ runner.temp }}/community-standards/report.json
+        if-no-files-found: ignore
+        retention-days: 14

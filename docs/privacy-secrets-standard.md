@@ -19,13 +19,17 @@ dependencies are installed from `privacy/requirements.lock` with required hashes
 Anonymizer is available in the tooling environment; automatic redaction of source
 files and application-runtime redaction are not part of this implementation.
 
-The tooling uses an isolated **Python 3.15.1** environment. The installer
+The tooling uses an isolated **Python 3.15.2** environment. The installer
 verifies the upstream Presidio and PyYAML source archives before building
 wheels with hash-locked tools. The Presidio compatibility build retains the
-2.2.366 scanner code and updates its package metadata for Python 3.15.1,
-NumPy 2.5.4 and preshed 3.0.15. The install checks the complete dependency
-set. Requalify the guard's behavioral tests and dependency locks when
-upstream support changes.
+2.2.366 scanner code and updates its package metadata for Python 3.15.2,
+NumPy 2.5.4 and preshed 3.0.15. Each rebuilt Presidio wheel retains and verifies
+the upstream MIT notice. Wheel timestamps and native debug paths are controlled;
+the installer's fixed permissions make builds repeatable on the same toolchain.
+Platform and toolchain changes still require qualification. The install checks
+the complete dependency set.
+Requalify the guard's behavioral tests and dependency locks when upstream support
+changes.
 
 ## Detection contract
 
@@ -56,13 +60,20 @@ Individually verified false positives may use the pinned tooling's
 binds commit, path, rule, line and matched-value digest; other findings still block.
 The safe summary separately counts reviewed nonsecrets and remaining findings.
 
+The separate [privacy finding registry](../privacy/reviewed-privacy-findings.md)
+records individually verified nonidentifiers against an exact Git blob, path,
+entity, line, character offsets and matched-value digest. It applies only to the
+repository profile and never to staged content. An unreviewed match, a changed
+blob or the sensitive profile still blocks. Reports count reviewed matches
+separately and retain the original coverage limitations.
+
 ## Scan scope
 
 | Invocation | Secret scan | Personal-identifier scan |
 | --- | --- | --- |
-| Pull request | Submitted commit range, including a secret added and later deleted | Complete final blobs of changed tracked files |
+| Pull request | Submitted commit range, including merge changes and a secret added and later deleted | Complete final blobs of changed tracked files |
 | Push to configured default branch | Introduced commit range; initial branch falls back to full history | Complete final blobs of changed tracked files; initial branch scans tracked text |
-| Weekly schedule or manual full audit | All locally reachable Git history in a complete clone | Current tracked text snapshot |
+| Weekly schedule or manual full audit | All locally reachable Git history in a complete clone, including merge changes | Current tracked text snapshot |
 | Local `--staged` | Staged Git diff, including an initial commit | Complete blobs of changed staged/index files |
 
 The personal-identifier check does not inspect every historical blob. A PII value
