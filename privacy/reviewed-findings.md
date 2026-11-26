@@ -89,6 +89,14 @@ change concurrently with a scan: the safety checks and scanner are separate
 processes. Scanner diagnostics are retained only in private temporary files and
 cause an error, even if Gitleaks otherwise returns a clean exit code.
 
+## CallTrack qualification fixtures
+
+The CallTrack full-history audit matched 25 UUID4 fixture identifiers in
+historical Android qualification receipts. Each entry points to the exact
+JSON line and the fixture generator at the same Git revision. The generator
+creates the identifier for a synthetic instrumentation session. The registry
+stores the matched-value digest and exact finding coordinates.
+
 ## Change process
 
 1. Establish the exact scanner finding locally, without posting raw values or
