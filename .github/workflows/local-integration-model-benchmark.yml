@@ -1,0 +1,76 @@
+name: Local integration model benchmark
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/local-integration-model-benchmark.yml'
+      - 'scripts/integration_model_benchmark.py'
+      - 'tests/test_integration_model_benchmark.py'
+      - 'tooling/integration-model.sha256'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: integration-model-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cpu-benchmark:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: edithatogo/standards_check
+          ref: d88f787ffd4647117bca4ca400cbb68d95197d40
+          path: reference
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Verify reference and test diagnostic harness
+        run: |
+          set -euo pipefail
+          test "$(git -C reference rev-parse HEAD)" = d88f787ffd4647117bca4ca400cbb68d95197d40
+          test "$(git hash-object reference/scripts/semantic_benchmark.py)" = da3b8f7712fe79536b8c33484f02a91d7f800645
+          PYTHONPATH=scripts python -m unittest discover -s tests -p test_integration_model_benchmark.py -v
+      - name: Prepare isolated experimental runtime and immutable Hugging Face assets
+        run: |
+          set -euo pipefail
+          python -m venv "$RUNNER_TEMP/model-venv"
+          "$RUNNER_TEMP/model-venv/bin/python" -m pip install --disable-pip-version-check --only-binary=:all: \
+            onnxruntime==1.23.2 tokenizers==0.22.1 numpy==2.5.5
+          "$RUNNER_TEMP/model-venv/bin/python" -m pip check
+          mkdir -p "$RUNNER_TEMP/model-assets" "$RUNNER_TEMP/model-evidence"
+          "$RUNNER_TEMP/model-venv/bin/python" -m pip freeze > "$RUNNER_TEMP/model-evidence/environment.txt"
+          base="https://huggingface.co/cross-encoder/nli-MiniLM2-L6-H768/resolve/c847a3c0e1cad93a5343183ef183f3044e3fc7c2"
+          for file in config.json tokenizer.json onnx/model_quint8_avx2.onnx; do
+            curl --fail --silent --show-error --location --max-redirs 5 \
+              --connect-timeout 15 --max-time 180 --max-filesize 100000000 \
+              --proto '=https' --proto-redir '=https' \
+              "$base/$file" --output "$RUNNER_TEMP/model-assets/${file##*/}"
+          done
+      - name: Run inference without network or credentials
+        run: |
+          set -euo pipefail
+          sudo unshare --net --setgid "$(id -g)" --setuid "$(id -u)" -- \
+            env -i PATH=/usr/bin:/bin HOME="$RUNNER_TEMP" \
+            HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_HUB_DISABLE_TELEMETRY=1 \
+            PYTHONPATH="$GITHUB_WORKSPACE/reference/scripts" \
+            timeout 180 "$RUNNER_TEMP/model-venv/bin/python" \
+            "$GITHUB_WORKSPACE/scripts/integration_model_benchmark.py" \
+            --assets "$RUNNER_TEMP/model-assets" --revision "$GITHUB_SHA" \
+            --output "$RUNNER_TEMP/model-evidence/receipt.json"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: local-integration-model-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/model-evidence/
+          if-no-files-found: error
+          retention-days: 90

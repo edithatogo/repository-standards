@@ -56,3 +56,49 @@ Keep model-relative findings advisory; independent tests and native protection
 are authoritative. Record rejected candidates and abstentions. No automatic model
 updates, training, extra GPU services or new dependencies until a bounded experiment
 shows additional value.
+
+### First local model experiment
+
+Reuse the pinned StandardFlow CPU-only MiniLM NLI implementation from
+d88f787ffd4647117bca4ca400cbb68d95197d40 (source blob da3b8f7712fe79536b8c33484f02a91d7f800645).
+Independently verified original StandardFlow benchmark artifact 14925311073, archive
+SHA-256 fe3cfa064cde26ba2dd3f8f1be53bb4137c5d071930df588644ae7eb2e805794,
+provides the exact three Hugging Face asset hashes used by the new benchmark.
+Download only those files, verify all bytes before model loading, execute on
+a separate GitHub-hosted CPU job with a network namespace and scrubbed environment,
+no write credential, and no external model endpoint. Top-level inference wheels
+are pinned; the full transitive environment is retained, not yet hash-locked.
+The benchmark compares exact matching with bidirectional NLI at the inherited
+0.95 diagnostic threshold on 12 synthetic requirement-preservation cases.
+The threshold is not PR-calibrated. Record false acceptances and false rejections;
+never qualify merging or repair generation from this synthetic experiment.
+
+Focused harness TDD: initial missing-module failure, four tests subsequently
+passed under Python 3.13.5 using synthetic scoring stubs. Actual model inference
+and qualified hosted suite are separate open gates. Candidate results determine
+whether a second model or broader historical replay is justified. No inference
+API, external upload, model authorization, or actual PR repair is introduced.
+
+### Experimental execution and checksum representation
+
+PR #195 tested merge e530bca75a2099dd260fa1ff83a828ce56dbeefc, source head
+6ddc31f6adb73b1fb6ed182ac9d0210cd5455bb4. [CPU run 45785630295](https://github.com/edithatogo/repository-standards/actions/runs/45785630295)
+successfully executed isolated, checksum-verified MiniLM inference. Artifact
+15099364071 archive SHA-256 independently reproduced as
+6cc4de4a6eafd3da760bbb1f1ec68225375e93e35248d006ae9b02868ad0b8e5.
+At the predeclared diagnostic threshold, exact match classified 9/12 correctly;
+NLI classified 11/12 correctly. Both had zero false acceptances among eight
+synthetic nonequivalent pairs. NLI missed one of four equivalent pairs; the exact
+baseline missed three. Model load plus evaluation 0.612 s; no claim of calibration,
+production safety or generalization. Receipt explicitly denies merge qualification.
+
+The candidate's independent privacy scan failed: Gitleaks generic-api-key on the
+public tokenizer file checksum (line 19), not a credential, corroborated by the
+prior verified StandardFlow receipt. Preserve #195 and the failed job 139791569450.
+Use a conventional digest-first sha256sum-format manifest for public content
+identifiers in a replacement candidate from unchanged main, with exact asset-name,
+duplicate and digest-format validation. Do not alter Gitleaks rules or reviewed
+finding policy, force-push, or treat the original failed run as passing. Five
+focused local tests passed after adding a failing manifest regression; rerun all
+checks and actual inference against the replacement candidate before integration.
+The original inference receipt remains historical evidence only.
