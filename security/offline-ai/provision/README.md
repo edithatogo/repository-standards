@@ -111,8 +111,8 @@ remains in the evidence artifact. The [review catalog](wolfi-image-review.json)
 records the eight findings in the qualification run and scopes the conclusions
 to the observed package versions.
 
-The [CPython catalog](cpython-backports.json) pins two fixes already present in
-Wolfi's 3.15.2 build and four official standard-library patches. The
+The [CPython catalog](cpython-backports.json) pins three fixes already present in
+Wolfi's 3.15.2 build and three official standard-library patches. The
 [retained diffs](cpython-patches/) contain the applied library changes
 from those upstream commits and carry the original CPython licence. The
 GitHub patch endpoint can change its abbreviated blob IDs. The build

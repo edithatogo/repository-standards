@@ -5,10 +5,10 @@ ca-certificates-bundle-20261020-r0
 coreutils-9.12-r8
 findutils-4.11.0-r6
 gdbm-1.26-r10
-glibc-2.44-2.44-r23
-glibc-2.44-locale-posix-2.44-r23
+glibc-2.44-2.44-r26
+glibc-2.44-locale-posix-2.44-r26
 grep-3.12-r12
-ld-linux-2.44-2.44-r23
+ld-linux-2.44-2.44-r26
 libacl1-2.4.0-r6
 libatomic-16.2.0-r5
 libattr1-2.6.0-r6
@@ -16,7 +16,7 @@ libbrotlicommon1-1.2.1-r4
 libbrotlidec1-1.2.1-r4
 libbrotlienc1-1.2.1-r4
 libbz2-1-1.0.8-r31
-libcrypt1-2.44-2.44-r23
+libcrypt1-2.44-2.44-r26
 libexpat1-2.11.0-r0
 libffi-3.8.1-r0
 libgcc-16.2.0-r5
@@ -38,9 +38,9 @@ py3-pip-wheel-26.2.2-r3
 py3.15-pip-26.2.2-r3
 py3.15-pip-base-26.2.2-r3
 py3.15-setuptools-84.2.1-r1
-python-3.15-3.15.2_git20261113-r0
-python-3.15-base-3.15.2_git20261113-r0
-python-3.15-runtime-3.15.2_git20261113-r0
+python-3.15-3.15.2_git20261120-r0
+python-3.15-base-3.15.2_git20261120-r0
+python-3.15-runtime-3.15.2_git20261120-r0
 readline-8.3-r4
 sqlite-libs-3.54.1-r1
 wolfi-base-1-r8
