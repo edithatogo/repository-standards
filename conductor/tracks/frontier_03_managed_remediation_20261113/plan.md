@@ -103,3 +103,17 @@ The receipt dated 2026-11-26T08:41:16.527351+00:00 contains 27 PRs (13 hold,
 14 wait), zero merge candidates, mode plan_only and write_authorized false.
 The live inventory is accepted for observation only, not for automatic writes.
 #192 A is accepted. B, actual CI reruns and writer qualification remain open.
+
+### 27 November 2026 — owner scope and integration gate
+
+Issue #192 remains the single F03/F06 coordination lane. The owner has limited
+conflict and candidate-repair fixtures to synthetic cases; historical live PR
+replay is not authorized in this increment. No live conflict repair, GitHub App
+write qualification, unattended merge activation, or estate rollout. Retain the
+existing fail-closed apply refusal. The accepted read-only inventory is not
+repeated as new work. F06's checksum-manifest PR #196 is refreshed against the
+registry-only receiving main 7e4dcadc02130c79aa974927fd672b52c34e3aeb without
+changing its executable files or the intervening registry change. The original
+checks and reviews are historical evidence; the new head requires fresh hosted
+checks and review before any ordinary protected integration. Keep B, D and E
+open; C remains experimental, not admission or authorization.

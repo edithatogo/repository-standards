@@ -102,3 +102,34 @@ finding policy, force-push, or treat the original failed run as passing. Five
 focused local tests passed after adding a failing manifest regression; rerun all
 checks and actual inference against the replacement candidate before integration.
 The original inference receipt remains historical evidence only.
+
+### 27 November 2026 — replacement qualification receipt
+
+PR #196 original head 4cd4a1bbc5629e8a534b43cdab03a37744c2d431 passed all nine
+observed checks, including both CodeQL analyses, the CodeQL alert gate, Zizmor,
+policy, community, privacy and CPU benchmark. Its automated code review completed
+without findings; no unresolved review threads. Policy job
+[139793303833](https://github.com/edithatogo/repository-standards/actions/runs/45786154903/job/139793303833)
+reported 372 tests, 38 capability skips, no failures (334 passed).
+The [replacement inference run 45786154886](https://github.com/edithatogo/repository-standards/actions/runs/45786154886)
+tested merge b05127c596143955070e361687fabfb083f61068. Artifact 15100047679 was
+downloaded and its archive SHA-256 independently reproduced:
+
+```text
+8638338b6df23626c279af47c6d03ad4fcb714f1d2b53657e26e82b0ae1aff13
+```
+
+The receipt retains the same pinned model revision, three verified asset
+hashes, fixture digest and threshold as the earlier experiment. Exact 9/12,
+NLI 11/12; both zero false acceptances among eight designed nonequivalent
+cases; three versus one false rejections. CPU model load and evaluation took
+0.717 s (Python 3.12.16, ONNX Runtime 1.23.2); this is a repeated same-fixture
+result, not independent validation or a latency benchmark. Transitive inference
+wheels remain unqualified as a hash-locked closure. Merge authorization is false.
+Preserve the draft #195 and its failed scan; do not count that revision as
+accepted. Main advanced by the unrelated registry-only change; refresh #196
+using both parents without force, preserve all executable blobs and require
+current-head review and checks. No additional model experiment until this
+integration gate is resolved. Future conflict and repair fixtures are synthetic
+only under the owner's 27 November scope; no historical live PR replay, App
+writes, automatic merges, or estate rollout.

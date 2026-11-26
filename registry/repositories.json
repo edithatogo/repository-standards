@@ -1985,6 +1985,37 @@
       "exceptions": []
     },
     {
+      "repository": "edithatogo/Iatonoesis",
+      "visibility": "public",
+      "archetype": "software",
+      "default_branch": "main",
+      "sole_developer": true,
+      "mandatory_human_approvals": 0,
+      "renovate": {
+        "current": "repository_config_detected",
+        "target": "hosted_app_plus_inherited_config",
+        "canonical_preset": "github>edithatogo/renovate-config",
+        "dependabot_detected": false,
+        "removal_gate": "Renovate first successful run"
+      },
+      "codecov": {
+        "current": "active_oidc_upload_verified",
+        "warranted": true,
+        "target": "active_oidc_upload_with_real_coverage"
+      },
+      "quality_issue": "https://github.com/edithatogo/Iatonoesis/issues/1",
+      "policy_version": 1,
+      "profile": "python",
+      "support_status": "experimental",
+      "maintenance_tier": "review_required",
+      "release_maturity": "not_released",
+      "canonical_status": "review_required",
+      "supply_chain_profile": "baseline",
+      "managed_files": "detect_and_issue",
+      "verification_receipt": "required",
+      "exceptions": []
+    },
+    {
       "repository": "edithatogo/innovate",
       "fair_software": {
         "enabled": true,
