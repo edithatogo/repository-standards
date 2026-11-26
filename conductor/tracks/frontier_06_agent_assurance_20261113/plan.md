@@ -20,3 +20,39 @@ Attacks do not cause prohibited actions; test suite catches forged receipts and 
 
 ## Blockers and recovery
 API forbidden, unsupported entitlement, unstarted runners, stale branch, unmerged consumer PR and nondeterministic test are explicit unresolved states. Maintain retry bounds and no-false-green accounting. Do not claim estate deployment when only central code passes.
+
+
+## Local-model integration qualification — 26 November 2026
+
+Cross-reference [F03 integration lane / issue #192](https://github.com/edithatogo/repository-standards/issues/192).
+Build no new agent framework or inference service until the deterministic baseline shows
+a need. Reuse the existing standards_check pinned ONNX and GGUF experiments where
+compatible; keep optional model dependencies separate from the qualified policy runtime.
+
+Candidate sequence (not yet qualified):
+1. Classical log classification, lexical retrieval and native Git first.
+2. One lightweight retrieval/reranking model (MiniLM or Qwen3-Embedding/Reranker-0.6B)
+   if context selection fails; compare to lexical retrieval.
+3. Existing MiniLM NLI ONNX and structured LiquidAI d1-2B decision experiment
+   for separate preservation/routing diagnostics; licence and runtime checks first.
+4. One small code-repair candidate (Qwen2.5-Coder-1.5B-Instruct or a measured successor);
+   add alternative small reasoning models only for distinct failure classes. Independent
+   counterexample generation is preferred to model voting; visual models only for
+   actual rendering failures.
+
+All inference runs locally from Hugging Face Hub weight snapshots (no Gemini,
+Copilot, hosted model endpoints or proprietary inference APIs). Pin exact revision,
+weight/tokenizer/config hashes, runtime and licence; prefer ONNX/safetensors/GGUF
+without remote executable code. Download separately, verify assets, disable network
+and telemetry for inference, limit resources, use typed output validated by trusted
+policy. Models cannot access write tokens, invoke shell commands from output or
+declare acceptance. No untrusted fork or private data on public receipts/runners.
+
+Replay historical exact base/head pairs without exposing their accepted resolutions;
+split calibration/evaluation by PR or repository, include synthetic harmful patches,
+missing checks, forged receipts, injection and stale-base cases. Measure incorrect
+acceptance and functionality loss before coverage, runner minutes and latency.
+Keep model-relative findings advisory; independent tests and native protection
+are authoritative. Record rejected candidates and abstentions. No automatic model
+updates, training, extra GPU services or new dependencies until a bounded experiment
+shows additional value.
