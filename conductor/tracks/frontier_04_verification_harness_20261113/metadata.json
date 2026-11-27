@@ -2,9 +2,9 @@
   "track_id": "frontier_04_verification_harness_20261113",
   "type": "testing",
   "priority": "P1",
-  "status": "new",
+  "status": "in_progress",
   "created_at": "2026-11-13",
-  "updated_at": "2026-11-13",
+  "updated_at": "2026-11-27",
   "dependencies": [
     "frontier_01_evidence_inventory_20261113",
     "bounded_execution_merkle_lineage_20261110"
@@ -12,5 +12,9 @@
   "implementation_complete": false,
   "hosted_canary_verified": false,
   "estate_rollout_verified": false,
-  "frontier_certified": false
+  "frontier_certified": false,
+  "first_increment": "Offline v1 receipt consistency, trusted identity/digest and required-check verification",
+  "first_increment_local_test_count": 10,
+  "first_increment_local_runtime": "Python 3.13.5; fastjsonschema 2.21.2",
+  "first_increment_hosted_validation_passed": false
 }

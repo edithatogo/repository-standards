@@ -1,6 +1,6 @@
 # Archetype-based verification and scientific reproducibility
 
-Status: **new / not implemented** · Priority: **P1** · Created: 2026-11-13
+Status: **in progress / offline receipt consistency candidate** · Priority: **P1** · Created: 2026-11-13
 
 - [Specification](spec.md)
 - [Execution plan](plan.md)
