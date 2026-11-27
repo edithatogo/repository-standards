@@ -2,9 +2,9 @@
   "track_id": "frontier_03_managed_remediation_20261113",
   "type": "automation",
   "priority": "P0",
-  "status": "new",
+  "status": "in_progress",
   "created_at": "2026-11-13",
-  "updated_at": "2026-11-13",
+  "updated_at": "2026-11-27",
   "dependencies": [
     "frontier_01_evidence_inventory_20261113",
     "frontier_02_enforcement_20261113"
@@ -12,5 +12,8 @@
   "implementation_complete": false,
   "hosted_canary_verified": false,
   "estate_rollout_verified": false,
-  "frontier_certified": false
+  "frontier_certified": false,
+  "offline_plan_contract_local_tests_passed": 10,
+  "offline_plan_contract_hosted_validation_passed": false,
+  "write_activation_authorized": false
 }
