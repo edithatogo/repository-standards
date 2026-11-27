@@ -24,8 +24,14 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
-      - run: ${{ inputs.install-command }}
-      - run: ${{ inputs.test-command }}
+      - name: Run install command
+        run: eval "$INSTALL_COMMAND"
+        env:
+          INSTALL_COMMAND: ${{ inputs.install-command }}
+      - name: Run test command
+        run: eval "$TEST_COMMAND"
+        env:
+          TEST_COMMAND: ${{ inputs.test-command }}
       - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           use_oidc: true
