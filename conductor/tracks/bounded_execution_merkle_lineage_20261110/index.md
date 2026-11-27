@@ -3,6 +3,7 @@
 - [Specification](spec.md)
 - [Executable plan](plan.md)
 - [Metadata](metadata.json)
+- [Two-tier synthetic lineage candidate](two-tier-lineage-candidate.md)
 - [Tracks registry](../../tracks.md)
 
 Central policy specifications and standards do not certify downstream runtime implementation or scientific conclusions. Consumer repositories (`edithatogo/tobac`, `archive-govt-nz`, `voiage`, `innovate`, `kairos`) own their respective runtime, numerical and lineage receipts.

@@ -1,10 +1,11 @@
 # Continuous assurance scorecard and frontier certification
 
-Status: **new / not implemented** · Priority: **P1** · Created: 2026-11-13
+Status: **in progress / synthetic metric aggregation candidate** · Priority: **P1** · Created: 2026-11-13
 
 - [Specification](spec.md)
 - [Execution plan](plan.md)
 - [Track metadata](metadata.json)
+- [Metric definitions and qualification](metric-dictionary.md)
 - [Programme roadmap](../../frontier-roadmap-20261113.md)
 
 Dependencies: `frontier_01_evidence_inventory_20261113`, `frontier_02_enforcement_20261113`, `frontier_03_managed_remediation_20261113`, `frontier_04_verification_harness_20261113`, `frontier_05_release_supplychain_20261113`, `frontier_06_agent_assurance_20261113`.
