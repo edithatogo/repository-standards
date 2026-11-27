@@ -56,3 +56,25 @@ Keep model-relative findings advisory; independent tests and native protection
 are authoritative. Record rejected candidates and abstentions. No automatic model
 updates, training, extra GPU services or new dependencies until a bounded experiment
 shows additional value.
+
+### First local model experiment
+
+Reuse the pinned StandardFlow CPU-only MiniLM NLI implementation from
+d88f787ffd4647117bca4ca400cbb68d95197d40 (source blob da3b8f7712fe79536b8c33484f02a91d7f800645).
+Independently verified original StandardFlow benchmark artifact 14925311073, archive
+SHA-256 fe3cfa064cde26ba2dd3f8f1be53bb4137c5d071930df588644ae7eb2e805794,
+provides the exact three Hugging Face asset hashes used by the new benchmark.
+Download only those files, verify all bytes before model loading, execute on
+a separate GitHub-hosted CPU job with a network namespace and scrubbed environment,
+no write credential, and no external model endpoint. Top-level inference wheels
+are pinned; the full transitive environment is retained, not yet hash-locked.
+The benchmark compares exact matching with bidirectional NLI at the inherited
+0.95 diagnostic threshold on 12 synthetic requirement-preservation cases.
+The threshold is not PR-calibrated. Record false acceptances and false rejections;
+never qualify merging or repair generation from this synthetic experiment.
+
+Focused harness TDD: initial missing-module failure, four tests subsequently
+passed under Python 3.13.5 using synthetic scoring stubs. Actual model inference
+and qualified hosted suite are separate open gates. Candidate results determine
+whether a second model or broader historical replay is justified. No inference
+API, external upload, model authorization, or actual PR repair is introduced.
