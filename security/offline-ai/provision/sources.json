@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "lock_status": "reviewed",
+  "verified_on": "2026-11-14",
+  "target": {
+    "os": "linux",
+    "architecture": "x86_64",
+    "python": "3.15.1"
+  },
+  "downloads": {
+    "gitleaks": {
+      "version": "8.30.1",
+      "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz",
+      "sha256": "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb",
+      "size_bytes": 8230402,
+      "maximum_bytes": 16777216,
+      "provenance_url": "https://api.github.com/repos/gitleaks/gitleaks/releases/tags/v8.30.1"
+    },
+    "opengrep": {
+      "version": "2.0.0",
+      "url": "https://github.com/opengrep/opengrep/releases/download/v2.0.0/opengrep_linux_x86",
+      "sha256": "37e93f4da5fd04a18c5c1febbdd12f7e98dfccd4d0c9cf2593bcb25eeb462da0",
+      "size_bytes": 161274624,
+      "maximum_bytes": 201326592,
+      "provenance_url": "https://api.github.com/repos/opengrep/opengrep/releases/tags/v2.0.0"
+    },
+    "torch": {
+      "version": "2.15.0+cpu",
+      "url": "https://download-r2.pytorch.org/whl/cpu/torch-2.15.0%2Bcpu-cp315-cp315-manylinux_2_28_x86_64.whl",
+      "sha256": "3552930ba3d358d3ff0b6fee19cb296e199767443c0c86be2a715471036d9233",
+      "size_bytes": 209534469,
+      "maximum_bytes": 268435456,
+      "provenance_url": "https://download.pytorch.org/whl/cpu/torch/",
+      "metadata_sha256": "8bbf94c86c3be6cf586385861d476b78cb66d19b67fef49ece4f7d68ca428cc3"
+    }
+  },
+  "promptfoo": {
+    "version": "0.125.1",
+    "integrity": "sha512-nogBhixdp69icwkg1EI0syZ4zAmAjJyWeLcqxAkTldbHi0qirOslwHvkUQhQmg65lQLrIKyMOMLXlBlSc6LRrg==",
+    "provenance_url": "https://registry.npmjs.org/promptfoo/0.125.1",
+    "source_commit": "8569e72ed6cf7737082a6042be8d925e40f9739d",
+    "source_url": "https://github.com/promptfoo/promptfoo/tree/8569e72ed6cf7737082a6042be8d925e40f9739d"
+  },
+  "python_roots": {
+    "gliner": {
+      "version": "0.2.30",
+      "sha256": "ab5d43a8f1c69e76ed296ee6ad5e4c438060ef1c4484fd9c26b21598fbae4865",
+      "provenance_url": "https://pypi.org/pypi/gliner/0.2.30/json"
+    },
+    "pytest": {
+      "version": "9.2.0",
+      "sha256": "07acdcf88ec174f907dc01af70bf52d49b014bbab03faeeade31c96b18c2e588",
+      "provenance_url": "https://pypi.org/pypi/pytest/9.2.0/json"
+    }
+  },
+  "policy_inputs": {
+    "privacy/requirements.lock": "2f85bfe3ae19737c0a4bc74e1a6fa5f592a8564b1f818d2ae89114a3bedd6160",
+    "privacy/build-requirements.lock": "e126a74900098c89d847b7e3d19b7786edca3cb288cd0a681522726acbdff336",
+    "scripts/build_privacy_wheels.py": "ef3d29ede13d8d00cd30efbd5fdb6dd6252e26b1fe549defe211b0aaeb579def",
+    "scripts/install_gitleaks.py": "5995885e3d1e39da26680ebe5e18cf32f03a2a28ffdaeb37ccad6c1a9f29c711",
+    "security/offline-ai/provision/promptfoo/package.json": "57619aa529d4e5d3d2bb8589b21f74558fad323c469384dfb6714ebd6141365e",
+    "security/offline-ai/provision/requirements.extra.lock": "8dff90e3d0de90b82e4685c505a5e2099487ea42ad0933b5b07cc302c966e302",
+    "security/offline-ai/provision/promptfoo/package-lock.json": "28794c2307783f00db6d389b1a89824f0f1f4ca38f70e4a27a4c9aa24132447b",
+    "security/offline-ai/provision/dependency-review.json": "b78adc58c61f5aa2eb56ddeb1dd62688e69800f7959f3f828420c1cef02a3197"
+  },
+  "qualification": {
+    "image": false,
+    "model": false,
+    "runner": false
+  }
+}

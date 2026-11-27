@@ -1,0 +1,18 @@
+title = "Offline security extensions"
+[extend]
+useDefault = true
+[[rules]]
+id = "offline-sensitive-canary"
+description = "Sensitive canary in committed source"
+regex = '''CANARY-[A-Z0-9]{6,}'''
+tags = ["canary", "secret"]
+[[rules]]
+id = "offline-sensitive-prompt"
+description = "Potential embedded private system instruction"
+regex = '''(?i)(?:PRIVATE_AGENT_INSTRUCTION|SYSTEM_PROMPT_SECRET)\s*[:=]\s*["']?[A-Za-z0-9_\-]{12,}'''
+tags = ["prompt", "secret"]
+[[rules]]
+id = "offline-pem-private-key"
+description = "Private key PEM marker"
+regex = '''-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----'''
+tags = ["key", "secret"]

@@ -1,0 +1,39 @@
+{
+  "gliner_config.json": {
+    "model_type": "gliner_uni_encoder_span",
+    "model_name": "microsoft/mdeberta-v3-base",
+    "span_mode": "markerV0",
+    "words_splitter_type": "whitespace",
+    "encoder_config": {
+      "model_type": "deberta-v2",
+      "hidden_size": 768,
+      "num_hidden_layers": 12,
+      "num_attention_heads": 12,
+      "vocab_size": 251000
+    }
+  },
+  "encoder/config.json": {
+    "model_type": "deberta-v2",
+    "hidden_size": 768,
+    "num_hidden_layers": 12,
+    "num_attention_heads": 12,
+    "vocab_size": 251000
+  },
+  "tokenizer_config.json": {
+    "tokenizer_class": "DebertaV2Tokenizer",
+    "model_max_length": 512
+  },
+  "tokenizer.json": {
+    "version": "1.0",
+    "model": {
+      "type": "Unigram",
+      "vocab": [
+        [
+          "[UNK]",
+          0
+        ]
+      ]
+    }
+  },
+  "model.safetensors": "Synthetic fixture bytes only; not a loadable or qualified model."
+}

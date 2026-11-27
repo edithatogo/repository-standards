@@ -1,0 +1,356 @@
+{
+  "schema_version": 1,
+  "kind": "offline-upstream-dependency-review",
+  "status": "reviewed-for-preparation",
+  "reviewed_at_utc": "2026-11-14T23:26:05+00:00",
+  "method": "automated-source-metadata-and-advisory-review",
+  "locked_inputs": {
+    "security/offline-ai/provision/requirements.extra.lock": {
+      "bytes": 10863,
+      "sha256": "8dff90e3d0de90b82e4685c505a5e2099487ea42ad0933b5b07cc302c966e302",
+      "git_blob_sha": "6ecc9cc85858ac9064da5bf26043b7fc2cba1fb3"
+    },
+    "security/offline-ai/provision/promptfoo/package.json": {
+      "bytes": 310,
+      "sha256": "57619aa529d4e5d3d2bb8589b21f74558fad323c469384dfb6714ebd6141365e",
+      "git_blob_sha": "3a7ffe03b1603b1f24e2b70c01f5fd679e52d4fa"
+    },
+    "security/offline-ai/provision/promptfoo/package-lock.json": {
+      "bytes": 323073,
+      "sha256": "28794c2307783f00db6d389b1a89824f0f1f4ca38f70e4a27a4c9aa24132447b",
+      "git_blob_sha": "304a5fe556ec2d73c650d8fa0f08916c10512f80"
+    }
+  },
+  "recovered_candidates": {
+    "python_complete_resolution": {
+      "bytes": 42228,
+      "sha256": "85b212d192391aad0d5a6fadbd67c411c004ffb59868d4195bab9596850f424e",
+      "git_blob_sha": "05e69364abaa67d3195637ecdbd4ff5e65fe4f23"
+    },
+    "npm_before_advisory_fixes": {
+      "bytes": 331877,
+      "sha256": "688999449f0f6301a33397277d4f13ba910bc8653609e7033d9e8aef0c9b133c",
+      "git_blob_sha": "753ac7f0d6c2709bec8d2e7f375b909d21c6de4b"
+    }
+  },
+  "python": {
+    "target_python": "3.15.1",
+    "target_platform": "x86_64-manylinux_2_28",
+    "added_releases": 18,
+    "upstream_release_hash_sets_verified": 18,
+    "existing_privacy_pins_and_hash_sets_retained": 21,
+    "source_endpoint": "https://pypi.org/pypi/{name}/{version}/json",
+    "pypi_reported_advisories_for_added_releases": 0,
+    "releases": [
+      {
+        "hash_count": 2,
+        "name": "fsspec",
+        "verified": true,
+        "version": "2026.9.0"
+      },
+      {
+        "hash_count": 2,
+        "name": "gliner",
+        "verified": true,
+        "version": "0.2.30"
+      },
+      {
+        "hash_count": 17,
+        "name": "hf-xet",
+        "verified": true,
+        "version": "1.8.0"
+      },
+      {
+        "hash_count": 2,
+        "name": "httpcore2",
+        "verified": true,
+        "version": "2.16.0"
+      },
+      {
+        "hash_count": 2,
+        "name": "httpx2",
+        "verified": true,
+        "version": "2.16.0"
+      },
+      {
+        "hash_count": 2,
+        "name": "huggingface-hub",
+        "verified": true,
+        "version": "2.4.0"
+      },
+      {
+        "hash_count": 2,
+        "name": "iniconfig",
+        "verified": true,
+        "version": "2.3.1"
+      },
+      {
+        "hash_count": 2,
+        "name": "mpmath",
+        "verified": true,
+        "version": "1.3.0"
+      },
+      {
+        "hash_count": 2,
+        "name": "networkx",
+        "verified": true,
+        "version": "3.7"
+      },
+      {
+        "hash_count": 2,
+        "name": "pluggy",
+        "verified": true,
+        "version": "1.7.0"
+      },
+      {
+        "hash_count": 8,
+        "name": "protobuf",
+        "verified": true,
+        "version": "7.36.2"
+      },
+      {
+        "hash_count": 2,
+        "name": "pytest",
+        "verified": true,
+        "version": "9.2.0"
+      },
+      {
+        "hash_count": 17,
+        "name": "safetensors",
+        "verified": true,
+        "version": "0.8.0"
+      },
+      {
+        "hash_count": 41,
+        "name": "sentencepiece",
+        "verified": true,
+        "version": "0.2.3"
+      },
+      {
+        "hash_count": 2,
+        "name": "sympy",
+        "verified": true,
+        "version": "1.14.0"
+      },
+      {
+        "hash_count": 24,
+        "name": "tokenizers",
+        "verified": true,
+        "version": "0.23.3"
+      },
+      {
+        "hash_count": 2,
+        "name": "transformers",
+        "verified": true,
+        "version": "5.22.2"
+      },
+      {
+        "hash_count": 2,
+        "name": "truststore",
+        "verified": true,
+        "version": "0.10.5"
+      }
+    ],
+    "cpu_torch": "Separately source-bound CPU 2.15.0+cpu wheel; no CUDA dependency resolution."
+  },
+  "npm": {
+    "node": "24.22.1",
+    "npm": "11.9.0",
+    "root_promptfoo": "0.125.1",
+    "locked_package_entries": 665,
+    "unique_releases": 603,
+    "unique_releases_verified": 603,
+    "retained_verified_releases": 597,
+    "changed_releases_verified": [
+      {
+        "name": "@hono/node-server",
+        "version": "2.1.6",
+        "source": "https://registry.npmjs.org/%40hono%2Fnode-server/2.1.6",
+        "integrity": "sha512-p/KH9MnfNcsm3sR6x4lNgm5j+QN4Et8srKredl9DZfXiyZ1UQ3aQ2YVpFLbqktYN5JI+DB+VZFKM2PqE5hLKjQ==",
+        "resolved": "https://registry.npmjs.org/@hono/node-server/-/node-server-2.1.6.tgz",
+        "verified": true,
+        "git_head": null,
+        "engines": {
+          "node": ">=20"
+        }
+      },
+      {
+        "name": "@isaacs/nonrecursive-glob-match",
+        "version": "1.1.0",
+        "source": "https://registry.npmjs.org/%40isaacs%2Fnonrecursive-glob-match/1.1.0",
+        "integrity": "sha512-GPm/Dbvk5RLmhRnxXIa7nTpK0xtl4E0wj0MslsuNiJ1FIROU+2+9lgUC/dgF7Ey4QCWhfEsgxilMRMCdHPfDfw==",
+        "resolved": "https://registry.npmjs.org/@isaacs/nonrecursive-glob-match/-/nonrecursive-glob-match-1.1.0.tgz",
+        "verified": true,
+        "git_head": "0ac7bea32e2be9613ca4eab38bbf108ef8f6f9fe",
+        "engines": null
+      },
+      {
+        "name": "basic-ftp",
+        "version": "6.2.4",
+        "source": "https://registry.npmjs.org/basic-ftp/6.2.4",
+        "integrity": "sha512-6ACKOQxSlv5xka4i03ujfncNr9qp5yZNK3u0+yUFTAU4HfG5AeztCC9+R1I9dm8oq+1vt4RZ7cIRTBrdHqL2mw==",
+        "resolved": "https://registry.npmjs.org/basic-ftp/-/basic-ftp-6.2.4.tgz",
+        "verified": true,
+        "git_head": "7b7a6240ddae025a669c9a1e930c012b65c0d218",
+        "engines": {
+          "node": ">=10.0.0"
+        }
+      },
+      {
+        "name": "glob",
+        "version": "14.0.2",
+        "source": "https://registry.npmjs.org/glob/14.0.2",
+        "integrity": "sha512-vfMgTR2djMHPUchsJMLpZlYQvtjVL+mHpEr5wPpoCbQs2vr/FBNK+3Gnl9Ara1DSs4Aeg4eG9HiADb5/rkY/ZA==",
+        "resolved": "https://registry.npmjs.org/glob/-/glob-14.0.2.tgz",
+        "verified": true,
+        "git_head": "93957bfedf11019063804027a7a5ad40d64cbe4f",
+        "engines": {
+          "node": "18 || 20 || >=22"
+        }
+      },
+      {
+        "name": "minimatch",
+        "version": "11.0.1",
+        "source": "https://registry.npmjs.org/minimatch/11.0.1",
+        "integrity": "sha512-t+Vn6DX4wPCxS23y03C0uhF7S1jpi1GfqPrnlEipCJaA2ykiNbMkVlDutZtmvLfRcUN6R8AYVlzTsQrT4RZoLQ==",
+        "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.1.tgz",
+        "verified": true,
+        "git_head": "47afe882784638ccdee8d30e0b7516aed2b589a9",
+        "engines": {
+          "node": "18 || 20 || >=22"
+        }
+      },
+      {
+        "name": "path-scurry",
+        "version": "3.0.0",
+        "source": "https://registry.npmjs.org/path-scurry/3.0.0",
+        "integrity": "sha512-1pTbQqH1wIwMi/eleQ5leFTTCkzFsPcgXNjwOA8YGGW/W4/kHT3dssE7Z6NH+zuqNLOzOB0uaD61yl7cAcVhgg==",
+        "resolved": "https://registry.npmjs.org/path-scurry/-/path-scurry-3.0.0.tgz",
+        "verified": true,
+        "git_head": "31124d97f3bb1e4c7e99e067cacbccc2fbc5dc66",
+        "engines": {
+          "node": "18 || 20 || >=22"
+        }
+      }
+    ],
+    "registry_checks": [
+      "exact version",
+      "exact dist.integrity SHA512",
+      "exact dist.tarball HTTPS origin"
+    ],
+    "source_endpoint": "https://registry.npmjs.org/{name}/{version}",
+    "ci_dry_run": {
+      "passed": true,
+      "scripts_enabled": false,
+      "omit": "dev",
+      "selected_linux_packages": 603
+    },
+    "audit_before": {
+      "info": 0,
+      "low": 0,
+      "moderate": 4,
+      "high": 5,
+      "critical": 0,
+      "total": 9
+    },
+    "audit_after": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "advisory_dispositions": [
+      {
+        "name": "@hono/node-server",
+        "previous_version": "2.1.5",
+        "pinned_version": "2.1.6",
+        "disposition": "fixed-version-pinned",
+        "advisories": [
+          {
+            "url": "https://github.com/advisories/GHSA-qv5m-9pm6-hqp3",
+            "title": "@hono/node-server: Unhandled `ECONNRESET` on the socket during an asynchronous WebSocket upgrade crashes the process",
+            "severity": "moderate"
+          },
+          {
+            "url": "https://github.com/advisories/GHSA-jpvv-r467-5p4w",
+            "title": "@hono/node-server: Backslash in the request path is parsed as a path separator, bypassing path-based access control at a reverse proxy",
+            "severity": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "basic-ftp",
+        "previous_version": "5.3.1",
+        "pinned_version": "6.2.4",
+        "disposition": "fixed-version-pinned",
+        "advisories": [
+          {
+            "url": "https://github.com/advisories/GHSA-c475-qrg2-pj4r",
+            "title": "basic-ftp: Quadratic-time CPU denial of service in Client.list() Unix directory-listing parser (RE_LINE backtracking)",
+            "severity": "high"
+          },
+          {
+            "url": "https://github.com/advisories/GHSA-5pm8-86m8-9m6r",
+            "title": "basic-ftp: Uncaught TypeError in MLSD directory-listing parser via __proto__ fact name causes DoS in Client.list()",
+            "severity": "moderate"
+          },
+          {
+            "url": "https://github.com/advisories/GHSA-r4jh-29pc-gfqr",
+            "title": "basic-ftp: Uncaught exception crashes the Node.js process when a password (or resumed-download path) contains CR/LF",
+            "severity": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "glob",
+        "previous_version": "13.0.7",
+        "pinned_version": "14.0.2",
+        "disposition": "fixed-version-pinned",
+        "advisories": [
+          {
+            "url": "https://github.com/advisories/GHSA-3g3m-2fjr-6pw4",
+            "title": "Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal",
+            "severity": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "minimatch",
+        "previous_version": "10.2.6",
+        "pinned_version": "11.0.1",
+        "disposition": "fixed-version-pinned",
+        "advisories": [
+          {
+            "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249",
+            "title": "minimatch has potential denial of service via globparts amplification",
+            "severity": "moderate"
+          }
+        ]
+      }
+    ],
+    "compatibility_review": "Node 24 satisfies the changed package engines. The pinned Promptfoo file, config, prompt, and testcase loaders use globSync, hasMagic and escape, which remain exported by glob 14. Major minimatch/glob overrides require real offline Promptfoo qualification before an image is eligible.",
+    "compatibility_sources": [
+      "https://github.com/promptfoo/promptfoo/blob/8569e72ed6cf7737082a6042be8d925e40f9739d/src/util/file.ts",
+      "https://github.com/promptfoo/promptfoo/blob/8569e72ed6cf7737082a6042be8d925e40f9739d/src/util/testCaseReader.ts",
+      "https://github.com/promptfoo/promptfoo/blob/8569e72ed6cf7737082a6042be8d925e40f9739d/src/util/config/load.ts",
+      "https://github.com/promptfoo/promptfoo/blob/8569e72ed6cf7737082a6042be8d925e40f9739d/src/prompts/index.ts",
+      "https://github.com/isaacs/node-glob/blob/93957bfedf11019063804027a7a5ad40d64cbe4f/src/index.ts",
+      "https://github.com/isaacs/minimatch/blob/47afe882784638ccdee8d30e0b7516aed2b589a9/src/index.ts"
+    ]
+  },
+  "qualification": {
+    "real_vendor_preparation": false,
+    "image": false,
+    "model": false,
+    "runner": false
+  },
+  "hosted_candidate_confirmation": {
+    "workflow_run_id": 43651617676,
+    "python_extra_lock_identical_bytes": true,
+    "python_extra_lock_sha256": "8dff90e3d0de90b82e4685c505a5e2099487ea42ad0933b5b07cc302c966e302",
+    "npm_candidate_sha256": "b002ff890569fd696c669908b2a5b9532bda24a9caba3ea0785683c2b85135fa",
+    "npm_source_identity_comparison": "All package names, versions, resolved archive URLs and integrity values equal the recovered pre-advisory candidate; only other JSON metadata or formatting differs. The reviewed final lock adds the recorded security overrides."
+  }
+}
