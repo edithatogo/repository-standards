@@ -1,0 +1,17 @@
+{
+  "track_id": "fuzz_property_rollout_20261120",
+  "type": "testing",
+  "priority": "P1",
+  "status": "in_progress",
+  "created_at": "2026-11-19",
+  "updated_at": "2026-11-19",
+  "dependencies": [
+    "frontier_04_verification_harness_20261113"
+  ],
+  "scope": "public_consumer_rollout_coordination",
+  "implementation_complete": false,
+  "estate_rollout_verified": false,
+  "release_qualified": false,
+  "memory_safety_qualified": false,
+  "scientific_qualification_claimed": false
+}
