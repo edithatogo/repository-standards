@@ -34,7 +34,7 @@ def unique_names(names):
 
 
 def timestamp(value):
-    if not matches(value, r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})'):
+    if not matches(value, r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)'):
         raise ReceiptError('invalid_timestamp')
     try:
         return datetime.fromisoformat(value.replace('Z', '+00:00')).astimezone(UTC)

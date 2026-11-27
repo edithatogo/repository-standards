@@ -54,10 +54,14 @@ class ReceiptTests(unittest.TestCase):
 
     def test_stale_future_and_naive_timestamps_fail(self):
         for value in ('2026-11-27T08:59:59Z', '2026-11-27T10:00:01Z',
-                      '2026-11-27T09:30:00', 'invalid'):
+                      '2026-11-27T09:30:00', '2026-11-27T10:00:00.0000001Z', 'invalid'):
             with self.subTest(value=value), self.assertRaises(verifier.ReceiptError):
                 self.inspect(receipt(generated_at=value))
         self.assertEqual(self.inspect(receipt(generated_at='2026-11-27T19:00:00+10:00'))['result'], 'pass')
+        self.assertEqual(self.inspect(receipt(generated_at='2026-11-27T10:00:00.000000Z'))['result'], 'pass')
+        for value in ('2026-11-27T08:30:00+00:60', '2026-11-27T09:00:00.0000001Z'):
+            with self.subTest(value=value), self.assertRaises(verifier.ReceiptError):
+                verifier.timestamp(value)
 
     def test_missing_duplicate_and_ambiguous_check_names_fail(self):
         for checks in ([{'name': 'tests', 'result': 'pass'}],

@@ -64,3 +64,18 @@ policy suite and independent code/security review remain hosted gates.
 Source qualification is not a consumer canary or estate deployment.
 No change to the shared tracks registry in this increment: #155 already owns
 that path. Track-local index and metadata carry the bounded status.
+
+### Freshness-boundary refinement
+
+The first #199 head f8fda810e9990f282de71d041c18fbf9f4c9c7d1 passed all eight
+observed CI checks, [policy run 45987175880, job 140465668064](https://github.com/edithatogo/repository-standards/actions/runs/45987175880/job/140465668064)
+reported 377 tests, 339 passed, 38 existing capability skips, and the exact-head
+code review completed without findings. Additional local adverse cases revealed
+three false accepts: sub-microsecond future evidence and unsupported precision
+or invalid offset-minute notation passed the timestamp parser. Python datetime
+must not silently truncate or normalize them. Require seconds with at most six
+fractional digits and an offset bounded to valid hour/minute ranges. Exact
+microsecond boundaries remain supported. Three red subcases became green;
+all ten focused tests pass locally at the corrected bytes. The prior hosted
+checks/review are historical; rerun the full policy suite and independent review
+on the new head. Do not merge until current qualification is complete.
