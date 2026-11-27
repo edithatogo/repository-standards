@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "stage": "pilot",
+  "scanner": {
+    "name": "OpenGrep",
+    "version": "1.33.1",
+    "platform": "linux-x86_64",
+    "asset_sha256": "46e8133cc490f9f50518061590ce2f6be5a08afaeda034471c0ceda4b3899808"
+  },
+  "rule_source": {
+    "reference": "p/python",
+    "immutable": false,
+    "semgrep_parity_verified": false
+  },
+  "scope": {
+    "language": "python",
+    "full_scan": true,
+    "nonempty_scan_required": true,
+    "strict": true,
+    "block_warning": true,
+    "upload_results": false,
+    "upload_source": false
+  },
+  "supported_profiles": [
+    "python"
+  ],
+  "not_yet_qualified": [
+    "rust",
+    "javascript",
+    "typescript",
+    "go",
+    "c_cpp",
+    "yaml"
+  ],
+  "acceptance": [
+    "synthetic_negative_and_positive",
+    "full_source_inventory",
+    "zero_parsing_errors",
+    "exact_head_hosted_checks",
+    "reviewed_finding_disposition",
+    "rule_set_provenance",
+    "required_check_readback"
+  ]
+}
