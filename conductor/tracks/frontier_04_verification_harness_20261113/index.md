@@ -5,6 +5,7 @@ Status: **in progress / offline receipt consistency candidate** · Priority: **P
 - [Specification](spec.md)
 - [Execution plan](plan.md)
 - [Track metadata](metadata.json)
+- [Independent attestation binding](attestation-binding.md)
 - [Programme roadmap](../../frontier-roadmap-20261113.md)
 
 Dependencies: `frontier_01_evidence_inventory_20261113`, `bounded_execution_merkle_lineage_20261110`.
